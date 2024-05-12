@@ -32,3 +32,6 @@ add_link_options(/OPT:ICF)
 add_subdirectory(src)
 # Include the 'thirdparty' folder containing third-party libraries - TODO(Gerark) Temporarily disabled
 # add_subdirectory(thirdparty)
+
+# Set ProjectTactics as the default startup project for the generated Visual Studio solution
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ProjectTactics)
