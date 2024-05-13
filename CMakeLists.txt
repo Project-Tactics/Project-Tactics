@@ -28,10 +28,13 @@ add_link_options(/OPT:REF)
 # Linker Optimization: Merge identical code sections when possible
 add_link_options(/OPT:ICF)
 
+# Include the root folder of the framework code as an additional include directory
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+
 # Include the 'src' folder containing the framework code
 add_subdirectory(src)
-# Include the 'thirdparty' folder containing third-party libraries - TODO(Gerark) Temporarily disabled
-# add_subdirectory(thirdparty)
+# Include the 'thirdparty' folder containing third-party libraries
+add_subdirectory(thirdparty)
 
 # Set ProjectTactics as the default startup project for the generated Visual Studio solution
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ProjectTactics)
