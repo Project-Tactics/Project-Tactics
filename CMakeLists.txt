@@ -28,13 +28,20 @@ add_link_options(/OPT:REF)
 # Linker Optimization: Merge identical code sections when possible
 add_link_options(/OPT:ICF)
 
+# Include macros from the build_system folder
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build_system)
+include(core_dependencies)
+
+# Call this macro from the build_system folder to resolve common dependencies like SDL, OpenGL, OpenAL and so on
+core_dependencies()
+
 # Include the root folder of the framework code as an additional include directory
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-# Include the 'src' folder containing the framework code
-add_subdirectory(src)
 # Include the 'thirdparty' folder containing third-party libraries
 add_subdirectory(thirdparty)
+# Include the 'src' folder containing the framework code
+add_subdirectory(src)
 
 # Set ProjectTactics as the default startup project for the generated Visual Studio solution
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ProjectTactics)
