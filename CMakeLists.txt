@@ -18,6 +18,8 @@ add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 
 # Treat warnings as errors
 add_compile_options(/WX)
+# Set warning level 4
+add_compile_options(/W4)
 # Enable multi-processor compilation to accelerate the build process
 add_compile_options(/MP)
 # Enable a more standardized preprocessor behavior
@@ -31,6 +33,8 @@ add_link_options(/OPT:ICF)
 # Include macros from the build_system folder
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build_system)
 include(core_dependencies)
+include(unit_tests)
+include(folder_utils)
 
 # Call this macro from the build_system folder to resolve common dependencies like SDL, OpenGL, OpenAL and so on
 core_dependencies()

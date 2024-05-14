@@ -12,6 +12,8 @@ target_link_libraries(engine_rendering
     PRIVATE
     sdl2_wrapper
     glad)
+set_property(TARGET engine_rendering PROPERTY FOLDER "tactics/engine")
+add_to_engine_folder(engine_rendering)
 
 unset(SOURCES)
 unset(HEADERS)

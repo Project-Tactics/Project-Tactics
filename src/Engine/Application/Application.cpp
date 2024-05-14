@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #include <Engine/Rendering/RenderSystem.h>
+#include <Libs/Events/EventsSystem.h>
 
 #include <SDL.h>
 #include <exception>
@@ -30,18 +31,15 @@ void Application::_initialize() {
 	_initializeSDL();
 	_createWindow();
 	_initializeRenderSystem();
+	_initializeEventsSystem();
 }
 
 void Application::_internalRun() {
-	SDL_Event event;
 	while (1) {
-		SDL_PollEvent(&event);
-
-		switch (event.type) {
-		case SDL_QUIT:
+		auto eventResult = _eventsSystem->update();
+		if (eventResult == libs::EventResult::QuitGame) {
 			return;
 		}
-
 		_renderSystem->beginDraw();
 		_renderSystem->endDraw();
 	}
@@ -67,6 +65,10 @@ void Application::_createWindow() {
 
 void Application::_initializeRenderSystem() {
 	_renderSystem = std::make_unique<RenderSystem>(_window);
+}
+
+void Application::_initializeEventsSystem() {
+	_eventsSystem = std::make_unique<libs::EventsSystem>();
 }
 
 }

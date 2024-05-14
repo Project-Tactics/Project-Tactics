@@ -6,8 +6,3 @@ set(UNIT_TEST_MAIN_SOURCES
 
 add_executable(ProjectTactics_UnitTests ${UNIT_TEST_MAIN_SOURCES})
 target_link_libraries(ProjectTactics_UnitTests PUBLIC GTest::gtest GTest::gmock)
-
-add_custom_target(UnitTest ProjectTactics_UnitTests
-        DEPENDS ProjectTactics_UnitTests
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        USES_TERMINAL)

@@ -1,0 +1,7 @@
+macro(add_unit_test TARGET_NAME SOURCES LIBS)
+    set(TEST_TARGET test_${TARGET_NAME})
+    add_library(${TEST_TARGET} OBJECT ${SOURCES})
+    target_link_libraries(${TEST_TARGET} PUBLIC GTest::gtest GTest::gmock ${LIBS})
+    target_link_libraries(ProjectTactics_UnitTests PUBLIC ${TEST_TARGET})
+    set_property(TARGET ${TEST_TARGET} PROPERTY FOLDER "unit_tests")
+endmacro()

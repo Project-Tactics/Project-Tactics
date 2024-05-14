@@ -7,3 +7,6 @@ add_subdirectory(googletest)
 
 # Adding glad as Loader-Generator for opengl
 add_subdirectory(glad)
+
+# Let's keep things clean and tidy by moving all the thirdparty libs to a folder
+set_property(TARGET gtest gtest_main gmock gmock_main glad PROPERTY FOLDER "thirdparty")

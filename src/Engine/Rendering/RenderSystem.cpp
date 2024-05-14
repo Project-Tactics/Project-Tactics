@@ -13,8 +13,7 @@ RenderSystem::RenderSystem(SDL_Window* window)
 
 	_oglContext = SDL_GL_CreateContext(_window);
 
-	int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
-
+	/*int version = */gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
 }
 
 RenderSystem::~RenderSystem() {

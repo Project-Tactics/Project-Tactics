@@ -11,7 +11,10 @@ add_library(engine_application ${SOURCES} ${HEADERS})
 target_link_libraries(engine_application
     PRIVATE 
     engine_rendering
+    libs_fsm
+    libs_events
     sdl2_wrapper)
+add_to_engine_folder(engine_application)
 
 unset(SOURCES)
 unset(HEADERS)
