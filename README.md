@@ -1,5 +1,5 @@
 # Project-Tactics
-An open-source game development framework inspired by Final Fantasy Tactics, empowering creators to craft their own unique tactical RPG experiences.
+An open-source game development framework inspired by Final Fantasy Tactics, letting you create your own unique tactical RPG adventures.
 
 ## Supported Platforms
 We currently plan to support only Windows. Expanding and maintaining support for other platforms would require a dedicated person, which isn't feasible for us at this time.
