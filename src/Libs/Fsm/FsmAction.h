@@ -4,7 +4,7 @@
 #include <string>
 #include <cassert>
 
-namespace tactics::libs {
+namespace tactics {
 
 class FsmAction {
 public:

@@ -6,7 +6,7 @@
 #include <format>
 #include <memory>
 
-namespace tactics::libs {
+namespace tactics {
 
 const std::string_view Fsm::exitState = "_Exit";
 

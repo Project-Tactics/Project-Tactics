@@ -2,10 +2,14 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
-    Application.cpp)
+    Application.cpp
+    States/StartState.cpp
+    States/MapState.cpp)
     
 set(HEADERS
-    Application.h)
+    Application.h
+    States/StartState.h
+    States/MapState.h)
 
 add_library(engine_application ${SOURCES} ${HEADERS})
 target_link_libraries(engine_application

@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace tactics::libs {
+namespace tactics {
 
 /*
  * @brief A group of utils used to work with std::string_view and std containers

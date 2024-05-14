@@ -7,7 +7,7 @@
 
 #include <Libs/Fsm/FsmBuilder.h>
 
-using namespace tactics::libs;
+using namespace tactics;
 
 class FsmTest: public testing::Test {
 protected:

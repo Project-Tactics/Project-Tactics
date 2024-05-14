@@ -2,7 +2,7 @@
 
 struct SDL_Window;
 
-namespace tactics::engine {
+namespace tactics {
 class RenderSystem {
 public:
 	RenderSystem(SDL_Window* window);

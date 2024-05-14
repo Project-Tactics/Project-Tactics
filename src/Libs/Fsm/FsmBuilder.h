@@ -24,7 +24,7 @@
 *             .on("back").jumpTo("MainMenu")
 */
 
-namespace tactics::libs {
+namespace tactics {
 
 class FsmBuilder {
 public:

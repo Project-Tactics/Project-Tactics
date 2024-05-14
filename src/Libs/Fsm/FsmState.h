@@ -10,7 +10,7 @@
  * FsmState derives from FsmEventHandler, enabling reaction to platform application events (such as input, window events, etc.)
  * by overriding the appropriate functions.
  */
-namespace tactics::libs {
+namespace tactics {
 
 class FsmState: public EventsListener {
 public:

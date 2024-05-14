@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace tactics::libs {
+namespace tactics {
 
 class EventsListener;
 

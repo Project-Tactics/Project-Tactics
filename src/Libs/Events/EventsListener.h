@@ -2,7 +2,7 @@
 
 #include <SDL_events.h>
 
-namespace tactics::libs {
+namespace tactics {
 
 /**
  * @brief Abstract class for managing system events.
@@ -12,6 +12,7 @@ namespace tactics::libs {
  */
 class EventsListener {
 public:
+	virtual ~EventsListener() = default;
 
 	/**
 	 * @brief Main function that handles dispatching events to the appropriate protected virtual methods.

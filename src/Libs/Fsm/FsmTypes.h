@@ -9,7 +9,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace tactics::libs {
+namespace tactics {
 
 struct FsmTransitionTarget {
 	std::string stateName;

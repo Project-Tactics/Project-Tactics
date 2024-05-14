@@ -8,7 +8,7 @@
 #include <string>
 #include <cassert>
 
-namespace tactics::libs {
+namespace tactics {
 
 FsmBuilder& FsmBuilder::state(std::string_view stateName, std::unique_ptr<FsmState> state) {
 	_latestOnTransition.clear();

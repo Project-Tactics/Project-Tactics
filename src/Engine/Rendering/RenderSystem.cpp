@@ -3,7 +3,7 @@
 #include <glad/gl.h>
 #include <SDL.h>
 
-namespace tactics::engine {
+namespace tactics {
 RenderSystem::RenderSystem(SDL_Window* window)
 	: _window(window) {
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);

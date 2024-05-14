@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace tactics::libs {
+namespace tactics {
 
 FsmAction FsmAction::none() {
 	return {};

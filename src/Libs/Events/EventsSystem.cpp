@@ -7,19 +7,19 @@
 #include <exception>
 #include <format>
 
-namespace tactics::libs {
+namespace tactics {
 
 EventResult EventsSystem::update() {
 	SDL_Event event;
-	SDL_PollEvent(&event);
+	if (SDL_PollEvent(&event)) {
+		switch (event.type) {
+		case SDL_QUIT:
+			return EventResult::QuitGame;
+		}
 
-	switch (event.type) {
-	case SDL_QUIT:
-		return EventResult::QuitGame;
-	}
-
-	for (auto& listener : _eventsListeners) {
-		listener->onEvent(event);
+		for (auto& listener : _eventsListeners) {
+			listener->onEvent(event);
+		}
 	}
 
 	return EventResult::None;

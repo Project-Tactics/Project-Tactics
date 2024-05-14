@@ -1,6 +1,6 @@
 #include "EventsListener.h"
 
-namespace tactics::libs {
+namespace tactics {
 
 bool EventsListener::onEvent(SDL_Event& event) {
 	switch (event.type) {

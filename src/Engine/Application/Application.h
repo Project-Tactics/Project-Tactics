@@ -4,12 +4,10 @@
 
 struct SDL_Window;
 
-namespace tactics::libs {
+namespace tactics {
+
 class EventsSystem;
-}
-
-namespace tactics::engine {
-
+class Fsm;
 class RenderSystem;
 
 class Application {
@@ -25,12 +23,14 @@ private:
 	void _createWindow();
 	void _initializeRenderSystem();
 	void _initializeEventsSystem();
+	void _initializeFsm();
 	void _internalRun();
 	void _shutdown();
 
 	SDL_Window* _window{};
 	std::unique_ptr<RenderSystem> _renderSystem;
-	std::unique_ptr<libs::EventsSystem> _eventsSystem;
+	std::unique_ptr<EventsSystem> _eventsSystem;
+	std::unique_ptr<Fsm> _fsm;
 };
 
 }

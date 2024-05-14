@@ -7,7 +7,7 @@
 #include <string>
 #include <memory>
 
-namespace tactics::libs {
+namespace tactics {
 
 class Fsm: public EventsListener {
 public:
