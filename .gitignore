@@ -33,6 +33,8 @@
 
 # Build Folder
 /Build
+/out
 
 # VS Code project folder
 .vscode/
+.vs/
