@@ -6,6 +6,8 @@
 #include <Engine/Rendering/RenderSystem.h>
 #include <Libs/Events/EventsSystem.h>
 #include <Libs/Fsm/FsmBuilder.h>
+#include <Libs/Overlay/OverlaySystem.h>
+#include <Libs/Overlay/ExampleOverlay.h>
 #include <Libs/Utilities/Exception.h>
 
 #include <SDL.h>
@@ -38,6 +40,7 @@ void Application::_initialize() {
 	_initializeSDL();
 	_initializeRenderSystem();
 	_initializeEventsSystem();
+	_initializeOverlaySystem();
 	_initializeFsm();
 }
 
@@ -49,11 +52,17 @@ void Application::_internalRun() {
 		}
 		_renderSystem->beginDraw();
 		_fsm->update();
+
+		_renderSystem->beginDrawOverlay();
+		_overlaySystem->update();
+		_renderSystem->endDrawOverlay();
+
 		_renderSystem->endDraw();
 	}
 }
 
 void Application::_shutdown() {
+	_overlaySystem->removeOverlay("ImGuiDemo");
 	_eventsSystem->unregisterEventsListener(_fsm.get());
 	SDL_Quit();
 }
@@ -85,6 +94,12 @@ void Application::_initializeFsm() {
 	_fsm = builder.build("Start");
 
 	_eventsSystem->registerEventsListener(_fsm.get());
+}
+
+void Application::_initializeOverlaySystem() {
+	_overlaySystem = std::make_unique<OverlaySystem>();
+	_overlaySystem->setEnabled(true);
+	_overlaySystem->addOverlay("ImGuiDemo", std::make_unique<ExampleOverlay>());
 }
 
 }

@@ -14,6 +14,7 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 add_library(engine_rendering ${SOURCES} ${HEADERS})
 target_link_libraries(engine_rendering
     PRIVATE
+    imgui
     sdl2_wrapper
     glad)
 set_property(TARGET engine_rendering PROPERTY FOLDER "tactics/engine")

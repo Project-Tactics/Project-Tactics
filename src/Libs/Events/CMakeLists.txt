@@ -11,7 +11,7 @@ set(HEADERS
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
 add_library(libs_events STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_events PUBLIC sdl2_wrapper)
+target_link_libraries(libs_events PUBLIC sdl2_wrapper PRIVATE imgui)
 add_to_libs_folder(libs_events)
 
 unset(SOURCES)

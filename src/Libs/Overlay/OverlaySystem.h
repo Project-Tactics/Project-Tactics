@@ -25,11 +25,9 @@ public:
 	bool isEnabled() const;
 	void setEnabled(bool enable);
 
-	void drawOverlays();
+	void update();
 
 private:
-	void _update();
-
 	UnorderedStringMap<std::unique_ptr<Overlay>> _overlays;
 	bool _isEnabled{};
 };

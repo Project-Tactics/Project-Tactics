@@ -19,6 +19,8 @@ target_link_libraries(engine_application
     engine_rendering
     libs_fsm
     libs_events
+    libs_overlay
+    libs_utils
     sdl2_wrapper
     glm)
 add_to_engine_folder(engine_application)

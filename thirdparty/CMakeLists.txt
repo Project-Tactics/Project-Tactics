@@ -22,16 +22,9 @@ add_subdirectory(imgui)
 # https://github.com/fmtlib/fmt
 add_subdirectory(fmt)
 
-# Use luajit as a just in time for lua ( we're using a forked version with cmake support for now )
-# https://github.com/WohlSoft/LuaJIT
-add_subdirectory(luajit)
-target_include_directories(libluajit INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/luajit/luajit/src)
-set_target_properties(libluajit PROPERTIES COMPILE_FLAGS "${CMAKE_C_FLAGS}" LINK_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
-
 # Adding sol2 as template library to easily bind c++ to lua
 # https://github.com/ThePhD/sol2
 add_subdirectory(sol2)
 
 # Let's keep things clean and tidy by moving all the thirdparty libs to a folder
 set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui fmt sol2 PROPERTY FOLDER "thirdparty")
-set_property(TARGET buildvm buildvm_arch_h minilua libluajit lj_gen_folddef lj_gen_headers lj_gen_vm_s luajit PROPERTY FOLDER "thirdparty/luajit")

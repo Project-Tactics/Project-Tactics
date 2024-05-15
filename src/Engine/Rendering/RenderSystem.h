@@ -12,6 +12,9 @@ public:
 	void drawSomething();
 	void endDraw();
 
+	void beginDrawOverlay();
+	void endDrawOverlay();
+
 private:
 	void _checkGlErrors(const char* context);
 	void _createQuad();

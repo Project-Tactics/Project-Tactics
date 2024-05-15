@@ -2,14 +2,12 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
-        OverlayEventHandler.cpp
         OverlaySystem.cpp
         ExampleOverlay.cpp
         ScriptedOverlay.cpp)
 
 set(HEADERS
         Overlay.h
-        OverlayEventHandler.h
         OverlaySystem.h
         ExampleOverlay.h
         ScriptedOverlay.h)
@@ -17,7 +15,7 @@ set(HEADERS
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
 add_library(libs_overlay STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_overlay PRIVATE imgui libluajit sol2 libs_utils)
+target_link_libraries(libs_overlay PRIVATE imgui lua_wrapper sol2 libs_utils)
 add_to_libs_folder(libs_overlay)
 
 unset(SOURCES)

@@ -10,6 +10,11 @@ macro(core_dependencies)
     # Set up OpenGL
     find_package(OpenGL REQUIRED)
 
-    #find_package(ZLIB REQUIRED)
-    #find_package(FFmpeg REQUIRED)
+    # Set up Lua
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}"/deps/lua/cmake")
+    find_package(LUA CONFIG REQUIRED)
+    # Create a wrapper library for lua
+    add_library(lua_wrapper INTERFACE)
+    # Link the wrapper library with lua51
+    target_link_libraries(lua_wrapper INTERFACE lua::lua)
 endmacro()

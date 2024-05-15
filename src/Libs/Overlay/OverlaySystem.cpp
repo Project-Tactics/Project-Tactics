@@ -5,11 +5,9 @@
 
 namespace tactics {
 
-OverlaySystem::OverlaySystem() {
-}
+OverlaySystem::OverlaySystem() {}
 
-OverlaySystem::~OverlaySystem() {
-}
+OverlaySystem::~OverlaySystem() {}
 
 void OverlaySystem::addOverlay(std::string_view name, std::unique_ptr<Overlay> overlay) {
 	if (_overlays.contains(name)) {
@@ -23,16 +21,10 @@ void OverlaySystem::removeOverlay(std::string_view name) {
 	_overlays.erase(name);
 }
 
-void OverlaySystem::drawOverlays() {
-	_update();
-}
-
-void OverlaySystem::_update() {
+void OverlaySystem::update() {
 	if (!_isEnabled) {
 		return;
 	}
-
-	//ImGui::ShowDemoWindow();
 
 	for (auto&& [name, overlay] : _overlays) {
 		overlay->update();
