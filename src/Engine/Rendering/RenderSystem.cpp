@@ -18,7 +18,7 @@ RenderSystem::RenderSystem() {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-	_window = SDL_CreateWindow("Project Tactics", 500, 500, 1280, 720, SDL_WINDOW_OPENGL);
+	_window = SDL_CreateWindow("Project Tactics", 100, 100, 1280, 720, SDL_WINDOW_OPENGL);
 	if (_window == nullptr) {
 		throw std::exception(std::format("Failed to open window: %s\n", SDL_GetError()).c_str());
 	}
