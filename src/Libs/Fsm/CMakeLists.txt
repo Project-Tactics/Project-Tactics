@@ -12,6 +12,8 @@ set(HEADERS
         FsmState.h
         FsmTypes.h)
 
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
+
 add_library(libs_fsm STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_fsm PUBLIC libs_events)
 add_to_libs_folder(libs_fsm)

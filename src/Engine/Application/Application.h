@@ -27,7 +27,6 @@ private:
 	void _internalRun();
 	void _shutdown();
 
-	SDL_Window* _window{};
 	std::unique_ptr<RenderSystem> _renderSystem;
 	std::unique_ptr<EventsSystem> _eventsSystem;
 	std::unique_ptr<Fsm> _fsm;

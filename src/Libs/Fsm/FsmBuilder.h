@@ -46,7 +46,7 @@ public:
 
 private:
 	FsmStateEntries _states;
-	FsmStateEntry* _latestState;
+	FsmStateEntry* _latestState{};
 	std::string _latestOnTransition;
 };
 

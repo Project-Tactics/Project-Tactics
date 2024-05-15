@@ -5,13 +5,18 @@ struct SDL_Window;
 namespace tactics {
 class RenderSystem {
 public:
-	RenderSystem(SDL_Window* window);
+	RenderSystem();
 	~RenderSystem();
 
 	void beginDraw();
+	void drawSomething();
 	void endDraw();
 
 private:
+	void _checkGlErrors(const char* context);
+	void _createQuad();
+	void _loadShaders();
+
 	SDL_Window* _window;
 	void* _oglContext;
 };

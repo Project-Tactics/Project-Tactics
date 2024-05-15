@@ -11,6 +11,8 @@ set(HEADERS
     States/StartState.h
     States/MapState.h)
 
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
+
 add_library(engine_application ${SOURCES} ${HEADERS})
 target_link_libraries(engine_application
     PRIVATE 

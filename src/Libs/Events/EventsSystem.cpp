@@ -11,7 +11,7 @@ namespace tactics {
 
 EventResult EventsSystem::update() {
 	SDL_Event event;
-	if (SDL_PollEvent(&event)) {
+	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
 			return EventResult::QuitGame;

@@ -14,26 +14,16 @@
 namespace tactics {
 
 Application::Application() {
-	try {
-		_initialize();
-	}
-	catch (std::exception& exception) {
-		printf("%s", exception.what());
-	}
 }
 
 Application::~Application() {
-	try {
-		_shutdown();
-	}
-	catch (std::exception& exception) {
-		printf("%s", exception.what());
-	}
 }
 
 void Application::run() {
 	try {
+		_initialize();
 		_internalRun();
+		_shutdown();
 	}
 	catch (std::exception& exception) {
 		printf("%s", exception.what());
@@ -42,7 +32,6 @@ void Application::run() {
 
 void Application::_initialize() {
 	_initializeSDL();
-	_createWindow();
 	_initializeRenderSystem();
 	_initializeEventsSystem();
 	_initializeFsm();
@@ -54,15 +43,14 @@ void Application::_internalRun() {
 		if (eventResult == EventResult::QuitGame) {
 			return;
 		}
-		_fsm->update();
 		_renderSystem->beginDraw();
+		_fsm->update();
 		_renderSystem->endDraw();
 	}
 }
 
 void Application::_shutdown() {
 	_eventsSystem->unregisterEventsListener(_fsm.get());
-	SDL_DestroyWindow(_window);
 	SDL_Quit();
 }
 
@@ -72,15 +60,8 @@ void Application::_initializeSDL() {
 	}
 }
 
-void Application::_createWindow() {
-	_window = SDL_CreateWindow("Project Tactics", 500, 500, 640, 480, SDL_WINDOW_OPENGL);
-	if (_window == nullptr) {
-		throw std::exception(std::format("Failed to open window: %s\n", SDL_GetError()).c_str());
-	}
-}
-
 void Application::_initializeRenderSystem() {
-	_renderSystem = std::make_unique<RenderSystem>(_window);
+	_renderSystem = std::make_unique<RenderSystem>();
 }
 
 void Application::_initializeEventsSystem() {
@@ -94,7 +75,7 @@ void Application::_initializeFsm() {
 		.state<StartState>("Start")
 		.on("proceed").jumpTo("Map")
 
-		.state<MapState>("Map")
+		.state<MapState>("Map", *_renderSystem)
 		.on("exit").exitFsm();
 
 	_fsm = builder.build("Start");
