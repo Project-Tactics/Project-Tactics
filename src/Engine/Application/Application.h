@@ -20,7 +20,6 @@ public:
 private:
 	void _initialize();
 	void _initializeSDL();
-	void _createWindow();
 	void _initializeRenderSystem();
 	void _initializeEventsSystem();
 	void _initializeFsm();

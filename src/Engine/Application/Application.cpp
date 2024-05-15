@@ -6,6 +6,7 @@
 #include <Engine/Rendering/RenderSystem.h>
 #include <Libs/Events/EventsSystem.h>
 #include <Libs/Fsm/FsmBuilder.h>
+#include <Libs/Utilities/Exception.h>
 
 #include <SDL.h>
 #include <exception>
@@ -24,6 +25,9 @@ void Application::run() {
 		_initialize();
 		_internalRun();
 		_shutdown();
+	}
+	catch (Exception& exception) {
+		printf("%s", exception.what());
 	}
 	catch (std::exception& exception) {
 		printf("%s", exception.what());
