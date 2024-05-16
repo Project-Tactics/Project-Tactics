@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
     RenderSteps/ClearColorRenderStep.cpp
+    RenderSteps/DrawSomethingRenderStep.cpp
+    RenderSteps/ImGuiRenderSteps.cpp
     RenderSteps/RenderStep.cpp
     Renderer.cpp
     RenderSystem.cpp
@@ -10,6 +12,8 @@ set(SOURCES
     
 set(HEADERS
     RenderSteps/ClearColorRenderStep.h
+    RenderSteps/DrawSomethingRenderStep.h
+    RenderSteps/ImGuiRenderSteps.h
     RenderSteps/RenderStep.h
     Renderer.h
     RenderSystem.h
@@ -20,10 +24,10 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 add_library(engine_rendering ${SOURCES} ${HEADERS})
 target_link_libraries(engine_rendering
     PRIVATE
+    libs_overlay
     imgui
     sdl2_wrapper
     glad)
-set_property(TARGET engine_rendering PROPERTY FOLDER "tactics/engine")
 add_to_engine_folder(engine_rendering)
 
 unset(SOURCES)

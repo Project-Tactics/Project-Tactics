@@ -36,9 +36,6 @@ include(core_dependencies)
 include(unit_tests)
 include(folder_utils)
 
-# Call this macro from the cmakes folder to resolve common dependencies like SDL, OpenGL, OpenAL and so on
-core_dependencies()
-
 # Include the root folder of the framework code as an additional include directory
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
@@ -46,6 +43,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_subdirectory(thirdparty)
 # Include the 'src' folder containing the framework code
 add_subdirectory(src)
+# Include the 'resources' folder containing the data for all the apps being built
+add_subdirectory(resources)
+
+# Call this macro from the cmakes folder to resolve common dependencies like SDL, OpenGL, OpenAL and so on
+core_dependencies()
 
 # Set ProjectTactics as the default startup project for the generated Visual Studio solution
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ProjectTactics)

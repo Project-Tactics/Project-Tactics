@@ -2,39 +2,21 @@
 #include "Renderer.h"
 
 #include "ShaderLoader.h"
-#include "RenderSteps/ClearColorRenderStep.h"
+#include "RenderSteps/RenderStep.h"
 
 #include <glad/gl.h>
 #include <SDL.h>
 #include <iostream>
 #include <format>
 
-#include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_sdl2.h>
 
 namespace tactics {
 RenderSystem::RenderSystem() {
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-	_window = SDL_CreateWindow("Project Tactics", 100, 100, 1280, 720, SDL_WINDOW_OPENGL);
-	if (_window == nullptr) {
-		throw std::exception(std::format("Failed to open window: %s\n", SDL_GetError()).c_str());
-	}
-
-	_oglContext = SDL_GL_CreateContext(_window);
-	SDL_GL_MakeCurrent(_window, _oglContext);
-	SDL_GL_SetSwapInterval(1);
-
-	int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
-	if (version == 0) {
-		throw std::exception(std::format("Failed to initialize OpenGL context\n").c_str());
-	}
-
-	printf(std::format("Loaded OpenGL {}.{}\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version)).c_str());
+	_defineGlAttributes();
+	_createWindow();
+	_initializeGlContext();
 
 	glViewport(0, 0, 1280, 720);
 	glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -51,9 +33,6 @@ RenderSystem::RenderSystem() {
 
 	ImGui_ImplSDL2_InitForOpenGL(_window, _oglContext);
 	ImGui_ImplOpenGL3_Init();
-
-	_renderer = std::make_unique<Renderer>();
-	_renderer->addStep<ClearColorRenderStep>();
 }
 
 RenderSystem::~RenderSystem() {
@@ -65,16 +44,44 @@ RenderSystem::~RenderSystem() {
 	SDL_DestroyWindow(_window);
 }
 
-void RenderSystem::beginDraw() {
-	_renderer->render();
+Renderer& RenderSystem::createRenderer() {
+	auto renderer = std::make_unique<Renderer>();
+	_renderers.push_back(std::move(renderer));
+	return *_renderers.back().get();
 }
 
-void RenderSystem::endDraw() {
+void RenderSystem::_defineGlAttributes() {
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+}
+
+void RenderSystem::_createWindow() {
+	_window = SDL_CreateWindow("Project Tactics", 100, 100, 1280, 720, SDL_WINDOW_OPENGL);
+	if (_window == nullptr) {
+		throw std::exception(std::format("Failed to open window: %s\n", SDL_GetError()).c_str());
+	}
+}
+
+void RenderSystem::_initializeGlContext() {
+	_oglContext = SDL_GL_CreateContext(_window);
+	SDL_GL_MakeCurrent(_window, _oglContext);
+	SDL_GL_SetSwapInterval(1);
+
+	int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
+	if (version == 0) {
+		throw std::exception(std::format("Failed to initialize OpenGL context\n").c_str());
+	}
+
+	printf(std::format("Loaded OpenGL {}.{}\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version)).c_str());
+}
+
+void RenderSystem::render() {
+	for (auto& renderer : _renderers) {
+		renderer->render();
+	}
 	SDL_GL_SwapWindow(_window);
-}
-
-void RenderSystem::drawSomething() {
-	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 void RenderSystem::_createQuad() {
@@ -157,17 +164,6 @@ void RenderSystem::_checkGlErrors(const char* context) {
 
 		throw std::exception(std::format("OpenGL error in {}: {} - Code: {}", context, error, errorCode).c_str());
 	}
-}
-
-void RenderSystem::beginDrawOverlay() {
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
-	ImGui::NewFrame();
-}
-
-void RenderSystem::endDrawOverlay() {
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 }

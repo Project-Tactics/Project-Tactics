@@ -4,11 +4,20 @@
 
 namespace tactics {
 
+class RenderSystem;
+class OverlaySystem;
+
 class StartState: public FsmState {
 public:
-	FsmAction update() override;
+	StartState(RenderSystem& renderSystem, OverlaySystem& overlaySystem);
+
 	FsmAction enter() override;
+	FsmAction update() override;
 	void exit() override;
+
+private:
+	RenderSystem& _renderSystem;
+	OverlaySystem& _overlaySystem;
 };
 
 }

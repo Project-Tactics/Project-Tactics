@@ -2,9 +2,9 @@
 
 #include <glad/gl.h>
 
-namespace tactics {
+namespace tactics::renderstep {
 
-void ClearColorRenderStep::render() {
+void ClearColor::render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 

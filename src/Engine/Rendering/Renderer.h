@@ -16,8 +16,8 @@ public:
 	void render();
 
 	template<typename TRenderStep, typename ...TArgs>
-	void addStep(TArgs... args) {
-		auto renderStep = std::make_unique<TRenderStep>(std::forward<TArgs>(args)...);
+	void addStep(TArgs&&... args) {
+		auto renderStep = std::make_unique<TRenderStep>(std::forward<TArgs&&>(args)...);
 		_renderSteps.push_back(std::move(renderStep));
 	}
 

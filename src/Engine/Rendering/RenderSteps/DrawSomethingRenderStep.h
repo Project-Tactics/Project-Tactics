@@ -4,7 +4,7 @@
 
 namespace tactics::renderstep {
 
-class ClearColor: public RenderStep {
+class DrawSomething: public RenderStep {
 public:
 	void render() override;
 };

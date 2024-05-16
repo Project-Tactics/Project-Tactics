@@ -16,5 +16,5 @@ macro(core_dependencies)
     # Create a wrapper library for lua
     add_library(lua_wrapper INTERFACE)
     # Link the wrapper library with lua51
-    target_link_libraries(lua_wrapper INTERFACE lua::lua)
+    target_link_libraries(lua_wrapper INTERFACE lua::lua sol2)
 endmacro()

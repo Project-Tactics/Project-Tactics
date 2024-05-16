@@ -10,6 +10,7 @@ class EventsSystem;
 class Fsm;
 class OverlaySystem;
 class RenderSystem;
+class ResourceSystem;
 
 class Application {
 public:
@@ -21,6 +22,7 @@ public:
 private:
 	void _initialize();
 	void _initializeSDL();
+	void _initializeResourceSystem();
 	void _initializeRenderSystem();
 	void _initializeEventsSystem();
 	void _initializeOverlaySystem();
@@ -28,6 +30,7 @@ private:
 	void _internalRun();
 	void _shutdown();
 
+	std::unique_ptr<ResourceSystem> _resourceSystem;
 	std::unique_ptr<RenderSystem> _renderSystem;
 	std::unique_ptr<EventsSystem> _eventsSystem;
 	std::unique_ptr<OverlaySystem> _overlaySystem;

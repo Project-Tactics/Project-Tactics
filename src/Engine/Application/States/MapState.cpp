@@ -29,8 +29,6 @@ FsmAction MapState::update() {
 		return FsmAction::transition("exit");
 	}
 
-	_renderSystem.drawSomething();
-
 	return FsmAction::none();
 }
 

@@ -17,6 +17,7 @@ add_library(engine_application ${SOURCES} ${HEADERS})
 target_link_libraries(engine_application
     PRIVATE 
     engine_rendering
+    engine_resources
     libs_fsm
     libs_events
     libs_overlay

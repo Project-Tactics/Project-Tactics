@@ -4,6 +4,7 @@
 #include "States/StartState.h"
 
 #include <Engine/Rendering/RenderSystem.h>
+#include <Engine/Resources/ResourceSystem.h>
 #include <Libs/Events/EventsSystem.h>
 #include <Libs/Fsm/FsmBuilder.h>
 #include <Libs/Overlay/OverlaySystem.h>
@@ -37,6 +38,7 @@ void Application::run() {
 
 void Application::_initialize() {
 	_initializeSDL();
+	_initializeResourceSystem();
 	_initializeRenderSystem();
 	_initializeEventsSystem();
 	_initializeOverlaySystem();
@@ -49,14 +51,10 @@ void Application::_internalRun() {
 		if (eventResult == EventResult::QuitGame) {
 			return;
 		}
-		_renderSystem->beginDraw();
+
 		_fsm->update();
 
-		_renderSystem->beginDrawOverlay();
-		_overlaySystem->update();
-		_renderSystem->endDrawOverlay();
-
-		_renderSystem->endDraw();
+		_renderSystem->render();
 	}
 }
 
@@ -83,7 +81,7 @@ void Application::_initializeFsm() {
 	auto builder = FsmBuilder();
 
 	builder
-		.state<StartState>("Start")
+		.state<StartState>("Start", *_renderSystem, *_overlaySystem)
 		.on("proceed").jumpTo("Map")
 
 		.state<MapState>("Map", *_renderSystem, *_overlaySystem)
@@ -97,6 +95,11 @@ void Application::_initializeFsm() {
 void Application::_initializeOverlaySystem() {
 	_overlaySystem = std::make_unique<OverlaySystem>();
 	_overlaySystem->setEnabled(true);
+}
+
+void Application::_initializeResourceSystem() {
+	_resourceSystem = std::make_unique<ResourceSystem>("data");
+	_resourceSystem->loadResources();
 }
 
 }
