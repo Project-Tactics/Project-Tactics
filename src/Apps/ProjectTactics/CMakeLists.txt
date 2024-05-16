@@ -16,8 +16,12 @@ set_target_properties(
 )
 
 # Copy all the dependencies ( dll ) to the executable file directory
-add_custom_target(RunPostBuildCommand ALL
+add_custom_command(TARGET ProjectTactics POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ProjectTactics> $<TARGET_RUNTIME_DLLS:ProjectTactics>
+  COMMAND_EXPAND_LISTS
+)
+# Copy all the dependencies ( dll ) and the data folder to the executable file directory
+add_custom_target(RunPostBuildCommand ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources/data $<TARGET_FILE_DIR:ProjectTactics>/data
   COMMAND_EXPAND_LISTS
 )
