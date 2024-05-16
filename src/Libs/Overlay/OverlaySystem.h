@@ -19,7 +19,12 @@ public:
 	OverlaySystem();
 	~OverlaySystem();
 
-	void addOverlay(std::string_view name, std::unique_ptr<Overlay> overlay);
+	template<typename TOverlay, typename ...TArgs>
+	void addOverlay(std::string_view name, TArgs... args) {
+		auto overlay = std::make_unique<TOverlay>(std::forward(args)...);
+		_addOverlay(name, std::move(overlay));
+	}
+
 	void removeOverlay(std::string_view name);
 
 	bool isEnabled() const;
@@ -28,6 +33,8 @@ public:
 	void update();
 
 private:
+	void _addOverlay(std::string_view name, std::unique_ptr<Overlay> overlay);
+
 	UnorderedStringMap<std::unique_ptr<Overlay>> _overlays;
 	bool _isEnabled{};
 };

@@ -1,19 +1,27 @@
 #include "MapState.h"
 
+#include <Libs/Overlay/OverlaySystem.h>
+#include <Libs/Overlay/ExampleOverlay.h>
 #include <Engine/Rendering/RenderSystem.h>
 
 namespace tactics {
 
-MapState::MapState(RenderSystem& renderSystem): _renderSystem(renderSystem) {
+MapState::MapState(RenderSystem& renderSystem, OverlaySystem& overlaySystem)
+	: _renderSystem(renderSystem)
+	, _overlaySystem(overlaySystem) {
 
 }
 
 FsmAction MapState::enter() {
 	_exitNextFrame = false;
+
+	_overlaySystem.addOverlay<ExampleOverlay>("ImGuiDemo");
+
 	return FsmAction::none();
 }
 
 void MapState::exit() {
+	_overlaySystem.removeOverlay("ImGuiDemo");
 }
 
 FsmAction MapState::update() {

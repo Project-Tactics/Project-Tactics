@@ -9,7 +9,7 @@ OverlaySystem::OverlaySystem() {}
 
 OverlaySystem::~OverlaySystem() {}
 
-void OverlaySystem::addOverlay(std::string_view name, std::unique_ptr<Overlay> overlay) {
+void OverlaySystem::_addOverlay(std::string_view name, std::unique_ptr<Overlay> overlay) {
 	if (_overlays.contains(name)) {
 		throw Exception("Can't add overlay \"{}\". Another overlay with the same name already exists.", name);
 	}

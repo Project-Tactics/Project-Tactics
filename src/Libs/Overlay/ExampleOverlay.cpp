@@ -5,7 +5,7 @@
 
 namespace tactics {
 
-// TODO(Gerark) this is going to disappear asap
+// TODO(Gerark) this is going to disappear asap. We keep it here just to compile/link sol2/lua even if we're not going to use scripting immediately
 sol::state state;
 
 ExampleOverlay::ExampleOverlay() {
