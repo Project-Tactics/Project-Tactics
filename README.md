@@ -18,5 +18,6 @@ cmake --build ./build --config Debug
 ```
 ### Run
 ```
-.\build\src\Apps\ProjectTactics\Debug\ProjectTactics.exe
+cd .\build\src\Apps\ProjectTactics\Debug
+.\ProjectTactics.exe
 ```
