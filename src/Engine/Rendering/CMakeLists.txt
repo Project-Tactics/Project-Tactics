@@ -2,10 +2,16 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
+    RenderSteps/ClearColorRenderStep.cpp
+    RenderSteps/RenderStep.cpp
+    Renderer.cpp
     RenderSystem.cpp
     ShaderLoader.cpp)
     
 set(HEADERS
+    RenderSteps/ClearColorRenderStep.h
+    RenderSteps/RenderStep.h
+    Renderer.h
     RenderSystem.h
     ShaderLoader.h)
 

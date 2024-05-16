@@ -1,6 +1,6 @@
 macro(core_dependencies)
     # Set up SDL2 dependency by configuring a wrapper library for simplified linking with other targets
-    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}"/deps/sdl2/cmake")
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}"/thirdparty/prebuilt/sdl2/cmake")
     find_package(SDL2 CONFIG REQUIRED)
     # Create a wrapper library for SDL2
     add_library(sdl2_wrapper INTERFACE)
@@ -11,7 +11,7 @@ macro(core_dependencies)
     find_package(OpenGL REQUIRED)
 
     # Set up Lua
-    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}"/deps/lua/cmake")
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}"/thirdparty/prebuilt/lua/cmake")
     find_package(LUA CONFIG REQUIRED)
     # Create a wrapper library for lua
     add_library(lua_wrapper INTERFACE)

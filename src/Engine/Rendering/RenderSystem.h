@@ -1,8 +1,13 @@
 #pragma once
 
+#include <memory>
+
 struct SDL_Window;
 
 namespace tactics {
+
+class Renderer;
+
 class RenderSystem {
 public:
 	RenderSystem();
@@ -22,5 +27,6 @@ private:
 
 	SDL_Window* _window;
 	void* _oglContext;
+	std::unique_ptr<Renderer> _renderer;
 };
 }

@@ -30,13 +30,13 @@ add_link_options(/OPT:REF)
 # Linker Optimization: Merge identical code sections when possible
 add_link_options(/OPT:ICF)
 
-# Include macros from the build_system folder
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build_system)
+# Include macros from the cmakes folder
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmakes)
 include(core_dependencies)
 include(unit_tests)
 include(folder_utils)
 
-# Call this macro from the build_system folder to resolve common dependencies like SDL, OpenGL, OpenAL and so on
+# Call this macro from the cmakes folder to resolve common dependencies like SDL, OpenGL, OpenAL and so on
 core_dependencies()
 
 # Include the root folder of the framework code as an additional include directory

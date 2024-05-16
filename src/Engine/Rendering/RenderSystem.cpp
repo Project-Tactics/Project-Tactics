@@ -1,6 +1,8 @@
 #include "RenderSystem.h"
+#include "Renderer.h"
 
 #include "ShaderLoader.h"
+#include "RenderSteps/ClearColorRenderStep.h"
 
 #include <glad/gl.h>
 #include <SDL.h>
@@ -49,6 +51,9 @@ RenderSystem::RenderSystem() {
 
 	ImGui_ImplSDL2_InitForOpenGL(_window, _oglContext);
 	ImGui_ImplOpenGL3_Init();
+
+	_renderer = std::make_unique<Renderer>();
+	_renderer->addStep<ClearColorRenderStep>();
 }
 
 RenderSystem::~RenderSystem() {
@@ -61,7 +66,7 @@ RenderSystem::~RenderSystem() {
 }
 
 void RenderSystem::beginDraw() {
-	glClear(GL_COLOR_BUFFER_BIT);
+	_renderer->render();
 }
 
 void RenderSystem::endDraw() {
