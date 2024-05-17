@@ -8,10 +8,10 @@ namespace tactics {
 class RenderStep;
 
 /**
- * @brief The Renderer class manages a sequence of rendering steps, ensuring each registered item is rendered
+ * @brief The RenderQueue class manages a sequence of rendering steps, ensuring each registered item is rendered
  * in a specific order, while providing contextual rendering information.
  */
-class Renderer {
+class RenderQueue {
 public:
 	void render();
 

@@ -1,8 +1,10 @@
 #include "RenderSystem.h"
-#include "Renderer.h"
 
-#include "ShaderLoader.h"
+#include "DebugMessageHandler.h"
+#include "RenderQueue.h"
 #include "RenderSteps/RenderStep.h"
+
+#include <Libs/Utilities/Exception.h>
 
 #include <glad/gl.h>
 #include <SDL.h>
@@ -13,17 +15,25 @@
 #include <imgui/backends/imgui_impl_sdl2.h>
 
 namespace tactics {
+
+// TODO(Gerark) This is a very simple way of dealing with OGL errors and requires an improvement
+// We can use all the parameters and we might have a dedicated class for it. Also it's currently stateless, which is not bad per se,
+// but we could probably pass a valid *userParam and leverage that by using a proper log manager
+void onGlErrorMessage(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum /*severity*/, GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
+	printf("%s\n", message);
+}
+
 RenderSystem::RenderSystem() {
-	_defineGlAttributes();
+	static const bool useDebugMessages = true;
+	_defineGlAttributes(useDebugMessages);
 	_createWindow();
 	_initializeGlContext();
 
 	glViewport(0, 0, 1280, 720);
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 
-	_loadShaders();
-	_createQuad();
-
+	// TODO(Gerark) Creating the context of ImGui in the RenderSystem doesn't sound right.
+	// We can move it to a specialized RenderQueue if we introduce some sort of Initialization for those classes as well.
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -33,6 +43,10 @@ RenderSystem::RenderSystem() {
 
 	ImGui_ImplSDL2_InitForOpenGL(_window, _oglContext);
 	ImGui_ImplOpenGL3_Init();
+
+	if (useDebugMessages) {
+		_debugMessageHandler = std::make_unique<DebugMessageHandler>();
+	}
 }
 
 RenderSystem::~RenderSystem() {
@@ -44,23 +58,38 @@ RenderSystem::~RenderSystem() {
 	SDL_DestroyWindow(_window);
 }
 
-Renderer& RenderSystem::createRenderer() {
-	auto renderer = std::make_unique<Renderer>();
-	_renderers.push_back(std::move(renderer));
-	return *_renderers.back().get();
+RenderQueue& RenderSystem::createRenderQueue() {
+	auto renderQueue = std::make_unique<RenderQueue>();
+	_renderQueues.push_back(std::move(renderQueue));
+	return *_renderQueues.back().get();
 }
 
-void RenderSystem::_defineGlAttributes() {
+void RenderSystem::_defineGlAttributes(bool useDebugMessages) {
+	// TODO(Gerark) all these configurations could be moved to lua/config
+
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+
+	int majorVersion = 3;
+	int minorVersion = 2;
+
+	// We're using OpenGL 4.3 to get access to the glDebugMessageCallback and get better error message. We might decrease the version if this is
+	// the only functionality we need and we're releasing a final version which doesn't require the log part
+	if (useDebugMessages) {
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+		majorVersion = 4;
+		minorVersion = 3;
+	}
+
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, majorVersion);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minorVersion);
+
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 }
 
 void RenderSystem::_createWindow() {
 	_window = SDL_CreateWindow("Project Tactics", 100, 100, 1280, 720, SDL_WINDOW_OPENGL);
 	if (_window == nullptr) {
-		throw std::exception(std::format("Failed to open window: %s\n", SDL_GetError()).c_str());
+		throw Exception("Failed to open window: %s\n", SDL_GetError());
 	}
 }
 
@@ -71,99 +100,18 @@ void RenderSystem::_initializeGlContext() {
 
 	int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
 	if (version == 0) {
-		throw std::exception(std::format("Failed to initialize OpenGL context\n").c_str());
+		throw Exception("Failed to initialize OpenGL context\n");
 	}
 
+	// TODO(Gerark) Move this printf once we have a proper Log System ( don't forget of removing the useless headers after that )
 	printf(std::format("Loaded OpenGL {}.{}\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version)).c_str());
 }
 
 void RenderSystem::render() {
-	for (auto& renderer : _renderers) {
-		renderer->render();
+	for (auto& renderQueue : _renderQueues) {
+		renderQueue->render();
 	}
 	SDL_GL_SwapWindow(_window);
-}
-
-void RenderSystem::_createQuad() {
-	unsigned int buffer;
-	glGenBuffers(1, &buffer);
-
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-
-	float positions[6] = {
-		-0.5f, -0.5f,
-		0.0f, 0.5f,
-		0.5f, -0.5f
-	};
-
-	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
-
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
-
-	_checkGlErrors("After Create Quad");
-}
-
-void RenderSystem::_loadShaders() {
-	auto programId = ShaderLoader::loadProgram(
-		R"(
-			#version 330 core
-			layout(location = 0) in vec4 position;
-			void main()
-			{
-				gl_Position = position;
-			}
-		)",
-		R"(
-			#version 330 core
-			layout(location = 0) out vec4 color;
-			void main()
-			{
-				color = vec4(1.0, 0.5, 0.0, 1.0);
-			}			
-		)"
-	);
-	glUseProgram(programId);
-}
-
-void RenderSystem::_checkGlErrors(const char* context) {
-	auto errorCode = glGetError();
-	if (errorCode != GL_NO_ERROR) {
-		std::string error;
-
-		switch (errorCode) {
-		case GL_INVALID_ENUM:
-			error = "GL_INVALID_ENUM: An unacceptable value is specified for an enumerated argument.";
-			break;
-		case GL_INVALID_VALUE:
-			error = "GL_INVALID_VALUE: A numeric argument is out of range.";
-			break;
-		case GL_INVALID_OPERATION:
-			error = "GL_INVALID_OPERATION: The specified operation is not allowed in the current state.";
-			break;
-		case GL_INVALID_FRAMEBUFFER_OPERATION:
-			error = "GL_INVALID_FRAMEBUFFER_OPERATION: The framebuffer object is not complete.";
-			break;
-		case GL_OUT_OF_MEMORY:
-			error = "GL_OUT_OF_MEMORY: There is not enough memory left to execute the command.";
-			break;
-		case GL_STACK_UNDERFLOW:
-			error = "GL_STACK_UNDERFLOW: An attempt has been made to perform an operation that would cause an internal stack to underflow.";
-			break;
-		case GL_STACK_OVERFLOW:
-			error = "GL_STACK_OVERFLOW: An attempt has been made to perform an operation that would cause an internal stack to overflow.";
-			break;
-		default:
-			error = "UNKNOWN ERROR: An unknown OpenGL error occurred.";
-			break;
-		}
-
-		throw std::exception(std::format("OpenGL error in {}: {} - Code: {}", context, error, errorCode).c_str());
-	}
 }
 
 }

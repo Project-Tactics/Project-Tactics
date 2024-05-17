@@ -26,14 +26,12 @@ public:
 	~ResourceSystem();
 	void loadResources();
 
-	BaseResource* getResource(ResourceId id);
+	std::shared_ptr<BaseResource> getResource(ResourceId id);
+	std::shared_ptr<BaseResource> getResource(std::string_view name);
 
-	template<typename TResource>
-	Resource<TResource>* as(ResourceId id) {
-		return static_cast<Resource<TResource>*>(getResource(id));
-	}
+	std::shared_ptr<ShaderResource> getShader(std::string_view name);
 
-	std::shared_ptr<ShaderResource> defineShader(std::string_view name, std::string_view vertexShader, std::string_view fragmentShader);
+	ResourceId createShader(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader);
 
 private:
 	void _loadShaders();

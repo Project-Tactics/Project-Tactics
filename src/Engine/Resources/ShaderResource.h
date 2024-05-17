@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Resource.h"
+#include "ShaderLoader.h"
 
-#include <string>
+namespace tactics {
 
 class ShaderResource: public Resource<ShaderResource> {
 public:
-	std::string name;
-	std::string vertexShader;
-	std::string fragmentShader;
+	ShaderId shaderId;
 };
+
+}

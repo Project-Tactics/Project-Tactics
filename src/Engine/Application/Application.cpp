@@ -81,7 +81,7 @@ void Application::_initializeFsm() {
 	auto builder = FsmBuilder();
 
 	builder
-		.state<StartState>("Start", *_renderSystem, *_overlaySystem)
+		.state<StartState>("Start", *_resourceSystem, *_renderSystem, *_overlaySystem)
 		.on("proceed").jumpTo("Map")
 
 		.state<MapState>("Map", *_renderSystem, *_overlaySystem)
@@ -99,7 +99,6 @@ void Application::_initializeOverlaySystem() {
 
 void Application::_initializeResourceSystem() {
 	_resourceSystem = std::make_unique<ResourceSystem>("data");
-	_resourceSystem->loadResources();
 }
 
 }

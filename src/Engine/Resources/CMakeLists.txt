@@ -2,18 +2,21 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
-    ResourceSystem.cpp)
+    ResourceSystem.cpp
+    ShaderLoader.cpp)
     
 set(HEADERS
     ResourceSystem.h
     Resource.h
-    ShaderResource.h)
+    ShaderResource.h
+    ShaderLoader.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
 add_library(engine_resources ${SOURCES} ${HEADERS})
 target_link_libraries(engine_resources
     PRIVATE
+    glad
     libs_utils
     lua_wrapper)
 set_property(TARGET engine_resources PROPERTY FOLDER "tactics/engine")

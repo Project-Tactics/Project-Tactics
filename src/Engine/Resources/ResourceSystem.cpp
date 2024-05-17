@@ -1,10 +1,13 @@
 #include "ResourceSystem.h"
+#include "ShaderLoader.h"
 
 #include <Libs/Utilities/Exception.h>
 #include <Libs/Utilities/UUID.h>
 
 #include <sol/sol.hpp>
 #include <fmt/format.h>
+#include <algorithm>
+#include <ranges>
 
 namespace tactics {
 
@@ -23,12 +26,33 @@ void ResourceSystem::loadResources() {
 	_loadShaders();
 }
 
-BaseResource* ResourceSystem::getResource(ResourceId id) {
-	if (!_resources.contains(id)) {
-		throw Exception("Resource with it id {} does not exists. Can't find resource.", id);
+std::shared_ptr<ShaderResource> ResourceSystem::getShader(std::string_view name) {
+	auto resource = getResource(name);
+	if (resource) {
+		return std::static_pointer_cast<ShaderResource>(resource);
 	}
 
-	return _resources[id].get();
+	return nullptr;
+}
+
+std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceId id) {
+	if (!_resources.contains(id)) {
+		throw Exception("Resource with id {} does not exists. Can't find resource.", id);
+	}
+
+	return _resources[id];
+}
+
+std::shared_ptr<BaseResource> ResourceSystem::getResource(std::string_view name) {
+	auto itr = std::ranges::find_if(_resources, [name] (const auto& pair) {
+		return pair.second->name == name;
+	});
+
+	if (itr == _resources.end()) {
+		throw Exception("Resource with name {} does not exists. Can't find resource.", name);
+	}
+
+	return itr->second;
 }
 
 void ResourceSystem::_loadShaders() {
@@ -36,25 +60,23 @@ void ResourceSystem::_loadShaders() {
 	sol::environment shaderEnv(*_luaState, sol::create);
 
 	// Expose the shader function to lua to give the possibility to define new shaders
-	shaderEnv.set_function("shader", [this] (std::string_view name, std::string_view vertexShader, std::string_view fragmentShader) {
-		auto shader = defineShader(name, vertexShader, fragmentShader);
-		_resources.insert({shader->id, shader});
+	shaderEnv.set_function("shader", [this] (std::string name, std::string vertexShader, std::string fragmentShader) {
+		createShader(name, vertexShader, fragmentShader);
 	});
 
 	auto path = _makeAbsolutePath("shaders/shader_definition.lua");
 	_luaState->script_file(path, shaderEnv);
 }
 
-std::shared_ptr<ShaderResource> ResourceSystem::defineShader(std::string_view name, std::string_view vertexShader, std::string_view fragmentShader) {
+ResourceId ResourceSystem::createShader(const std::string& name, const std::string& vertexShader, const std::string& fragmentShader) {
 	auto shader = std::make_shared<ShaderResource>();
 	shader->id = generateUUID();
 	shader->type = ResourceType::Shader;
 	shader->name = name;
-	shader->fragmentShader = fragmentShader;
-	shader->vertexShader = vertexShader;
-	return shader;
+	shader->shaderId = ShaderLoader::loadProgram(vertexShader, fragmentShader);
+	_resources.insert({shader->id, shader});
+	return shader->id;
 }
-
 
 std::string ResourceSystem::_makeAbsolutePath(std::string_view dataPath) {
 	return (_absoluteDataPath / dataPath).string();
