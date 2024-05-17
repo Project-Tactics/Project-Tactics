@@ -37,6 +37,15 @@ DrawSomething::DrawSomething(std::shared_ptr<ShaderResource> shader): _shader(sh
 
 void DrawSomething::render() {
 	glUseProgram(_shader->shaderId);
+
+	int location = glGetUniformLocation(_shader->shaderId, "u_Color");
+	static int step = 2;
+	static int i = 0;
+	if (i > 255 || i < 0) {
+		step = -step;
+	}
+	i += step;
+	glUniform4f(location, i / 255.f, i / 255.f, 255 - i / 255.f, 1);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
