@@ -7,9 +7,11 @@ shader(
 
         out vec2 v_TexCoord;
 
+        uniform mat4 u_ModelViewProjection;
+
         void main()
         {
-            gl_Position = position;
+            gl_Position = u_ModelViewProjection * position;
             v_TexCoord = texCoord;
         }
     ]],

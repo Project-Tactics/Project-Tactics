@@ -20,8 +20,10 @@ StartState::StartState(ResourceSystem& resourceSystem, RenderSystem& renderSyste
 FsmAction StartState::enter() {
 	using namespace renderstep;
 
-	_resourceSystem.loadResourcePackDefinition("resources.lua");
+	_resourceSystem.loadResourcePackDefinition("game_res.lua");
 	_resourceSystem.loadResourcePack("mainPackage");
+
+	_renderSystem.createCamera();
 
 	auto shader = _resourceSystem.getResource<Shader>("main");
 	auto texture = _resourceSystem.getResource<Texture>("tactics-icon");

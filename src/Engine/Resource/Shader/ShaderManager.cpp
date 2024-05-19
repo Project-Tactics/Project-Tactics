@@ -25,6 +25,7 @@ std::vector<ResourceId> ShaderManager::load(sol::reference& luaDefinitionLoader)
 	ScriptingHelper::executeFunction(_luaState, luaDefinitionLoader);
 
 	resourcePackEnv["shader"] = sol::nil;
+	resourcePackEnv["shaderDef"] = sol::nil;
 	return resources;
 }
 

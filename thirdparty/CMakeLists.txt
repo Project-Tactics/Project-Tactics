@@ -30,5 +30,11 @@ add_subdirectory(sol2)
 # https://github.com/nothings/stb
 add_subdirectory(stb)
 
+# Adding inifile-cpp for reading .ini files
+# https://github.com/Rookfighter/inifile-cpp
+# We're not really in need of going through their cmakelists.txt
+add_library(inicpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/inifile-cpp/include/inicpp.h)
+target_include_directories(inicpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/inifile-cpp/include)
+
 # Let's keep things clean and tidy by moving all the thirdparty libs to a folder
-set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui fmt sol2 stb PROPERTY FOLDER "thirdparty")
+set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui fmt sol2 stb inicpp PROPERTY FOLDER "thirdparty")

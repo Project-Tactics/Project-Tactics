@@ -10,18 +10,18 @@ namespace tactics::renderstep {
 
 class ImGuiBegin: public RenderStep {
 public:
-	void render() override;
+	void execute(Camera& camera) override;
 };
 
 class ImGuiEnd: public RenderStep {
 public:
-	void render() override;
+	void execute(Camera& camera) override;
 };
 
 class ImGuiRender: public RenderStep {
 public:
 	ImGuiRender(OverlaySystem& overlaySystem);
-	void render() override;
+	void execute(Camera& camera) override;
 
 private:
 	OverlaySystem& _overlaySystem;

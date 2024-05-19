@@ -10,6 +10,8 @@ ResourceType ResourceTypeSerialization::toEnum(std::string_view strValue) {
 		return ResourceType::Shader;
 	} else if (strValue == "texture") {
 		return ResourceType::Texture;
+	} else if (strValue == "ini") {
+		return ResourceType::IniFile;
 	}
 
 	return ResourceType::Unkwown;
@@ -20,6 +22,8 @@ ResourceType ResourceTypeSerialization::fromGroupTypeToEnum(std::string_view str
 		return ResourceType::Shader;
 	} else if (strValue == "textures") {
 		return ResourceType::Texture;
+	} else if (strValue == "inis") {
+		return ResourceType::IniFile;
 	}
 
 	return ResourceType::Unkwown;
@@ -32,6 +36,9 @@ std::string ResourceTypeSerialization::toString(ResourceType resourceType) {
 	}
 	case ResourceType::Shader: {
 		return "shader";
+	}
+	case ResourceType::IniFile: {
+		return "ini";
 	}
 	}
 

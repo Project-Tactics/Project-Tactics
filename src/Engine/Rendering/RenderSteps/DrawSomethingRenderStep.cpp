@@ -2,6 +2,9 @@
 
 #include <glad/gl.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "../Camera.h"
 
 namespace tactics::renderstep {
 
@@ -14,10 +17,10 @@ DrawSomething::DrawSomething(std::shared_ptr<Shader> shader, std::shared_ptr<Tex
 	: _shader(shader)
 	, _texture(texture) {
 	float vertices[] = {
-		-0.25f, -0.5f, 0.0f, 0.0f,
-		0.25f, -0.5f, 1.0f, 0.0f,
-		0.25f, 0.5f, 1.0f, 1.0f,
-		-0.25f, 0.5f, 0.0f, 1.0f
+		-0.25f, -0.5f, -5.f, 0.0f, 0.0f,
+		0.25f, -0.5f, -5.f, 1.0f, 0.0f,
+		0.25f, 0.5f, -5.f, 1.0f, 1.0f,
+		-0.25f, 0.5f, -5.f, 0.0f, 1.0f
 	};
 
 	GLuint indices[] = {
@@ -28,15 +31,15 @@ DrawSomething::DrawSomething(std::shared_ptr<Shader> shader, std::shared_ptr<Tex
 	unsigned int buffer;
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, 4 * 4 * sizeof(float), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 4 * 5 * sizeof(float), vertices, GL_STATIC_DRAW);
 
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(2 * sizeof(GLfloat)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 
 	unsigned int ibo;
@@ -45,7 +48,7 @@ DrawSomething::DrawSomething(std::shared_ptr<Shader> shader, std::shared_ptr<Tex
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(GLuint), indices, GL_STATIC_DRAW);
 }
 
-void DrawSomething::render() {
+void DrawSomething::execute(Camera& camera) {
 	glUseProgram(_shader->rendererId);
 
 	glEnable(GL_BLEND);
@@ -53,6 +56,7 @@ void DrawSomething::render() {
 	glBindTexture(GL_TEXTURE_2D, _texture->rendererId);
 	glActiveTexture(GL_TEXTURE0);
 
+	int mvpLocation = glGetUniformLocation(_shader->rendererId, "u_ModelViewProjection");
 	int texLocation = glGetUniformLocation(_shader->rendererId, "u_Texture");
 	int colLocation = glGetUniformLocation(_shader->rendererId, "u_Color");
 	static int step = 2;
@@ -61,8 +65,12 @@ void DrawSomething::render() {
 		step = -step;
 	}
 	i += step;
+	camera.setPosition(glm::vec3(i / 1000.f, 0, 0));
+
+	glm::mat4 mvp = camera.getProjection() * camera.getView() * glm::mat4(1.0f);
 	glUniform4f(colLocation, i / 255.f, i / 255.f, 255 - i / 255.f, 1);
 	glUniform1i(texLocation, 0);
+	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvp[0][0]);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 

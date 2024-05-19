@@ -1,7 +1,10 @@
 #include "MapState.h"
 
+#include "../Overlay/DebugOverlay.h"
+
 #include <Libs/Overlay/OverlaySystem.h>
 #include <Libs/Overlay/ExampleOverlay.h>
+#include <Libs/Overlay/MainOverlay.h>
 #include <Engine/Rendering/RenderSystem.h>
 
 namespace tactics {
@@ -15,13 +18,17 @@ MapState::MapState(RenderSystem& renderSystem, OverlaySystem& overlaySystem)
 FsmAction MapState::enter() {
 	_exitNextFrame = false;
 
-	_overlaySystem.addOverlay<ExampleOverlay>("ImGuiDemo");
+	_overlaySystem.addOverlay<MainOverlay>("Main", true, _overlaySystem);
+	_overlaySystem.addOverlay<DebugOverlay>("Debug", false, _renderSystem);
+	_overlaySystem.addOverlay<ExampleOverlay>("Example", false);
 
 	return FsmAction::none();
 }
 
 void MapState::exit() {
-	_overlaySystem.removeOverlay("ImGuiDemo");
+	_overlaySystem.removeOverlay("Main");
+	_overlaySystem.removeOverlay("Debug");
+	_overlaySystem.removeOverlay("Example");
 }
 
 FsmAction MapState::update() {

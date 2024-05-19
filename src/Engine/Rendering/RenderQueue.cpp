@@ -2,9 +2,9 @@
 #include "RenderSteps/RenderStep.h"
 
 namespace tactics {
-void RenderQueue::render() {
+void RenderQueue::execute(Camera& camera) {
 	for (auto& renderStep : _renderSteps) {
-		renderStep->render();
+		renderStep->execute(camera);
 	}
 }
 

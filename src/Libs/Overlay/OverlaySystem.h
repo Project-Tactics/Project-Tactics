@@ -1,12 +1,15 @@
 #pragma once
 
+#include "OverlayTypes.h"
+
 #include <Libs/Utilities/TransparentTypes.h>
 
 #include <memory>
+#include <functional>
 
 namespace tactics {
 
-class Overlay;
+class IniFile;
 
 /**
  * @brief An Overlay is a screen built in Immediate Mode GUI ( imgui ) which is displayed on top of any other ui and it's
@@ -16,27 +19,42 @@ class Overlay;
  */
 class OverlaySystem {
 public:
-	OverlaySystem();
+	OverlaySystem(std::shared_ptr<IniFile> iniFile);
 	~OverlaySystem();
 
 	template<typename TOverlay, typename ...TArgs>
-	void addOverlay(std::string_view name, TArgs... args) {
-		auto overlay = std::make_unique<TOverlay>(std::forward(args)...);
-		_addOverlay(name, std::move(overlay));
+	void addOverlay(std::string_view name, bool enabled, TArgs &&... args) {
+		auto overlay = std::make_unique<TOverlay>(std::forward<TArgs>(args)...);
+		if constexpr (HasType<TOverlay, TOverlay>) {
+			_addOverlay(name, std::move(overlay), TOverlay::TYPE, enabled);
+		} else {
+			_addOverlay(name, std::move(overlay), OverlayType::Window, enabled);
+		}
 	}
 
 	void removeOverlay(std::string_view name);
+	void enableOverlay(std::string_view name, bool enabled);
 
 	bool isEnabled() const;
 	void setEnabled(bool enable);
 
 	void update();
 
-private:
-	void _addOverlay(std::string_view name, std::unique_ptr<Overlay> overlay);
+	struct OverlayItem {
+		std::unique_ptr<Overlay> overlay;
+		bool enabled{};
+		OverlayType type{};
+	};
+	void forEachOverlay(const std::function<void(const std::string&, OverlayItem&)>& callback);
 
-	UnorderedStringMap<std::unique_ptr<Overlay>> _overlays;
+private:
+	void _addOverlay(std::string_view name, std::unique_ptr<Overlay> overlay, OverlayType type = OverlayType::Window, bool enabled = false);
+	bool _getOrCreateOverlayStoredEnableValue(std::string_view name, bool defaultValue);
+	void _setOverlayStoredEnableValue(std::string_view name, bool enabled);
+
+	UnorderedStringMap<OverlayItem> _overlays;
 	bool _isEnabled{};
+	std::shared_ptr<IniFile> _iniFile;
 };
 
 }

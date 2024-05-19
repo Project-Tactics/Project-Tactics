@@ -2,6 +2,8 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
+    IniFile/IniFile.cpp
+    IniFile/IniFileManager.cpp
     Resource.cpp
     ResourcePathHelper.cpp
     ResourceSystem.cpp
@@ -9,6 +11,8 @@ set(SOURCES
     ResourcePack/ResourcePackManager.cpp)
     
 set(HEADERS
+    IniFile/IniFile.h
+    IniFile/IniFileManager.h
     Resource.h
     ResourcePathHelper.h
     ResourceSystem.h
@@ -21,6 +25,7 @@ add_library(libs_resource STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_resource
     PUBLIC 
     libs_scripting
+    inicpp
     PRIVATE
     libs_utils)
 add_to_libs_folder(libs_resource)

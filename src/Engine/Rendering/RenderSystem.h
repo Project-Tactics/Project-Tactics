@@ -9,6 +9,7 @@ namespace tactics {
 
 class DebugMessageHandler;
 class RenderQueue;
+class Camera;
 
 class RenderSystem {
 public:
@@ -16,6 +17,9 @@ public:
 	~RenderSystem();
 
 	RenderQueue& createRenderQueue();
+	Camera& createCamera();
+
+	Camera& getCamera();
 
 	void render();
 
@@ -24,9 +28,13 @@ private:
 	void _createWindow();
 	void _initializeGlContext();
 
-	SDL_Window* _window;
-	void* _oglContext;
+	void _initializeImGui();
+	void _shutdownImGui();
+
+	SDL_Window* _window{};
+	void* _oglContext{};
 	std::unique_ptr<DebugMessageHandler> _debugMessageHandler;
 	std::vector<std::unique_ptr<RenderQueue>> _renderQueues;
+	std::unique_ptr<Camera> _camera;
 };
 }

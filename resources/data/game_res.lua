@@ -1,4 +1,3 @@
--- The
 resourcePack({
     name = "mainPackage",
     shaders = function()
@@ -6,5 +5,5 @@ resourcePack({
     end,
     textures = function()
         textureDef("textures\\texture_definition.lua")
-    end,
+    end
 })

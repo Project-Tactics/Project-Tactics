@@ -52,6 +52,10 @@ public:
 		_unregisterManager(manager);
 	}
 
+	ResourcePathHelper& getResourcePathHelper() {
+		return _resourcePathHelper;
+	}
+
 private:
 	void _cleanupResources();
 	void _registerManager(std::unique_ptr<ResourceManager> resourceManager);

@@ -32,4 +32,6 @@ add_dependencies(RunPostBuildCommand framework_data)
 # Make the main target depend on the post-build command target
 add_dependencies(ProjectTactics RunPostBuildCommand)
 
+  set_property(TARGET RunPostBuildCommand PROPERTY FOLDER "postbuild")
+
 unset(SOURCES)

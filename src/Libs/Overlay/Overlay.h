@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Libs/Overlay/OverlayTypes.h>
+
 namespace tactics {
 
 class Overlay {

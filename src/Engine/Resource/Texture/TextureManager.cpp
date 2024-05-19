@@ -25,6 +25,7 @@ std::vector<ResourceId> TextureManager::load(sol::reference& luaDefinitionLoader
 	ScriptingHelper::executeFunction(_luaState, luaDefinitionLoader);
 
 	resourcePackEnv["texture"] = sol::nil;
+	resourcePackEnv["textureDef"] = sol::nil;
 	return resources;
 }
 
@@ -35,6 +36,9 @@ void TextureManager::unload(ResourceId resourceId) {
 }
 
 void TextureManager::unload(std::vector<ResourceId> resourceIds) {
+	for (auto& resourceId : resourceIds) {
+		unload(resourceId);
+	}
 
 }
 

@@ -4,10 +4,12 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
     Application.cpp
     States/StartState.cpp
-    States/MapState.cpp)
+    States/MapState.cpp
+    Overlay/DebugOverlay.cpp)
     
 set(HEADERS
     Application.h
+    Overlay/DebugOverlay.h
     States/StartState.h
     States/MapState.h)
 

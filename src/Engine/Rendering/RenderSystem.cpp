@@ -1,5 +1,6 @@
 #include "RenderSystem.h"
 
+#include "Camera.h"
 #include "DebugMessageHandler.h"
 #include "RenderQueue.h"
 #include "RenderSteps/RenderStep.h"
@@ -10,6 +11,7 @@
 #include <SDL.h>
 #include <iostream>
 #include <format>
+#include <filesystem>
 
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_sdl2.h>
@@ -26,23 +28,16 @@ void onGlErrorMessage(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum 
 RenderSystem::RenderSystem() {
 	static const bool useDebugMessages = true;
 	_defineGlAttributes(useDebugMessages);
+	// TODO(Gerark) similarly to how we create a camera from outside we should expose the creation of the window
 	_createWindow();
 	_initializeGlContext();
 
+	// TODO(Gerark) Of course it's not a good idea to hardcode the viewport size. As soon as we receive the information from outside,
+	// through some config file or even a command line argument, we should use that information to set the viewport size
 	glViewport(0, 0, 1280, 720);
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 
-	// TODO(Gerark) Creating the context of ImGui in the RenderSystem doesn't sound right.
-	// We can move it to a specialized RenderQueue if we introduce some sort of Initialization for those classes as well.
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
-
-	ImGui_ImplSDL2_InitForOpenGL(_window, _oglContext);
-	ImGui_ImplOpenGL3_Init();
+	_initializeImGui();
 
 	if (useDebugMessages) {
 		_debugMessageHandler = std::make_unique<DebugMessageHandler>();
@@ -50,10 +45,7 @@ RenderSystem::RenderSystem() {
 }
 
 RenderSystem::~RenderSystem() {
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
-
+	_shutdownImGui();
 	SDL_GL_DeleteContext(_oglContext);
 	SDL_DestroyWindow(_window);
 }
@@ -108,10 +100,42 @@ void RenderSystem::_initializeGlContext() {
 }
 
 void RenderSystem::render() {
+	_camera->update();
 	for (auto& renderQueue : _renderQueues) {
-		renderQueue->render();
+		renderQueue->execute(*_camera);
 	}
 	SDL_GL_SwapWindow(_window);
+}
+
+Camera& RenderSystem::createCamera() {
+	_camera = std::make_unique<Camera>();
+	return *_camera;
+}
+
+Camera& RenderSystem::getCamera() {
+	if (!_camera) {
+		throw Exception("Can't get camera. The camera hasn't been created yet.");
+	}
+	return *_camera;
+}
+
+void RenderSystem::_initializeImGui() {
+	// TODO(Gerark) Creating the context of ImGui in the RenderSystem doesn't sound right.
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
+
+	ImGui_ImplSDL2_InitForOpenGL(_window, _oglContext);
+	ImGui_ImplOpenGL3_Init();
+}
+
+void RenderSystem::_shutdownImGui() {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 }
 
 }

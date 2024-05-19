@@ -29,6 +29,7 @@ private:
 	void _initializeFsm();
 	void _internalRun();
 	void _shutdown();
+	void _loadResources();
 
 	std::unique_ptr<ResourceSystem> _resourceSystem;
 	std::unique_ptr<RenderSystem> _renderSystem;

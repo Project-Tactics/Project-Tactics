@@ -8,7 +8,8 @@ namespace tactics {
 enum class ResourceType: uint8_t {
 	Unkwown,
 	Shader,
-	Texture
+	Texture,
+	IniFile
 };
 
 // TODO(Gerark) we should take a look at magic_enum lib or something else to automate this

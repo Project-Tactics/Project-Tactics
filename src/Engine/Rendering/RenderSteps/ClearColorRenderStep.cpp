@@ -4,7 +4,7 @@
 
 namespace tactics::renderstep {
 
-void ClearColor::render() {
+void ClearColor::execute(Camera&) {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 

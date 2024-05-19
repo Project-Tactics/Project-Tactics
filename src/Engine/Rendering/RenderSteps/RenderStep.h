@@ -2,6 +2,8 @@
 
 namespace tactics {
 
+class Camera;
+
 /**
  * @brief Interface implemented to handle rendering operations such as drawing meshes, setting clear color, applying post-processing effects, etc.
  */
@@ -10,9 +12,10 @@ public:
 	virtual ~RenderStep() = default;
 
 	/**
-	 * @brief Renders the scene according to the implemented rendering step.
+	 * @brief Executes the rendering operation.
+	 * @param camera The camera to use for rendering.
 	 */
-	virtual void render() = 0;
+	virtual void execute(Camera& camera) = 0;
 };
 
 }

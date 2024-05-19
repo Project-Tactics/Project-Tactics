@@ -6,7 +6,7 @@ namespace tactics::renderstep {
 
 class ClearColor: public RenderStep {
 public:
-	void render() override;
+	void execute(Camera& camera) override;
 };
 
 }

@@ -6,6 +6,7 @@
 namespace tactics {
 
 class RenderStep;
+class Camera;
 
 /**
  * @brief The RenderQueue class manages a sequence of rendering steps, ensuring each registered item is rendered
@@ -13,7 +14,7 @@ class RenderStep;
  */
 class RenderQueue {
 public:
-	void render();
+	void execute(Camera& camera);
 
 	template<typename TRenderStep, typename ...TArgs>
 	void addStep(TArgs&&... args) {

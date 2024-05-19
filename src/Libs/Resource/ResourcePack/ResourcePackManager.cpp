@@ -45,6 +45,8 @@ void ResourcePackManager::loadPackDefinition(std::string_view packDefinitionPath
 
 	auto path = _pathHelper.makeAbsolutePath(packDefinitionPath);
 	_luaState.script_file(path, resourcePackEnv);
+
+	resourcePackEnv["resourcePack"] = sol::nil;
 }
 
 void ResourcePackManager::loadPack(std::string_view packName) {
@@ -56,8 +58,12 @@ void ResourcePackManager::loadPack(std::string_view packName) {
 
 void ResourcePackManager::_loadPack(Package& package, PackageLoadInfo& loadInfo) {
 	auto manager = _managerProvider(loadInfo.resourceType);
-	auto resourceId = manager->load(loadInfo.luaFunction);
-	_addLoadedResources(package, loadInfo.resourceType, resourceId);
+	auto resourceIds = manager->load(loadInfo.luaFunction);
+	if (resourceIds.empty()) {
+		throw Exception("A section for resource type \"{}\" has been defined in package \"{}\" but no resources have been loaded.",
+			ResourceTypeSerialization::toString(loadInfo.resourceType), package.name);
+	}
+	_addLoadedResources(package, loadInfo.resourceType, resourceIds);
 }
 
 void ResourcePackManager::_addLoadedResources(Package& package, ResourceType resourceType, std::vector<ResourceId> resourceIds) {
