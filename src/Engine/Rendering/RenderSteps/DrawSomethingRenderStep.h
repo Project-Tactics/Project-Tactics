@@ -11,12 +11,12 @@ namespace tactics::renderstep {
 
 class DrawSomething: public RenderStep {
 public:
-	DrawSomething(std::shared_ptr<Shader> shader, std::shared_ptr<Texture> texture);
+	DrawSomething(Shader* shader, Texture* texture);
 	void execute(Camera& camera) override;
 
 private:
-	std::shared_ptr<Shader> _shader;
-	std::shared_ptr<Texture> _texture;
+	Shader* _shader;
+	Texture* _texture;
 };
 
 }

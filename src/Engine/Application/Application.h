@@ -14,22 +14,18 @@ class ResourceSystem;
 
 class Application {
 public:
+	static void run();
+
+private:
 	Application();
 	~Application();
 
-	void run();
-
-private:
 	void _initialize();
 	void _initializeSDL();
-	void _initializeResourceSystem();
-	void _initializeRenderSystem();
-	void _initializeEventsSystem();
-	void _initializeOverlaySystem();
+	void _initializeImGui();
 	void _initializeFsm();
 	void _internalRun();
 	void _shutdown();
-	void _loadResources();
 
 	std::unique_ptr<ResourceSystem> _resourceSystem;
 	std::unique_ptr<RenderSystem> _renderSystem;

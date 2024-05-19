@@ -29,14 +29,15 @@ public:
 
 	void loadResourcePackDefinition(std::string_view definitionPath);
 	void loadResourcePack(std::string_view packName);
+	void unloadResourcePack(std::string_view packName);
 
 	template<typename TResource>
-	std::shared_ptr<TResource> getResource(std::string_view name) {
+	TResource* getResource(std::string_view name) {
 		return _getManager<TResource>()->getResource(name);
 	}
 
 	template<typename TResource>
-	std::shared_ptr<TResource> getResource(ResourceId id) {
+	TResource* getResource(ResourceId id) {
 		return _getManager<TResource>()->getResource(id);
 	}
 
@@ -56,8 +57,9 @@ public:
 		return _resourcePathHelper;
 	}
 
+	void cleanupResources();
+
 private:
-	void _cleanupResources();
 	void _registerManager(std::unique_ptr<ResourceManager> resourceManager);
 	void _unregisterManager(std::unique_ptr<ResourceManager> resourceManager);
 

@@ -8,7 +8,7 @@
 
 namespace tactics {
 
-OverlaySystem::OverlaySystem(std::shared_ptr<IniFile> iniFile): _iniFile(iniFile) {
+OverlaySystem::OverlaySystem(IniFile* iniFile): _iniFile(iniFile) {
 }
 
 OverlaySystem::~OverlaySystem() {}

@@ -34,7 +34,6 @@ ResourceSystem::ResourceSystem(std::string_view relativeDataPath): _resourcePath
 }
 
 ResourceSystem::~ResourceSystem() {
-	_cleanupResources();
 }
 
 void ResourceSystem::loadResourcePackDefinition(std::string_view definitionPath) {
@@ -45,7 +44,11 @@ void ResourceSystem::loadResourcePack(std::string_view resourcePackName) {
 	_resourcePackManager->loadPack(resourcePackName);
 }
 
-void ResourceSystem::_cleanupResources() {
+void ResourceSystem::unloadResourcePack(std::string_view resourcePackName) {
+	_resourcePackManager->unloadPack(resourcePackName);
+}
+
+void ResourceSystem::cleanupResources() {
 	_resourcePackManager->unloadAllPacks();
 }
 

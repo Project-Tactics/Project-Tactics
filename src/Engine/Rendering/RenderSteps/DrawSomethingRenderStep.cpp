@@ -13,7 +13,7 @@ struct Vertex {
 	glm::vec2 texCoord;
 };
 
-DrawSomething::DrawSomething(std::shared_ptr<Shader> shader, std::shared_ptr<Texture> texture)
+DrawSomething::DrawSomething(Shader* shader, Texture* texture)
 	: _shader(shader)
 	, _texture(texture) {
 	float vertices[] = {

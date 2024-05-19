@@ -9,7 +9,8 @@ set(SOURCES
     RenderSteps/ImGuiRenderSteps.cpp
     RenderSteps/RenderStep.cpp
     RenderQueue.cpp
-    RenderSystem.cpp)
+    RenderSystem.cpp
+    Viewport.cpp)
     
 set(HEADERS
     Camera.h
@@ -19,7 +20,8 @@ set(HEADERS
     RenderSteps/ImGuiRenderSteps.h
     RenderSteps/RenderStep.h
     RenderQueue.h
-    RenderSystem.h)
+    RenderSystem.h
+    Viewport.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 

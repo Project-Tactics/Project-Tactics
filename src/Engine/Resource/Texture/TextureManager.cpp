@@ -13,8 +13,12 @@ std::vector<ResourceId> TextureManager::load(sol::reference& luaDefinitionLoader
 	std::vector<ResourceId> resources;
 
 	resourcePackEnv.set_function("texture", [this, &resources] (std::string_view name, std::string_view filename) {
-		auto id = _createTexture(name, std::string(filename));
-		resources.push_back(id);
+		auto texture = std::make_unique<Texture>(name);
+		auto [textureId, info] = TextureLoader::loadTexture(_pathHelper.makeAbsolutePath(filename).c_str());
+		texture->rendererId = textureId;
+		texture->info = info;
+		resources.push_back(texture->id);
+		_registerResource(std::move(texture));
 	});
 
 	resourcePackEnv.set_function("textureDef", [this, &resourcePackEnv] (std::string_view definitionFile) {
@@ -40,15 +44,6 @@ void TextureManager::unload(std::vector<ResourceId> resourceIds) {
 		unload(resourceId);
 	}
 
-}
-
-ResourceId TextureManager::_createTexture(std::string_view name, std::string_view filename) {
-	auto texture = std::make_shared<Texture>(name);
-	auto [textureId, info] = TextureLoader::loadTexture(_pathHelper.makeAbsolutePath(filename).c_str());
-	texture->rendererId = textureId;
-	texture->info = info;
-	_registerResource(texture);
-	return texture->id;
 }
 
 }

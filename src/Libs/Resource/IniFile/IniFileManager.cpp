@@ -14,15 +14,15 @@ std::vector<ResourceId> IniFileManager::load(sol::reference& luaDefinitionLoader
 
 	resourcePackEnv.set_function("iniDef", [this, &resources] (std::string_view name, std::string_view definitionFile) {
 		auto path = _pathHelper.makeAbsolutePath(definitionFile);
-		auto iniFile = std::make_shared<IniFile>(name);
+		auto iniFile = std::make_unique<IniFile>(name);
 		iniFile->filename = path;
 		if (std::filesystem::exists(path)) {
 			iniFile->file.load(path);
 		} else {
 			iniFile->file.save(path);
 		}
-		_registerResource(iniFile);
 		resources.push_back(iniFile->id);
+		_registerResource(std::move(iniFile));
 	});
 
 	ScriptingHelper::executeFunction(_luaState, luaDefinitionLoader);

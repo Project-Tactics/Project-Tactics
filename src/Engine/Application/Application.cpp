@@ -28,9 +28,10 @@ Application::~Application() {
 
 void Application::run() {
 	try {
-		_initialize();
-		_internalRun();
-		_shutdown();
+		auto application = Application();
+		application._initialize();
+		application._internalRun();
+		application._shutdown();
 	}
 	catch (Exception& exception) {
 		printf("%s", exception.what());
@@ -42,11 +43,19 @@ void Application::run() {
 
 void Application::_initialize() {
 	_initializeSDL();
-	_initializeResourceSystem();
-	_initializeRenderSystem();
-	_loadResources();
-	_initializeEventsSystem();
-	_initializeOverlaySystem();
+	_resourceSystem = std::make_unique<ResourceSystem>("data");
+	ResourceSystemInitializer::initialize(*_resourceSystem);
+	_resourceSystem->loadResourcePackDefinition("engine_res.lua");
+	_resourceSystem->loadResourcePack("initialization");
+	auto iniFile = _resourceSystem->getResource<IniFile>("configFile");
+
+	_renderSystem = std::make_unique<RenderSystem>(iniFile);
+
+	_initializeImGui();
+
+	_eventsSystem = std::make_unique<EventsSystem>();
+	_overlaySystem = std::make_unique<OverlaySystem>(iniFile);
+	_overlaySystem->setEnabled(true);
 	_initializeFsm();
 }
 
@@ -65,6 +74,7 @@ void Application::_internalRun() {
 
 void Application::_shutdown() {
 	_eventsSystem->unregisterEventsListener(_fsm.get());
+	_resourceSystem->cleanupResources();
 	SDL_Quit();
 }
 
@@ -74,9 +84,7 @@ void Application::_initializeSDL() {
 	}
 }
 
-void Application::_initializeRenderSystem() {
-	_renderSystem = std::make_unique<RenderSystem>();
-
+void Application::_initializeImGui() {
 	// TODO(Gerark) This is absolutely something that should move elsewhere and probably configure it through lua
 	ImGuiStyle* style = &ImGui::GetStyle();
 
@@ -142,10 +150,6 @@ void Application::_initializeRenderSystem() {
 	}
 }
 
-void Application::_initializeEventsSystem() {
-	_eventsSystem = std::make_unique<EventsSystem>();
-}
-
 void Application::_initializeFsm() {
 	auto builder = FsmBuilder();
 
@@ -159,22 +163,6 @@ void Application::_initializeFsm() {
 	_fsm = builder.build("Start");
 
 	_eventsSystem->registerEventsListener(_fsm.get());
-}
-
-void Application::_initializeOverlaySystem() {
-	auto iniFile = _resourceSystem->getResource<IniFile>("configFile");
-	_overlaySystem = std::make_unique<OverlaySystem>(std::move(iniFile));
-	_overlaySystem->setEnabled(true);
-}
-
-void Application::_initializeResourceSystem() {
-	_resourceSystem = std::make_unique<ResourceSystem>("data");
-	ResourceSystemInitializer::initialize(*_resourceSystem);
-}
-
-void Application::_loadResources() {
-	_resourceSystem->loadResourcePackDefinition("engine_res.lua");
-	_resourceSystem->loadResourcePack("initialization");
 }
 
 }

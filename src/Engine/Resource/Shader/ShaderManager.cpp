@@ -13,8 +13,10 @@ std::vector<ResourceId> ShaderManager::load(sol::reference& luaDefinitionLoader)
 	std::vector<ResourceId> resources;
 
 	resourcePackEnv.set_function("shader", [this, &resources] (std::string_view name, std::string_view vertexShader, std::string_view fragmentShader) {
-		auto id = _createShader(name, std::string(vertexShader), std::string(fragmentShader));
-		resources.push_back(id);
+		auto shader = std::make_unique<Shader>(name);
+		shader->rendererId = ShaderLoader::loadProgram(std::string(vertexShader), std::string(fragmentShader));
+		resources.push_back(shader->id);
+		_registerResource(std::move(shader));
 	});
 
 	resourcePackEnv.set_function("shaderDef", [this, &resourcePackEnv] (std::string_view definitionFile) {
@@ -41,10 +43,4 @@ void ShaderManager::unload(std::vector<ResourceId> resourceIds) {
 	}
 }
 
-ResourceId ShaderManager::_createShader(std::string_view name, const std::string& vertexShader, const std::string& fragmentShader) {
-	auto shader = std::make_shared<Shader>(name);
-	shader->rendererId = ShaderLoader::loadProgram(vertexShader, fragmentShader);
-	_registerResource(shader);
-	return shader->id;
-}
 }

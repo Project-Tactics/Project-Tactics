@@ -11,7 +11,7 @@
 namespace tactics {
 
 template<typename TResource>
-using ResourceMap = std::unordered_map<ResourceId, std::shared_ptr<TResource>>;
+using ResourceMap = std::unordered_map<ResourceId, std::unique_ptr<TResource>>;
 
 /**
 * Base class for all the manager of a single Resource type. The user generally doesn't touch this
@@ -38,15 +38,15 @@ public:
 	TResourceManager(sol::state_view& luaState, const ResourcePathHelper& pathHelper): _luaState(luaState), _pathHelper(pathHelper) {
 	}
 
-	std::shared_ptr<TResource> getResource(ResourceId id) {
+	TResource* getResource(ResourceId id) {
 		if (!_resources.contains(id)) {
 			throw Exception("Resource with id \"{}\" does not exist. Can't find resource.", id);
 		}
 
-		return _resources[id];
+		return _resources[id].get();
 	}
 
-	std::shared_ptr<TResource> getResource(std::string_view name) {
+	TResource* getResource(std::string_view name) {
 		auto itr = std::ranges::find_if(_resources, [name] (const auto& pair) {
 			return pair.second->name == name;
 		});
@@ -55,7 +55,7 @@ public:
 			throw Exception("Resource with name \"{}\" does not exist. Can't find resource.", name);
 		}
 
-		return itr->second;
+		return itr->second.get();
 	}
 
 	ResourceType getType() const override {
@@ -64,19 +64,19 @@ public:
 
 protected:
 
-	void _registerResource(std::shared_ptr<TResource> resource) {
+	void _registerResource(std::unique_ptr<TResource> resource) {
 		if (_resources.contains(resource->id)) {
 			throw Exception("Attempt to register a resource with the same id. Resource Id: {} - Name: {} - Type: {}",
-				resource->id, resource->name, static_cast<int>(resource->type));
+				resource->id, resource->name, ResourceTypeSerialization::toString(resource->type));
 		}
-		_resources.insert({resource->id, resource});
+		_resources.insert({resource->id, std::move(resource)});
 	}
 
-	void _removeResource(std::shared_ptr<TResource> resource) {
+	void _removeResource(TResource* resource) {
 		auto itr = _resources.find(resource->id);
 		if (itr == _resources.end()) {
 			throw Exception("Attempt to remove a resource which is not registered in the Resource Manager. Resource Id: {} - Name: {} - Type: {}",
-				resource->id, resource->name, static_cast<int>(resource->type));
+				resource->id, resource->name, ResourceTypeSerialization::toString(resource->type));
 		}
 
 		_resources.erase(itr);

@@ -25,10 +25,9 @@ void onGlErrorMessage(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum 
 	printf("%s\n", message);
 }
 
-RenderSystem::RenderSystem() {
+RenderSystem::RenderSystem(IniFile* configFile): _configFile(configFile) {
 	static const bool useDebugMessages = true;
 	_defineGlAttributes(useDebugMessages);
-	// TODO(Gerark) similarly to how we create a camera from outside we should expose the creation of the window
 	_createWindow();
 	_initializeGlContext();
 

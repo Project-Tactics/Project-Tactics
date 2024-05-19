@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Libs/Resource/IniFile/IniFile.h>
+
 #include <memory>
 #include <vector>
 
@@ -13,7 +15,7 @@ class Camera;
 
 class RenderSystem {
 public:
-	RenderSystem();
+	RenderSystem(IniFile* configFile);
 	~RenderSystem();
 
 	RenderQueue& createRenderQueue();
@@ -36,5 +38,6 @@ private:
 	std::unique_ptr<DebugMessageHandler> _debugMessageHandler;
 	std::vector<std::unique_ptr<RenderQueue>> _renderQueues;
 	std::unique_ptr<Camera> _camera;
+	IniFile* _configFile;
 };
 }

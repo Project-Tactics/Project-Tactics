@@ -3,9 +3,6 @@
 #include <Engine/Application/Application.h>
 
 int main(int /*argc*/, char** /*argv*/) {
-
-	auto application = std::make_unique<tactics::Application>();
-	application->run();
-
+	tactics::Application::run();
 	return 0;
 }
