@@ -1,8 +1,8 @@
 #include "TextureManager.h"
 
 #include "TextureLoader.h"
-#include "../ResourcePathHelper.h"
 
+#include <Libs/Resource/ResourcePathHelper.h>
 #include <Libs/Scripting/ScriptingHelper.h>
 
 namespace tactics {

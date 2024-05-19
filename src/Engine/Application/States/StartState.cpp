@@ -1,14 +1,13 @@
 #include "StartState.h"
 
 #include <Libs/Overlay/OverlaySystem.h>
+#include <Libs/Resource/ResourceSystem.h>
 
 #include <Engine/Rendering/RenderSystem.h>
 #include <Engine/Rendering/RenderQueue.h>
 #include <Engine/Rendering/RenderSteps/ClearColorRenderStep.h>
 #include <Engine/Rendering/RenderSteps/DrawSomethingRenderStep.h>
 #include <Engine/Rendering/RenderSteps/ImGuiRenderSteps.h>
-
-#include <Engine/Resource/ResourceSystem.h>
 
 namespace tactics {
 
@@ -25,10 +24,11 @@ FsmAction StartState::enter() {
 	_resourceSystem.loadResourcePack("mainPackage");
 
 	auto shader = _resourceSystem.getResource<Shader>("main");
+	auto texture = _resourceSystem.getResource<Texture>("tactics-icon");
 
 	auto& mainRenderQueue = _renderSystem.createRenderQueue();
 	mainRenderQueue.addStep<ClearColor>();
-	mainRenderQueue.addStep<DrawSomething>(shader);
+	mainRenderQueue.addStep<DrawSomething>(shader, texture);
 
 	auto& imguiRenderQueue = _renderSystem.createRenderQueue();
 	imguiRenderQueue.addStep<ImGuiBegin>();

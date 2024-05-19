@@ -25,6 +25,7 @@ add_library(engine_rendering ${SOURCES} ${HEADERS})
 target_link_libraries(engine_rendering
     PUBLIC
     glad
+    glm
     PRIVATE
     engine_resources
     libs_overlay

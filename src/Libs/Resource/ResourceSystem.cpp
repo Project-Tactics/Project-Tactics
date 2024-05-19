@@ -1,7 +1,5 @@
 #include "ResourceSystem.h"
 
-#include "Texture/TextureManager.h"
-#include "Shader/ShaderManager.h"
 #include "ResourcePack/ResourcePackManager.h"
 
 #include <Libs/Utilities/Exception.h>
@@ -33,11 +31,6 @@ ResourceSystem::ResourceSystem(std::string_view relativeDataPath): _resourcePath
 
 	sol::state_view luaStateView(*_luaState);
 	_resourcePackManager = std::make_unique<ResourcePackManager>(luaStateView, _resourcePathHelper, managerProvider);
-	auto textureManager = std::make_unique<TextureManager>(luaStateView, _resourcePathHelper);
-	auto shaderManager = std::make_unique<ShaderManager>(luaStateView, _resourcePathHelper);
-
-	_registerManager(std::move(textureManager));
-	_registerManager(std::move(shaderManager));
 }
 
 ResourceSystem::~ResourceSystem() {

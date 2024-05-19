@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Resource.h"
+#include <Libs/Resource/Resource.h>
 
 namespace tactics {
 

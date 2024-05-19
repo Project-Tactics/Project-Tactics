@@ -1,1 +1,1 @@
-texture("testTexture", "textures\\test.png")
+texture("tactics-icon", "textures\\tactics-icon.png")

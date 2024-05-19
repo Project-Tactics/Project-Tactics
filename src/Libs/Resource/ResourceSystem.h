@@ -40,6 +40,18 @@ public:
 		return _getManager<TResource>()->getResource(id);
 	}
 
+	template<typename TResourceManager>
+	void registerManager() {
+		auto manager = std::make_unique<TResourceManager>(*_luaState, _resourcePathHelper);
+		_registerManager(std::move(manager));
+	}
+
+	template<typename TResourceManager>
+	void unregisterManager() {
+		auto manager = _getManager<typename TResourceManager::ResourceType>();
+		_unregisterManager(manager);
+	}
+
 private:
 	void _cleanupResources();
 	void _registerManager(std::unique_ptr<ResourceManager> resourceManager);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ResourceManager.h"
+#include <Libs/Resource/ResourceManager.h>
 #include "Texture.h"
 
 namespace tactics {

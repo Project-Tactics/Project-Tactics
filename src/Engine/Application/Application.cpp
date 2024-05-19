@@ -4,10 +4,12 @@
 #include "States/StartState.h"
 
 #include <Engine/Rendering/RenderSystem.h>
-#include <Engine/Resource/ResourceSystem.h>
+#include <Engine/Resource/ResourceSystemInitializer.h>
+
 #include <Libs/Events/EventsSystem.h>
 #include <Libs/Fsm/FsmBuilder.h>
 #include <Libs/Overlay/OverlaySystem.h>
+#include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Utilities/Exception.h>
 
 #include <SDL.h>
@@ -99,6 +101,7 @@ void Application::_initializeOverlaySystem() {
 
 void Application::_initializeResourceSystem() {
 	_resourceSystem = std::make_unique<ResourceSystem>("data");
+	ResourceSystemInitializer::initialize(*_resourceSystem);
 }
 
 }
