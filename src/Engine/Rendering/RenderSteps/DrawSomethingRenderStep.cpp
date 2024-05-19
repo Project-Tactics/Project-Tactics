@@ -65,7 +65,8 @@ void DrawSomething::execute(Camera& camera) {
 		step = -step;
 	}
 	i += step;
-	camera.setPosition(glm::vec3(i / 1000.f, 0, 0));
+	auto& position = camera.getPosition();
+	camera.setPosition(glm::vec3(i / 1000.f, position.y, position.z));
 
 	glm::mat4 mvp = camera.getProjection() * camera.getView() * glm::mat4(1.0f);
 	glUniform4f(colLocation, i / 255.f, i / 255.f, 255 - i / 255.f, 1);

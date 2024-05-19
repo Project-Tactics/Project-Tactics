@@ -43,10 +43,12 @@ void DebugOverlay::update() {
 }
 
 bool DebugOverlay::_vector3(const char* label, glm::vec3& vec, float componentWidth) {
+	ImGui::AlignTextToFramePadding();
 	ImGui::Text("%s", label);
 	if (componentWidth == 0) {
 		componentWidth = (ImGui::GetContentRegionAvail().x - (ImGui::CalcTextSize(label).x + ImGui::GetStyle().ItemSpacing.x * 4)) / 3;
 	}
+	ImGui::BeginGroup();
 	ImGui::SameLine();
 	bool valueChanged = false;
 	valueChanged |= _vecComponent(&vec.x, xComponentColor, componentWidth, ("##x" + std::string(label)).c_str());
@@ -54,13 +56,13 @@ bool DebugOverlay::_vector3(const char* label, glm::vec3& vec, float componentWi
 	valueChanged |= _vecComponent(&vec.y, yComponentColor, componentWidth, ("##y" + std::string(label)).c_str());
 	ImGui::SameLine();
 	valueChanged |= _vecComponent(&vec.z, zComponentColor, componentWidth, ("##z" + std::string(label)).c_str());
+	ImGui::EndGroup();
 	return valueChanged;
 }
 
 bool DebugOverlay::_vecComponent(float* component, const ImVec4& color, float width, const char* id) {
 	ImVec2 squareSize(2, 23);
 	ImVec2 cursorPos = ImGui::GetCursorScreenPos();
-	cursorPos.y -= 4;
 	ImDrawList* drawList = ImGui::GetWindowDrawList();
 	drawList->AddRectFilled(cursorPos, ImVec2(cursorPos.x + squareSize.x, cursorPos.y + squareSize.y), ImGui::ColorConvertFloat4ToU32(color));
 	auto dummySize = ImVec2(squareSize.x - 12, squareSize.y);
@@ -68,9 +70,7 @@ bool DebugOverlay::_vecComponent(float* component, const ImVec4& color, float wi
 
 	ImGui::SameLine();
 	ImGui::SetNextItemWidth(width);
-	cursorPos = ImGui::GetCursorPos();
-	ImGui::SetCursorPos(ImVec2(cursorPos.x, cursorPos.y - 5));
-	return ImGui::InputFloat(id, component);
+	return ImGui::DragFloat(id, component, 0.1f);
 }
 
 }
