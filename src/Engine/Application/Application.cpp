@@ -4,7 +4,7 @@
 #include "States/StartState.h"
 
 #include <Engine/Rendering/RenderSystem.h>
-#include <Engine/Resources/ResourceSystem.h>
+#include <Engine/Resource/ResourceSystem.h>
 #include <Libs/Events/EventsSystem.h>
 #include <Libs/Fsm/FsmBuilder.h>
 #include <Libs/Overlay/OverlaySystem.h>

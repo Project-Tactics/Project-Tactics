@@ -4,7 +4,7 @@
 
 namespace tactics::renderstep {
 
-DrawSomething::DrawSomething(std::shared_ptr<ShaderResource> shader): _shader(shader) {
+DrawSomething::DrawSomething(std::shared_ptr<Shader> shader): _shader(shader) {
 	float positions[] = {
 		-0.5f, -0.5f,
 		0.5f, -0.5f,
@@ -36,9 +36,9 @@ DrawSomething::DrawSomething(std::shared_ptr<ShaderResource> shader): _shader(sh
 }
 
 void DrawSomething::render() {
-	glUseProgram(_shader->shaderId);
+	glUseProgram(_shader->rendererId);
 
-	int location = glGetUniformLocation(_shader->shaderId, "u_Color");
+	int location = glGetUniformLocation(_shader->rendererId, "u_Color");
 	static int step = 2;
 	static int i = 0;
 	if (i > 255 || i < 0) {

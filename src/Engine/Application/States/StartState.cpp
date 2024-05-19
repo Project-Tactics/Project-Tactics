@@ -8,7 +8,7 @@
 #include <Engine/Rendering/RenderSteps/DrawSomethingRenderStep.h>
 #include <Engine/Rendering/RenderSteps/ImGuiRenderSteps.h>
 
-#include <Engine/Resources/ResourceSystem.h>
+#include <Engine/Resource/ResourceSystem.h>
 
 namespace tactics {
 
@@ -21,9 +21,10 @@ StartState::StartState(ResourceSystem& resourceSystem, RenderSystem& renderSyste
 FsmAction StartState::enter() {
 	using namespace renderstep;
 
-	_resourceSystem.loadResources();
+	_resourceSystem.loadResourcePackDefinition("resources.lua");
+	_resourceSystem.loadResourcePack("mainPackage");
 
-	auto shader = _resourceSystem.getShader("main");
+	auto shader = _resourceSystem.getResource<Shader>("main");
 
 	auto& mainRenderQueue = _renderSystem.createRenderQueue();
 	mainRenderQueue.addStep<ClearColor>();

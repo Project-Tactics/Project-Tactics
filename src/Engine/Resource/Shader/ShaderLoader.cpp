@@ -9,8 +9,8 @@ namespace tactics {
 ShaderProgramId ShaderLoader::loadProgram(const std::string& vertexShaderCode, const std::string& fragmentShaderCode) {
 	auto programId = glCreateProgram();
 
-	auto vertexShaderId = loadShader(GL_VERTEX_SHADER, vertexShaderCode);
-	auto fragmentShaderId = loadShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
+	auto vertexShaderId = _loadShader(GL_VERTEX_SHADER, vertexShaderCode);
+	auto fragmentShaderId = _loadShader(GL_FRAGMENT_SHADER, fragmentShaderCode);
 
 	glAttachShader(programId, vertexShaderId);
 	glAttachShader(programId, fragmentShaderId);
@@ -24,7 +24,11 @@ ShaderProgramId ShaderLoader::loadProgram(const std::string& vertexShaderCode, c
 	return programId;
 }
 
-ShaderId ShaderLoader::loadShader(ShaderType shaderType, const std::string& shaderCode) {
+void ShaderLoader::unloadProgram(ShaderProgramId programId) {
+	glDeleteProgram(programId);
+}
+
+ShaderId ShaderLoader::_loadShader(ShaderType shaderType, const std::string& shaderCode) {
 	char* code = const_cast<char*>(shaderCode.c_str());
 
 	auto shaderId = glCreateShader(shaderType);

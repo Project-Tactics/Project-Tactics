@@ -2,7 +2,7 @@
 
 #include "RenderStep.h"
 
-#include <Engine/Resources/ShaderResource.h>
+#include <Engine/Resource/Shader/Shader.h>
 
 #include <memory>
 
@@ -10,11 +10,11 @@ namespace tactics::renderstep {
 
 class DrawSomething: public RenderStep {
 public:
-	DrawSomething(std::shared_ptr<ShaderResource> shader);
+	DrawSomething(std::shared_ptr<Shader> shader);
 	void render() override;
 
 private:
-	std::shared_ptr<ShaderResource> _shader;
+	std::shared_ptr<Shader> _shader;
 };
 
 }

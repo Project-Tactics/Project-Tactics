@@ -26,5 +26,9 @@ add_subdirectory(fmt)
 # https://github.com/ThePhD/sol2
 add_subdirectory(sol2)
 
+# Adding stb library by only including std_image.h to load images
+# https://github.com/nothings/stb
+add_subdirectory(stb)
+
 # Let's keep things clean and tidy by moving all the thirdparty libs to a folder
-set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui fmt sol2 PROPERTY FOLDER "thirdparty")
+set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui fmt sol2 stb PROPERTY FOLDER "thirdparty")

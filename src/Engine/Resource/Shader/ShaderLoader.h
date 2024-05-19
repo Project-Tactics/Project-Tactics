@@ -13,7 +13,10 @@ using ShaderType = GLenum;
 class ShaderLoader {
 public:
 	static ShaderProgramId loadProgram(const std::string& vertexShaderCode, const std::string& fragmentShaderCode);
-	static ShaderId loadShader(ShaderType shaderType, const std::string& shaderCode);
+	static void unloadProgram(ShaderProgramId programId);
+
+private:
+	static ShaderId _loadShader(ShaderType shaderType, const std::string& shaderCode);
 };
 
 }
