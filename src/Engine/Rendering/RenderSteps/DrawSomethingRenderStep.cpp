@@ -48,6 +48,8 @@ DrawSomething::DrawSomething(std::shared_ptr<Shader> shader, std::shared_ptr<Tex
 void DrawSomething::render() {
 	glUseProgram(_shader->rendererId);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, _texture->rendererId);
 	glActiveTexture(GL_TEXTURE0);
 
