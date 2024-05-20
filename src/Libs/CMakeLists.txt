@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 add_subdirectory(Utilities)
 add_subdirectory(Events)
+add_subdirectory(Rendering)
 add_subdirectory(Resource)
 add_subdirectory(Scripting)
 add_subdirectory(Overlay)

@@ -32,6 +32,7 @@ target_link_libraries(engine_rendering
     glm
     PRIVATE
     engine_resources
+    libs_rendering
     libs_overlay
     libs_utils
     imgui

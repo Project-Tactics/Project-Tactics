@@ -6,12 +6,20 @@
 
 #include "../Camera.h"
 
+#include <Libs/Rendering/IndexBuffer.h>
+#include <Libs/Rendering/VertexBuffer.h>
+#include <Libs/Rendering/VertexDefinition.h>
+
 namespace tactics::renderstep {
 
 struct Vertex {
 	glm::vec2 position;
 	glm::vec2 texCoord;
 };
+
+VertexBuffer* vb;
+IndexBuffer* ib;
+VertexDefinition* vd;
 
 DrawSomething::DrawSomething(Shader* shader, Texture* texture)
 	: _shader(shader)
@@ -28,24 +36,17 @@ DrawSomething::DrawSomething(Shader* shader, Texture* texture)
 		0, 2, 3
 	};
 
-	unsigned int buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, 4 * 5 * sizeof(float), vertices, GL_STATIC_DRAW);
+	vb = new VertexBuffer();
+	vb->setData(vertices, 4 * 5 * sizeof(float));
 
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	auto builder = VertexDefinition::Builder();
+	builder.attributef(3); // position
+	builder.attributef(2); // uv
+	vd = builder.create();
+	vd->bind();
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-
-	unsigned int ibo;
-	glGenBuffers(1, &ibo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(GLuint), indices, GL_STATIC_DRAW);
+	ib = new IndexBuffer();
+	ib->setData(indices, 6 * sizeof(GLuint));
 }
 
 void DrawSomething::execute(RenderStepInfo& renderInfo) {
@@ -62,6 +63,8 @@ void DrawSomething::execute(RenderStepInfo& renderInfo) {
 	glm::mat4 mvp = renderInfo.camera.getProjection() * renderInfo.camera.getView() * glm::mat4(1.0f);
 	glUniform1i(texLocation, 0);
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvp[0][0]);
+
+	ib->bind();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
