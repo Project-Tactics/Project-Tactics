@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+#include "Viewport.h"
+
 #include <glm/common.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
@@ -8,8 +10,11 @@
 namespace tactics {
 
 Camera::Camera() {
-	setProjection(45, 1280.f / 720.f, 0.1f, 100.0f);
-	setView(Vector::zero, Vector::forward, Vector::up);
+	setAspectRatio(1.0f);
+	setFov(45.0f);
+	setNearPlane(0.1f);
+	setFarPlane(100.0f);
+	setView(Vector3::zero, Vector3::forward, Vector3::up);
 }
 
 Camera::~Camera() {
@@ -20,14 +25,31 @@ void Camera::update() {
 		_updateViewMatrix();
 		_viewDirty = false;
 	}
+
+	if (_projectionDirty) {
+		_projection = glm::perspective(glm::radians(_fov), _aspectRatio, _near, _far);
+		_projectionDirty = false;
+	}
 }
 
-void Camera::setProjection(float fovAngle, float aspectRatio, float near, float far) {
+void Camera::setFov(float fovAngle) {
 	_fov = fovAngle;
+	_projectionDirty = true;
+}
+
+void Camera::setAspectRatio(float aspectRatio) {
 	_aspectRatio = aspectRatio;
+	_projectionDirty = true;
+}
+
+void Camera::setNearPlane(float near) {
 	_near = near;
+	_projectionDirty = false;
+}
+
+void Camera::setFarPlane(float far) {
 	_far = far;
-	_projection = glm::perspective(glm::radians(fovAngle), aspectRatio, near, far);
+	_projectionDirty = false;
 }
 
 void Camera::setPosition(const glm::vec3& position) {
@@ -58,6 +80,10 @@ const glm::vec3& Camera::getPosition() const {
 	return _position;
 }
 
+float Camera::getAspectRatio() const {
+	return _aspectRatio;
+}
+
 const glm::vec3& Camera::getLookAt() const {
 	return _lookAt;
 }
@@ -68,10 +94,6 @@ const glm::vec3& Camera::getUp() const {
 
 float Camera::getFov() const {
 	return _fov;
-}
-
-float Camera::getAspectRatio() const {
-	return _aspectRatio;
 }
 
 float Camera::getNearPlane() const {

@@ -9,9 +9,10 @@ struct SDL_Window;
 
 namespace tactics {
 
+class Camera;
 class DebugMessageHandler;
 class RenderQueue;
-class Camera;
+class Viewport;
 
 class RenderSystem {
 public:
@@ -19,13 +20,16 @@ public:
 	~RenderSystem();
 
 	RenderQueue& createRenderQueue();
-	Camera& createCamera();
 
 	Camera& getCamera();
+	Viewport& getViewport();
 
 	void render();
 
 private:
+	Camera& _createCamera();
+	Viewport& _createViewport(Camera& camera);
+
 	void _defineGlAttributes(bool useDebugMessages);
 	void _createWindow();
 	void _initializeGlContext();
@@ -37,6 +41,7 @@ private:
 	void* _oglContext{};
 	std::unique_ptr<DebugMessageHandler> _debugMessageHandler;
 	std::vector<std::unique_ptr<RenderQueue>> _renderQueues;
+	std::unique_ptr<Viewport> _viewport;
 	std::unique_ptr<Camera> _camera;
 	IniFile* _configFile;
 };

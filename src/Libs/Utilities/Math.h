@@ -4,7 +4,7 @@
 
 namespace tactics {
 
-class Vector {
+class Vector3 {
 public:
 	static const glm::vec3 zero;
 	static const glm::vec3 one;
@@ -14,6 +14,16 @@ public:
 	static const glm::vec3 right;
 	static const glm::vec3 forward;
 	static const glm::vec3 backward;
+};
+
+class Vector2 {
+public:
+	static const glm::vec2 zero;
+	static const glm::vec2 one;
+	static const glm::vec2 up;
+	static const glm::vec2 down;
+	static const glm::vec2 left;
+	static const glm::vec2 right;
 };
 
 class Math {

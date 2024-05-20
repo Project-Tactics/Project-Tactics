@@ -11,6 +11,9 @@ public:
 	std::vector<ResourceId> load(sol::reference& luaDefinitionLoader) override;
 	void unload(ResourceId resourceId) override;
 	void unload(std::vector<ResourceId> resourceIds) override;
+
+private:
+	void _merge(IniFile& iniFile, const std::string& defaultIniContent);
 };
 
 }

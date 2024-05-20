@@ -2,12 +2,14 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(HEADERS
+    Color.h
     Exception.h
     Math.h
     TransparentTypes.h
     UUID.h)
 
 set(SOURCES
+    Color.cpp
     Exception.cpp
     Math.cpp
     UUID.cpp)

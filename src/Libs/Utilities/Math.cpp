@@ -4,15 +4,24 @@
 
 namespace tactics {
 
-const glm::vec3 Vector::zero = glm::vec3(0.0f, 0.0f, 0.0f);
-const glm::vec3 Vector::one = glm::vec3(1.0f, 1.0f, 1.0f);
-const glm::vec3 Vector::up = glm::vec3(0.0f, 1.0f, 0.0f);
-const glm::vec3 Vector::down = glm::vec3(0.0f, -1.0f, 0.0f);
-const glm::vec3 Vector::left = glm::vec3(-1.0f, 0.0f, 0.0f);
-const glm::vec3 Vector::right = glm::vec3(1.0f, 0.0f, 0.0f);
-const glm::vec3 Vector::forward = glm::vec3(0.0f, 0.0f, -1.0f);
-const glm::vec3 Vector::backward = glm::vec3(0.0f, 0.0f, 1.0f);
+using namespace glm;
 
-const float Math::PI = glm::pi<float>();
+const vec3 Vector3::zero = vec3(0.0f, 0.0f, 0.0f);
+const vec3 Vector3::one = vec3(1.0f, 1.0f, 1.0f);
+const vec3 Vector3::up = vec3(0.0f, 1.0f, 0.0f);
+const vec3 Vector3::down = vec3(0.0f, -1.0f, 0.0f);
+const vec3 Vector3::left = vec3(-1.0f, 0.0f, 0.0f);
+const vec3 Vector3::right = vec3(1.0f, 0.0f, 0.0f);
+const vec3 Vector3::forward = vec3(0.0f, 0.0f, -1.0f);
+const vec3 Vector3::backward = vec3(0.0f, 0.0f, 1.0f);
+
+const vec2 Vector2::zero = vec2(0.0f, 0.0f);
+const vec2 Vector2::one = vec2(1.0f, 1.0f);
+const vec2 Vector2::up = vec2(0.0f, 1.0f);
+const vec2 Vector2::down = vec2(0.0f, -1.0f);
+const vec2 Vector2::left = vec2(-1.0f, 0.0f);
+const vec2 Vector2::right = vec2(1.0f, 0.0f);
+
+const float Math::PI = pi<float>();
 
 }

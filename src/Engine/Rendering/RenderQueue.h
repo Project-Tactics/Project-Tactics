@@ -5,6 +5,7 @@
 
 namespace tactics {
 
+struct RenderStepInfo;
 class RenderStep;
 class Camera;
 
@@ -14,7 +15,7 @@ class Camera;
  */
 class RenderQueue {
 public:
-	void execute(Camera& camera);
+	void execute(RenderStepInfo& renderInfo);
 
 	template<typename TRenderStep, typename ...TArgs>
 	void addStep(TArgs&&... args) {

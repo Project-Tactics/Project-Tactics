@@ -4,6 +4,8 @@
 
 namespace tactics {
 
+class Viewport;
+
 class Camera {
 public:
 	Camera();
@@ -11,9 +13,12 @@ public:
 
 	void update();
 
-	void setProjection(float fovAngle, float aspectRatio, float near, float far);
 	void setPosition(const glm::vec3& position);
 	void setView(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up);
+	void setAspectRatio(float aspectRatio);
+	void setFov(float fov);
+	void setNearPlane(float near);
+	void setFarPlane(float far);
 
 	const glm::mat4& getProjection() const;
 	const glm::mat4& getView() const;
@@ -23,9 +28,9 @@ public:
 	const glm::vec3& getUp() const;
 
 	float getFov() const;
-	float getAspectRatio() const;
 	float getNearPlane() const;
 	float getFarPlane() const;
+	float getAspectRatio() const;
 
 private:
 	void _updateViewMatrix();
@@ -42,6 +47,7 @@ private:
 	float _aspectRatio{};
 
 	bool _viewDirty{};
+	bool _projectionDirty{};
 };
 
 }

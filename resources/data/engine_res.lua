@@ -1,6 +1,10 @@
 resourcePack({
     name = "initialization",
     inis = function()
-        iniDef("configFile", "overlay.ini")
+        iniDef("configFile", "config.ini", [[
+            [window]
+            width=1280
+            height=720
+        ]])
     end
 })

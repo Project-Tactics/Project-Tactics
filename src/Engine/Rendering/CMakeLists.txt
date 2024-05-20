@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
     Camera.cpp
     DebugMessageHandler.cpp
-    RenderSteps/ClearColorRenderStep.cpp
+    RenderSteps/ClearViewportRenderStep.cpp
     RenderSteps/DrawSomethingRenderStep.cpp
     RenderSteps/ImGuiRenderSteps.cpp
     RenderSteps/RenderStep.cpp
@@ -15,7 +15,7 @@ set(SOURCES
 set(HEADERS
     Camera.h
     DebugMessageHandler.h
-    RenderSteps/ClearColorRenderStep.h
+    RenderSteps/ClearViewportRenderStep.h
     RenderSteps/DrawSomethingRenderStep.h
     RenderSteps/ImGuiRenderSteps.h
     RenderSteps/RenderStep.h

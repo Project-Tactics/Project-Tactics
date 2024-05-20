@@ -48,7 +48,7 @@ DrawSomething::DrawSomething(Shader* shader, Texture* texture)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(GLuint), indices, GL_STATIC_DRAW);
 }
 
-void DrawSomething::execute(Camera& camera) {
+void DrawSomething::execute(RenderStepInfo& renderInfo) {
 	glUseProgram(_shader->rendererId);
 
 	glEnable(GL_BLEND);
@@ -65,10 +65,10 @@ void DrawSomething::execute(Camera& camera) {
 		step = -step;
 	}
 	i += step;
-	auto& position = camera.getPosition();
-	camera.setPosition(glm::vec3(i / 1000.f, position.y, position.z));
+	auto& position = renderInfo.camera.getPosition();
+	renderInfo.camera.setPosition(glm::vec3(i / 1000.f, position.y, position.z));
 
-	glm::mat4 mvp = camera.getProjection() * camera.getView() * glm::mat4(1.0f);
+	glm::mat4 mvp = renderInfo.camera.getProjection() * renderInfo.camera.getView() * glm::mat4(1.0f);
 	glUniform4f(colLocation, i / 255.f, i / 255.f, 255 - i / 255.f, 1);
 	glUniform1i(texLocation, 0);
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvp[0][0]);

@@ -12,7 +12,7 @@ std::vector<ResourceId> IniFileManager::load(sol::reference& luaDefinitionLoader
 
 	std::vector<ResourceId> resources;
 
-	resourcePackEnv.set_function("iniDef", [this, &resources] (std::string_view name, std::string_view definitionFile) {
+	resourcePackEnv.set_function("iniDef", [this, &resources] (std::string_view name, std::string_view definitionFile, std::string defaultIniContent) {
 		auto path = _pathHelper.makeAbsolutePath(definitionFile);
 		auto iniFile = std::make_unique<IniFile>(name);
 		iniFile->filename = path;
@@ -21,6 +21,7 @@ std::vector<ResourceId> IniFileManager::load(sol::reference& luaDefinitionLoader
 		} else {
 			iniFile->file.save(path);
 		}
+		_merge(*iniFile, defaultIniContent);
 		resources.push_back(iniFile->id);
 		_registerResource(std::move(iniFile));
 	});
@@ -41,6 +42,12 @@ void IniFileManager::unload(std::vector<ResourceId> resourceIds) {
 	for (auto resourceId : resourceIds) {
 		unload(resourceId);
 	}
+}
+
+void IniFileManager::_merge(IniFile& iniFile, const std::string& defaultIniContent) {
+	std::istringstream defaultIniStream(defaultIniContent);
+	ini::IniFile file(defaultIniStream);
+	iniFile.file.merge(file);
 }
 
 }

@@ -1,6 +1,7 @@
 #include "RenderSystem.h"
 
 #include "Camera.h"
+#include "Viewport.h"
 #include "DebugMessageHandler.h"
 #include "RenderQueue.h"
 #include "RenderSteps/RenderStep.h"
@@ -31,10 +32,8 @@ RenderSystem::RenderSystem(IniFile* configFile): _configFile(configFile) {
 	_createWindow();
 	_initializeGlContext();
 
-	// TODO(Gerark) Of course it's not a good idea to hardcode the viewport size. As soon as we receive the information from outside,
-	// through some config file or even a command line argument, we should use that information to set the viewport size
-	glViewport(0, 0, 1280, 720);
-	glClearColor(0.f, 0.f, 0.f, 1.f);
+	auto& camera = _createCamera();
+	_createViewport(camera);
 
 	_initializeImGui();
 
@@ -78,7 +77,9 @@ void RenderSystem::_defineGlAttributes(bool useDebugMessages) {
 }
 
 void RenderSystem::_createWindow() {
-	_window = SDL_CreateWindow("Project Tactics", 100, 100, 1280, 720, SDL_WINDOW_OPENGL);
+	int width = _configFile->getOrCreate("window", "width", 1280);
+	int height = _configFile->getOrCreate("window", "height", 720);
+	_window = SDL_CreateWindow("Project Tactics", 100, 100, width, height, SDL_WINDOW_OPENGL);
 	if (_window == nullptr) {
 		throw Exception("Failed to open window: %s\n", SDL_GetError());
 	}
@@ -99,16 +100,27 @@ void RenderSystem::_initializeGlContext() {
 }
 
 void RenderSystem::render() {
+	RenderStepInfo renderInfo{*_camera, *_viewport};
+
 	_camera->update();
+	glViewport(_viewport->getTopLeft().x, _viewport->getTopLeft().y, _viewport->getSize().x, _viewport->getSize().y);
 	for (auto& renderQueue : _renderQueues) {
-		renderQueue->execute(*_camera);
+		renderQueue->execute(renderInfo);
 	}
 	SDL_GL_SwapWindow(_window);
 }
 
-Camera& RenderSystem::createCamera() {
+Camera& RenderSystem::_createCamera() {
 	_camera = std::make_unique<Camera>();
 	return *_camera;
+}
+
+Viewport& RenderSystem::_createViewport(Camera& camera) {
+	_viewport = std::make_unique<Viewport>(camera);
+	int width, height;
+	SDL_GetWindowSize(_window, &width, &height);
+	_viewport->setDimensions(glm::vec2{0, 0}, glm::vec2{width, height});
+	return *_viewport;
 }
 
 Camera& RenderSystem::getCamera() {
@@ -135,6 +147,10 @@ void RenderSystem::_shutdownImGui() {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+}
+
+Viewport& RenderSystem::getViewport() {
+	return *_viewport;
 }
 
 }

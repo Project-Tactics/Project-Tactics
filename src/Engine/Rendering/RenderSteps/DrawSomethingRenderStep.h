@@ -12,7 +12,7 @@ namespace tactics::renderstep {
 class DrawSomething: public RenderStep {
 public:
 	DrawSomething(Shader* shader, Texture* texture);
-	void execute(Camera& camera) override;
+	void execute(RenderStepInfo& renderInfo) override;
 
 private:
 	Shader* _shader;
