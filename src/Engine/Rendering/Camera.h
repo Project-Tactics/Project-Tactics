@@ -14,7 +14,7 @@ public:
 	void update();
 
 	void setPosition(const glm::vec3& position);
-	void setView(const glm::vec3& position, const glm::vec3& target, const glm::vec3& up);
+	void setView(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up);
 	void setAspectRatio(float aspectRatio);
 	void setFov(float fov);
 	void setNearPlane(float near);
@@ -24,7 +24,7 @@ public:
 	const glm::mat4& getView() const;
 
 	const glm::vec3& getPosition() const;
-	const glm::vec3& getLookAt() const;
+	const glm::vec3& getDirection() const;
 	const glm::vec3& getUp() const;
 
 	float getFov() const;
@@ -39,7 +39,7 @@ private:
 	glm::mat4 _view;
 
 	glm::vec3 _position;
-	glm::vec3 _lookAt;
+	glm::vec3 _direction;
 	glm::vec3 _up;
 	float _near{};
 	float _far{};

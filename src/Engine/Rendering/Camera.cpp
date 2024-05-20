@@ -57,15 +57,15 @@ void Camera::setPosition(const glm::vec3& position) {
 	_viewDirty = true;
 }
 
-void Camera::setView(const glm::vec3& position, const glm::vec3& lookAt, const glm::vec3& up) {
+void Camera::setView(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up) {
 	_position = position;
-	_lookAt = lookAt;
+	_direction = direction;
 	_up = up;
 	_viewDirty = true;
 }
 
 void Camera::_updateViewMatrix() {
-	_view = glm::lookAt(_position, _lookAt, _up);
+	_view = glm::lookAt(_position, _position + _direction, _up);
 }
 
 const glm::mat4& Camera::getProjection() const {
@@ -84,8 +84,8 @@ float Camera::getAspectRatio() const {
 	return _aspectRatio;
 }
 
-const glm::vec3& Camera::getLookAt() const {
-	return _lookAt;
+const glm::vec3& Camera::getDirection() const {
+	return _direction;
 }
 
 const glm::vec3& Camera::getUp() const {

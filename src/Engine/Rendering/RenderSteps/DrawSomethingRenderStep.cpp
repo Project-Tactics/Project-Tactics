@@ -17,10 +17,10 @@ DrawSomething::DrawSomething(Shader* shader, Texture* texture)
 	: _shader(shader)
 	, _texture(texture) {
 	float vertices[] = {
-		-0.25f, -0.5f, -5.f, 0.0f, 0.0f,
-		0.25f, -0.5f, -5.f, 1.0f, 0.0f,
-		0.25f, 0.5f, -5.f, 1.0f, 1.0f,
-		-0.25f, 0.5f, -5.f, 0.0f, 1.0f
+		-0.5f, -0.5f, -5.f, 0.0f, 0.0f,
+		0.5f, -0.5f, -5.f, 1.0f, 0.0f,
+		0.5f, 0.5f, -5.f, 1.0f, 1.0f,
+		-0.5f, 0.5f, -5.f, 0.0f, 1.0f
 	};
 
 	GLuint indices[] = {
@@ -58,18 +58,8 @@ void DrawSomething::execute(RenderStepInfo& renderInfo) {
 
 	int mvpLocation = glGetUniformLocation(_shader->rendererId, "u_ModelViewProjection");
 	int texLocation = glGetUniformLocation(_shader->rendererId, "u_Texture");
-	int colLocation = glGetUniformLocation(_shader->rendererId, "u_Color");
-	static int step = 2;
-	static int i = 0;
-	if (i > 255 || i < 0) {
-		step = -step;
-	}
-	i += step;
-	auto& position = renderInfo.camera.getPosition();
-	renderInfo.camera.setPosition(glm::vec3(i / 1000.f, position.y, position.z));
 
 	glm::mat4 mvp = renderInfo.camera.getProjection() * renderInfo.camera.getView() * glm::mat4(1.0f);
-	glUniform4f(colLocation, i / 255.f, i / 255.f, 255 - i / 255.f, 1);
 	glUniform1i(texLocation, 0);
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvp[0][0]);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
