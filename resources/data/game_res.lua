@@ -1,9 +1,63 @@
 resourcePack({
     name = "mainPackage",
     shaders = function()
-        shaderDef("shaders\\shader_definition.lua")
+        script("shaders\\shader_definition.lua")
     end,
     textures = function()
-        textureDef("textures\\texture_definition.lua")
+        script("textures\\texture_definition.lua")
+    end,
+    meshes = function()
+        mesh(
+            "quad",
+            [[
+                -0.5f, -0.5f, -5.f, 0.0f, 0.0f,
+                 0.5f, -0.5f, -5.f, 1.0f, 0.0f,
+                 0.5f,  0.5f, -5.f, 1.0f, 1.0f,
+                -0.5f,  0.5f, -5.f, 0.0f, 1.0f
+            ]],
+            [[
+                0, 1, 2,
+                0, 2, 3
+            ]]
+        )
+        mesh(
+            "cube",
+            [[
+                -0.5f, -0.5f, -5.f, 0.0f, 0.0f,
+                 0.5f, -0.5f, -5.f, 1.0f, 0.0f,
+                 0.5f,  0.5f, -5.f, 1.0f, 1.0f,
+                -0.5f,  0.5f, -5.f, 0.0f, 1.0f,
+                -0.5f, -0.5f, -4.f, 0.0f, 0.0f,
+                 0.5f, -0.5f, -4.f, 1.0f, 0.0f,
+                 0.5f,  0.5f, -4.f, 1.0f, 1.0f,
+                -0.5f,  0.5f, -4.f, 0.0f, 1.0f,
+                -0.5f, -0.5f, -4.f, 0.0f, 0.0f,
+                -0.5f, -0.5f, -5.f, 1.0f, 0.0f,
+                -0.5f,  0.5f, -5.f, 1.0f, 1.0f,
+                -0.5f,  0.5f, -4.f, 0.0f, 1.0f,
+                 0.5f, -0.5f, -4.f, 0.0f, 0.0f,
+                 0.5f, -0.5f, -5.f, 1.0f, 0.0f,
+                 0.5f,  0.5f, -5.f, 1.0f, 1.0f,
+                 0.5f,  0.5f, -4.f, 0.0f, 1.0f,
+                -0.5f,  0.5f, -4.f, 0.0f, 0.0f,
+                -0.5f,  0.5f, -5.f, 1.0f, 0.0f,
+                 0.5f,  0.5f, -5.f, 1.0f, 1.0f,
+                 0.5f,  0.5f, -4.f, 0.0f, 1.0f,
+                -0.5f, -0.5f, -4.f, 0.0f, 0.0f,
+                -0.5f, -0.5f, -5.f, 1.0f, 0.0f,
+                 0.5f, -0.5f, -5.f, 1.0f, 1.0f,
+                 0.5f, -0.5f, -4.f, 0.0f, 1.0f,
+            ]],
+            [[
+                0,1,2,0,2,3,
+                4,5,6,4,6,7,
+                8,9,10,8,10,11,
+                12,13,14,12,14,15,
+                16,17,18,16,18,19,
+                20,21,22,20,22,23,
+            ]]
+        )
+
+        --file("meshes\\test_room.obj")
     end
 })

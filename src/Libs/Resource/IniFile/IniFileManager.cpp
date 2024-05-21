@@ -12,7 +12,7 @@ std::vector<ResourceId> IniFileManager::load(sol::reference& luaDefinitionLoader
 
 	std::vector<ResourceId> resources;
 
-	resourcePackEnv.set_function("iniDef", [this, &resources] (std::string_view name, std::string_view definitionFile, std::string defaultIniContent) {
+	resourcePackEnv.set_function("file", [this, &resources] (std::string_view name, std::string_view definitionFile, std::string defaultIniContent) {
 		auto path = _pathHelper.makeAbsolutePath(definitionFile);
 		auto iniFile = std::make_unique<IniFile>(name);
 		iniFile->filename = path;
@@ -28,7 +28,7 @@ std::vector<ResourceId> IniFileManager::load(sol::reference& luaDefinitionLoader
 
 	ScriptingHelper::executeFunction(_luaState, luaDefinitionLoader);
 
-	resourcePackEnv["iniDef"] = sol::nil;
+	resourcePackEnv["file"] = sol::nil;
 	return resources;
 }
 

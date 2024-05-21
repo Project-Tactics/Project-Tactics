@@ -24,11 +24,12 @@ FsmAction StartState::enter() {
 	_resourceSystem.loadResourcePack("mainPackage");
 
 	auto shader = _resourceSystem.getResource<Shader>("main");
-	auto texture = _resourceSystem.getResource<Texture>("tactics-icon");
+	auto texture = _resourceSystem.getResource<Texture>("crate");
+	auto mesh = _resourceSystem.getResource<Mesh>("cube");
 
 	auto& mainRenderQueue = _renderSystem.createRenderQueue();
 	mainRenderQueue.addStep<ClearViewport>();
-	mainRenderQueue.addStep<DrawSomething>(shader, texture);
+	mainRenderQueue.addStep<DrawSomething>(shader, texture, mesh);
 
 	auto& imguiRenderQueue = _renderSystem.createRenderQueue();
 	imguiRenderQueue.addStep<ImGuiBegin>();

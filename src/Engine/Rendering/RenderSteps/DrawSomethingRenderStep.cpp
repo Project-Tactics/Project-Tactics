@@ -12,41 +12,19 @@
 
 namespace tactics::renderstep {
 
-struct Vertex {
-	glm::vec2 position;
-	glm::vec2 texCoord;
-};
-
-VertexBuffer* vb;
-IndexBuffer* ib;
 VertexDefinition* vd;
 
-DrawSomething::DrawSomething(Shader* shader, Texture* texture)
+DrawSomething::DrawSomething(Shader* shader, Texture* texture, Mesh* mesh)
 	: _shader(shader)
-	, _texture(texture) {
-	float vertices[] = {
-		-0.5f, -0.5f, -5.f, 0.0f, 0.0f,
-		0.5f, -0.5f, -5.f, 1.0f, 0.0f,
-		0.5f, 0.5f, -5.f, 1.0f, 1.0f,
-		-0.5f, 0.5f, -5.f, 0.0f, 1.0f
-	};
-
-	GLuint indices[] = {
-		0, 1, 2,
-		0, 2, 3
-	};
-
-	vb = new VertexBuffer();
-	vb->setData(vertices, 4 * 5 * sizeof(float));
-
+	, _texture(texture)
+	, _mesh(mesh) {
+	mesh->vertexBuffer->bind();
 	auto builder = VertexDefinition::Builder();
 	builder.attributef(3); // position
 	builder.attributef(2); // uv
 	vd = builder.create();
 	vd->bind();
-
-	ib = new IndexBuffer();
-	ib->setData(indices, 6 * sizeof(GLuint));
+	mesh->vertexBuffer->unbind();
 }
 
 void DrawSomething::execute(RenderStepInfo& renderInfo) {
@@ -64,8 +42,12 @@ void DrawSomething::execute(RenderStepInfo& renderInfo) {
 	glUniform1i(texLocation, 0);
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, &mvp[0][0]);
 
-	ib->bind();
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	if (_mesh->indexBuffer->getSize() > 0) {
+		_mesh->indexBuffer->bind();
+		glDrawElements(GL_TRIANGLES, _mesh->indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
+	} else {
+		glDrawArrays(GL_TRIANGLES, 0, _mesh->vertexBuffer->getSize());
+	}
 }
 
 }

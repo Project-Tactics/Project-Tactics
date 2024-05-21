@@ -19,7 +19,7 @@ std::vector<ResourceId> ShaderManager::load(sol::reference& luaDefinitionLoader)
 		_registerResource(std::move(shader));
 	});
 
-	resourcePackEnv.set_function("shaderDef", [this, &resourcePackEnv] (std::string_view definitionFile) {
+	resourcePackEnv.set_function("script", [this, &resourcePackEnv] (std::string_view definitionFile) {
 		auto path = _pathHelper.makeAbsolutePath(definitionFile);
 		_luaState.script_file(path, resourcePackEnv);
 	});
@@ -27,7 +27,7 @@ std::vector<ResourceId> ShaderManager::load(sol::reference& luaDefinitionLoader)
 	ScriptingHelper::executeFunction(_luaState, luaDefinitionLoader);
 
 	resourcePackEnv["shader"] = sol::nil;
-	resourcePackEnv["shaderDef"] = sol::nil;
+	resourcePackEnv["script"] = sol::nil;
 	return resources;
 }
 

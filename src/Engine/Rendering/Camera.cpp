@@ -11,7 +11,7 @@ namespace tactics {
 
 Camera::Camera() {
 	setAspectRatio(1.0f);
-	setFov(45.0f);
+	setFov(60.0f);
 	setNearPlane(0.1f);
 	setFarPlane(100.0f);
 	setView(Vector3::zero, Vector3::forward, Vector3::up);

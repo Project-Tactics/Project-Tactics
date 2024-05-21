@@ -1,5 +1,7 @@
 #include "MeshManager.h"
 
+#include "MeshLoader.h"
+
 #include <Libs/Resource/ResourcePathHelper.h>
 #include <Libs/Scripting/ScriptingHelper.h>
 
@@ -10,21 +12,23 @@ std::vector<ResourceId> MeshManager::load(sol::reference& luaDefinitionLoader) {
 
 	std::vector<ResourceId> resources;
 
-	resourcePackEnv.set_function("mesh", [this, &resources] (std::string_view name) {
+	// This way of defining a mesh from lua in an inline style through strings is not that efficient but it's mostly used for simple meshes
+	resourcePackEnv.set_function("mesh", [this, &resources] (std::string_view name, std::string strVertices, std::string strIndices) {
 		auto mesh = std::make_unique<Mesh>(name);
+		mesh->vertexBuffer = std::make_unique<VertexBuffer>();
+		mesh->vertexBuffer->setData(MeshLoader::parseVertices(strVertices));
+		mesh->vertexBuffer->unbind();
+		mesh->indexBuffer = std::make_unique<IndexBuffer>();
+		mesh->indexBuffer->setData(MeshLoader::parseIndices(strIndices));
+		mesh->indexBuffer->unbind();
+
 		resources.push_back(mesh->id);
 		_registerResource(std::move(mesh));
-	});
-
-	resourcePackEnv.set_function("meshDef", [this, &resourcePackEnv] (std::string_view definitionFile) {
-		auto path = _pathHelper.makeAbsolutePath(definitionFile);
-		_luaState.script_file(path, resourcePackEnv);
 	});
 
 	ScriptingHelper::executeFunction(_luaState, luaDefinitionLoader);
 
 	resourcePackEnv["mesh"] = sol::nil;
-	resourcePackEnv["meshDef"] = sol::nil;
 	return resources;
 }
 

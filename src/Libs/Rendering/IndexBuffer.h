@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace tactics {
 
 class IndexBuffer {
@@ -10,10 +12,12 @@ public:
 	void bind();
 	void unbind();
 
-	void setData(const void* data, size_t size);
+	void setData(const std::vector<unsigned int>& data);
+	unsigned int getSize() const;
 
 private:
-	unsigned int _id;
+	unsigned int _id{};
+	unsigned int _size{};
 };
 
 }

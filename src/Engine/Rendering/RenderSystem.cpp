@@ -40,6 +40,8 @@ RenderSystem::RenderSystem(IniFile* configFile): _configFile(configFile) {
 	if (useDebugMessages) {
 		_debugMessageHandler = std::make_unique<DebugMessageHandler>();
 	}
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 RenderSystem::~RenderSystem() {

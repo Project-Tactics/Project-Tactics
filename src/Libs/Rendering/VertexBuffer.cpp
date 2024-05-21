@@ -20,9 +20,14 @@ void VertexBuffer::unbind() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void VertexBuffer::setData(const void* data, size_t size) {
+void VertexBuffer::setData(const std::vector<float>& data) {
 	bind();
-	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+	_size = static_cast<unsigned int>(data.size());
+}
+
+unsigned int VertexBuffer::getSize() const {
+	return _size;
 }
 
 }

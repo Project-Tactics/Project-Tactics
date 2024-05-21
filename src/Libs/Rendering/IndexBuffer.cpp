@@ -20,9 +20,14 @@ void IndexBuffer::unbind() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void IndexBuffer::setData(const void* data, size_t size) {
+void IndexBuffer::setData(const std::vector<unsigned int>& data) {
 	bind();
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(unsigned int), data.data(), GL_STATIC_DRAW);
+	_size = static_cast<unsigned int>(data.size());
+}
+
+unsigned int IndexBuffer::getSize() const {
+	return _size;
 }
 
 }

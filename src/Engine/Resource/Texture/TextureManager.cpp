@@ -12,7 +12,7 @@ std::vector<ResourceId> TextureManager::load(sol::reference& luaDefinitionLoader
 
 	std::vector<ResourceId> resources;
 
-	resourcePackEnv.set_function("texture", [this, &resources] (std::string_view name, std::string_view filename) {
+	resourcePackEnv.set_function("file", [this, &resources] (std::string_view name, std::string_view filename) {
 		auto texture = std::make_unique<Texture>(name);
 		auto [textureId, info] = TextureLoader::loadTexture(_pathHelper.makeAbsolutePath(filename).c_str());
 		texture->rendererId = textureId;
@@ -21,15 +21,15 @@ std::vector<ResourceId> TextureManager::load(sol::reference& luaDefinitionLoader
 		_registerResource(std::move(texture));
 	});
 
-	resourcePackEnv.set_function("textureDef", [this, &resourcePackEnv] (std::string_view definitionFile) {
+	resourcePackEnv.set_function("script", [this, &resourcePackEnv] (std::string_view definitionFile) {
 		auto path = _pathHelper.makeAbsolutePath(definitionFile);
 		_luaState.script_file(path, resourcePackEnv);
 	});
 
 	ScriptingHelper::executeFunction(_luaState, luaDefinitionLoader);
 
-	resourcePackEnv["texture"] = sol::nil;
-	resourcePackEnv["textureDef"] = sol::nil;
+	resourcePackEnv["file"] = sol::nil;
+	resourcePackEnv["script"] = sol::nil;
 	return resources;
 }
 
