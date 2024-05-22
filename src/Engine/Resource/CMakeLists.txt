@@ -32,7 +32,8 @@ target_link_libraries(engine_resources
     PRIVATE
     glad
     stb
-    libs_utils)
+    libs_utils
+    assimp_wrapper)
 set_property(TARGET engine_resources PROPERTY FOLDER "tactics/engine")
 add_to_engine_folder(engine_resources)
 

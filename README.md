@@ -10,7 +10,7 @@ We currently plan to support only Windows. Expanding and maintaining support for
 git clone https://github.com/Project-Tactics/Project-Tactics.git
 cd Project-Tactics
 git submodule update --init --recursive
-cmake -G "Visual Studio 17 2022" -A x64 -S ./ -B ./build
+cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CONFIGURATION_TYPES=Debug -S ./ -B ./build
 ```
 ### Build
 ```bash

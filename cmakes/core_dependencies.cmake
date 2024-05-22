@@ -17,4 +17,11 @@ macro(core_dependencies)
     add_library(lua_wrapper INTERFACE)
     # Link the wrapper library with lua51
     target_link_libraries(lua_wrapper INTERFACE lua::lua sol2)
+
+    # Set up assimp
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}"/thirdparty/prebuilt/assimp/cmake")
+    find_package(assimp CONFIG REQUIRED)
+    # Create a wrapper library for assimp
+    add_library(assimp_wrapper INTERFACE)
+    target_link_libraries(assimp_wrapper INTERFACE assimp::assimp)
 endmacro()
