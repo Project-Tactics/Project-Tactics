@@ -19,7 +19,7 @@ class IniFile;
  */
 class OverlaySystem {
 public:
-	OverlaySystem(IniFile* iniFile);
+	OverlaySystem(IniFile& iniFile);
 	~OverlaySystem();
 
 	template<typename TOverlay, typename ...TArgs>
@@ -54,7 +54,7 @@ private:
 
 	UnorderedStringMap<OverlayItem> _overlays;
 	bool _isEnabled{};
-	IniFile* _iniFile;
+	IniFile& _iniFile;
 };
 
 }

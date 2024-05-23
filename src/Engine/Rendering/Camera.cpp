@@ -57,6 +57,11 @@ void Camera::setPosition(const glm::vec3& position) {
 	_viewDirty = true;
 }
 
+void Camera::setDirection(const glm::vec3& direction) {
+	_direction = direction;
+	_viewDirty = true;
+}
+
 void Camera::setView(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up) {
 	_position = position;
 	_direction = direction;

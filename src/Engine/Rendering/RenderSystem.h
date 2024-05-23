@@ -16,7 +16,7 @@ class Viewport;
 
 class RenderSystem {
 public:
-	RenderSystem(IniFile* configFile);
+	RenderSystem(IniFile& configFile);
 	~RenderSystem();
 
 	RenderQueue& createRenderQueue();
@@ -43,6 +43,6 @@ private:
 	std::vector<std::unique_ptr<RenderQueue>> _renderQueues;
 	std::unique_ptr<Viewport> _viewport;
 	std::unique_ptr<Camera> _camera;
-	IniFile* _configFile;
+	IniFile& _configFile;
 };
 }

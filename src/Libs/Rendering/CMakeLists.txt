@@ -2,11 +2,10 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
-    IndexBuffer.cpp
-    VertexBuffer.cpp
     VertexDefinition.cpp)
     
 set(HEADERS    
+    BaseBuffer.h
     IndexBuffer.h
     VertexBuffer.h
     VertexDefinition.h)

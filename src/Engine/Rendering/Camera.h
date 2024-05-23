@@ -15,6 +15,7 @@ public:
 
 	void setPosition(const glm::vec3& position);
 	void setView(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up);
+	void setDirection(const glm::vec3& direction);
 	void setAspectRatio(float aspectRatio);
 	void setFov(float fov);
 	void setNearPlane(float near);

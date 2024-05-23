@@ -23,5 +23,6 @@ macro(core_dependencies)
     find_package(assimp CONFIG REQUIRED)
     # Create a wrapper library for assimp
     add_library(assimp_wrapper INTERFACE)
-    target_link_libraries(assimp_wrapper INTERFACE assimp::assimp)
+    target_link_libraries(assimp_wrapper INTERFACE assimp::assimp ${ASSIMP_LIBRARIES})
+    target_include_directories(assimp_wrapper INTERFACE ${ASSIMP_INCLUDE_DIRS})
 endmacro()

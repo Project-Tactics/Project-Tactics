@@ -32,12 +32,12 @@ public:
 	void unloadResourcePack(std::string_view packName);
 
 	template<typename TResource>
-	TResource* getResource(std::string_view name) {
+	TResource& getResource(std::string_view name) {
 		return _getManager<TResource>()->getResource(name);
 	}
 
 	template<typename TResource>
-	TResource* getResource(ResourceId id) {
+	TResource& getResource(ResourceId id) {
 		return _getManager<TResource>()->getResource(id);
 	}
 

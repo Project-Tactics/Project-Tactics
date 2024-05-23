@@ -47,9 +47,10 @@ void Application::_initialize() {
 	ResourceSystemInitializer::initialize(*_resourceSystem);
 	_resourceSystem->loadResourcePackDefinition("engine_res.lua");
 	_resourceSystem->loadResourcePack("initialization");
-	auto iniFile = _resourceSystem->getResource<IniFile>("configFile");
+	auto& iniFile = _resourceSystem->getResource<IniFile>("configFile");
 
 	_renderSystem = std::make_unique<RenderSystem>(iniFile);
+	_resourceSystem->loadResourcePack("builtinMeshes");
 
 	_initializeImGui();
 

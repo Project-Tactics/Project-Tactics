@@ -26,7 +26,7 @@ void onGlErrorMessage(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum 
 	printf("%s\n", message);
 }
 
-RenderSystem::RenderSystem(IniFile* configFile): _configFile(configFile) {
+RenderSystem::RenderSystem(IniFile& configFile): _configFile(configFile) {
 	static const bool useDebugMessages = true;
 	_defineGlAttributes(useDebugMessages);
 	_createWindow();
@@ -79,8 +79,8 @@ void RenderSystem::_defineGlAttributes(bool useDebugMessages) {
 }
 
 void RenderSystem::_createWindow() {
-	int width = _configFile->getOrCreate("window", "width", 1280);
-	int height = _configFile->getOrCreate("window", "height", 720);
+	int width = _configFile.getOrCreate("window", "width", 1280);
+	int height = _configFile.getOrCreate("window", "height", 720);
 	_window = SDL_CreateWindow("Project Tactics", 100, 100, width, height, SDL_WINDOW_OPENGL);
 	if (_window == nullptr) {
 		throw Exception("Failed to open window: %s\n", SDL_GetError());

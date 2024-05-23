@@ -1,24 +1,9 @@
 #pragma once
 
-#include <vector>
+#include "BaseBuffer.h"
 
 namespace tactics {
 
-class VertexBuffer {
-public:
-	VertexBuffer();
-	~VertexBuffer();
-
-	void bind();
-	void unbind();
-
-	void setData(const std::vector<float>& data);
-
-	unsigned int getSize() const;
-
-private:
-	unsigned int _size{};
-	unsigned int _id{};
-};
+class VertexBuffer: public BaseBuffer<float, GL_ARRAY_BUFFER> {};
 
 }

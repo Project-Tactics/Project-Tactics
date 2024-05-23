@@ -29,9 +29,7 @@ ExternalProject_Add(external_assimp
   URL_MD5 0354d56d4b10a593f205d24adb5f1c5b
   CMAKE_ARGS ${ASSIMP_CMAKE_ARGS}
 )
-message("${install_dir}")
 ExternalProject_Get_Property(external_assimp install_dir)
-message("${install_dir}")
 
 set(ASSIMP_INCLUDE_DIR ${install_dir}/include)
 
@@ -42,7 +40,6 @@ else()
 endif()
 
 set(ASSIMP_LIBRARY ${install_dir}/lib/assimp-vc143${LIB_POSTFIX}.lib)
-set(IRRXML_LIBRARY ${install_dir}/lib/IrrXML.lib)
 # TODO(Gerark) Maybe we should use the non-debug version when linking in release
 set(ZLIB_LIBRARY ${install_dir}/lib/zlibstaticd.lib)
 
@@ -59,6 +56,8 @@ find_package_handle_standard_args(assimp
 )
 
 if (ASSIMP_FOUND)
-	set(ASSIMP_LIBRARIES ${ASSIMP_LIBRARY} ${IRRXML_LIBRARY} ${ZLIB_LIBRARY})
+	set(ASSIMP_LIBRARIES ${ASSIMP_LIBRARY} ${ZLIB_LIBRARY})
 	set(ASSIMP_INCLUDE_DIRS ${ASSIMP_INCLUDE_DIR})
 endif ()
+
+add_to_thirdparty_folder(external_assimp)

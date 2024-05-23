@@ -8,7 +8,7 @@
 
 namespace tactics {
 
-OverlaySystem::OverlaySystem(IniFile* iniFile): _iniFile(iniFile) {
+OverlaySystem::OverlaySystem(IniFile& iniFile): _iniFile(iniFile) {
 }
 
 OverlaySystem::~OverlaySystem() {}
@@ -91,12 +91,12 @@ void OverlaySystem::enableOverlay(std::string_view name, bool enabled) {
 }
 
 bool OverlaySystem::_getOrCreateOverlayStoredEnableValue(std::string_view name, bool defaultValue) {
-	return _iniFile->getOrCreate("overlay", name, defaultValue);
+	return _iniFile.getOrCreate("overlay", name, defaultValue);
 }
 
 void OverlaySystem::_setOverlayStoredEnableValue(std::string_view name, bool enabled) {
-	_iniFile->set("overlay", name.data(), enabled);
-	_iniFile->save();
+	_iniFile.set("overlay", name.data(), enabled);
+	_iniFile.save();
 }
 
 }

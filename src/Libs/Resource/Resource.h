@@ -26,6 +26,9 @@ using ResourceId = uint64_t;
 class BaseResource {
 public:
 	BaseResource(std::string_view name, ResourceType type);
+	BaseResource(BaseResource&&) = delete;
+	BaseResource(BaseResource&) = delete;
+	BaseResource& operator=(BaseResource&&) = delete;
 
 	ResourceId id;
 	std::string name;

@@ -33,8 +33,8 @@ std::vector<ResourceId> IniFileManager::load(sol::reference& luaDefinitionLoader
 }
 
 void IniFileManager::unload(ResourceId resourceId) {
-	auto resource = getResource(resourceId);
-	resource->save();
+	auto& resource = getResource(resourceId);
+	resource.save();
 	_removeResource(resource);
 }
 

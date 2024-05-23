@@ -12,13 +12,13 @@ namespace tactics::renderstep {
 
 class DrawSomething: public RenderStep {
 public:
-	DrawSomething(Shader* shader, Texture* texture, Mesh* mesh);
+	DrawSomething(Shader& shader, Texture& texture, Mesh& mesh);
 	void execute(RenderStepInfo& renderInfo) override;
 
 private:
-	Shader* _shader;
-	Texture* _texture;
-	Mesh* _mesh;
+	Shader& _shader;
+	Texture& _texture;
+	Mesh& _mesh;
 };
 
 }

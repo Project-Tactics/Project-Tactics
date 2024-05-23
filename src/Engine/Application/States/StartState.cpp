@@ -23,9 +23,9 @@ FsmAction StartState::enter() {
 	_resourceSystem.loadResourcePackDefinition("game_res.lua");
 	_resourceSystem.loadResourcePack("mainPackage");
 
-	auto shader = _resourceSystem.getResource<Shader>("main");
-	auto texture = _resourceSystem.getResource<Texture>("crate");
-	auto mesh = _resourceSystem.getResource<Mesh>("cube");
+	auto& shader = _resourceSystem.getResource<Shader>("main");
+	auto& texture = _resourceSystem.getResource<Texture>("colors");
+	auto& mesh = _resourceSystem.getResource<Mesh>("book");
 
 	auto& mainRenderQueue = _renderSystem.createRenderQueue();
 	mainRenderQueue.addStep<ClearViewport>();
