@@ -1,7 +1,7 @@
 #include "Resource.h"
 
-#include <Libs/Utilities/UUID.h>
-#include <Libs/Utilities/Exception.h>
+#include <Libs/Utility/UUID.h>
+#include <Libs/Utility/Exception.h>
 
 namespace tactics::resource {
 

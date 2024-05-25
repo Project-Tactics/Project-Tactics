@@ -1,19 +1,18 @@
-#include "Application.h"
+#include "Engine.h"
 
-#include "States/DemoState.h"
-#include "States/StartState.h"
+#include "Application.h"
 
 #include <Engine/ECS/EcsSystem.h>
 #include <Engine/Rendering/RenderSystem.h>
 #include <Engine/Resource/ResourceSystemInitializer.h>
 
-#include <Libs/Events/EventsSystem.h>
+#include <Libs/Event/EventsSystem.h>
 #include <Libs/Fsm/FsmBuilder.h>
 #include <Libs/Overlay/OverlaySystem.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/IniFile/IniFile.h>
-#include <Libs/Utilities/Service/ServiceLocator.h>
-#include <Libs/Utilities/Exception.h>
+#include <Libs/Utility/Service/ServiceLocator.h>
+#include <Libs/Utility/Exception.h>
 
 #include <imgui/imgui.h>
 #include <SDL.h>
@@ -22,18 +21,12 @@
 
 namespace tactics {
 
-Application::Application() {
-}
-
-Application::~Application() {
-}
-
-void Application::run() {
+void Engine::_run(Application& application) {
 	try {
-		auto application = Application();
-		application._initialize();
-		application._internalRun();
-		application._shutdown();
+		auto engine = Engine();
+		engine._initialize(application);
+		engine._internalRun();
+		engine._shutdown();
 	}
 	catch (Exception& exception) {
 		printf("%s", exception.what());
@@ -43,7 +36,7 @@ void Application::run() {
 	}
 }
 
-void Application::_initialize() {
+void Engine::_initialize(Application& application) {
 	_initializeSDL();
 	_resourceSystem = std::make_unique<resource::ResourceSystem>("data");
 	resource::ResourceSystemInitializer::initialize(*_resourceSystem);
@@ -69,10 +62,16 @@ void Application::_initialize() {
 	_serviceLocator->addService(_eventsSystem.get());
 	_serviceLocator->addService(_ecsSystem.get());
 
-	_initializeFsm();
+	auto builder = FsmBuilder();
+	auto fsmStartingStateName = application.initialize(*_serviceLocator, builder);
+	if (fsmStartingStateName.empty()) {
+		throw Exception("Application did not return a valid FSM");
+	}
+	_fsm = builder.build(fsmStartingStateName);
+	_eventsSystem->registerEventsListener(_fsm.get());
 }
 
-void Application::_internalRun() {
+void Engine::_internalRun() {
 	while (!_fsm->hasReachedExitState()) {
 		auto eventResult = _eventsSystem->update();
 		if (eventResult == EventResult::QuitGame) {
@@ -85,19 +84,19 @@ void Application::_internalRun() {
 	}
 }
 
-void Application::_shutdown() {
+void Engine::_shutdown() {
 	_eventsSystem->unregisterEventsListener(_fsm.get());
 	_resourceSystem->cleanupResources();
 	SDL_Quit();
 }
 
-void Application::_initializeSDL() {
+void Engine::_initializeSDL() {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		throw std::exception(std::format("SDL could not initialize! SDL_Error: {}\n", SDL_GetError()).c_str());
 	}
 }
 
-void Application::_initializeImGui() {
+void Engine::_initializeImGui() {
 	// TODO(Gerark) This is absolutely something that should move elsewhere and probably configure it through lua
 	ImGuiStyle* style = &ImGui::GetStyle();
 
@@ -161,23 +160,6 @@ void Application::_initializeImGui() {
 		io.Fonts->AddFontFromFileTTF(fontPathStr.c_str(), 24);
 		io.Fonts->AddFontFromFileTTF(fontPathStr.c_str(), 32);
 	}
-}
-
-void Application::_initializeFsm() {
-	auto builder = FsmBuilder();
-
-	builder
-		// TODO(Gerark) we can definitely start telling that probably it would be better to have a service locator or
-		// something like that to avoid passing all these systems around
-		.state<StartState>("Start", *_serviceLocator)
-		.on("proceed").jumpTo("Map")
-
-		.state<DemoState>("Map", *_serviceLocator)
-		.on("exit").exitFsm();
-
-	_fsm = builder.build("Start");
-
-	_eventsSystem->registerEventsListener(_fsm.get());
 }
 
 }

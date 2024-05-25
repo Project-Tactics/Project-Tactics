@@ -5,8 +5,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include <Libs/Utilities/Service/ServiceLocator.h>
-#include <Libs/Utilities/Exception.h>
+#include <Libs/Utility/Service/ServiceLocator.h>
+#include <Libs/Utility/Exception.h>
 
 using namespace tactics;
 

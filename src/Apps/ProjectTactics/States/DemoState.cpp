@@ -1,13 +1,12 @@
 #include "DemoState.h"
 
-#include "../Overlay/DebugOverlay.h"
-
 #include <Libs/Overlay/OverlaySystem.h>
 #include <Libs/Overlay/ExampleOverlay.h>
 #include <Libs/Overlay/MainOverlay.h>
 #include <Libs/Resource/ResourceSystem.h>
-#include <Libs/Utilities/Math.h>
+#include <Libs/Utility/Math.h>
 
+#include <Engine/Core/Overlay/DebugOverlay.h>
 #include <Engine/ECS/EcsSystem.h>
 #include <Engine/Rendering/RenderSystem.h>
 #include <Engine/Rendering/Camera.h>

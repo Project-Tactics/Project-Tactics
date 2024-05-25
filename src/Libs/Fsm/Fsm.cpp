@@ -1,20 +1,25 @@
 #include "Fsm.h"
 
-#include <utility>
-#include <exception>
+#include <Libs/Utility/Exception.h>
+
 #include <string>
-#include <format>
 #include <memory>
 
 namespace tactics {
 
 const std::string_view Fsm::exitState = "_Exit";
 
-Fsm::Fsm(FsmStateEntries states, std::string_view startStateName): _states(std::move(states)) {
-	_goToState(startStateName);
+Fsm::Fsm(FsmStateEntries states, std::string_view startStateName): _states(std::move(states)), _startStateName(startStateName) {
+	if (!_states.contains(startStateName)) {
+		throw Exception("Cannot create Fsm with starting state [{}]. The state does not exist.", _startStateName);
+	}
 }
 
 void Fsm::update() {
+	if (!_currentState) {
+		_goToState(_startStateName);
+	}
+
 	if (_hasReachedExitState)
 		return;
 
@@ -25,7 +30,7 @@ void Fsm::update() {
 void Fsm::_goToState(std::string_view stateName) {
 	FsmStateEntry* nextState = _getStateByName(stateName);
 	if (!nextState) {
-		throw std::exception(std::format("Cannot jump to state [{}]. The state does not exist.", stateName).c_str());
+		throw Exception("Cannot jump to state [{}]. The state does not exist.", stateName);
 	}
 
 	if (_currentState) {
@@ -52,7 +57,7 @@ void Fsm::_executeTransition(std::string_view transition) {
 	FsmTransitions& transitions = _currentState->transitions;
 	auto itr = transitions.find(transition.data());
 	if (itr == transitions.end()) {
-		throw std::exception(std::format("Cannot execute transition from state [{}]. Transition [{}] does not exist.", _currentState->name, transition).c_str());
+		throw Exception("Cannot execute transition from state [{}]. Transition [{}] does not exist.", _currentState->name, transition);
 	}
 
 	// Check if there's at least one transition condition that evaluates to true
@@ -64,7 +69,7 @@ void Fsm::_executeTransition(std::string_view transition) {
 		}
 	}
 	if (!transitionTarget) {
-		throw std::exception(std::format("Cannot execute transition [{}] from state [{}]. No condition evaluated to true", transition, _currentState->name).c_str());
+		throw Exception("Cannot execute transition [{}] from state [{}]. No condition evaluated to true", transition, _currentState->name);
 	}
 
 	_hasReachedExitState = transitionTarget->stateName == exitState;

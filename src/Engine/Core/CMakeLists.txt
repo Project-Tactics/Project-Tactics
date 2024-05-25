@@ -3,31 +3,30 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
     Application.cpp
-    States/StartState.cpp
-    States/DemoState.cpp
+    Engine.cpp
     Overlay/DebugOverlay.cpp)
     
 set(HEADERS
     Application.h
-    Overlay/DebugOverlay.h
-    States/StartState.h
-    States/DemoState.h)
+    Engine.h
+    Overlay/DebugOverlay.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
-add_library(engine_application ${SOURCES} ${HEADERS})
-target_link_libraries(engine_application
+add_library(engine_core ${SOURCES} ${HEADERS})
+target_link_libraries(engine_core
+    PUBLIC
+    libs_fsm
     PRIVATE 
     engine_rendering
-    engine_resources
+    engine_resource
     engine_ecs
-    libs_fsm
-    libs_events
+    libs_event
     libs_overlay
-    libs_utils
+    libs_utility
     sdl2_wrapper
     glm)
-add_to_engine_folder(engine_application)
+add_to_engine_folder(engine_core)
 
 unset(SOURCES)
 unset(HEADERS)

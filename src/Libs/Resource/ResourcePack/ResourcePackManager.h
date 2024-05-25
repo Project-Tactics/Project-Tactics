@@ -3,7 +3,7 @@
 #include "../Resource.h"
 #include <memory>
 #include <sol/sol.hpp>
-#include <Libs/Utilities/TransparentTypes.h>
+#include <Libs/Utility/TransparentTypes.h>
 
 namespace tactics::resource {
 

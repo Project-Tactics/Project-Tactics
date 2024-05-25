@@ -18,10 +18,10 @@ set(SOURCES
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
-add_library(libs_utils STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_utils PUBLIC glm fmt::fmt)
-add_to_libs_folder(libs_utils)
+add_library(libs_utility STATIC ${SOURCES} ${HEADERS})
+target_link_libraries(libs_utility PUBLIC glm fmt::fmt)
+add_to_libs_folder(libs_utility)
 
 set(TEST_SOURCES Tests/Test_ServiceLocator.cpp)
-set(TEST_LIBS libs_utils)
-add_unit_test(libs_utils ${TEST_SOURCES} ${TEST_LIBS})
+set(TEST_LIBS libs_utility)
+add_unit_test(libs_utility ${TEST_SOURCES} ${TEST_LIBS})

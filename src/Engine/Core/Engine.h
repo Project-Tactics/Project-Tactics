@@ -9,6 +9,7 @@ namespace resource {
 class ResourceSystem;
 }
 
+class Application;
 class EcsSystem;
 class EventsSystem;
 class Fsm;
@@ -16,18 +17,19 @@ class OverlaySystem;
 class RenderSystem;
 class ServiceLocator;
 
-class Application {
+class Engine {
 public:
-	static void run();
+	template<typename TApplication>
+	static void run() {
+		TApplication application;
+		_run(application);
+	}
 
 private:
-	Application();
-	~Application();
-
-	void _initialize();
+	static void _run(Application& application);
+	void _initialize(Application& application);
 	void _initializeSDL();
 	void _initializeImGui();
-	void _initializeFsm();
 	void _internalRun();
 	void _shutdown();
 

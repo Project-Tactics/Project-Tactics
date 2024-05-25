@@ -18,7 +18,7 @@ target_link_libraries(libs_rendering
     glad
     glm
     PRIVATE
-    libs_utils)
+    libs_utility)
 add_to_libs_folder(libs_rendering)
 
 unset(SOURCES)

@@ -2,12 +2,20 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
-    ProjectTacticsMain.cpp)
+    BattlegroundApplication.cpp
+    ProjectTacticsMain.cpp
+    States/StartState.cpp
+    States/DemoState.cpp)
+    
+set(HEADERS
+    BattlegroundApplication.h
+    States/StartState.h
+    States/DemoState.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
-add_executable(ProjectTactics ${SOURCES})
-target_link_libraries(ProjectTactics PUBLIC engine_application)
+add_executable(ProjectTactics ${SOURCES} ${HEADERS})
+target_link_libraries(ProjectTactics PUBLIC tactics_engine)
 
 # Set the working directory for visual studio
 set_target_properties(
@@ -35,3 +43,4 @@ add_dependencies(ProjectTactics RunPostBuildCommand)
   set_property(TARGET RunPostBuildCommand PROPERTY FOLDER "postbuild")
 
 unset(SOURCES)
+unset(HEADERS)

@@ -3,7 +3,7 @@
 #include "../ResourcePathHelper.h"
 #include "../ResourceManager.h"
 
-#include <Libs/Utilities/Exception.h>
+#include <Libs/Utility/Exception.h>
 
 namespace tactics::resource {
 

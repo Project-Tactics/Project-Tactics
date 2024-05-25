@@ -2,8 +2,8 @@
 
 #include "Camera.h"
 
-#include <Libs/Utilities/Math.h>
-#include <Libs/Utilities/Color.h>
+#include <Libs/Utility/Math.h>
+#include <Libs/Utility/Color.h>
 
 namespace tactics {
 

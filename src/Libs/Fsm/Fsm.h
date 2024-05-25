@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Libs/Events/EventsListener.h>
+#include <Libs/Event/EventsListener.h>
 
 #include "FsmTypes.h"
 
@@ -42,6 +42,7 @@ private:
 	FsmStateEntry* _currentState{};
 
 	bool _hasReachedExitState{};
+	std::string _startStateName;
 };
 
 }

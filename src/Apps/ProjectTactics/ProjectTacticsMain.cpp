@@ -1,8 +1,9 @@
-#include <iostream>
+#include "BattlegroundApplication.h"
 
-#include <Engine/Application/Application.h>
+#include <Engine/Core/Engine.h>
 
 int main(int /*argc*/, char** /*argv*/) {
-	tactics::Application::run();
+	using namespace tactics;
+	Engine::run<BattlegroundApplication>();
 	return 0;
 }

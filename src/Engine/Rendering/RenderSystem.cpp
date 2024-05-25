@@ -6,7 +6,7 @@
 #include "RenderQueue.h"
 #include "RenderSteps/RenderStep.h"
 
-#include <Libs/Utilities/Exception.h>
+#include <Libs/Utility/Exception.h>
 #include <Libs/Rendering/VertexBuffer.h>
 #include <Libs/Rendering/VertexAttributes.h>
 

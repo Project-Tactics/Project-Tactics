@@ -2,7 +2,7 @@
 
 #include "Resource.h"
 
-#include <Libs/Utilities/Exception.h>
+#include <Libs/Utility/Exception.h>
 
 #include <unordered_map>
 #include <memory>

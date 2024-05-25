@@ -2,7 +2,7 @@
 
 #include "ResourcePack/ResourcePackManager.h"
 
-#include <Libs/Utilities/Exception.h>
+#include <Libs/Utility/Exception.h>
 #include <Libs/Scripting/ScriptingHelper.h>
 
 #include <sol/sol.hpp>

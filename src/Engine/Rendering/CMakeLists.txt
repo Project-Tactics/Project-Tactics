@@ -31,11 +31,11 @@ target_link_libraries(engine_rendering
     glad
     glm
     PRIVATE
-    engine_resources
+    engine_resource
     engine_ecs
     libs_rendering
     libs_overlay
-    libs_utils
+    libs_utility
     imgui
     sdl2_wrapper)
 add_to_engine_folder(engine_rendering)

@@ -2,7 +2,7 @@
 
 #include "FsmState.h"
 
-#include <Libs/Utilities/Service/ServiceLocator.h>
+#include <Libs/Utility/Service/ServiceLocator.h>
 
 /**
  * @brief A utility abstract class used to store a service locator. It's just containing syntactic sugar to retrieve a service.

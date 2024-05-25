@@ -1,12 +1,7 @@
 #include "FsmBuilder.h"
 #include "Fsm.h"
 
-#include <memory>
-#include <exception>
-#include <format>
-#include <utility>
-#include <string>
-#include <cassert>
+#include <Libs/Utility/Exception.h>
 
 namespace tactics {
 
@@ -23,13 +18,13 @@ FsmBuilder& FsmBuilder::state(std::string_view stateName, std::unique_ptr<FsmSta
 FsmBuilder& FsmBuilder::on(std::string_view transitionName) {
 	_latestOnTransition.clear();
 	if (!_latestState) {
-		throw std::exception(std::format("Can't create a transition with name [{}]. No state has been setup in the FsmBuilder",
-			transitionName).c_str());
+		throw Exception("Can't create a transition with name [{}]. No state has been setup in the FsmBuilder",
+			transitionName);
 	}
 
 	if (_latestState->transitions.contains(transitionName)) {
-		throw std::exception(std::format("Can't create a transition with the same name [{}]. State [{}]",
-			transitionName, _latestState->name).c_str());
+		throw Exception("Can't create a transition with the same name [{}]. State [{}]",
+			transitionName, _latestState->name);
 	}
 
 	_latestState->transitions.insert({transitionName, {}});
@@ -47,13 +42,13 @@ FsmBuilder& FsmBuilder::exitFsm() {
 
 FsmBuilder& FsmBuilder::jumpTo(std::function<bool()> condition, std::string_view targetState) {
 	if (!_latestState) {
-		throw std::exception(std::format("Can't add a target state to jumpTo. No state has been setup in the FsmBuilder. TargetState [{}]",
-			targetState).c_str());
+		throw Exception("Can't add a target state to jumpTo. No state has been setup in the FsmBuilder. TargetState [{}]",
+			targetState);
 	}
 
 	if (_latestOnTransition.empty()) {
-		throw std::exception(std::format("Can't add a target state to jumpTo. No 'on' event has been defined yet. State [{}], TargetState [{}]",
-			_latestState->name, targetState).c_str());
+		throw Exception("Can't add a target state to jumpTo. No 'on' event has been defined yet. State [{}], TargetState [{}]",
+			_latestState->name, targetState);
 	}
 
 	_latestState->transitions[_latestOnTransition].push_back(FsmTransitionTarget{std::string(targetState), condition});
@@ -61,6 +56,11 @@ FsmBuilder& FsmBuilder::jumpTo(std::function<bool()> condition, std::string_view
 }
 
 std::unique_ptr<Fsm> FsmBuilder::build(std::string_view startStateName) {
+	if (!_states.contains(startStateName)) {
+		throw Exception("Can't build FSM. Start state [{}] is not valid", startStateName);
+	} else if (_states.empty()) {
+		throw Exception("Can't build FSM. No states have been added to the FSM");
+	}
 	auto fsm = std::make_unique<Fsm>(std::move(_states), startStateName);
 	_states.clear();
 	_latestOnTransition.clear();

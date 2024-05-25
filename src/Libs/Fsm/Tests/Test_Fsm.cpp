@@ -6,6 +6,7 @@
 #include <gmock/gmock.h>
 
 #include <Libs/Fsm/FsmBuilder.h>
+#include <Libs/Utility/Exception.h>
 
 using namespace tactics;
 
@@ -39,24 +40,27 @@ using ::testing::Return;
 using ::testing::Invoke;
 
 TEST_F(FsmTest, WrongStartingStateWithEmptyFsm) {
-	EXPECT_THROW(_createFsm("InvalidState"), std::exception);
+	EXPECT_THROW(_createFsm("InvalidState"), Exception);
 }
 
 TEST_F(FsmTest, WrongStartingState) {
 	_addState("FirstState", std::make_unique<MockFsmState>());
 	_addState("SecondState", std::make_unique<MockFsmState>());
 	_addState("ThirdState", std::make_unique<MockFsmState>());
-	EXPECT_THROW(_createFsm("FourthState"), std::exception);
+	EXPECT_THROW(_createFsm("FourthState"), Exception);
 }
 
 TEST_F(FsmTest, CallEnterOnStartingState) {
 	auto state = std::make_unique<MockFsmState>();
 	EXPECT_CALL(*state.get(), enter())
 		.Times(Exactly(1));
+	EXPECT_CALL(*state.get(), update())
+		.Times(Exactly(1));
 
 	_addState("TestState", std::move(state));
 
 	auto fsm = _createFsm("TestState");
+	fsm->update();
 }
 
 TEST_F(FsmTest, PassThroughTest) {
@@ -91,6 +95,7 @@ TEST_F(FsmTest, PassThroughTest) {
 	});
 
 	auto fsm = _createFsm("FirstState");
+	fsm->update();
 	EXPECT_TRUE(fsm->hasReachedExitState());
 }
 
@@ -145,7 +150,7 @@ TEST_F(FsmTest, WrongTransitionName) {
 	});
 
 	auto fsm = _createFsm("FirstState");
-	EXPECT_THROW(fsm->update(), std::exception);
+	EXPECT_THROW(fsm->update(), Exception);
 }
 
 TEST_F(FsmTest, WrongTargetStateTransition) {
@@ -162,5 +167,5 @@ TEST_F(FsmTest, WrongTargetStateTransition) {
 	});
 
 	auto fsm = _createFsm("FirstState");
-	EXPECT_THROW(fsm->update(), std::exception);
+	EXPECT_THROW(fsm->update(), Exception);
 }

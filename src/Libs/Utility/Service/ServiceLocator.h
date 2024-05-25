@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Libs/Utilities/Exception.h>
-#include <Libs/Utilities/ClassId.h>
+#include <Libs/Utility/Exception.h>
+#include <Libs/Utility/ClassId.h>
 
 #include <unordered_map>
 #include <memory>

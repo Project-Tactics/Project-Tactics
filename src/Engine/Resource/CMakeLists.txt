@@ -25,17 +25,17 @@ set(HEADERS
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
-add_library(engine_resources ${SOURCES} ${HEADERS})
-target_link_libraries(engine_resources
+add_library(engine_resource ${SOURCES} ${HEADERS})
+target_link_libraries(engine_resource
     PUBLIC
     libs_resource
     PRIVATE
     glad
     stb
-    libs_utils
+    libs_utility
     assimp_wrapper)
-set_property(TARGET engine_resources PROPERTY FOLDER "tactics/engine")
-add_to_engine_folder(engine_resources)
+set_property(TARGET engine_resource PROPERTY FOLDER "tactics/engine")
+add_to_engine_folder(engine_resource)
 
 unset(SOURCES)
 unset(HEADERS)

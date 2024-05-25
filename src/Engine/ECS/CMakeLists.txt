@@ -19,8 +19,8 @@ target_link_libraries(engine_ecs
     entt
     PRIVATE 
     engine_rendering
-    engine_resources
-    libs_utils)
+    engine_resource
+    libs_utility)
 add_to_engine_folder(engine_ecs)
 
 unset(SOURCES)

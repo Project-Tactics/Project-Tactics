@@ -1,6 +1,6 @@
 #include "ScriptingHelper.h"
 
-#include <Libs/Utilities/Exception.h>
+#include <Libs/Utility/Exception.h>
 
 namespace tactics {
 

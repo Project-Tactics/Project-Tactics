@@ -10,7 +10,7 @@ set(HEADERS
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
 add_library(libs_scripting STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_scripting PUBLIC lua_wrapper PRIVATE libs_utils)
+target_link_libraries(libs_scripting PUBLIC lua_wrapper PRIVATE libs_utility)
 add_to_libs_folder(libs_scripting)
 
 unset(SOURCES)

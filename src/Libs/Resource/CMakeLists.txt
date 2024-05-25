@@ -27,7 +27,7 @@ target_link_libraries(libs_resource
     libs_scripting
     inicpp
     PRIVATE
-    libs_utils)
+    libs_utility)
 add_to_libs_folder(libs_resource)
 
 unset(SOURCES)

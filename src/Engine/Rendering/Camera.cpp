@@ -5,7 +5,7 @@
 #include <glm/common.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
-#include <Libs/Utilities/Math.h>
+#include <Libs/Utility/Math.h>
 
 namespace tactics {
 
