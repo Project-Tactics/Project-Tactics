@@ -3,7 +3,7 @@
 #include <string>
 #include <filesystem>
 
-namespace tactics {
+namespace tactics::resource {
 
 /**
  * Utility class for managing and retrieving important filesystem paths and resources.

@@ -4,4 +4,5 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 # Add all the subdirectory for the engine part
 add_subdirectory(Rendering)
 add_subdirectory(Resource)
+add_subdirectory(ECS)
 add_subdirectory(Application)

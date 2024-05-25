@@ -4,14 +4,14 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
     Application.cpp
     States/StartState.cpp
-    States/MapState.cpp
+    States/DemoState.cpp
     Overlay/DebugOverlay.cpp)
     
 set(HEADERS
     Application.h
     Overlay/DebugOverlay.h
     States/StartState.h
-    States/MapState.h)
+    States/DemoState.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
@@ -20,6 +20,7 @@ target_link_libraries(engine_application
     PRIVATE 
     engine_rendering
     engine_resources
+    engine_ecs
     libs_fsm
     libs_events
     libs_overlay

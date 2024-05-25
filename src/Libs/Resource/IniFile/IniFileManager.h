@@ -3,7 +3,7 @@
 #include <Libs/Resource/ResourceManager.h>
 #include "IniFile.h"
 
-namespace tactics {
+namespace tactics::resource {
 
 class IniFileManager: public TResourceManager<IniFile> {
 public:

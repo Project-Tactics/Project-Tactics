@@ -24,4 +24,8 @@ const vec2 Vector2::right = vec2(1.0f, 0.0f);
 
 const float Math::PI = pi<float>();
 
+const quat Quaternion::identity = quat(1.0f, 0.0f, 0.0f, 0.0f);
+
+const mat4x4 Matrix4x4::identity = mat4(1.0f);
+
 }

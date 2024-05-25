@@ -1,6 +1,6 @@
 #pragma once
 
-namespace tactics {
+namespace tactics::resource {
 
 class ResourceSystem;
 

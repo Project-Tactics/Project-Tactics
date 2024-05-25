@@ -3,7 +3,7 @@
 #include <Libs/Resource/ResourceManager.h>
 #include "Texture.h"
 
-namespace tactics {
+namespace tactics::resource {
 
 class TextureManager: public TResourceManager<Texture> {
 public:

@@ -8,7 +8,7 @@
 #include <memory>
 #include <sol/sol.hpp>
 
-namespace tactics {
+namespace tactics::resource {
 
 template<typename TResource>
 using ResourceMap = std::unordered_map<ResourceId, std::unique_ptr<TResource>>;

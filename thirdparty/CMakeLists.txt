@@ -36,5 +36,11 @@ add_subdirectory(stb)
 add_library(inicpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/inifile-cpp/include/inicpp.h)
 target_include_directories(inicpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/inifile-cpp/include)
 
+# Adding entt as an entity-component-system library
+# https://github.com/skypjack/entt
+# We're not really in need of going through their cmakelists.txt
+add_library(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/single_include/entt/entt.hpp)
+target_include_directories(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/single_include)
+
 # Let's keep things clean and tidy by moving all the thirdparty libs to a folder
-set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui fmt sol2 stb inicpp PROPERTY FOLDER "thirdparty")
+set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui fmt sol2 stb inicpp entt PROPERTY FOLDER "thirdparty")

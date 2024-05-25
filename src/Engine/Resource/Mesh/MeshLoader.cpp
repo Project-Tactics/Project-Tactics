@@ -3,6 +3,7 @@
 #include "Mesh.h"
 
 #include <Libs/Utilities/Exception.h>
+#include <Libs/Rendering/VertexAttributes.h>
 
 #include <regex>
 #include <functional>
@@ -10,7 +11,7 @@
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
 
-namespace tactics {
+namespace tactics::resource {
 
 template<typename T>
 std::vector<T> parseString(const std::string& str, std::function<T(const std::string&)> convertFunc) {
@@ -34,6 +35,21 @@ std::vector<float> MeshLoader::parseVertices(const std::string& strVertices) {
 
 std::vector<unsigned int> MeshLoader::parseIndices(const std::string& strIndices) {
 	return parseString<unsigned int>(strIndices, [] (const std::string& str) { return std::stoul(str); });
+}
+
+std::unique_ptr<Mesh> MeshLoader::loadMesh(std::string_view name, const std::string& strVertices, const std::string& strIndices) {
+	// TODO(Gerark) Using dynamic draw as usage but it should be best to receive this as a parameter
+	auto meshVertices = std::make_unique<VertexBuffer>(parseVertices(strVertices), GL_DYNAMIC_DRAW);
+	meshVertices->bind();
+	auto vertexAttributes = _createDefaultVertexAttributes();
+	meshVertices->unbind();
+
+	return std::make_unique<Mesh>(
+		name,
+		std::move(meshVertices),
+		std::make_unique<IndexBuffer>(parseIndices(strIndices), GL_DYNAMIC_DRAW),
+		std::move(vertexAttributes)
+	);
 }
 
 std::unique_ptr<Mesh> MeshLoader::loadMesh(std::string_view name, const std::string& path) {
@@ -74,11 +90,26 @@ std::unique_ptr<Mesh> MeshLoader::loadMesh(std::string_view name, const std::str
 		}
 	}
 
+	// TODO(Gerark) Using dynamic draw as usage but it should be best to receive this as a parameter
+	auto meshVertices = std::make_unique<VertexBuffer>(vertices, GL_DYNAMIC_DRAW);
+	meshVertices->bind();
+	auto vertexAttributes = _createDefaultVertexAttributes();
+	meshVertices->unbind();
+
 	return std::make_unique<Mesh>(
 		name,
-		std::make_unique<VertexBuffer>(vertices),
-		std::make_unique<IndexBuffer>(indices)
+		std::move(meshVertices),
+		std::make_unique<IndexBuffer>(indices, GL_DYNAMIC_DRAW),
+		std::move(vertexAttributes)
 	);
+}
+
+std::unique_ptr<VertexAttributes> MeshLoader::_createDefaultVertexAttributes() {
+	auto builder = VertexAttributes::Builder();
+	builder.attributef(3); // position
+	builder.attributef(2); // uv
+	auto attributes = builder.create();
+	return attributes;
 }
 
 }

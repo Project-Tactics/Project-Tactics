@@ -4,7 +4,7 @@
 
 #include <glad/gl.h>
 
-namespace tactics {
+namespace tactics::resource {
 
 using ShaderId = GLuint;
 using ShaderProgramId = GLuint;

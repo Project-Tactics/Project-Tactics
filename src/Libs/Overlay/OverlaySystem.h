@@ -8,8 +8,9 @@
 #include <functional>
 
 namespace tactics {
-
+namespace resource {
 class IniFile;
+}
 
 /**
  * @brief An Overlay is a screen built in Immediate Mode GUI ( imgui ) which is displayed on top of any other ui and it's
@@ -19,7 +20,7 @@ class IniFile;
  */
 class OverlaySystem {
 public:
-	OverlaySystem(IniFile& iniFile);
+	OverlaySystem(resource::IniFile& iniFile);
 	~OverlaySystem();
 
 	template<typename TOverlay, typename ...TArgs>
@@ -54,7 +55,7 @@ private:
 
 	UnorderedStringMap<OverlayItem> _overlays;
 	bool _isEnabled{};
-	IniFile& _iniFile;
+	resource::IniFile& _iniFile;
 };
 
 }

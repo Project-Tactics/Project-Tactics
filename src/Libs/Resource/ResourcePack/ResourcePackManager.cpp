@@ -5,7 +5,7 @@
 
 #include <Libs/Utilities/Exception.h>
 
-namespace tactics {
+namespace tactics::resource {
 
 ResourcePackManager::ResourcePackManager(sol::state_view luaState, const ResourcePathHelper& pathHelper, const ResourceManagerProvider& managerProvider)
 	: _luaState(luaState)

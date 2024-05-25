@@ -5,7 +5,7 @@
 
 #include <filesystem>
 
-namespace tactics {
+namespace tactics::resource {
 
 std::vector<ResourceId> IniFileManager::load(sol::reference& luaDefinitionLoader) {
 	sol::environment resourcePackEnv = _luaState["__resourceEnvTable"];

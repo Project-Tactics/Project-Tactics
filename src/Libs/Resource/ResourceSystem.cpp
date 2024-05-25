@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <ranges>
 
-namespace tactics {
+namespace tactics::resource {
 
 ResourceSystem::ResourceSystem(std::string_view relativeDataPath): _resourcePathHelper(relativeDataPath) {
 	// TODO(Gerark) We're currently creating a lua state here but the idea is to inject it from outside.

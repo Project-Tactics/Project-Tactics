@@ -5,7 +5,7 @@
 #include <Libs/Resource/ResourcePathHelper.h>
 #include <Libs/Scripting/ScriptingHelper.h>
 
-namespace tactics {
+namespace tactics::resource {
 
 std::vector<ResourceId> ShaderManager::load(sol::reference& luaDefinitionLoader) {
 	sol::environment resourcePackEnv = _luaState["__resourceEnvTable"];

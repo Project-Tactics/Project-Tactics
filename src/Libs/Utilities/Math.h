@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace tactics {
 
@@ -29,6 +30,16 @@ public:
 class Math {
 public:
 	static const float PI;
+};
+
+class Quaternion {
+public:
+	static const glm::quat identity;
+};
+
+class Matrix4x4 {
+public:
+	static const glm::mat4x4 identity;
 };
 
 }

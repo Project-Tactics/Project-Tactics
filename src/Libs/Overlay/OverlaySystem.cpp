@@ -8,7 +8,7 @@
 
 namespace tactics {
 
-OverlaySystem::OverlaySystem(IniFile& iniFile): _iniFile(iniFile) {
+OverlaySystem::OverlaySystem(resource::IniFile& iniFile): _iniFile(iniFile) {
 }
 
 OverlaySystem::~OverlaySystem() {}

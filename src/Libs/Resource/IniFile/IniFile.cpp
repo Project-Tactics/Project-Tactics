@@ -1,6 +1,6 @@
 #include "IniFile.h"
 
-namespace tactics {
+namespace tactics::resource {
 
 void IniFile::save() {
 	file.save(filename);

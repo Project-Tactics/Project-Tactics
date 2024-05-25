@@ -5,7 +5,7 @@
 #include <sol/sol.hpp>
 #include <Libs/Utilities/TransparentTypes.h>
 
-namespace tactics {
+namespace tactics::resource {
 
 class ResourceManager;
 class ResourcePathHelper;

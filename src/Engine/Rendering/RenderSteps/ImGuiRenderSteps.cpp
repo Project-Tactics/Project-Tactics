@@ -8,15 +8,10 @@
 
 namespace tactics::renderstep {
 
-void ImGuiBegin::execute(RenderStepInfo&) {
+void ImGuiRender1::execute(RenderStepInfo&) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
-}
-
-void ImGuiEnd::execute(RenderStepInfo&) {
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 ImGuiRender::ImGuiRender(OverlaySystem& overlaySystem): _overlaySystem(overlaySystem) {
@@ -24,6 +19,9 @@ ImGuiRender::ImGuiRender(OverlaySystem& overlaySystem): _overlaySystem(overlaySy
 
 void ImGuiRender::execute(RenderStepInfo&) {
 	_overlaySystem.update();
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 }

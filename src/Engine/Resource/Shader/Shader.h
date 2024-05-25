@@ -2,7 +2,7 @@
 
 #include <Libs/Resource/Resource.h>
 
-namespace tactics {
+namespace tactics::resource {
 
 class Shader: public Resource<Shader> {
 public:

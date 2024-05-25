@@ -4,7 +4,7 @@
 #include <format>
 #include <vector>
 
-namespace tactics {
+namespace tactics::resource {
 
 ShaderProgramId ShaderLoader::loadProgram(const std::string& vertexShaderCode, const std::string& fragmentShaderCode) {
 	auto programId = glCreateProgram();

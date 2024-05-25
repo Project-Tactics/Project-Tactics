@@ -10,6 +10,7 @@ set(HEADERS
         FsmAction.h
         FsmBuilder.h
         FsmState.h
+        FsmStateWithServices.h
         FsmTypes.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})

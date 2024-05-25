@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <string>
 
-namespace tactics {
+namespace tactics::resource {
 
 enum class ResourceType: uint8_t {
 	Unkwown,

@@ -3,38 +3,29 @@
 #include <Libs/Overlay/OverlaySystem.h>
 #include <Libs/Resource/ResourceSystem.h>
 
+#include <Engine/ECS/EcsSystem.h>
 #include <Engine/Rendering/RenderSystem.h>
 #include <Engine/Rendering/RenderQueue.h>
 #include <Engine/Rendering/RenderSteps/ClearViewportRenderStep.h>
-#include <Engine/Rendering/RenderSteps/DrawSomethingRenderStep.h>
+#include <Engine/Rendering/RenderSteps/DrawMeshesRenderStep.h>
 #include <Engine/Rendering/RenderSteps/ImGuiRenderSteps.h>
 
 namespace tactics {
 
-StartState::StartState(ResourceSystem& resourceSystem, RenderSystem& renderSystem, OverlaySystem& overlaySystem)
-	: _resourceSystem(resourceSystem)
-	, _renderSystem(renderSystem)
-	, _overlaySystem(overlaySystem) {
-}
-
 FsmAction StartState::enter() {
 	using namespace renderstep;
 
-	_resourceSystem.loadResourcePackDefinition("game_res.lua");
-	_resourceSystem.loadResourcePack("mainPackage");
+	auto& resourceSystem = getService<resource::ResourceSystem>();
+	resourceSystem.loadResourcePackDefinition("game_res.lua");
+	resourceSystem.loadResourcePack("mainPackage");
 
-	auto& shader = _resourceSystem.getResource<Shader>("main");
-	auto& texture = _resourceSystem.getResource<Texture>("colors");
-	auto& mesh = _resourceSystem.getResource<Mesh>("book");
-
-	auto& mainRenderQueue = _renderSystem.createRenderQueue();
+	auto& mainRenderQueue = getService<RenderSystem>().createRenderQueue();
 	mainRenderQueue.addStep<ClearViewport>();
-	mainRenderQueue.addStep<DrawSomething>(shader, texture, mesh);
+	mainRenderQueue.addStep<ImGuiRender1>();
+	mainRenderQueue.addStep<DrawMeshes>(getService<EcsSystem>(), AlphaBlendedFlag::WithoutAlphaBlend);
+	mainRenderQueue.addStep<DrawMeshes>(getService<EcsSystem>(), AlphaBlendedFlag::WithAlphaBlend);
 
-	auto& imguiRenderQueue = _renderSystem.createRenderQueue();
-	imguiRenderQueue.addStep<ImGuiBegin>();
-	imguiRenderQueue.addStep<ImGuiRender>(_overlaySystem);
-	imguiRenderQueue.addStep<ImGuiEnd>();
+	mainRenderQueue.addStep<ImGuiRender>(getService<OverlaySystem>());
 
 	return FsmAction::transition("proceed");
 }

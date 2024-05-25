@@ -5,18 +5,15 @@
 #include <Libs/Resource/ResourcePathHelper.h>
 #include <Libs/Scripting/ScriptingHelper.h>
 
-namespace tactics {
+namespace tactics::resource {
 
 std::vector<ResourceId> TextureManager::load(sol::reference& luaDefinitionLoader) {
 	sol::environment resourcePackEnv = _luaState["__resourceEnvTable"];
 
 	std::vector<ResourceId> resources;
 
-	resourcePackEnv.set_function("file", [this, &resources] (std::string_view name, std::string_view filename) {
-		auto texture = std::make_unique<Texture>(name);
-		auto [textureId, info] = TextureLoader::loadTexture(_pathHelper.makeAbsolutePath(filename).c_str());
-		texture->rendererId = textureId;
-		texture->info = info;
+	resourcePackEnv.set_function("file", [this, &resources] (std::string_view name, std::string_view filename, std::optional<bool> useTransparency) {
+		auto texture = TextureLoader::loadTexture(name, _pathHelper.makeAbsolutePath(filename).c_str(), useTransparency ? *useTransparency : false);
 		resources.push_back(texture->id);
 		_registerResource(std::move(texture));
 	});

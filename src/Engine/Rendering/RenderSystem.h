@@ -8,6 +8,9 @@
 struct SDL_Window;
 
 namespace tactics {
+namespace resource {
+class IniFile;
+}
 
 class Camera;
 class DebugMessageHandler;
@@ -16,7 +19,7 @@ class Viewport;
 
 class RenderSystem {
 public:
-	RenderSystem(IniFile& configFile);
+	RenderSystem(resource::IniFile& configFile);
 	~RenderSystem();
 
 	RenderQueue& createRenderQueue();
@@ -43,6 +46,6 @@ private:
 	std::vector<std::unique_ptr<RenderQueue>> _renderQueues;
 	std::unique_ptr<Viewport> _viewport;
 	std::unique_ptr<Camera> _camera;
-	IniFile& _configFile;
+	resource::IniFile& _configFile;
 };
 }

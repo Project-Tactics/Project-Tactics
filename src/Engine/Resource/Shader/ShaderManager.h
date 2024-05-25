@@ -3,7 +3,7 @@
 #include <Libs/Resource/ResourceManager.h>
 #include "Shader.h"
 
-namespace tactics {
+namespace tactics::resource {
 
 class ShaderManager: public TResourceManager<Shader> {
 public:

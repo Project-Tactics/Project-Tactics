@@ -12,9 +12,9 @@ public:
 		glGenBuffers(1, &_id);
 	}
 
-	BaseBuffer(const std::vector<T>& data) {
+	BaseBuffer(const std::vector<T>& data, GLenum usage = GL_STATIC_DRAW) {
 		glGenBuffers(1, &_id);
-		setData(data);
+		setData(data, usage);
 	}
 
 	~BaseBuffer() {
@@ -32,9 +32,13 @@ public:
 		glBindBuffer(BufferType, 0);
 	}
 
-	void setData(const std::vector<T>& data) {
+	void release() {
+		glDeleteBuffers(1, &_id);
+	}
+
+	void setData(const std::vector<T>& data, GLenum usage = GL_STATIC_DRAW) {
 		bind();
-		glBufferData(BufferType, data.size() * sizeof(T), data.data(), GL_STATIC_DRAW);
+		glBufferData(BufferType, data.size() * sizeof(T), data.data(), usage);
 		_size = static_cast<unsigned int>(data.size());
 		unbind();
 	}

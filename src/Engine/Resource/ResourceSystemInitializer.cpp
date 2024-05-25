@@ -7,7 +7,7 @@
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/IniFile/IniFileManager.h>
 
-namespace tactics {
+namespace tactics::resource {
 
 void ResourceSystemInitializer::initialize(ResourceSystem& resourceSystem) {
 	resourceSystem.registerManager<IniFileManager>();

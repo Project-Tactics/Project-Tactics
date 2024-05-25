@@ -1,6 +1,6 @@
 #include "ResourcePathHelper.h"
 
-namespace tactics {
+namespace tactics::resource {
 
 ResourcePathHelper::ResourcePathHelper(std::string_view dataPath) {
 	setRelativeDataPath(dataPath);

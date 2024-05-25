@@ -1,25 +1,25 @@
 #pragma once
 
-#include <Libs/Fsm/FsmState.h>
+#include <Libs/Fsm/FsmStateWithServices.h>
 
 namespace tactics {
 
 class OverlaySystem;
 class RenderSystem;
 
-class MapState: public FsmState {
+class DemoState: public FsmStateWithServices {
 public:
-	MapState(RenderSystem& renderSystem, OverlaySystem& overlaySystem);
+	using FsmStateWithServices::FsmStateWithServices;
 	FsmAction update() override;
 	FsmAction enter() override;
 	void exit() override;
 
 private:
 	bool onKeyPress(SDL_KeyboardEvent& event) override;
+	void _rotateCamera();
 
 	bool _exitNextFrame{};
-	RenderSystem& _renderSystem;
-	OverlaySystem& _overlaySystem;
+	float _cameraAngleX{};
 };
 
 }

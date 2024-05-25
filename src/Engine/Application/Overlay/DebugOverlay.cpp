@@ -65,10 +65,13 @@ void DebugOverlay::_drawViewportStats() {
 void DebugOverlay::_drawCameraStats() {
 	auto& camera = _renderSystem.getCamera();
 	ImGui::TextColored(titleColor, "%s", "CAMERA");
-	auto& position = camera.getPosition();
-	auto _pos = position;
-	if (_vector3("Position", _pos, 0, 0.1f)) {
-		camera.setPosition(_pos);
+	auto position = camera.getPosition();
+	if (_vector3("Position", position, 0, 0.1f)) {
+		camera.setPosition(position);
+	}
+	auto direction = camera.getDirection();
+	if (_vector3("Direction", direction, 0, 0.01f)) {
+		camera.setDirection(direction);
 	}
 	ImGui::Text("Fov: %f", camera.getFov());
 	ImGui::Text("Near: %f", camera.getNearPlane());

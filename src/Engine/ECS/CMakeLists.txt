@@ -1,0 +1,27 @@
+# Ensure the minimum required version of CMake is available, otherwise, throw an error
+cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
+
+set(SOURCES
+    EcsSystem.cpp)
+    
+set(HEADERS
+    EcsSystem.h
+    Components/AlphaBlendedComponent.h
+    Components/MaterialComponent.h
+    Components/MeshComponent.h
+    Components/TransformComponent.h)
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
+
+add_library(engine_ecs ${SOURCES} ${HEADERS})
+target_link_libraries(engine_ecs
+    PUBLIC
+    entt
+    PRIVATE 
+    engine_rendering
+    engine_resources
+    libs_utils)
+add_to_engine_folder(engine_ecs)
+
+unset(SOURCES)
+unset(HEADERS)

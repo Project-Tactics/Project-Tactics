@@ -2,11 +2,13 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(HEADERS
+    ClassId.h
     Color.h
     Exception.h
     Math.h
     TransparentTypes.h
-    UUID.h)
+    UUID.h
+    Service/ServiceLocator.h)
 
 set(SOURCES
     Color.cpp
@@ -20,4 +22,6 @@ add_library(libs_utils STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_utils PUBLIC glm fmt::fmt)
 add_to_libs_folder(libs_utils)
 
-unset(HEADERS)
+set(TEST_SOURCES Tests/Test_ServiceLocator.cpp)
+set(TEST_LIBS libs_utils)
+add_unit_test(libs_utils ${TEST_SOURCES} ${TEST_LIBS})

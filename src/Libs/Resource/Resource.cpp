@@ -3,7 +3,7 @@
 #include <Libs/Utilities/UUID.h>
 #include <Libs/Utilities/Exception.h>
 
-namespace tactics {
+namespace tactics::resource {
 
 ResourceType ResourceTypeSerialization::toEnum(std::string_view strValue) {
 	if (strValue == "shader") {

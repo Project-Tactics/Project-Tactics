@@ -6,7 +6,6 @@ namespace tactics {
 
 class ExampleOverlay: public Overlay {
 public:
-	ExampleOverlay();
 	virtual void update() override;
 
 	static const auto TYPE = OverlayType::Custom;

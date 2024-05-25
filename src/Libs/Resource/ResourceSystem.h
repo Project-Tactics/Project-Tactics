@@ -12,7 +12,7 @@ namespace sol {
 class state;
 }
 
-namespace tactics {
+namespace tactics::resource {
 
 class ResourcePackManager;
 

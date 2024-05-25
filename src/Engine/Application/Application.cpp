@@ -1,8 +1,9 @@
 #include "Application.h"
 
-#include "States/MapState.h"
+#include "States/DemoState.h"
 #include "States/StartState.h"
 
+#include <Engine/ECS/EcsSystem.h>
 #include <Engine/Rendering/RenderSystem.h>
 #include <Engine/Resource/ResourceSystemInitializer.h>
 
@@ -11,6 +12,7 @@
 #include <Libs/Overlay/OverlaySystem.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/IniFile/IniFile.h>
+#include <Libs/Utilities/Service/ServiceLocator.h>
 #include <Libs/Utilities/Exception.h>
 
 #include <imgui/imgui.h>
@@ -43,11 +45,11 @@ void Application::run() {
 
 void Application::_initialize() {
 	_initializeSDL();
-	_resourceSystem = std::make_unique<ResourceSystem>("data");
-	ResourceSystemInitializer::initialize(*_resourceSystem);
+	_resourceSystem = std::make_unique<resource::ResourceSystem>("data");
+	resource::ResourceSystemInitializer::initialize(*_resourceSystem);
 	_resourceSystem->loadResourcePackDefinition("engine_res.lua");
 	_resourceSystem->loadResourcePack("initialization");
-	auto& iniFile = _resourceSystem->getResource<IniFile>("configFile");
+	auto& iniFile = _resourceSystem->getResource<resource::IniFile>("configFile");
 
 	_renderSystem = std::make_unique<RenderSystem>(iniFile);
 	_resourceSystem->loadResourcePack("builtinMeshes");
@@ -57,6 +59,16 @@ void Application::_initialize() {
 	_eventsSystem = std::make_unique<EventsSystem>();
 	_overlaySystem = std::make_unique<OverlaySystem>(iniFile);
 	_overlaySystem->setEnabled(true);
+
+	_ecsSystem = std::make_unique<EcsSystem>();
+
+	_serviceLocator = std::make_unique<ServiceLocator>();
+	_serviceLocator->addService(_resourceSystem.get());
+	_serviceLocator->addService(_overlaySystem.get());
+	_serviceLocator->addService(_renderSystem.get());
+	_serviceLocator->addService(_eventsSystem.get());
+	_serviceLocator->addService(_ecsSystem.get());
+
 	_initializeFsm();
 }
 
@@ -155,10 +167,12 @@ void Application::_initializeFsm() {
 	auto builder = FsmBuilder();
 
 	builder
-		.state<StartState>("Start", *_resourceSystem, *_renderSystem, *_overlaySystem)
+		// TODO(Gerark) we can definitely start telling that probably it would be better to have a service locator or
+		// something like that to avoid passing all these systems around
+		.state<StartState>("Start", *_serviceLocator)
 		.on("proceed").jumpTo("Map")
 
-		.state<MapState>("Map", *_renderSystem, *_overlaySystem)
+		.state<DemoState>("Map", *_serviceLocator)
 		.on("exit").exitFsm();
 
 	_fsm = builder.build("Start");

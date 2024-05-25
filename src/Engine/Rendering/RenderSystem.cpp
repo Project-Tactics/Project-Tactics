@@ -7,6 +7,8 @@
 #include "RenderSteps/RenderStep.h"
 
 #include <Libs/Utilities/Exception.h>
+#include <Libs/Rendering/VertexBuffer.h>
+#include <Libs/Rendering/VertexAttributes.h>
 
 #include <glad/gl.h>
 #include <SDL.h>
@@ -19,14 +21,7 @@
 
 namespace tactics {
 
-// TODO(Gerark) This is a very simple way of dealing with OGL errors and requires an improvement
-// We can use all the parameters and we might have a dedicated class for it. Also it's currently stateless, which is not bad per se,
-// but we could probably pass a valid *userParam and leverage that by using a proper log manager
-void onGlErrorMessage(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum /*severity*/, GLsizei /*length*/, const GLchar* message, const void* /*userParam*/) {
-	printf("%s\n", message);
-}
-
-RenderSystem::RenderSystem(IniFile& configFile): _configFile(configFile) {
+RenderSystem::RenderSystem(resource::IniFile& configFile): _configFile(configFile) {
 	static const bool useDebugMessages = true;
 	_defineGlAttributes(useDebugMessages);
 	_createWindow();

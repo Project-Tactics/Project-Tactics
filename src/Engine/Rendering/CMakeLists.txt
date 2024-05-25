@@ -5,7 +5,7 @@ set(SOURCES
     Camera.cpp
     DebugMessageHandler.cpp
     RenderSteps/ClearViewportRenderStep.cpp
-    RenderSteps/DrawSomethingRenderStep.cpp
+    RenderSteps/DrawMeshesRenderStep.cpp
     RenderSteps/ImGuiRenderSteps.cpp
     RenderSteps/RenderStep.cpp
     RenderQueue.cpp
@@ -16,7 +16,7 @@ set(HEADERS
     Camera.h
     DebugMessageHandler.h
     RenderSteps/ClearViewportRenderStep.h
-    RenderSteps/DrawSomethingRenderStep.h
+    RenderSteps/DrawMeshesRenderStep.h
     RenderSteps/ImGuiRenderSteps.h
     RenderSteps/RenderStep.h
     RenderQueue.h
@@ -32,6 +32,7 @@ target_link_libraries(engine_rendering
     glm
     PRIVATE
     engine_resources
+    engine_ecs
     libs_rendering
     libs_overlay
     libs_utils

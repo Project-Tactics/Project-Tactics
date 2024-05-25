@@ -3,7 +3,7 @@
 #include <Libs/Resource/Resource.h>
 #include <inicpp.h>
 
-namespace tactics {
+namespace tactics::resource {
 
 class IniFile: public Resource<IniFile> {
 public:

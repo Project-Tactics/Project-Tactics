@@ -3,18 +3,19 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
-namespace tactics {
+namespace tactics::resource {
 
-std::tuple<TextureId, TextureInfo> TextureLoader::loadTexture(std::string_view filename) {
-	auto info = TextureInfo();
+std::unique_ptr<Texture> TextureLoader::loadTexture(std::string_view name, std::string_view filename, bool useTransparency) {
+	auto texture = std::make_unique<Texture>(name);
+	texture->info.useTransparency = useTransparency;
+	auto& info = texture->info;
 
 	stbi_set_flip_vertically_on_load(true);
 
 	unsigned char* textureData = stbi_load(filename.data(), &info.width, &info.height, &info.channelsCount, 0);
-	GLuint textureId;
 
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
+	glGenTextures(1, &texture->rendererId);
+	glBindTexture(GL_TEXTURE_2D, texture->rendererId);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -25,7 +26,8 @@ std::tuple<TextureId, TextureInfo> TextureLoader::loadTexture(std::string_view f
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	stbi_image_free(textureData);
-	return {textureId, info};
+
+	return texture;
 }
 
 void TextureLoader::unloadTexture(TextureId textureId) {

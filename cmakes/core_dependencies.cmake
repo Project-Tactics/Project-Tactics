@@ -25,4 +25,7 @@ macro(core_dependencies)
     add_library(assimp_wrapper INTERFACE)
     target_link_libraries(assimp_wrapper INTERFACE assimp::assimp ${ASSIMP_LIBRARIES})
     target_include_directories(assimp_wrapper INTERFACE ${ASSIMP_INCLUDE_DIRS})
+
+    # Set up entt
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}"/thirdparty/entt/cmake")
 endmacro()

@@ -8,16 +8,6 @@ class OverlaySystem;
 
 namespace tactics::renderstep {
 
-class ImGuiBegin: public RenderStep {
-public:
-	void execute(RenderStepInfo& renderInfo) override;
-};
-
-class ImGuiEnd: public RenderStep {
-public:
-	void execute(RenderStepInfo& renderInfo) override;
-};
-
 class ImGuiRender: public RenderStep {
 public:
 	ImGuiRender(OverlaySystem& overlaySystem);
@@ -25,6 +15,11 @@ public:
 
 private:
 	OverlaySystem& _overlaySystem;
+};
+
+class ImGuiRender1: public RenderStep {
+public:
+	void execute(RenderStepInfo& renderInfo) override;
 };
 
 }
