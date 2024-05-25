@@ -65,9 +65,6 @@ public:
 	}
 
 private:
-	// TODO(Gerark) Using void* might be perceived as a suboptimal choice. One alternative could be creating a base class for services
-	// and mandating all services to inherit from it.
-	// However, I propose delaying this decision until we encounter a situation where adding additional functionality to the base class becomes necessary.
 	std::unordered_map<unsigned int, std::unique_ptr<Service>> _services;
 };
 
