@@ -4,8 +4,28 @@
 #include <Libs/Utilities/ClassId.h>
 
 #include <unordered_map>
+#include <memory>
 
 namespace tactics {
+
+struct Service {
+public:
+	virtual ~Service() = default;
+};
+
+template<typename TService>
+struct WrappedService: public Service {
+public:
+	WrappedService(TService* service): _service(service) {
+	}
+
+	[[nodiscard]] TService& get() {
+		return *_service;
+	}
+
+private:
+	TService* _service;
+};
 
 /**
 * @brief A service locator is a way to provide services to objects without having to pass them in the constructor.
@@ -21,7 +41,7 @@ public:
 		if (_services.contains(id)) {
 			throw Exception("Service is already registered. Class ID: {}", id);
 		}
-		_services[id] = service;
+		_services[id] = std::make_unique<WrappedService<TService>>(service);
 	}
 
 	template<typename TService>
@@ -38,7 +58,7 @@ public:
 	[[nodiscard]] TService& getService() {
 		auto id = ClassId<TService>::ID();
 		if (auto itr = _services.find(id); itr != _services.end()) {
-			return static_cast<TService&>(*reinterpret_cast<TService*>(itr->second));
+			return static_cast<WrappedService<TService>*>(itr->second.get())->get();
 		} else {
 			throw Exception("Can't find Service. Class ID: {}", id);
 		}
@@ -48,7 +68,7 @@ private:
 	// TODO(Gerark) Using void* might be perceived as a suboptimal choice. One alternative could be creating a base class for services
 	// and mandating all services to inherit from it.
 	// However, I propose delaying this decision until we encounter a situation where adding additional functionality to the base class becomes necessary.
-	std::unordered_map<unsigned int, void*> _services;
+	std::unordered_map<unsigned int, std::unique_ptr<Service>> _services;
 };
 
 }
