@@ -1,6 +1,7 @@
-#include "TextureManager.h"
+#include "TextureLoader.h"
 
 #include <Libs/Resource/ResourcePathHelper.h>
+#include <Libs/Utility/Exception.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -8,28 +9,17 @@
 
 namespace tactics::resource {
 
-struct TextureDescriptor {
-	std::string name;
-	std::string path;
-	bool useTransparency = false;
-
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(TextureDescriptor, name, path, useTransparency);
-};
-
-ResourceId TextureManager::load(const nlohmann::json& descriptor) {
-	auto textureDescriptor = descriptor.template get<TextureDescriptor>();
+std::unique_ptr<Texture> TextureLoader::load(const TextureDescriptor& descriptor) {
 	auto texture = _loadTexture(
-		textureDescriptor.name,
-		_pathHelper.makeAbsolutePath(textureDescriptor.path),
-		textureDescriptor.useTransparency);
-	auto resourceId = texture->id;
-	_registerResource(std::move(texture));
-	return resourceId;
+		descriptor.name,
+		_makeAbsolutePath(descriptor.path),
+		descriptor.useTransparency);
+	return texture;
 }
 
-std::unique_ptr<Texture> TextureManager::_loadTexture(const std::string& name, const std::string& filename, bool useTransparency) {
+std::unique_ptr<Texture> TextureLoader::_loadTexture(const std::string& name, const std::string& filename, bool useTransparency) {
 	if (filename.empty()) {
-		throw Exception("TextureManager::_loadTexture: filename is empty while trying to load texture [{}]", name);
+		throw Exception("Can't load texture. Filename is empty while trying to load texture [{}]", name);
 	}
 
 	auto texture = std::make_unique<Texture>(name);

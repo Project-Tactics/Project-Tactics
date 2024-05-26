@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
     IniFile/IniFile.cpp
-    IniFile/IniFileManager.cpp
+    IniFile/IniFileLoader.cpp
     Resource.cpp
     ResourcePathHelper.cpp
     ResourceSystem.cpp
@@ -12,8 +12,9 @@ set(SOURCES
     
 set(HEADERS
     IniFile/IniFile.h
-    IniFile/IniFileManager.h
+    IniFile/IniFileLoader.h
     Resource.h
+    ResourceLoader.h
     ResourcePathHelper.h
     ResourceSystem.h
     ResourceManager.h

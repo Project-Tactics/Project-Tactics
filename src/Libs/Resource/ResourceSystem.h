@@ -29,12 +29,12 @@ public:
 
 	template<typename TResource>
 	TResource& getResource(std::string_view name) {
-		return _getManager<TResource>()->getResource(name);
+		return static_cast<TResource&>(_getManager<TResource>()->getResource(name));
 	}
 
 	template<typename TResource>
 	TResource& getResource(ResourceId id) {
-		return _getManager<TResource>()->getResource(id);
+		return static_cast<TResource&>(_getManager<TResource>()->getResource(id));
 	}
 
 	template<typename TResourceManager>
@@ -56,17 +56,17 @@ public:
 	void cleanupResources();
 
 private:
-	void _registerManager(std::unique_ptr<ResourceManager> resourceManager);
-	void _unregisterManager(std::unique_ptr<ResourceManager> resourceManager);
+	void _registerManager(std::unique_ptr<BaseResourceManager> resourceManager);
+	void _unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager);
 
 	template<typename TResource>
-	TResourceManager<TResource>* _getManager() {
-		return static_cast<TResourceManager<TResource>*>(_resourceManagers[TResource::TYPE].get());
+	BaseResourceManager* _getManager() {
+		return _resourceManagers[TResource::TYPE].get();
 	}
 
 	ResourcePathHelper _resourcePathHelper;
 	std::unique_ptr<ResourcePackManager> _resourcePackManager;
-	std::unordered_map<ResourceType, std::unique_ptr<ResourceManager>> _resourceManagers;
+	std::unordered_map<ResourceType, std::unique_ptr<BaseResourceManager>> _resourceManagers;
 	std::filesystem::path _absoluteDataPath;
 };
 

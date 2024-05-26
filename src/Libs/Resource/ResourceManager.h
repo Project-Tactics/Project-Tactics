@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Resource.h"
+#include "ResourceLoader.h"
 
 #include <Libs/Utility/Exception.h>
 
@@ -15,29 +16,40 @@ using ResourceMap = std::unordered_map<ResourceId, std::unique_ptr<TResource>>;
 /**
 * Base class for all the manager of a single Resource type. The user generally doesn't touch this
 */
-class ResourceManager {
+class BaseResourceManager {
 public:
-	virtual ~ResourceManager() = default;
+	virtual ~BaseResourceManager() = default;
 
 	virtual ResourceType getType() const = 0;
 	virtual void unload(ResourceId resourceId) = 0;
 	virtual void unload(std::vector<ResourceId> resourceIds) = 0;
 	virtual ResourceId load(const nlohmann::json& descriptor) = 0;
+	virtual BaseResource& getResource(std::string_view name) = 0;
+	virtual BaseResource& getResource(ResourceId id) = 0;
 };
 
-class ResourcePathHelper;
+template<typename T>
+concept IsResourceLoader = std::is_base_of_v<ResourceLoader, T>;
 
 /**
 * A manager class for a single resource type. This is what is mostly used to define a manager for a resource ( like textures, shaders, etc.. )
-* Some examples: TResourceManager<Texture>, TResourceManager<Shader>, and so on
+* Some examples: ResourceManager<Texture, TextureLoader>, ResourceManager<Shader, ShaderLoader>, and so on
 */
-template<typename TResource>
-class TResourceManager: public ResourceManager {
+template<typename TResource, IsResourceLoader TResourceLoader>
+class ResourceManager: public BaseResourceManager {
 public:
-	TResourceManager(const ResourcePathHelper& pathHelper): _pathHelper(pathHelper) {
+	ResourceManager(const ResourcePathHelper& pathHelper): _loader(pathHelper) {
 	}
 
-	TResource& getResource(ResourceId id) {
+	BaseResource& getResource(std::string_view name) override {
+		return getTResource(name);
+	}
+
+	BaseResource& getResource(ResourceId id) override {
+		return getTResource(id);
+	}
+
+	TResource& getTResource(ResourceId id) {
 		if (!_resources.contains(id)) {
 			throw Exception("Resource with id \"{}\" does not exist. Can't find resource.", id);
 		}
@@ -45,7 +57,7 @@ public:
 		return *_resources[id];
 	}
 
-	TResource& getResource(std::string_view name) {
+	TResource& getTResource(std::string_view name) {
 		auto itr = std::ranges::find_if(_resources, [name] (const auto& pair) {
 			return pair.second->name == name;
 		});
@@ -61,8 +73,15 @@ public:
 		return TResource::TYPE;
 	}
 
+	ResourceId load(const nlohmann::json& descriptor) override {
+		auto resource = _loader.load(descriptor);
+		auto id = resource->id;
+		_registerResource(std::move(resource));
+		return id;
+	}
+
 	void unload(ResourceId resourceId) override {
-		auto& resource = getResource(resourceId);
+		auto& resource = getTResource(resourceId);
 		_removeResource(resource);
 	}
 
@@ -92,8 +111,8 @@ protected:
 		_resources.erase(itr);
 	}
 
-	const ResourcePathHelper& _pathHelper;
 	ResourceMap<TResource> _resources;
+	TResourceLoader _loader;
 };
 
 }

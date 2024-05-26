@@ -10,10 +10,10 @@
 
 namespace tactics::resource {
 
-class ResourceManager;
+class BaseResourceManager;
 class ResourcePathHelper;
 
-using ResourceManagerProvider = std::function<ResourceManager& (ResourceType)>;
+using ResourceManagerProvider = std::function<BaseResourceManager& (ResourceType)>;
 
 class ResourcePackManager {
 public:

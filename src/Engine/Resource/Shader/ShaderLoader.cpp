@@ -1,4 +1,4 @@
-#include "ShaderManager.h"
+#include "ShaderLoader.h"
 
 #include <Libs/Resource/ResourcePathHelper.h>
 #include <Libs/Utility/Exception.h>
@@ -8,26 +8,14 @@
 
 namespace tactics::resource {
 
-struct ShaderDescriptor {
-	std::string name;
-	std::string vertexShaderPath;
-	std::string fragmentShaderPath;
-
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(ShaderDescriptor, name, vertexShaderPath, fragmentShaderPath);
-};
-
-ResourceId ShaderManager::load(const nlohmann::json& descriptor) {
-	auto shaderDescriptor = descriptor.template get<ShaderDescriptor>();
-
-	auto shader = std::make_unique<Shader>(shaderDescriptor.name);
-	shader->rendererId = _loadProgram(shaderDescriptor.vertexShaderPath, shaderDescriptor.fragmentShaderPath);
-	auto id = shader->id;
-	_registerResource(std::move(shader));
-	return id;
+std::unique_ptr<Shader> ShaderLoader::load(const ShaderDescriptor& descriptor) {
+	auto shader = std::make_unique<Shader>(descriptor.name);
+	shader->rendererId = _loadProgram(descriptor.vertexShaderPath, descriptor.fragmentShaderPath);
+	return shader;
 }
 
-std::string ShaderManager::_loadFile(const std::string& filePath) {
-	auto path = _pathHelper.makeAbsolutePath(filePath);
+std::string ShaderLoader::_loadFile(const std::string& filePath) {
+	auto path = _makeAbsolutePath(filePath);
 	std::ifstream file(path);
 	if (!file.is_open()) {
 		throw Exception("Error while trying to open shader file. Could not open file: {}", path);
@@ -37,7 +25,7 @@ std::string ShaderManager::_loadFile(const std::string& filePath) {
 	return buffer.str();
 }
 
-unsigned int ShaderManager::_loadProgram(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) {
+unsigned int ShaderLoader::_loadProgram(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) {
 	auto programId = glCreateProgram();
 
 	auto vertexShaderId = _loadShader(GL_VERTEX_SHADER, vertexShaderFilePath);
@@ -55,7 +43,7 @@ unsigned int ShaderManager::_loadProgram(const std::string& vertexShaderFilePath
 	return programId;
 }
 
-unsigned int ShaderManager::_loadShader(unsigned int shaderType, const std::string& shaderFilePath) {
+unsigned int ShaderLoader::_loadShader(unsigned int shaderType, const std::string& shaderFilePath) {
 	auto shaderCode = _loadFile(shaderFilePath);
 	char* code = const_cast<char*>(shaderCode.c_str());
 

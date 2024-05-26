@@ -11,7 +11,7 @@
 namespace tactics::resource {
 
 ResourceSystem::ResourceSystem(std::string_view relativeDataPath): _resourcePathHelper(relativeDataPath) {
-	auto managerProvider = [this] (ResourceType resourceType) -> ResourceManager& {
+	auto managerProvider = [this] (ResourceType resourceType) -> BaseResourceManager& {
 		auto itr = _resourceManagers.find(resourceType);
 		if (itr == _resourceManagers.end()) {
 			throw Exception("Can't find manager for resource type: {}",
@@ -42,7 +42,7 @@ void ResourceSystem::cleanupResources() {
 	_resourcePackManager->unloadAllPacks();
 }
 
-void ResourceSystem::_registerManager(std::unique_ptr<ResourceManager> resourceManager) {
+void ResourceSystem::_registerManager(std::unique_ptr<BaseResourceManager> resourceManager) {
 	auto type = resourceManager->getType();
 	if (_resourceManagers.contains(type)) {
 		throw Exception("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.",
@@ -52,7 +52,7 @@ void ResourceSystem::_registerManager(std::unique_ptr<ResourceManager> resourceM
 	_resourceManagers.insert({type, std::move(resourceManager)});
 }
 
-void ResourceSystem::_unregisterManager(std::unique_ptr<ResourceManager> resourceManager) {
+void ResourceSystem::_unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager) {
 	auto itr = _resourceManagers.find(resourceManager->getType());
 	if (itr == _resourceManagers.end()) {
 		throw Exception("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.",

@@ -1,21 +1,27 @@
 #include "ResourceSystemInitializer.h"
 
-#include "Texture/TextureManager.h"
-#include "Shader/ShaderManager.h"
-#include "Mesh/MeshManager.h"
-#include "Material/MaterialManager.h"
+#include "Texture/TextureLoader.h"
+#include "Shader/ShaderLoader.h"
+#include "Mesh/MeshLoader.h"
+#include "Material/MaterialLoader.h"
 
 #include <Libs/Resource/ResourceSystem.h>
-#include <Libs/Resource/IniFile/IniFileManager.h>
+#include <Libs/Resource/IniFile/IniFileLoader.h>
 
 namespace tactics::resource {
 
+// Little helper function to keep the registration way more clean
+template<typename TResource, typename TResourceLoader>
+void registerManager(ResourceSystem& resourceSystem) {
+	resourceSystem.registerManager<ResourceManager<TResource, TResourceLoader>>();
+}
+
 void ResourceSystemInitializer::initialize(ResourceSystem& resourceSystem) {
-	resourceSystem.registerManager<IniFileManager>();
-	resourceSystem.registerManager<TextureManager>();
-	resourceSystem.registerManager<ShaderManager>();
-	resourceSystem.registerManager<MeshManager>();
-	resourceSystem.registerManager<MaterialManager>();
+	registerManager<IniFile, IniFileLoader>(resourceSystem);
+	registerManager<Texture, TextureLoader>(resourceSystem);
+	registerManager<Shader, ShaderLoader>(resourceSystem);
+	registerManager<Mesh, MeshLoader>(resourceSystem);
+	registerManager<Material, MaterialLoader>(resourceSystem);
 }
 
 }

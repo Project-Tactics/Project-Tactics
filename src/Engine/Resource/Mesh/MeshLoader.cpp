@@ -1,6 +1,7 @@
-#include "MeshManager.h"
+#include "MeshLoader.h"
 
 #include <Libs/Resource/ResourcePathHelper.h>
+#include <Libs/Utility/Exception.h>
 
 #include <regex>
 #include <functional>
@@ -18,19 +19,16 @@ struct MeshInlineDescriptor {
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MeshInlineDescriptor, name, vertices, indices);
 };
 
-ResourceId MeshManager::load(const nlohmann::json& descriptor) {
+std::unique_ptr<Mesh> MeshLoader::load(const nlohmann::json& descriptor) {
 	std::unique_ptr<Mesh> mesh;
 	if (!descriptor.contains("path")) {
 		auto meshDescriptor = descriptor.template get<MeshInlineDescriptor>();
 		mesh = _loadMesh(meshDescriptor.name, meshDescriptor.vertices, meshDescriptor.indices);
 	} else {
 		auto meshDescriptor = descriptor.template get<FileDescriptor>();
-		mesh = _loadMesh(meshDescriptor.name, _pathHelper.makeAbsolutePath(meshDescriptor.path));
+		mesh = _loadMesh(meshDescriptor.name, _makeAbsolutePath(meshDescriptor.path));
 	}
-
-	auto id = mesh->id;
-	_registerResource(std::move(mesh));
-	return id;
+	return mesh;
 }
 
 template<typename T>
@@ -48,16 +46,16 @@ std::vector<T> parseString(const std::string& str, std::function<T(const std::st
 	return result;
 }
 
-std::vector<float> MeshManager::_parseVertices(const std::string& strVertices) {
+std::vector<float> MeshLoader::_parseVertices(const std::string& strVertices) {
 	return parseString<float>(strVertices, [] (const std::string& str) { return std::stof(str); });
 
 }
 
-std::vector<unsigned int> MeshManager::_parseIndices(const std::string& strIndices) {
+std::vector<unsigned int> MeshLoader::_parseIndices(const std::string& strIndices) {
 	return parseString<unsigned int>(strIndices, [] (const std::string& str) { return std::stoul(str); });
 }
 
-std::unique_ptr<Mesh> MeshManager::_loadMesh(const std::string& name, const std::string& strVertices, const std::string& strIndices) {
+std::unique_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::string& strVertices, const std::string& strIndices) {
 	// TODO(Gerark) Using dynamic draw as usage but it should be best to receive this as a parameter
 	auto meshVertices = std::make_unique<VertexBuffer>(_parseVertices(strVertices), GL_DYNAMIC_DRAW);
 	meshVertices->bind();
@@ -72,7 +70,7 @@ std::unique_ptr<Mesh> MeshManager::_loadMesh(const std::string& name, const std:
 	);
 }
 
-std::unique_ptr<Mesh> MeshManager::_loadMesh(const std::string& name, const std::string& path) {
+std::unique_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::string& path) {
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenNormals);
 
@@ -124,7 +122,7 @@ std::unique_ptr<Mesh> MeshManager::_loadMesh(const std::string& name, const std:
 	);
 }
 
-std::unique_ptr<VertexAttributes> MeshManager::_createDefaultVertexAttributes() {
+std::unique_ptr<VertexAttributes> MeshLoader::_createDefaultVertexAttributes() {
 	auto builder = VertexAttributes::Builder();
 	builder.attributef(3); // position
 	builder.attributef(2); // uv

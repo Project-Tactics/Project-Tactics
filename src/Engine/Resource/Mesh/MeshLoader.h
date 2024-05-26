@@ -1,14 +1,13 @@
 #pragma once
 
-#include <Libs/Resource/ResourceManager.h>
+#include <Libs/Resource/ResourceLoader.h>
 #include "Mesh.h"
 
 namespace tactics::resource {
 
-class MeshManager: public TResourceManager<Mesh> {
+class MeshLoader: public ResourceLoader {
 public:
-	using TResourceManager<Mesh>::TResourceManager;
-	ResourceId load(const nlohmann::json& descriptor) override;
+	std::unique_ptr<Mesh> load(const nlohmann::json& descriptor);
 
 private:
 	static std::vector<float> _parseVertices(const std::string& strVertices);
