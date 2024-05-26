@@ -1,8 +1,7 @@
 # Ensure the minimum required version of CMake is available, otherwise, throw an error
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
-set(FILES
-    data/shaders/shader_definition.lua)
+file(GLOB_RECURSE FILES *.*)
     
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${FILES})
 
