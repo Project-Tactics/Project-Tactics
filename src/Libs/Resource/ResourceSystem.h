@@ -8,10 +8,6 @@
 #include <string_view>
 #include <unordered_map>
 
-namespace sol {
-class state;
-}
-
 namespace tactics::resource {
 
 class ResourcePackManager;
@@ -43,7 +39,7 @@ public:
 
 	template<typename TResourceManager>
 	void registerManager() {
-		auto manager = std::make_unique<TResourceManager>(*_luaState, _resourcePathHelper);
+		auto manager = std::make_unique<TResourceManager>(_resourcePathHelper);
 		_registerManager(std::move(manager));
 	}
 
@@ -68,7 +64,6 @@ private:
 		return static_cast<TResourceManager<TResource>*>(_resourceManagers[TResource::TYPE].get());
 	}
 
-	std::unique_ptr<sol::state> _luaState;
 	ResourcePathHelper _resourcePathHelper;
 	std::unique_ptr<ResourcePackManager> _resourcePackManager;
 	std::unordered_map<ResourceType, std::unique_ptr<ResourceManager>> _resourceManagers;

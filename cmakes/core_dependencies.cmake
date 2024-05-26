@@ -26,6 +26,10 @@ macro(core_dependencies)
     target_link_libraries(assimp_wrapper INTERFACE assimp::assimp ${ASSIMP_LIBRARIES})
     target_include_directories(assimp_wrapper INTERFACE ${ASSIMP_INCLUDE_DIRS})
 
-    # Set up entt
-    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_SOURCE_DIR}"/thirdparty/entt/cmake")
+    include(FetchContent)
+
+    FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
+    FetchContent_MakeAvailable(json)
+    add_library(json_wrapper INTERFACE)
+    target_link_libraries(json_wrapper INTERFACE nlohmann_json::nlohmann_json)
 endmacro()

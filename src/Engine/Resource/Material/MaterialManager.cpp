@@ -1,9 +1,7 @@
 #include "MaterialManager.h"
 
 namespace tactics::resource {
-
-std::vector<ResourceId> MaterialManager::load(sol::reference& /*luaDefinitionLoader*/) {
-	return {};
+ResourceId MaterialManager::load(const nlohmann::json& /*descriptor*/) {
+	return 0;
 }
-
 }

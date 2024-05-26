@@ -40,7 +40,7 @@ void Engine::_initialize(Application& application) {
 	_initializeSDL();
 	_resourceSystem = std::make_unique<resource::ResourceSystem>("data");
 	resource::ResourceSystemInitializer::initialize(*_resourceSystem);
-	_resourceSystem->loadResourcePackDefinition("engine_res.lua");
+	_resourceSystem->loadResourcePackDefinition("engine_data.json");
 	_resourceSystem->loadResourcePack("initialization");
 	auto& iniFile = _resourceSystem->getResource<resource::IniFile>("configFile");
 

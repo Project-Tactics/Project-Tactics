@@ -13,7 +13,7 @@ class Mesh: public Resource<Mesh> {
 public:
 	static const ResourceType TYPE = ResourceType::Mesh;
 	using Resource<Mesh>::Resource;
-	Mesh(std::string_view name, std::unique_ptr<VertexBuffer> vertexBuffer, std::unique_ptr<IndexBuffer> indexBuffer, std::unique_ptr<VertexAttributes> vertexAttributes);
+	Mesh(const std::string& name, std::unique_ptr<VertexBuffer> vertexBuffer, std::unique_ptr<IndexBuffer> indexBuffer, std::unique_ptr<VertexAttributes> vertexAttributes);
 	~Mesh();
 	std::unique_ptr<VertexBuffer> vertexBuffer;
 	std::unique_ptr<IndexBuffer> indexBuffer;

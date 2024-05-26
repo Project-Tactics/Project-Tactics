@@ -23,10 +23,9 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
 add_library(libs_resource STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_resource
-    PUBLIC 
-    libs_scripting
+    PUBLIC
     inicpp
-    PRIVATE
+    json_wrapper
     libs_utility)
 add_to_libs_folder(libs_resource)
 

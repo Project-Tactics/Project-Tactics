@@ -42,10 +42,5 @@ target_include_directories(inicpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/inifile-
 add_library(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/single_include/entt/entt.hpp)
 target_include_directories(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/single_include)
 
-# Adding nlohmann/json for json parsing
-# https://github.com/nlohmann/json
-# We're not interested in the library unit tests
-set(JSON_BuildTests OFF CACHE INTERNAL "")
-
 # Let's keep things clean and tidy by moving all the thirdparty libs to a folder
 set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui fmt sol2 stb inicpp entt PROPERTY FOLDER "thirdparty")

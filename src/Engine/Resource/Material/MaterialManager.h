@@ -9,8 +9,7 @@ namespace tactics::resource {
 class MaterialManager: public TResourceManager<Material> {
 public:
 	using TResourceManager<Material>::TResourceManager;
-
-	std::vector<ResourceId> load(sol::reference& luaDefinitionLoader) override;
+	ResourceId load(const nlohmann::json& descriptor) override;
 };
 
 }

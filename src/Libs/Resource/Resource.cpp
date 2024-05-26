@@ -21,22 +21,6 @@ ResourceType ResourceTypeSerialization::toEnum(std::string_view strValue) {
 	return ResourceType::Unkwown;
 }
 
-ResourceType ResourceTypeSerialization::fromGroupTypeToEnum(std::string_view strValue) {
-	if (strValue == "shaders") {
-		return ResourceType::Shader;
-	} else if (strValue == "textures") {
-		return ResourceType::Texture;
-	} else if (strValue == "inis") {
-		return ResourceType::IniFile;
-	} else if (strValue == "meshes") {
-		return ResourceType::Mesh;
-	} else if (strValue == "materials") {
-		return ResourceType::Material;
-	}
-
-	return ResourceType::Unkwown;
-}
-
 std::string ResourceTypeSerialization::toString(ResourceType resourceType) {
 	switch (resourceType) {
 	case ResourceType::Texture: {
@@ -59,7 +43,7 @@ std::string ResourceTypeSerialization::toString(ResourceType resourceType) {
 	return "Unknown";
 }
 
-BaseResource::BaseResource(std::string_view name, ResourceType type) {
+BaseResource::BaseResource(const std::string& name, ResourceType type) {
 	this->id = generateUUID();
 	this->name = name;
 	this->type = type;

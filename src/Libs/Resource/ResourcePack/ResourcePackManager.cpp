@@ -5,104 +5,95 @@
 
 #include <Libs/Utility/Exception.h>
 
+#include <fstream>
+
 namespace tactics::resource {
 
-ResourcePackManager::ResourcePackManager(sol::state_view luaState, const ResourcePathHelper& pathHelper, const ResourceManagerProvider& managerProvider)
-	: _luaState(luaState)
-	, _pathHelper(pathHelper)
+ResourcePackManager::ResourcePackManager(const ResourcePathHelper& pathHelper, const ResourceManagerProvider& managerProvider)
+	: _pathHelper(pathHelper)
 	, _managerProvider(managerProvider) {
 }
 
 void ResourcePackManager::loadPackDefinition(std::string_view packDefinitionPath) {
-	sol::environment resourcePackEnv = _luaState["__resourceEnvTable"];
-	resourcePackEnv.set_function("resourcePack", [this] (sol::table packageTable) {
-		auto package = std::make_unique<Package>();
-
-		for (auto&& [keyObj, value] : packageTable) {
-			std::string_view key = keyObj.as<std::string_view>();
-			if (key == "name") {
-				package->name = value.as<std::string_view>();
-				if (_packages.contains(package->name)) {
-					throw Exception("Can't add package {}. A package with the same name already exists.", package->name);
-				}
-			} else {
-				auto resourceType = ResourceTypeSerialization::fromGroupTypeToEnum(key);
-				auto function = value.as<sol::function>();
-				if (function.valid()) {
-					auto functionReference = sol::make_reference(_luaState, function);
-					auto loadInfo = std::make_unique<PackageLoadInfo>();
-					loadInfo->resourceType = resourceType;
-					loadInfo->luaFunction = functionReference;
-					package->loadInfos.push_back(std::move(loadInfo));
-				} else {
-					throw Exception("Can't add package {}. A lua function has not been defined for Resource type {}",
-						package->name, key);
-				}
-			}
-		}
-		_packages.insert({package->name, std::move(package)});
-	});
-
 	auto path = _pathHelper.makeAbsolutePath(packDefinitionPath);
-	_luaState.script_file(path, resourcePackEnv);
+	std::ifstream fstream(path);
+	nlohmann::json data = nlohmann::json::parse(fstream);
+	if (!data.contains("packs")) {
+		throw Exception("Can't find packs in the resource pack definition file [{}]", packDefinitionPath);
+	}
 
-	resourcePackEnv["resourcePack"] = sol::nil;
+	for (auto&& packData : data["packs"]) {
+		auto pack = std::make_unique<Pack>();
+		if (!packData.contains("name")) {
+			throw Exception("Can't find name for a pack defined in the pack definition file [{}]", packDefinitionPath);
+		}
+		pack->name = packData["name"].get<std::string>();
+		if (_packs.contains(pack->name)) {
+			throw Exception("Can't add pack [{}]. A pack with the same name already exists.", pack->name);
+		}
+
+		for (auto&& [key, value] : packData.items()) {
+			if (key == "name") {
+				continue;
+			}
+
+			if (!value.is_array()) {
+				throw Exception("Can't add pack [{}]. The value for resource type [{}] is not an array.", pack->name, key);
+			}
+
+			auto loadInfo = std::make_unique<PackGroup>();
+			loadInfo->type = ResourceTypeSerialization::toEnum(key);
+			for (auto&& definition : value) {
+				loadInfo->descriptors.push_back(definition);
+			}
+			pack->groups.insert({loadInfo->type, std::move(loadInfo)});
+		}
+		_packs.insert({pack->name, std::move(pack)});
+	}
 }
 
 void ResourcePackManager::loadPack(std::string_view packName) {
 	auto& resourcePack = _getResourcePack(packName);
-	for (auto&& loader : resourcePack.loadInfos) {
-		_loadPack(resourcePack, *loader);
-	}
+	_loadPack(resourcePack);
 }
 
-void ResourcePackManager::_loadPack(Package& package, PackageLoadInfo& loadInfo) {
-	auto manager = _managerProvider(loadInfo.resourceType);
-	auto resourceIds = manager->load(loadInfo.luaFunction);
-	if (resourceIds.empty()) {
-		throw Exception("A section for resource type \"{}\" has been defined in package \"{}\" but no resources have been loaded.",
-			ResourceTypeSerialization::toString(loadInfo.resourceType), package.name);
-	}
-	_addLoadedResources(package, loadInfo.resourceType, resourceIds);
-}
-
-void ResourcePackManager::_addLoadedResources(Package& package, ResourceType resourceType, std::vector<ResourceId> resourceIds) {
-	for (auto& resourceId : resourceIds) {
-		if (auto itr = package.loadedResources.find(resourceType); itr == package.loadedResources.end()) {
-			package.loadedResources[resourceType] = {resourceId};
-		} else {
-			itr->second.push_back(resourceId);
+void ResourcePackManager::_loadPack(Pack& pack) {
+	for (auto&& [resourceType, group] : pack.groups) {
+		auto& manager = _managerProvider(group->type);
+		for (auto&& descriptor : group->descriptors) {
+			auto resourceId = manager.load(descriptor);
+			group->loadedResources.push_back(resourceId);
 		}
 	}
 }
 
 void ResourcePackManager::unloadPack(std::string_view packName) {
-	auto& package = _getResourcePack(packName);
-	_unloadPack(package);
+	auto& pack = _getResourcePack(packName);
+	_unloadPack(pack);
 }
 
-void ResourcePackManager::_unloadPack(Package& package) {
-	for (auto&& [resourceType, loadedResources] : package.loadedResources) {
-		auto manager = _managerProvider(resourceType);
-		for (auto&& resourceId : loadedResources) {
-			manager->unload(resourceId);
+void ResourcePackManager::_unloadPack(Pack& pack) {
+	for (auto&& [resourceType, group] : pack.groups) {
+		for (auto&& resourceId : group->loadedResources) {
+			auto& manager = _managerProvider(resourceType);
+			manager.unload(resourceId);
 		}
-		loadedResources.clear();
+		group->loadedResources.clear();
 	}
 }
 
 void ResourcePackManager::unloadAllPacks() {
-	for (auto&& [packName, package] : _packages) {
-		_unloadPack(*package);
+	for (auto&& [packName, pack] : _packs) {
+		_unloadPack(*pack);
 	}
 }
 
-ResourcePackManager::Package& ResourcePackManager::_getResourcePack(std::string_view packName) {
-	if (!_packages.contains(packName)) {
-		throw Exception("Can't find resource pack with name {}. The Resource Pack does not exists", packName);
+ResourcePackManager::Pack& ResourcePackManager::_getResourcePack(std::string_view packName) {
+	if (!_packs.contains(packName)) {
+		throw Exception("Can't find resource pack with name [{}]. The Resource Pack does not exists", packName);
 	}
 
-	return *_packages[packName];
+	return *_packs[packName];
 }
 
 }

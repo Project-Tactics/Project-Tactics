@@ -10,7 +10,7 @@ Mesh::~Mesh() {
 	vertexAttributes->release();
 }
 
-Mesh::Mesh(std::string_view name, std::unique_ptr<VertexBuffer> vb, std::unique_ptr<IndexBuffer> ib, std::unique_ptr<VertexAttributes> vao)
+Mesh::Mesh(const std::string& name, std::unique_ptr<VertexBuffer> vb, std::unique_ptr<IndexBuffer> ib, std::unique_ptr<VertexAttributes> vao)
 	: Resource(name)
 	, vertexBuffer(std::move(vb))
 	, indexBuffer(std::move(ib))

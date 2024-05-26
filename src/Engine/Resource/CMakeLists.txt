@@ -4,31 +4,23 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
     ResourceSystemInitializer.cpp
     Mesh/Mesh.cpp
-    Mesh/MeshLoader.cpp
     Mesh/MeshManager.cpp
     Shader/Shader.cpp
-    Shader/ShaderLoader.cpp
     Shader/ShaderManager.cpp
     Texture/Texture.cpp
-    Texture/TextureLoader.cpp
     Texture/TextureManager.cpp
     Material/Material.cpp
-    Material/MaterialLoader.cpp
     Material/MaterialManager.cpp)
     
 set(HEADERS
     ResourceSystemInitializer.h
     Mesh/Mesh.h
-    Mesh/MeshLoader.h
     Mesh/MeshManager.h
-    Shader/ShaderLoader.h
     Shader/Shader.h
     Shader/ShaderManager.h
     Texture/Texture.h
-    Texture/TextureLoader.h
     Texture/TextureManager.h
     Material/Material.h
-    Material/MaterialLoader.h
     Material/MaterialManager.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})

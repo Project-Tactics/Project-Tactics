@@ -1,0 +1,39 @@
+{
+    "packs": [
+        {
+            "name": "mainPackage",
+            "shader": [
+                {
+                    "name": "main",
+                    "vertexShaderPath": "shaders/main.vert",
+                    "fragmentShaderPath": "shaders/main.frag"
+                }
+            ],
+            "texture": [
+                {
+                    "name": "tactics-icon",
+                    "path": "textures/tactics-icon.png",
+                    "useTransparency": true
+                },
+                {
+                    "name": "crate",
+                    "path": "textures/crate.jpg"
+                },
+                {
+                    "name": "colors",
+                    "path": "textures/colors.png"
+                },
+                {
+                    "name": "floor",
+                    "path": "textures/floor.jpg"
+                }
+            ],
+            "mesh": [
+                {
+                    "name": "book",
+                    "path": "meshes/book.fbx"
+                }
+            ]
+        }
+    ]
+}

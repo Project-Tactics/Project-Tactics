@@ -3,9 +3,7 @@
 #include "ResourcePack/ResourcePackManager.h"
 
 #include <Libs/Utility/Exception.h>
-#include <Libs/Scripting/ScriptingHelper.h>
 
-#include <sol/sol.hpp>
 #include <fmt/format.h>
 #include <algorithm>
 #include <ranges>
@@ -13,24 +11,16 @@
 namespace tactics::resource {
 
 ResourceSystem::ResourceSystem(std::string_view relativeDataPath): _resourcePathHelper(relativeDataPath) {
-	// TODO(Gerark) We're currently creating a lua state here but the idea is to inject it from outside.
-	_luaState = std::make_unique<sol::state>();
-	_luaState->open_libraries(sol::lib::base);
-	// let's create the environment table for the resources
-	sol::environment resourceEnv(*_luaState, sol::create);
-	(*_luaState)["__resourceEnvTable"] = resourceEnv;
-
-	auto managerProvider = [this] (ResourceType resourceType) {
+	auto managerProvider = [this] (ResourceType resourceType) -> ResourceManager& {
 		auto itr = _resourceManagers.find(resourceType);
 		if (itr == _resourceManagers.end()) {
 			throw Exception("Can't find manager for resource type: {}",
 				ResourceTypeSerialization::toString(resourceType));
 		}
-		return itr->second.get();
+		return *itr->second;
 	};
 
-	sol::state_view luaStateView(*_luaState);
-	_resourcePackManager = std::make_unique<ResourcePackManager>(luaStateView, _resourcePathHelper, managerProvider);
+	_resourcePackManager = std::make_unique<ResourcePackManager>(_resourcePathHelper, managerProvider);
 }
 
 ResourceSystem::~ResourceSystem() {

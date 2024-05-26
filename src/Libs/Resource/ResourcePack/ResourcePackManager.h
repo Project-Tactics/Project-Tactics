@@ -1,20 +1,23 @@
 #pragma once
 
 #include "../Resource.h"
-#include <memory>
-#include <sol/sol.hpp>
+
 #include <Libs/Utility/TransparentTypes.h>
+
+#include <nlohmann/json.hpp>
+#include <memory>
+#include <functional>
 
 namespace tactics::resource {
 
 class ResourceManager;
 class ResourcePathHelper;
 
-using ResourceManagerProvider = std::function<ResourceManager* (ResourceType)>;
+using ResourceManagerProvider = std::function<ResourceManager& (ResourceType)>;
 
 class ResourcePackManager {
 public:
-	ResourcePackManager(sol::state_view luaState, const ResourcePathHelper& pathHelper, const ResourceManagerProvider& managerProvider);
+	ResourcePackManager(const ResourcePathHelper& pathHelper, const ResourceManagerProvider& managerProvider);
 	void loadPackDefinition(std::string_view packDefinitionPath);
 
 	void loadPack(std::string_view packName);
@@ -22,25 +25,23 @@ public:
 	void unloadAllPacks();
 
 private:
-	struct PackageLoadInfo {
-		ResourceType resourceType;
-		sol::reference luaFunction;
+	struct PackGroup {
+		ResourceType type;
+		std::vector<nlohmann::json> descriptors;
+		std::vector<ResourceId> loadedResources;
 	};
 
-	struct Package {
+	struct Pack {
 		std::string name;
-		std::vector<std::unique_ptr<PackageLoadInfo>> loadInfos;
-		std::unordered_map<ResourceType, std::vector<ResourceId>> loadedResources;
+		std::unordered_map<ResourceType, std::unique_ptr<PackGroup>> groups;
 	};
 
-	Package& _getResourcePack(std::string_view packName);
-	void _loadPack(Package& package, PackageLoadInfo& loadInfo);
-	void _unloadPack(Package& package);
-	void _addLoadedResources(Package& package, ResourceType resourceType, std::vector<ResourceId> resourceIds);
+	Pack& _getResourcePack(std::string_view packName);
+	void _loadPack(Pack& pack);
+	void _unloadPack(Pack& pack);
 
 	const ResourcePathHelper& _pathHelper;
-	sol::state_view _luaState;
-	UnorderedStringMap<std::unique_ptr<Package>> _packages;
+	UnorderedStringMap<std::unique_ptr<Pack>> _packs;
 	ResourceManagerProvider _managerProvider;
 };
 

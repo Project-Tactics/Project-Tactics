@@ -6,7 +6,6 @@
 
 #include <unordered_map>
 #include <memory>
-#include <sol/sol.hpp>
 
 namespace tactics::resource {
 
@@ -20,10 +19,10 @@ class ResourceManager {
 public:
 	virtual ~ResourceManager() = default;
 
-	virtual std::vector<ResourceId> load(sol::reference& luaDefinitionLoader) = 0;
+	virtual ResourceType getType() const = 0;
 	virtual void unload(ResourceId resourceId) = 0;
 	virtual void unload(std::vector<ResourceId> resourceIds) = 0;
-	virtual ResourceType getType() const = 0;
+	virtual ResourceId load(const nlohmann::json& descriptor) = 0;
 };
 
 class ResourcePathHelper;
@@ -35,7 +34,7 @@ class ResourcePathHelper;
 template<typename TResource>
 class TResourceManager: public ResourceManager {
 public:
-	TResourceManager(sol::state_view& luaState, const ResourcePathHelper& pathHelper): _luaState(luaState), _pathHelper(pathHelper) {
+	TResourceManager(const ResourcePathHelper& pathHelper): _pathHelper(pathHelper) {
 	}
 
 	TResource& getResource(ResourceId id) {
@@ -93,7 +92,6 @@ protected:
 		_resources.erase(itr);
 	}
 
-	sol::state_view _luaState;
 	const ResourcePathHelper& _pathHelper;
 	ResourceMap<TResource> _resources;
 };

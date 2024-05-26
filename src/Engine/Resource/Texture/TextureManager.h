@@ -8,7 +8,10 @@ namespace tactics::resource {
 class TextureManager: public TResourceManager<Texture> {
 public:
 	using TResourceManager<Texture>::TResourceManager;
-	std::vector<ResourceId> load(sol::reference& luaDefinitionLoader) override;
+	ResourceId load(const nlohmann::json& descriptor) override;
+
+private:
+	std::unique_ptr<Texture> _loadTexture(const std::string& name, const std::string& filename, bool useTransparency);
 };
 
 }
