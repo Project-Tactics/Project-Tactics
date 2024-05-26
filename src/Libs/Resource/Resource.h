@@ -10,7 +10,8 @@ enum class ResourceType: uint8_t {
 	Shader,
 	Texture,
 	IniFile,
-	Mesh
+	Mesh,
+	Material
 };
 
 // TODO(Gerark) we should take a look at magic_enum lib or something else to automate this

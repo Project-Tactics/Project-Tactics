@@ -31,16 +31,4 @@ std::vector<ResourceId> ShaderManager::load(sol::reference& luaDefinitionLoader)
 	return resources;
 }
 
-void ShaderManager::unload(ResourceId resourceId) {
-	auto& resource = getResource(resourceId);
-	ShaderLoader::unloadProgram(resource.rendererId);
-	_removeResource(resource);
-}
-
-void ShaderManager::unload(std::vector<ResourceId> resourceIds) {
-	for (auto& resourceId : resourceIds) {
-		unload(resourceId);
-	}
-}
-
 }

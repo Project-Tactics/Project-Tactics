@@ -30,8 +30,4 @@ std::unique_ptr<Texture> TextureLoader::loadTexture(std::string_view name, std::
 	return texture;
 }
 
-void TextureLoader::unloadTexture(TextureId textureId) {
-	glDeleteTextures(1, &textureId);
-}
-
 }

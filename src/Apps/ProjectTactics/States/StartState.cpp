@@ -21,7 +21,6 @@ FsmAction StartState::enter() {
 
 	auto& mainRenderQueue = getService<RenderSystem>().createRenderQueue();
 	mainRenderQueue.addStep<ClearViewport>();
-	mainRenderQueue.addStep<ImGuiRender1>();
 	mainRenderQueue.addStep<DrawMeshes>(getService<EcsSystem>(), AlphaBlendedFlag::WithoutAlphaBlend);
 	mainRenderQueue.addStep<DrawMeshes>(getService<EcsSystem>(), AlphaBlendedFlag::WithAlphaBlend);
 

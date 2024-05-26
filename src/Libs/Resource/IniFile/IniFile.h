@@ -7,6 +7,7 @@ namespace tactics::resource {
 
 class IniFile: public Resource<IniFile> {
 public:
+	~IniFile();
 	void save();
 	void reload();
 	ini::IniSection& createSection(std::string_view section);

@@ -2,6 +2,10 @@
 
 namespace tactics::resource {
 
+IniFile::~IniFile() {
+	file.save(filename);
+}
+
 void IniFile::save() {
 	file.save(filename);
 }

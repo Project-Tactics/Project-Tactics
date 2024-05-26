@@ -17,9 +17,4 @@ private:
 	OverlaySystem& _overlaySystem;
 };
 
-class ImGuiRender1: public RenderStep {
-public:
-	void execute(RenderStepInfo& renderInfo) override;
-};
-
 }

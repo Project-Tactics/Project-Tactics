@@ -14,6 +14,8 @@ ResourceType ResourceTypeSerialization::toEnum(std::string_view strValue) {
 		return ResourceType::IniFile;
 	} else if (strValue == "mesh") {
 		return ResourceType::Mesh;
+	} else if (strValue == "material") {
+		return ResourceType::Material;
 	}
 
 	return ResourceType::Unkwown;
@@ -28,6 +30,8 @@ ResourceType ResourceTypeSerialization::fromGroupTypeToEnum(std::string_view str
 		return ResourceType::IniFile;
 	} else if (strValue == "meshes") {
 		return ResourceType::Mesh;
+	} else if (strValue == "materials") {
+		return ResourceType::Material;
 	}
 
 	return ResourceType::Unkwown;
@@ -46,6 +50,9 @@ std::string ResourceTypeSerialization::toString(ResourceType resourceType) {
 	}
 	case ResourceType::Mesh: {
 		return "mesh";
+	}
+	case ResourceType::Material: {
+		return "material";
 	}
 	}
 

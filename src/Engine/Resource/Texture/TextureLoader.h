@@ -15,7 +15,6 @@ using TextureId = GLuint;
 class TextureLoader {
 public:
 	static std::unique_ptr<Texture> loadTexture(std::string_view name, std::string_view filename, bool useTransparency);
-	static void unloadTexture(TextureId textureId);
 };
 
 }

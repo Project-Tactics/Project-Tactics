@@ -30,17 +30,4 @@ std::vector<ResourceId> TextureManager::load(sol::reference& luaDefinitionLoader
 	return resources;
 }
 
-void TextureManager::unload(ResourceId resourceId) {
-	auto& resource = getResource(resourceId);
-	TextureLoader::unloadTexture(resource.rendererId);
-	_removeResource(resource);
-}
-
-void TextureManager::unload(std::vector<ResourceId> resourceIds) {
-	for (auto& resourceId : resourceIds) {
-		unload(resourceId);
-	}
-
-}
-
 }

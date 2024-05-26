@@ -32,19 +32,4 @@ std::vector<ResourceId> MeshManager::load(sol::reference& luaDefinitionLoader) {
 	return resources;
 }
 
-void MeshManager::unload(ResourceId resourceId) {
-	auto& resource = getResource(resourceId);
-	resource.vertexAttributes->release();
-	resource.vertexBuffer->release();
-	resource.indexBuffer->release();
-	_removeResource(resource);
-}
-
-void MeshManager::unload(std::vector<ResourceId> resourceIds) {
-	for (auto& resourceId : resourceIds) {
-		unload(resourceId);
-	}
-
-}
-
 }

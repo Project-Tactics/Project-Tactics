@@ -9,8 +9,6 @@ class TextureManager: public TResourceManager<Texture> {
 public:
 	using TResourceManager<Texture>::TResourceManager;
 	std::vector<ResourceId> load(sol::reference& luaDefinitionLoader) override;
-	void unload(ResourceId resourceId) override;
-	void unload(std::vector<ResourceId> resourceIds) override;
 };
 
 }

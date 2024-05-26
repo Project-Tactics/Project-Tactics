@@ -24,10 +24,6 @@ ShaderProgramId ShaderLoader::loadProgram(const std::string& vertexShaderCode, c
 	return programId;
 }
 
-void ShaderLoader::unloadProgram(ShaderProgramId programId) {
-	glDeleteProgram(programId);
-}
-
 ShaderId ShaderLoader::_loadShader(ShaderType shaderType, const std::string& shaderCode) {
 	char* code = const_cast<char*>(shaderCode.c_str());
 

@@ -6,10 +6,15 @@ set(SOURCES
     Mesh/Mesh.cpp
     Mesh/MeshLoader.cpp
     Mesh/MeshManager.cpp
+    Shader/Shader.cpp
     Shader/ShaderLoader.cpp
     Shader/ShaderManager.cpp
+    Texture/Texture.cpp
     Texture/TextureLoader.cpp
-    Texture/TextureManager.cpp)
+    Texture/TextureManager.cpp
+    Material/Material.cpp
+    Material/MaterialLoader.cpp
+    Material/MaterialManager.cpp)
     
 set(HEADERS
     ResourceSystemInitializer.h
@@ -21,7 +26,10 @@ set(HEADERS
     Shader/ShaderManager.h
     Texture/Texture.h
     Texture/TextureLoader.h
-    Texture/TextureManager.h)
+    Texture/TextureManager.h
+    Material/Material.h
+    Material/MaterialLoader.h
+    Material/MaterialManager.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 

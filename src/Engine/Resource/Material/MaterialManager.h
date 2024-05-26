@@ -1,13 +1,15 @@
 #pragma once
 
+#include "Material.h"
+
 #include <Libs/Resource/ResourceManager.h>
-#include "Shader.h"
 
 namespace tactics::resource {
 
-class ShaderManager: public TResourceManager<Shader> {
+class MaterialManager: public TResourceManager<Material> {
 public:
-	using TResourceManager<Shader>::TResourceManager;
+	using TResourceManager<Material>::TResourceManager;
+
 	std::vector<ResourceId> load(sol::reference& luaDefinitionLoader) override;
 };
 

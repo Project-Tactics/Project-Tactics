@@ -62,6 +62,17 @@ public:
 		return TResource::TYPE;
 	}
 
+	void unload(ResourceId resourceId) override {
+		auto& resource = getResource(resourceId);
+		_removeResource(resource);
+	}
+
+	void unload(std::vector<ResourceId> resourceIds) override {
+		for (auto& resourceId : resourceIds) {
+			unload(resourceId);
+		}
+	}
+
 protected:
 
 	void _registerResource(std::unique_ptr<TResource> resource) {
