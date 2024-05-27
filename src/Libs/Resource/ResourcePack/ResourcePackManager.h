@@ -37,6 +37,8 @@ private:
 	struct Pack {
 		std::string name;
 		std::unordered_map<ResourceType, std::unique_ptr<PackGroup>> groups;
+		bool isLoaded{};
+		bool isManuallyCreated{};
 
 		PackGroup& getOrCreatePackGroup(ResourceType type);
 	};

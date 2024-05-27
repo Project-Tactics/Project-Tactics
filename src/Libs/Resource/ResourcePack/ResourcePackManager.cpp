@@ -52,6 +52,12 @@ void ResourcePackManager::loadPackDefinition(std::string_view packDefinitionPath
 
 void ResourcePackManager::loadPack(std::string_view packName) {
 	auto& resourcePack = _getResourcePack(packName);
+	if (resourcePack.isManuallyCreated) {
+		throw Exception("Can't load pack [{}]. A manually created pack is considered loaded by default and can't be reloaded again.", packName);
+	}
+	if (resourcePack.isLoaded) {
+		throw Exception("Can't load pack [{}]. The pack is already loaded.", packName);
+	}
 	_loadPack(resourcePack);
 }
 
@@ -63,6 +69,7 @@ void ResourcePackManager::_loadPack(Pack& pack) {
 			group->loadedResources.push_back(resourceId);
 		}
 	}
+	pack.isLoaded = true;
 }
 
 void ResourcePackManager::unloadPack(std::string_view packName) {
@@ -77,6 +84,8 @@ void ResourcePackManager::createPack(std::string_view packName) {
 
 	auto pack = std::make_unique<Pack>();
 	pack->name = packName;
+	pack->isManuallyCreated = true;
+	pack->isLoaded = true; // A custom pack is always considered loaded since there's no certainty of what resources it will contain
 	_packs.insert({packName, std::move(pack)});
 }
 
@@ -88,6 +97,7 @@ void ResourcePackManager::_unloadPack(Pack& pack) {
 		}
 		group->loadedResources.clear();
 	}
+	pack.isLoaded = false;
 }
 
 void ResourcePackManager::unloadAllPacks() {
@@ -106,6 +116,10 @@ ResourcePackManager::Pack& ResourcePackManager::_getResourcePack(std::string_vie
 
 void ResourcePackManager::registerResource(std::string_view packName, std::shared_ptr<BaseResource> resource) {
 	auto& pack = _getResourcePack(packName);
+	if (!pack.isManuallyCreated) {
+		throw Exception("Can't register manual resource [{}] of type [{}] to pack [{}]. The pack is not manually created.",
+			resource->name, ResourceTypeSerialization::toString(resource->type), packName);
+	}
 	auto& packGroup = pack.getOrCreatePackGroup(resource->type);
 	auto& manager = _managerProvider(resource->type);
 	manager.registerResource(resource);
@@ -125,6 +139,10 @@ ResourcePackManager::PackGroup& ResourcePackManager::Pack::getOrCreatePackGroup(
 
 void ResourcePackManager::loadResource(std::string_view packName, const nlohmann::json& descriptor, ResourceType type) {
 	auto& pack = _getResourcePack(packName);
+	if (!pack.isManuallyCreated) {
+		throw Exception("Can't load resource of type [{}] to pack [{}]. The pack is not manually created. Descriptor: {}",
+			ResourceTypeSerialization::toString(type), packName, descriptor.dump());
+	}
 	auto& packGroup = pack.getOrCreatePackGroup(type);
 	packGroup.descriptors.push_back(descriptor);
 
