@@ -36,4 +36,12 @@ struct TransparentStringLess: std::less<std::string_view> {
 template <typename T>
 using UnorderedStringMap = std::unordered_map<TransparentString, T, TransparentStringHash, TransparentStringEquals>;
 
+template <typename T>
+void assign(const std::unordered_map<std::string, T>& source, UnorderedStringMap<T>& dest) {
+	dest.clear();
+	for (auto& [key, value] : source) {
+		dest[key] = value;
+	}
+}
+
 }

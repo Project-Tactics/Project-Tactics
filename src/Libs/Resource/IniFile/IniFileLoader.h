@@ -17,6 +17,7 @@ struct IniFileLoadDescriptor {
 
 class IniFileLoader: public ResourceLoader {
 public:
+	using ResourceLoader::ResourceLoader;
 	std::shared_ptr<IniFile> load(const IniFileLoadDescriptor& descriptor);
 };
 

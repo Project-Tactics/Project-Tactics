@@ -41,7 +41,7 @@ public:
 template<typename TResource>
 class Resource: public BaseResource {
 public:
-	Resource(const std::string& name): BaseResource(name, TResource::TYPE) {}
+	explicit Resource(const std::string& name): BaseResource(name, TResource::TYPE) {}
 };
 
 /*

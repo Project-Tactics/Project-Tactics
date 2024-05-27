@@ -27,7 +27,7 @@ public:
 private:
 	struct PackGroup {
 		ResourceType type;
-		std::vector<nlohmann::json> descriptors;
+		std::vector<nlohmann::ordered_json> descriptors;
 		std::vector<ResourceId> loadedResources;
 	};
 

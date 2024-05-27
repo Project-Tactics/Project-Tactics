@@ -27,6 +27,11 @@ public:
 		_dirty = true;
 	}
 
+	void setRotation(float radians, const glm::vec3& axis) {
+		rotation = glm::angleAxis(radians, axis);
+		_dirty = true;
+	}
+
 	void setScale(const glm::vec3& newScale) {
 		scale = newScale;
 		_dirty = true;

@@ -2,6 +2,8 @@
 
 #include "RenderStep.h"
 
+#include <Engine/Resource/Material/Material.h>
+
 #include <glm/glm.hpp>
 
 #include <memory>
@@ -11,6 +13,10 @@ namespace components {
 struct Transform;
 struct Mesh;
 struct Material;
+}
+
+namespace resource {
+class Mesh;
 }
 
 class Camera;
@@ -36,7 +42,11 @@ public:
 	void execute(RenderStepInfo& renderInfo) override;
 
 private:
-	void _drawMesh(const glm::mat4x4& viewProjection, components::Transform& transform, const components::Mesh& mesh, const components::Material& material);
+	void _drawMesh(const glm::mat4x4& viewProjection, components::Transform& transform, const components::Mesh& mesh);
+	void _drawGeometry(const resource::Mesh& mesh);
+	void _drawOpaqueGeometry(const glm::mat4x4& viewProjection);
+	void _drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, RenderStepInfo& renderInfo);
+
 	EcsSystem& _ecsSystem;
 	AlphaBlendedFlag _alphaBlendedFlag{};
 };

@@ -16,6 +16,9 @@ public:
 	static const ResourceType TYPE = ResourceType::Texture;
 	using Resource<Texture>::Resource;
 	~Texture();
+	void bind(unsigned int slot) const;
+	void unbind() const;
+
 	TextureInfo info;
 	unsigned int rendererId;
 };

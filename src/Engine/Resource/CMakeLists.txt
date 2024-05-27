@@ -10,7 +10,8 @@ set(SOURCES
     Texture/Texture.cpp
     Texture/TextureLoader.cpp
     Material/Material.cpp
-    Material/MaterialLoader.cpp)
+    Material/MaterialLoader.cpp
+    Material/Uniforms.cpp)
     
 set(HEADERS
     ResourceSystemInitializer.h
@@ -21,7 +22,8 @@ set(HEADERS
     Texture/Texture.h
     Texture/TextureLoader.h
     Material/Material.h
-    Material/MaterialLoader.h)
+    Material/MaterialLoader.h
+    Material/Uniforms.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 

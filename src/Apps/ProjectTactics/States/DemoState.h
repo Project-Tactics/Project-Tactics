@@ -2,6 +2,9 @@
 
 #include <Libs/Fsm/FsmStateWithServices.h>
 
+#include <entt/entt.hpp>
+#include <glm/glm.hpp>
+
 namespace tactics {
 
 class OverlaySystem;
@@ -17,6 +20,7 @@ public:
 private:
 	bool onKeyPress(SDL_KeyboardEvent& event) override;
 	void _rotateCamera();
+	entt::entity _createObject(const glm::vec3& position, std::string_view meshName, std::string_view materialName);
 
 	bool _exitNextFrame{};
 	float _cameraAngleX{};

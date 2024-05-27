@@ -3,6 +3,7 @@
 #include "Resource.h"
 #include "ResourceManager.h"
 #include "ResourcePathHelper.h"
+#include "ResourceProvider.h"
 
 #include <memory>
 #include <string_view>
@@ -18,7 +19,7 @@ class ResourcePackManager;
  * This class handles the loading and management of various resources such as textures, shaders, etc...
  */
 
-class ResourceSystem {
+class ResourceSystem: public ResourceProvider {
 public:
 	ResourceSystem(std::string_view relativeDataPath);
 	~ResourceSystem();
@@ -37,9 +38,12 @@ public:
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(id));
 	}
 
+	std::shared_ptr<BaseResource> getResource(ResourceType resourceType, std::string_view name) const override;
+	std::shared_ptr<BaseResource> getResource(ResourceType resourceType, ResourceId id) const override;
+
 	template<typename TResourceManager>
 	void registerManager() {
-		auto manager = std::make_unique<TResourceManager>(_resourcePathHelper);
+		auto manager = std::make_unique<TResourceManager>(_resourcePathHelper, *this);
 		_registerManager(std::move(manager));
 	}
 
@@ -61,7 +65,20 @@ private:
 
 	template<typename TResource>
 	BaseResourceManager* _getManager() {
-		return _resourceManagers[TResource::TYPE].get();
+		return _getManager(TResource::TYPE);
+	}
+
+	BaseResourceManager* _getManager(ResourceType resourceType) {
+		return _resourceManagers[resourceType].get();
+	}
+
+	template<typename TResource>
+	const BaseResourceManager* _getManager() const {
+		return _getManager(TResource::TYPE);
+	}
+
+	const BaseResourceManager* _getManager(ResourceType resourceType) const {
+		return _resourceManagers.at(resourceType).get();
 	}
 
 	ResourcePathHelper _resourcePathHelper;

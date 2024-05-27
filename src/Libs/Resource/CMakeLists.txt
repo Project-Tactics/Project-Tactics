@@ -5,9 +5,9 @@ set(SOURCES
     IniFile/IniFile.cpp
     IniFile/IniFileLoader.cpp
     Resource.cpp
+    ResourceManager.cpp
     ResourcePathHelper.cpp
     ResourceSystem.cpp
-    ResourceManager.cpp
     ResourcePack/ResourcePackManager.cpp)
     
 set(HEADERS
@@ -15,9 +15,10 @@ set(HEADERS
     IniFile/IniFileLoader.h
     Resource.h
     ResourceLoader.h
-    ResourcePathHelper.h
-    ResourceSystem.h
     ResourceManager.h
+    ResourcePathHelper.h
+    ResourceProvider.h
+    ResourceSystem.h
     ResourcePack/ResourcePackManager.h)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})

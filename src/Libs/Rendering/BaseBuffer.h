@@ -24,11 +24,11 @@ public:
 	BaseBuffer(const BaseBuffer&) = delete;
 	BaseBuffer& operator=(const BaseBuffer&) = delete;
 
-	void bind() {
+	void bind() const {
 		glBindBuffer(BufferType, _id);
 	}
 
-	void unbind() {
+	void unbind() const {
 		glBindBuffer(BufferType, 0);
 	}
 

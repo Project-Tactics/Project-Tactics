@@ -17,7 +17,7 @@ ResourcePackManager::ResourcePackManager(const ResourcePathHelper& pathHelper, c
 void ResourcePackManager::loadPackDefinition(std::string_view packDefinitionPath) {
 	auto path = _pathHelper.makeAbsolutePath(packDefinitionPath);
 	std::ifstream fstream(path);
-	nlohmann::json data = nlohmann::json::parse(fstream);
+	nlohmann::ordered_json data = nlohmann::ordered_json::parse(fstream);
 	if (!data.contains("packs")) {
 		throw Exception("Can't find packs in the resource pack definition file [{}]", packDefinitionPath);
 	}
@@ -73,7 +73,7 @@ void ResourcePackManager::unloadPack(std::string_view packName) {
 }
 
 void ResourcePackManager::_unloadPack(Pack& pack) {
-	for (auto&& [resourceType, group] : pack.groups) {
+	for (auto&& [resourceType, group] : pack.groups | std::views::reverse) {
 		for (auto&& resourceId : group->loadedResources) {
 			auto& manager = _managerProvider(resourceType);
 			manager.unload(resourceId);

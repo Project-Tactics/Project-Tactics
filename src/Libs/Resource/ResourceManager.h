@@ -10,6 +10,8 @@
 
 namespace tactics::resource {
 
+class BaseResourceProvider;
+
 template<typename TResource>
 using ResourceMap = std::unordered_map<ResourceId, std::shared_ptr<TResource>>;
 
@@ -26,6 +28,8 @@ public:
 	virtual ResourceId load(const nlohmann::json& descriptor) = 0;
 	virtual std::shared_ptr<BaseResource> getResource(std::string_view name) = 0;
 	virtual std::shared_ptr<BaseResource> getResource(ResourceId id) = 0;
+	virtual std::shared_ptr<BaseResource> getResource(std::string_view name) const = 0;
+	virtual std::shared_ptr<BaseResource> getResource(ResourceId id) const = 0;
 	virtual void forEachResource(std::function<void(BaseResource&)> callback) = 0;
 };
 
@@ -39,7 +43,7 @@ concept IsResourceLoader = std::is_base_of_v<ResourceLoader, T>;
 template<typename TResource, IsResourceLoader TResourceLoader>
 class ResourceManager: public BaseResourceManager {
 public:
-	ResourceManager(const ResourcePathHelper& pathHelper): _loader(pathHelper) {
+	ResourceManager(const ResourcePathHelper& pathHelper, const ResourceProvider& resourceProvider): _loader(pathHelper, resourceProvider) {
 	}
 
 	std::shared_ptr<BaseResource> getResource(std::string_view name) override final {
@@ -50,12 +54,23 @@ public:
 		return _getTResource(id);
 	}
 
+	std::shared_ptr<BaseResource> getResource(std::string_view name) const final {
+		return _getTResource(name);
+	}
+
+	std::shared_ptr<BaseResource> getResource(ResourceId id) const final {
+		return _getTResource(id);
+	}
+
 	ResourceType getType() const override final {
 		return TResource::TYPE;
 	}
 
 	ResourceId load(const nlohmann::json& descriptor) override final {
 		auto resource = _loader.load(descriptor);
+		if (!resource) {
+			throw Exception("Failed to load resource from descriptor. Resource Type: {} - Descriptor: {}", ResourceTypeSerialization::toString(TResource::TYPE), descriptor.dump());
+		}
 		auto id = resource->id;
 		_registerResource(std::move(resource));
 		return id;
@@ -80,20 +95,29 @@ public:
 
 private:
 	std::shared_ptr<TResource>& _getTResource(ResourceId id) {
+		return const_cast<std::shared_ptr<TResource>&>(const_cast<const ResourceManager*>(this)->_getTResource(id));
+	}
+
+	std::shared_ptr<TResource>& _getTResource(std::string_view name) {
+		return const_cast<std::shared_ptr<TResource>&>(const_cast<const ResourceManager*>(this)->_getTResource(name));
+	}
+
+	const std::shared_ptr<TResource>& _getTResource(ResourceId id) const {
 		if (!_resources.contains(id)) {
 			throw Exception("Resource with id \"{}\" does not exist. Can't find resource.", id);
 		}
 
-		return _resources[id];
+		return _resources.at(id);
 	}
 
-	std::shared_ptr<TResource>& _getTResource(std::string_view name) {
+	const std::shared_ptr<TResource>& _getTResource(std::string_view name) const {
 		auto itr = std::ranges::find_if(_resources, [name] (const auto& pair) {
 			return pair.second->name == name;
 		});
 
 		if (itr == _resources.end()) {
-			throw Exception("Resource with name \"{}\" does not exist. Can't find resource.", name);
+			throw Exception("Resource with name [{}] does not exist. Can't find resource in [{}] manager.",
+				name, ResourceTypeSerialization::toString(getType()));
 		}
 
 		return itr->second;
@@ -114,9 +138,10 @@ private:
 				resource->id, resource->name, ResourceTypeSerialization::toString(resource->type));
 		}
 
-		if (resource.use_count() > 1) {
-			throw Exception("Attempt to remove a resource which is still in use. Resource Id: {} - Name: {} - Type: {}",
-								resource->id, resource->name, ResourceTypeSerialization::toString(resource->type));
+		auto useCount = resource.use_count();
+		if (useCount > 1) {
+			throw Exception("Attempt to remove a resource which is still in use. Resource Id: {} - Name: {} - Type: {} - RefCount: {}",
+								resource->id, resource->name, ResourceTypeSerialization::toString(resource->type), useCount);
 		}
 
 		_resources.erase(itr);

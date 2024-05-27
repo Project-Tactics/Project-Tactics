@@ -7,7 +7,6 @@ set(SOURCES
 set(HEADERS
     EcsSystem.h
     Components/AlphaBlendedComponent.h
-    Components/MaterialComponent.h
     Components/MeshComponent.h
     Components/TransformComponent.h)
 

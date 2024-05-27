@@ -64,4 +64,12 @@ void ResourceSystem::_unregisterManager(std::unique_ptr<BaseResourceManager> res
 	_resourceManagers.erase(itr);
 }
 
+std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceType, std::string_view name) const {
+	return _getManager(resourceType)->getResource(name);
+}
+
+std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceType, ResourceId id) const {
+	return _getManager(resourceType)->getResource(id);
+}
+
 }

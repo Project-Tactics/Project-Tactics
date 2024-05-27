@@ -7,6 +7,7 @@ namespace tactics::resource {
 
 class MeshLoader: public ResourceLoader {
 public:
+	using ResourceLoader::ResourceLoader;
 	std::shared_ptr<Mesh> load(const nlohmann::json& descriptor);
 
 private:

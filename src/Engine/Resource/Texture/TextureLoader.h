@@ -15,6 +15,7 @@ struct TextureDescriptor {
 
 class TextureLoader: public ResourceLoader {
 public:
+	using ResourceLoader::ResourceLoader;
 	std::shared_ptr<Texture> load(const TextureDescriptor& descriptor);
 
 private:

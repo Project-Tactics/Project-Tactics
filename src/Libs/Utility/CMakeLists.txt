@@ -8,18 +8,20 @@ set(HEADERS
     Math.h
     TransparentTypes.h
     UUID.h
+    Json/MathJsonSerializer.h
     Service/ServiceLocator.h)
 
 set(SOURCES
     Color.cpp
     Exception.cpp
     Math.cpp
+    Json/MathJsonSerializer.cpp
     UUID.cpp)
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
 add_library(libs_utility STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_utility PUBLIC glm fmt::fmt)
+target_link_libraries(libs_utility PUBLIC glm fmt::fmt json_wrapper)
 add_to_libs_folder(libs_utility)
 
 set(TEST_SOURCES Tests/Test_ServiceLocator.cpp)
