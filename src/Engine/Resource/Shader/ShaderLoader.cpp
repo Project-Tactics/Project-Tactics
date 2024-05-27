@@ -5,12 +5,13 @@
 
 #include <glad/gl.h>
 #include <fstream>
+#include <filesystem>
 
 namespace tactics::resource {
 
 std::shared_ptr<Shader> ShaderLoader::load(const ShaderDescriptor& descriptor) {
 	auto shader = std::make_shared<Shader>(descriptor.name);
-	shader->rendererId = _loadProgram(descriptor.vertexShaderPath, descriptor.fragmentShaderPath);
+	shader->rendererId = _loadProgram(descriptor.vertexShader, descriptor.fragmentShader);
 	return shader;
 }
 
@@ -25,11 +26,11 @@ std::string ShaderLoader::_loadFile(const std::string& filePath) {
 	return buffer.str();
 }
 
-unsigned int ShaderLoader::_loadProgram(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) {
+unsigned int ShaderLoader::_loadProgram(const std::string& vertexShader, const std::string& fragmentShader) {
 	auto programId = glCreateProgram();
 
-	auto vertexShaderId = _loadShader(GL_VERTEX_SHADER, vertexShaderFilePath);
-	auto fragmentShaderId = _loadShader(GL_FRAGMENT_SHADER, fragmentShaderFilePath);
+	auto vertexShaderId = _loadShader(GL_VERTEX_SHADER, vertexShader);
+	auto fragmentShaderId = _loadShader(GL_FRAGMENT_SHADER, fragmentShader);
 
 	glAttachShader(programId, vertexShaderId);
 	glAttachShader(programId, fragmentShaderId);
@@ -43,8 +44,12 @@ unsigned int ShaderLoader::_loadProgram(const std::string& vertexShaderFilePath,
 	return programId;
 }
 
-unsigned int ShaderLoader::_loadShader(unsigned int shaderType, const std::string& shaderFilePath) {
-	auto shaderCode = _loadFile(shaderFilePath);
+unsigned int ShaderLoader::_loadShader(unsigned int shaderType, const std::string& shaderContent) {
+	std::filesystem::path shaderPath = shaderContent;
+	std::string shaderCode = shaderContent;
+	if (shaderPath.extension() == ".vert" || shaderPath.extension() == ".frag") {
+		shaderCode = _loadFile(shaderContent);
+	}
 	char* code = const_cast<char*>(shaderCode.c_str());
 
 	auto shaderId = glCreateShader(shaderType);

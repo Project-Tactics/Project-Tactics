@@ -7,10 +7,10 @@ namespace tactics::resource {
 
 struct ShaderDescriptor {
 	std::string name;
-	std::string vertexShaderPath;
-	std::string fragmentShaderPath;
+	std::string vertexShader;
+	std::string fragmentShader;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(ShaderDescriptor, name, vertexShaderPath, fragmentShaderPath);
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(ShaderDescriptor, name, vertexShader, fragmentShader);
 };
 
 class ShaderLoader: public ResourceLoader {

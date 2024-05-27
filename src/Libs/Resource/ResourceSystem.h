@@ -27,6 +27,12 @@ public:
 	void loadResourcePackDefinition(std::string_view definitionPath);
 	void loadResourcePack(std::string_view packName);
 	void unloadResourcePack(std::string_view packName);
+	void createResourcePack(std::string_view packName);
+
+	template<typename TResource>
+	void loadResource(std::string_view packName, const nlohmann::json& descriptor) {
+		_loadResource(packName, descriptor, TResource::TYPE);
+	}
 
 	template<typename TResource>
 	std::shared_ptr<TResource> getResource(std::string_view name) {
@@ -37,6 +43,8 @@ public:
 	std::shared_ptr<TResource> getResource(ResourceId id) {
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(id));
 	}
+
+	void registerResource(std::string_view packName, std::shared_ptr<BaseResource> resource);
 
 	std::shared_ptr<BaseResource> getResource(ResourceType resourceType, std::string_view name) const override;
 	std::shared_ptr<BaseResource> getResource(ResourceType resourceType, ResourceId id) const override;
@@ -62,6 +70,7 @@ public:
 private:
 	void _registerManager(std::unique_ptr<BaseResourceManager> resourceManager);
 	void _unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager);
+	void _loadResource(std::string_view packName, const nlohmann::json& descriptor, ResourceType resourceType);
 
 	template<typename TResource>
 	BaseResourceManager* _getManager() {

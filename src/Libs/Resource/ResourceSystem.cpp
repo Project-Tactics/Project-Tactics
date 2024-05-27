@@ -38,6 +38,10 @@ void ResourceSystem::unloadResourcePack(std::string_view resourcePackName) {
 	_resourcePackManager->unloadPack(resourcePackName);
 }
 
+void ResourceSystem::createResourcePack(std::string_view resourcePackName) {
+	_resourcePackManager->createPack(resourcePackName);
+}
+
 void ResourceSystem::forEachResource(std::function<void(BaseResource&)> callback) {
 	for (auto&& [type, manager] : _resourceManagers) {
 		manager->forEachResource(callback);
@@ -70,6 +74,14 @@ std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceT
 
 std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceType, ResourceId id) const {
 	return _getManager(resourceType)->getResource(id);
+}
+
+void ResourceSystem::registerResource(std::string_view packName, std::shared_ptr<BaseResource> resource) {
+	_resourcePackManager->registerResource(packName, resource);
+}
+
+void ResourceSystem::_loadResource(std::string_view packName, const nlohmann::json& jsonObject, ResourceType resourceType) {
+	_resourcePackManager->loadResource(packName, jsonObject, resourceType);
 }
 
 }

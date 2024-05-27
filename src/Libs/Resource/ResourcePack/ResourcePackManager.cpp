@@ -41,12 +41,10 @@ void ResourcePackManager::loadPackDefinition(std::string_view packDefinitionPath
 				throw Exception("Can't add pack [{}]. The value for resource type [{}] is not an array.", pack->name, key);
 			}
 
-			auto loadInfo = std::make_unique<PackGroup>();
-			loadInfo->type = ResourceTypeSerialization::toEnum(key);
+			auto& packGroup = pack->getOrCreatePackGroup(ResourceTypeSerialization::toEnum(key));
 			for (auto&& definition : value) {
-				loadInfo->descriptors.push_back(definition);
+				packGroup.descriptors.push_back(definition);
 			}
-			pack->groups.insert({loadInfo->type, std::move(loadInfo)});
 		}
 		_packs.insert({pack->name, std::move(pack)});
 	}
@@ -72,6 +70,16 @@ void ResourcePackManager::unloadPack(std::string_view packName) {
 	_unloadPack(pack);
 }
 
+void ResourcePackManager::createPack(std::string_view packName) {
+	if (_packs.contains(packName)) {
+		throw Exception("Can't create custom pack [{}]. A pack with the same name already exists.", packName);
+	}
+
+	auto pack = std::make_unique<Pack>();
+	pack->name = packName;
+	_packs.insert({packName, std::move(pack)});
+}
+
 void ResourcePackManager::_unloadPack(Pack& pack) {
 	for (auto&& [resourceType, group] : pack.groups | std::views::reverse) {
 		for (auto&& resourceId : group->loadedResources) {
@@ -94,6 +102,35 @@ ResourcePackManager::Pack& ResourcePackManager::_getResourcePack(std::string_vie
 	}
 
 	return *_packs[packName];
+}
+
+void ResourcePackManager::registerResource(std::string_view packName, std::shared_ptr<BaseResource> resource) {
+	auto& pack = _getResourcePack(packName);
+	auto& packGroup = pack.getOrCreatePackGroup(resource->type);
+	auto& manager = _managerProvider(resource->type);
+	manager.registerResource(resource);
+	packGroup.loadedResources.push_back(resource->id);
+}
+
+ResourcePackManager::PackGroup& ResourcePackManager::Pack::getOrCreatePackGroup(ResourceType type) {
+	if (groups.contains(type)) {
+		return *groups[type];
+	}
+
+	auto group = std::make_unique<PackGroup>();
+	group->type = type;
+	groups.insert({type, std::move(group)});
+	return *groups[type];
+}
+
+void ResourcePackManager::loadResource(std::string_view packName, const nlohmann::json& descriptor, ResourceType type) {
+	auto& pack = _getResourcePack(packName);
+	auto& packGroup = pack.getOrCreatePackGroup(type);
+	packGroup.descriptors.push_back(descriptor);
+
+	auto& manager = _managerProvider(type);
+	auto resourceId = manager.load(descriptor);
+	packGroup.loadedResources.push_back(resourceId);
 }
 
 }

@@ -13,8 +13,9 @@ public:
 		void attributef(int count);
 		std::unique_ptr<VertexAttributes> create();
 		void create(VertexAttributes* outVertexAttribute);
-		void defineAttributes(VertexAttributes& vertexAttribute);
 	private:
+		void _defineAttributes(VertexAttributes& vertexAttribute);
+
 		int _stride{};
 		unsigned int _attributeIndex{};
 		std::vector<std::function<void()>> _attributes;

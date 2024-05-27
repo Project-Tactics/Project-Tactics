@@ -16,7 +16,7 @@ void VertexAttributes::Builder::attributef(int count) {
 
 std::unique_ptr<VertexAttributes> VertexAttributes::Builder::create() {
 	auto attributes = std::make_unique<VertexAttributes>();
-	defineAttributes(*attributes);
+	_defineAttributes(*attributes);
 	return attributes;
 }
 
@@ -48,7 +48,7 @@ void VertexAttributes::release() {
 	glDeleteVertexArrays(1, &_vao);
 }
 
-void VertexAttributes::Builder::defineAttributes(VertexAttributes& vertexAttribute) {
+void VertexAttributes::Builder::_defineAttributes(VertexAttributes& vertexAttribute) {
 	vertexAttribute.bind();
 	for (auto& attribute : _attributes) {
 		attribute();

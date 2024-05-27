@@ -3,6 +3,7 @@
 #include <Libs/Overlay/OverlaySystem.h>
 #include <Libs/Overlay/ExampleOverlay.h>
 #include <Libs/Overlay/MainOverlay.h>
+#include <Libs/Rendering/GeometryBuilder.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Utility/Math.h>
 
@@ -56,6 +57,44 @@ FsmAction DemoState::enter() {
 		}
 	}
 
+	// Example of how to create a custom resource programmatically ( in this case a mesh )
+	// with a custom material/shader and add it to the resource system
+	resourceSystem.createResourcePack("CustomPack");
+	auto geometryBuilder = GeometryBuilder({{3}, {2}});
+	geometryBuilder.addVertex({-10.f, -10.f, 0.0f, 0, 0});
+	geometryBuilder.addVertex({10.f, -10.f, 0.0f, 1, 0});
+	geometryBuilder.addVertex({10, 10.0f, 0.0f, 1, 1});
+	geometryBuilder.addVertex({-10, 10.0f, 0.0f, 0, 1});
+	geometryBuilder.addIndices({0, 1, 2});
+	geometryBuilder.addIndices({2, 3, 0});
+	auto triangleMesh = geometryBuilder.build<resource::Mesh>("customQuadMesh");
+	resourceSystem.registerResource("CustomPack", triangleMesh);
+
+	// We can also create a resource by simulating the usual pack loading
+	nlohmann::json descriptor = {
+		{"name", "CustomShader"},
+		{"vertexShader", "shaders/main.vert"},
+		{"fragmentShader", R"(
+				#version 330 core
+				layout(location = 0) out vec4 color;
+				uniform vec4 u_Color;
+				void main()
+				{
+					color = u_Color;
+				}
+			)"
+	}
+	};
+	resourceSystem.loadResource<resource::Shader>("CustomPack", descriptor);
+
+	auto material = std::make_shared<resource::Material>("colorOnly");
+	material->shader = resourceSystem.getResource<resource::Shader>("CustomShader");
+	material->set("u_Color", {0.204f, 0.608f, 0.922f, 1.0f});
+	resourceSystem.registerResource("CustomPack", material);
+
+	// Now I can use the triangle mesh by applying the custom material with a specialized fragment shader
+	_customQuadEntity = _createObject({0.0f, 40.0f, 0.0f}, "customQuadMesh", "colorOnly");
+
 	return FsmAction::none();
 }
 
@@ -68,6 +107,7 @@ void DemoState::exit() {
 	});
 
 	auto& resourceSystem = getService<resource::ResourceSystem>();
+	resourceSystem.unloadResourcePack("CustomPack");
 	resourceSystem.unloadResourcePack("mainPackage");
 
 	auto& overlaySystem = getService<OverlaySystem>();
@@ -80,6 +120,9 @@ FsmAction DemoState::update() {
 	if (_exitNextFrame) {
 		return FsmAction::transition("exit");
 	}
+
+	auto& ecs = getService<EcsSystem>();
+	ecs.get<components::Transform>(_customQuadEntity).rotate(glm::radians(1.0f), Vector3::forward);
 
 	_rotateCamera();
 

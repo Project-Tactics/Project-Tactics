@@ -24,6 +24,7 @@ private:
 
 	bool _exitNextFrame{};
 	float _cameraAngleX{};
+	entt::entity _customQuadEntity;
 };
 
 }

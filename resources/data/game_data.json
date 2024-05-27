@@ -5,8 +5,8 @@
             "shader": [
                 {
                     "name": "main",
-                    "vertexShaderPath": "shaders/main.vert",
-                    "fragmentShaderPath": "shaders/main.frag"
+                    "vertexShader": "shaders/main.vert",
+                    "fragmentShader": "shaders/main.frag"
                 }
             ],
             "texture": [

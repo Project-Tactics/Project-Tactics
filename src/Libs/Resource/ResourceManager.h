@@ -31,6 +31,7 @@ public:
 	virtual std::shared_ptr<BaseResource> getResource(std::string_view name) const = 0;
 	virtual std::shared_ptr<BaseResource> getResource(ResourceId id) const = 0;
 	virtual void forEachResource(std::function<void(BaseResource&)> callback) = 0;
+	virtual void registerResource(std::shared_ptr<BaseResource> resource) = 0;
 };
 
 template<typename T>
@@ -91,6 +92,14 @@ public:
 		for (auto& [id, resource] : _resources) {
 			callback(*resource);
 		}
+	}
+
+	void registerResource(std::shared_ptr<BaseResource> resource) override final {
+		if (resource->type != getType()) {
+			throw Exception("Attempt to register a resource of the wrong type. Resource Type: {} - Expected Type: {} - Name: {} - ID: {}",
+					ResourceTypeSerialization::toString(resource->type), ResourceTypeSerialization::toString(TResource::TYPE), resource->name, resource->id);
+		}
+		_registerResource(std::dynamic_pointer_cast<TResource>(resource));
 	}
 
 private:
