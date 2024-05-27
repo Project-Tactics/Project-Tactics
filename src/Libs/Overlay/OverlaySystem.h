@@ -53,7 +53,6 @@ private:
 	void _addOverlay(std::string_view name, std::unique_ptr<Overlay> overlay, OverlayType type = OverlayType::Window, bool enabled = false);
 	bool _getOrCreateOverlayStoredEnableValue(std::string_view name, bool defaultValue);
 	void _setOverlayStoredEnableValue(std::string_view name, bool enabled);
-	void _setupImGuiStyle(const resource::ResourcePathHelper& resourcePathHelper);
 
 	UnorderedStringMap<OverlayItem> _overlays;
 	bool _isEnabled{};

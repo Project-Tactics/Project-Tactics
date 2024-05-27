@@ -3,7 +3,9 @@
 namespace tactics::resource {
 
 IniFile::~IniFile() {
-	file.save(filename);
+	if (saveOnUnload) {
+		save();
+	}
 }
 
 void IniFile::save() {

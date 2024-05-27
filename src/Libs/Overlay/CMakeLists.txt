@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
         OverlaySystem.cpp
+        OverlayStyleHelper.cpp
         ExampleOverlay.cpp
         MainOverlay.cpp
         ScriptedOverlay.cpp)
@@ -10,6 +11,7 @@ set(SOURCES
 set(HEADERS
         Overlay.h
         OverlaySystem.h
+        OverlayStyleHelper.h
         OverlayTypes.h
         ExampleOverlay.h
         MainOverlay.h

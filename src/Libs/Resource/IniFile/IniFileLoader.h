@@ -10,8 +10,9 @@ struct IniFileLoadDescriptor {
 	std::string name;
 	std::string path;
 	std::string pathToDefault;
+	bool saveOnUnload = false;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(IniFileLoadDescriptor, name, path, pathToDefault);
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(IniFileLoadDescriptor, name, path, pathToDefault, saveOnUnload);
 };
 
 class IniFileLoader: public ResourceLoader {

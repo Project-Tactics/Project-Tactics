@@ -6,12 +6,14 @@
                 {
                     "name": "configFile",
                     "path": "config.ini",
-                    "pathToDefault": "defaultConfig.ini"
+                    "pathToDefault": "defaultConfig.ini",
+                    "saveOnUnload": true
                 },
                 {
                     "name": "devConfigFile",
                     "path": "dev/devConfig.ini",
-                    "pathToDefault": "dev/defaultDevConfig.ini"
+                    "pathToDefault": "dev/defaultDevConfig.ini",
+                    "saveOnUnload": true
                 }
             ]
         },

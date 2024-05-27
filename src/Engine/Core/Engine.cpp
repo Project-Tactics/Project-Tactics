@@ -16,8 +16,6 @@
 
 #include <imgui/imgui.h>
 #include <SDL.h>
-#include <exception>
-#include <format>
 
 namespace tactics {
 
@@ -91,7 +89,7 @@ void Engine::_throwIfAnyResourceIsStillLoaded() {
 
 void Engine::_initializeSDL() {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		throw std::exception(std::format("SDL could not initialize! SDL_Error: {}\n", SDL_GetError()).c_str());
+		throw Exception("SDL could not initialize! SDL_Error: {}\n", SDL_GetError());
 	}
 }
 
@@ -99,7 +97,7 @@ void Engine::_setupFsm(Application& application) {
 	auto builder = FsmBuilder();
 	auto fsmStartingStateName = application.initialize(*_serviceLocator, builder);
 	if (fsmStartingStateName.empty()) {
-		throw Exception("Application did not return a valid FSM");
+		throw Exception("Application did not return a valid name for the starting state for the FSM. The name is empty");
 	}
 	_fsm = builder.build(fsmStartingStateName);
 	_eventsSystem->registerEventsListener(_fsm.get());

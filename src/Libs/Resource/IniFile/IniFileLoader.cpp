@@ -12,6 +12,7 @@ std::shared_ptr<IniFile> IniFileLoader::load(const IniFileLoadDescriptor& descri
 
 	auto iniFile = std::make_unique<IniFile>(descriptor.name);
 	iniFile->filename = path;
+	iniFile->saveOnUnload = descriptor.saveOnUnload;
 	if (std::filesystem::exists(path)) {
 		iniFile->file.load(path);
 	} else {

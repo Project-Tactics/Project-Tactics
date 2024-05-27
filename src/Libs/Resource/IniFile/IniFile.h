@@ -27,6 +27,21 @@ public:
 	}
 
 	template<typename T>
+	T get(std::string_view sectionName, std::string_view key, T defaultValue) {
+		if (!file.contains(sectionName.data())) {
+			return defaultValue;
+		}
+
+		auto& section = file[sectionName];
+		auto itr = section.find(key.data());
+		if (itr == section.end()) {
+			return defaultValue;
+		}
+
+		return itr->second.as<T>();
+	}
+
+	template<typename T>
 	void set(std::string_view sectionName, std::string_view key, T&& value) {
 		file[sectionName.data()][key.data()] = value;
 	}
@@ -34,6 +49,7 @@ public:
 	static const ResourceType TYPE = ResourceType::IniFile;
 	ini::IniFile file;
 	std::string filename;
+	bool saveOnUnload = false;
 };
 
 }
