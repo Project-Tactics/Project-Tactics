@@ -21,9 +21,9 @@ public:
 		const glm::vec3& position,
 		const glm::quat& rotation,
 		const glm::vec3& scale,
-		resource::Mesh& mesh,
-		resource::Shader& shader,
-		resource::Texture& texture
+		std::shared_ptr<resource::Mesh> mesh,
+		std::shared_ptr<resource::Shader> shader,
+		std::shared_ptr<resource::Texture> texture
 	);
 
 private:

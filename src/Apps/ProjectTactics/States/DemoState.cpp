@@ -8,6 +8,9 @@
 
 #include <Engine/Core/Overlay/DebugOverlay.h>
 #include <Engine/ECS/EcsSystem.h>
+#include <Engine/ECS/Components/MaterialComponent.h>
+#include <Engine/ECS/Components/MeshComponent.h>
+#include <Engine/ECS/Components/TransformComponent.h>
 #include <Engine/Rendering/RenderSystem.h>
 #include <Engine/Rendering/Camera.h>
 #include <Engine/Resource/Mesh/Mesh.h>
@@ -88,6 +91,16 @@ FsmAction DemoState::enter() {
 }
 
 void DemoState::exit() {
+	using namespace tactics::components;
+
+	auto& ecsSystem = getService<EcsSystem>();
+	ecsSystem.getRegistry().view<Mesh, Transform, Material>().each([&ecsSystem] (auto entity, auto&, auto&, auto&) {
+		ecsSystem.getRegistry().destroy(entity);
+	});
+
+	auto& resourceSystem = getService<resource::ResourceSystem>();
+	resourceSystem.unloadResourcePack("mainPackage");
+
 	auto& overlaySystem = getService<OverlaySystem>();
 	overlaySystem.removeOverlay("Main");
 	overlaySystem.removeOverlay("Debug");

@@ -10,6 +10,7 @@ namespace tactics::resource {
 class Material: public Resource<Material> {
 public:
 	static const ResourceType TYPE = ResourceType::Material;
+	using Resource<Material>::Resource;
 	unsigned int shaderRendererId;
 	unsigned int textureRendererId;
 	glm::vec4 color = Color::white;

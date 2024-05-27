@@ -10,18 +10,25 @@
 
 namespace tactics::resource {
 
-// Little helper function to keep the registration way more clean
+// Little helper function to keep the registration of a Resource Manager way cleaner
 template<typename TResource, typename TResourceLoader>
 void registerManager(ResourceSystem& resourceSystem) {
 	resourceSystem.registerManager<ResourceManager<TResource, TResourceLoader>>();
 }
 
-void ResourceSystemInitializer::initialize(ResourceSystem& resourceSystem) {
-	registerManager<IniFile, IniFileLoader>(resourceSystem);
-	registerManager<Texture, TextureLoader>(resourceSystem);
-	registerManager<Shader, ShaderLoader>(resourceSystem);
-	registerManager<Mesh, MeshLoader>(resourceSystem);
-	registerManager<Material, MaterialLoader>(resourceSystem);
+std::unique_ptr<ResourceSystem> ResourceSystemInitializer::initialize() {
+	auto resourceSystem = std::make_unique<resource::ResourceSystem>("data");
+	registerManager<IniFile, IniFileLoader>(*resourceSystem);
+	registerManager<Texture, TextureLoader>(*resourceSystem);
+	registerManager<Shader, ShaderLoader>(*resourceSystem);
+	registerManager<Mesh, MeshLoader>(*resourceSystem);
+	registerManager<Material, MaterialLoader>(*resourceSystem);
+
+	// Let's initialize some engine data
+	resourceSystem->loadResourcePackDefinition("engine_data.json");
+	resourceSystem->loadResourcePack("initialization");
+
+	return resourceSystem;
 }
 
 }

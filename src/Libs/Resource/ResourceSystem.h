@@ -28,13 +28,13 @@ public:
 	void unloadResourcePack(std::string_view packName);
 
 	template<typename TResource>
-	TResource& getResource(std::string_view name) {
-		return static_cast<TResource&>(_getManager<TResource>()->getResource(name));
+	std::shared_ptr<TResource> getResource(std::string_view name) {
+		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(name));
 	}
 
 	template<typename TResource>
-	TResource& getResource(ResourceId id) {
-		return static_cast<TResource&>(_getManager<TResource>()->getResource(id));
+	std::shared_ptr<TResource> getResource(ResourceId id) {
+		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(id));
 	}
 
 	template<typename TResourceManager>
@@ -53,7 +53,7 @@ public:
 		return _resourcePathHelper;
 	}
 
-	void cleanupResources();
+	void forEachResource(std::function<void(BaseResource&)> callback);
 
 private:
 	void _registerManager(std::unique_ptr<BaseResourceManager> resourceManager);

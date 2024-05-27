@@ -14,6 +14,7 @@ struct TextureInfo {
 class Texture: public Resource<Texture> {
 public:
 	static const ResourceType TYPE = ResourceType::Texture;
+	using Resource<Texture>::Resource;
 	~Texture();
 	TextureInfo info;
 	unsigned int rendererId;

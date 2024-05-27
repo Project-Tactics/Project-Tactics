@@ -15,7 +15,7 @@ struct ShaderDescriptor {
 
 class ShaderLoader: public ResourceLoader {
 public:
-	std::unique_ptr<Shader> load(const ShaderDescriptor& descriptor);
+	std::shared_ptr<Shader> load(const ShaderDescriptor& descriptor);
 
 private:
 	std::string _loadFile(const std::string& filePath);

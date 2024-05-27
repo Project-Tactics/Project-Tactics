@@ -4,11 +4,13 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
     BattlegroundApplication.cpp
     ProjectTacticsMain.cpp
+    States/EmptyState.cpp
     States/StartState.cpp
     States/DemoState.cpp)
     
 set(HEADERS
     BattlegroundApplication.h
+    States/EmptyState.h
     States/StartState.h
     States/DemoState.h)
 

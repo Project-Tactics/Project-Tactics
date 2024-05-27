@@ -7,7 +7,7 @@ namespace tactics::resource {
 
 class MaterialLoader: public ResourceLoader {
 public:
-	std::unique_ptr<Material> load(const nlohmann::json& descriptor);
+	std::shared_ptr<Material> load(const nlohmann::json& descriptor);
 };
 
 }

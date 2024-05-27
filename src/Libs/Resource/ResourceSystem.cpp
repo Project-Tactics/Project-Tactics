@@ -38,8 +38,10 @@ void ResourceSystem::unloadResourcePack(std::string_view resourcePackName) {
 	_resourcePackManager->unloadPack(resourcePackName);
 }
 
-void ResourceSystem::cleanupResources() {
-	_resourcePackManager->unloadAllPacks();
+void ResourceSystem::forEachResource(std::function<void(BaseResource&)> callback) {
+	for (auto&& [type, manager] : _resourceManagers) {
+		manager->forEachResource(callback);
+	}
 }
 
 void ResourceSystem::_registerManager(std::unique_ptr<BaseResourceManager> resourceManager) {

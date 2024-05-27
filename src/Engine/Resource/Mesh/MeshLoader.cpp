@@ -19,8 +19,8 @@ struct MeshInlineDescriptor {
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MeshInlineDescriptor, name, vertices, indices);
 };
 
-std::unique_ptr<Mesh> MeshLoader::load(const nlohmann::json& descriptor) {
-	std::unique_ptr<Mesh> mesh;
+std::shared_ptr<Mesh> MeshLoader::load(const nlohmann::json& descriptor) {
+	std::shared_ptr<Mesh> mesh;
 	if (!descriptor.contains("path")) {
 		auto meshDescriptor = descriptor.template get<MeshInlineDescriptor>();
 		mesh = _loadMesh(meshDescriptor.name, meshDescriptor.vertices, meshDescriptor.indices);
@@ -55,14 +55,14 @@ std::vector<unsigned int> MeshLoader::_parseIndices(const std::string& strIndice
 	return parseString<unsigned int>(strIndices, [] (const std::string& str) { return std::stoul(str); });
 }
 
-std::unique_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::string& strVertices, const std::string& strIndices) {
+std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::string& strVertices, const std::string& strIndices) {
 	// TODO(Gerark) Using dynamic draw as usage but it should be best to receive this as a parameter
 	auto meshVertices = std::make_unique<VertexBuffer>(_parseVertices(strVertices), GL_DYNAMIC_DRAW);
 	meshVertices->bind();
 	auto vertexAttributes = _createDefaultVertexAttributes();
 	meshVertices->unbind();
 
-	return std::make_unique<Mesh>(
+	return std::make_shared<Mesh>(
 		name,
 		std::move(meshVertices),
 		std::make_unique<IndexBuffer>(_parseIndices(strIndices), GL_DYNAMIC_DRAW),
@@ -70,7 +70,7 @@ std::unique_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::
 	);
 }
 
-std::unique_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::string& path) {
+std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::string& path) {
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenNormals);
 
@@ -114,7 +114,7 @@ std::unique_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::
 	auto vertexAttributes = _createDefaultVertexAttributes();
 	meshVertices->unbind();
 
-	return std::make_unique<Mesh>(
+	return std::make_shared<Mesh>(
 		name,
 		std::move(meshVertices),
 		std::make_unique<IndexBuffer>(indices, GL_DYNAMIC_DRAW),

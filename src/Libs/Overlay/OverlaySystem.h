@@ -10,6 +10,7 @@
 namespace tactics {
 namespace resource {
 class IniFile;
+class ResourcePathHelper;
 }
 
 /**
@@ -20,7 +21,7 @@ class IniFile;
  */
 class OverlaySystem {
 public:
-	OverlaySystem(resource::IniFile& iniFile);
+	OverlaySystem(std::shared_ptr<resource::IniFile> iniFile, const resource::ResourcePathHelper& resourcePathHelper);
 	~OverlaySystem();
 
 	template<typename TOverlay, typename ...TArgs>
@@ -52,10 +53,11 @@ private:
 	void _addOverlay(std::string_view name, std::unique_ptr<Overlay> overlay, OverlayType type = OverlayType::Window, bool enabled = false);
 	bool _getOrCreateOverlayStoredEnableValue(std::string_view name, bool defaultValue);
 	void _setOverlayStoredEnableValue(std::string_view name, bool enabled);
+	void _setupImGuiStyle(const resource::ResourcePathHelper& resourcePathHelper);
 
 	UnorderedStringMap<OverlayItem> _overlays;
 	bool _isEnabled{};
-	resource::IniFile& _iniFile;
+	std::shared_ptr<resource::IniFile> _iniFile;
 };
 
 }

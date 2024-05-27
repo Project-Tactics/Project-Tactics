@@ -7,6 +7,7 @@ namespace tactics::resource {
 
 class IniFile: public Resource<IniFile> {
 public:
+	using Resource<IniFile>::Resource;
 	~IniFile();
 	void save();
 	void reload();
@@ -30,7 +31,6 @@ public:
 		file[sectionName.data()][key.data()] = value;
 	}
 
-	using Resource<IniFile>::Resource;
 	static const ResourceType TYPE = ResourceType::IniFile;
 	ini::IniFile file;
 	std::string filename;

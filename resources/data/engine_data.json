@@ -7,6 +7,11 @@
                     "name": "configFile",
                     "path": "config.ini",
                     "pathToDefault": "defaultConfig.ini"
+                },
+                {
+                    "name": "devConfigFile",
+                    "path": "dev/devConfig.ini",
+                    "pathToDefault": "dev/defaultDevConfig.ini"
                 }
             ]
         },

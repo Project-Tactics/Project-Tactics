@@ -9,7 +9,7 @@
 
 namespace tactics::resource {
 
-std::unique_ptr<Texture> TextureLoader::load(const TextureDescriptor& descriptor) {
+std::shared_ptr<Texture> TextureLoader::load(const TextureDescriptor& descriptor) {
 	auto texture = _loadTexture(
 		descriptor.name,
 		_makeAbsolutePath(descriptor.path),
@@ -17,12 +17,12 @@ std::unique_ptr<Texture> TextureLoader::load(const TextureDescriptor& descriptor
 	return texture;
 }
 
-std::unique_ptr<Texture> TextureLoader::_loadTexture(const std::string& name, const std::string& filename, bool useTransparency) {
+std::shared_ptr<Texture> TextureLoader::_loadTexture(const std::string& name, const std::string& filename, bool useTransparency) {
 	if (filename.empty()) {
 		throw Exception("Can't load texture. Filename is empty while trying to load texture [{}]", name);
 	}
 
-	auto texture = std::make_unique<Texture>(name);
+	auto texture = std::make_shared<Texture>(name);
 	texture->info.useTransparency = useTransparency;
 	auto& info = texture->info;
 

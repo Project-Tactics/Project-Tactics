@@ -1,7 +1,8 @@
 #include "BattlegroundApplication.h"
 
-#include "States/StartState.h"
+#include "States/EmptyState.h"
 #include "States/DemoState.h"
+#include "States/StartState.h"
 
 namespace tactics {
 

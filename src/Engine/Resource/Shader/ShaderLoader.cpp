@@ -8,8 +8,8 @@
 
 namespace tactics::resource {
 
-std::unique_ptr<Shader> ShaderLoader::load(const ShaderDescriptor& descriptor) {
-	auto shader = std::make_unique<Shader>(descriptor.name);
+std::shared_ptr<Shader> ShaderLoader::load(const ShaderDescriptor& descriptor) {
+	auto shader = std::make_shared<Shader>(descriptor.name);
 	shader->rendererId = _loadProgram(descriptor.vertexShaderPath, descriptor.fragmentShaderPath);
 	return shader;
 }

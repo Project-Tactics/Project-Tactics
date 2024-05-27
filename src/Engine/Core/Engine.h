@@ -29,9 +29,12 @@ private:
 	static void _run(Application& application);
 	void _initialize(Application& application);
 	void _initializeSDL();
-	void _initializeImGui();
 	void _internalRun();
 	void _shutdown();
+	void _throwIfAnyResourceIsStillLoaded();
+
+	void _setupServiceLocator();
+	void _setupFsm(Application& application);
 
 	std::unique_ptr<resource::ResourceSystem> _resourceSystem;
 	std::unique_ptr<RenderSystem> _renderSystem;

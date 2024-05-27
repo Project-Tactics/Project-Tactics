@@ -31,6 +31,7 @@ public:
 	BaseResource(BaseResource&&) = delete;
 	BaseResource(BaseResource&) = delete;
 	BaseResource& operator=(BaseResource&&) = delete;
+	virtual ~BaseResource() = default;
 
 	ResourceId id;
 	std::string name;

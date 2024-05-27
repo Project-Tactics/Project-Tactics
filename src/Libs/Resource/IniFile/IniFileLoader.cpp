@@ -6,7 +6,7 @@
 
 namespace tactics::resource {
 
-std::unique_ptr<IniFile> IniFileLoader::load(const IniFileLoadDescriptor& descriptor) {
+std::shared_ptr<IniFile> IniFileLoader::load(const IniFileLoadDescriptor& descriptor) {
 	auto path = _makeAbsolutePath(descriptor.path);
 	auto defaultPath = _makeAbsolutePath(descriptor.pathToDefault);
 

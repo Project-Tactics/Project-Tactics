@@ -5,7 +5,7 @@
 namespace tactics::components {
 
 struct Mesh {
-	resource::Mesh* mesh;
+	std::shared_ptr<resource::Mesh> mesh;
 };
 
 }

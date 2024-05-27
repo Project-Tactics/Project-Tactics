@@ -6,8 +6,8 @@
 namespace tactics::components {
 
 struct Material {
-	resource::Texture* texture;
-	resource::Shader* shader;
+	std::shared_ptr<resource::Texture> texture;
+	std::shared_ptr<resource::Shader> shader;
 };
 
 }

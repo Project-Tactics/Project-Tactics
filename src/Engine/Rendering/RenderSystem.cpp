@@ -21,7 +21,7 @@
 
 namespace tactics {
 
-RenderSystem::RenderSystem(resource::IniFile& configFile): _configFile(configFile) {
+RenderSystem::RenderSystem(std::shared_ptr<resource::IniFile> configFile): _configFile(configFile) {
 	static const bool useDebugMessages = true;
 	_defineGlAttributes(useDebugMessages);
 	_createWindow();
@@ -74,8 +74,8 @@ void RenderSystem::_defineGlAttributes(bool useDebugMessages) {
 }
 
 void RenderSystem::_createWindow() {
-	int width = _configFile.getOrCreate("window", "width", 1280);
-	int height = _configFile.getOrCreate("window", "height", 720);
+	int width = _configFile->getOrCreate("window", "width", 1280);
+	int height = _configFile->getOrCreate("window", "height", 720);
 	_window = SDL_CreateWindow("Project Tactics", 100, 100, width, height, SDL_WINDOW_OPENGL);
 	if (_window == nullptr) {
 		throw Exception("Failed to open window: %s\n", SDL_GetError());
@@ -128,14 +128,6 @@ Camera& RenderSystem::getCamera() {
 }
 
 void RenderSystem::_initializeImGui() {
-	// TODO(Gerark) Creating the context of ImGui in the RenderSystem doesn't sound right.
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
-
 	ImGui_ImplSDL2_InitForOpenGL(_window, _oglContext);
 	ImGui_ImplOpenGL3_Init();
 }
@@ -143,7 +135,6 @@ void RenderSystem::_initializeImGui() {
 void RenderSystem::_shutdownImGui() {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
 }
 
 Viewport& RenderSystem::getViewport() {
