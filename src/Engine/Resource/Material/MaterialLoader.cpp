@@ -3,7 +3,7 @@
 namespace tactics::resource {
 
 std::shared_ptr<Material> MaterialLoader::load(const MaterialDescriptor& descriptor) {
-	auto material = std::make_shared<Material>(descriptor.name);
+	auto material = std::make_shared<Material>();
 
 	auto shader = _getResource<Shader>(descriptor.shader);
 	material->shader = shader;

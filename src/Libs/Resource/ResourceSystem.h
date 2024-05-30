@@ -2,36 +2,42 @@
 
 #include "Resource.h"
 #include "ResourceManager.h"
-#include "ResourcePathHelper.h"
 #include "ResourceProvider.h"
+#include "ResourcePack/ResourcePack.h"
 
 #include <memory>
 #include <string_view>
 #include <unordered_map>
+
+namespace tactics {
+class FileSystem;
+}
 
 namespace tactics::resource {
 
 class ResourcePackManager;
 
 /**
- * @brief A very raw Resource Management class that might be changed in the near future.
- *
  * This class handles the loading and management of various resources such as textures, shaders, etc...
+ * It is responsible for loading resource packs and individual resources.
+ * It also provides a way to register and unregister resource managers for different types of resources.
  */
 
 class ResourceSystem: public ResourceProvider {
 public:
-	ResourceSystem(std::string_view relativeDataPath);
+	ResourceSystem(FileSystem& fileSystem);
 	~ResourceSystem();
 
-	void loadResourcePackDefinition(std::string_view definitionPath);
-	void loadResourcePack(std::string_view packName);
-	void unloadResourcePack(std::string_view packName);
-	void createResourcePack(std::string_view packName);
+	void loadPackDefinition(std::string_view definitionPath);
+	void loadPack(std::string_view packName);
+	void unloadPack(std::string_view packName);
+	void createManualPack(std::string_view packName);
+
+	void loadExternalResource(std::string_view packName, std::shared_ptr<BaseResource> resource);
 
 	template<typename TResource>
-	void loadResource(std::string_view packName, const nlohmann::json& descriptor) {
-		_loadResource(packName, descriptor, TResource::TYPE);
+	void loadExternalResource(std::string_view packName, std::string_view resourceName, const nlohmann::json& data) {
+		_loadExternalResource(packName, resourceName, TResource::TYPE, data);
 	}
 
 	template<typename TResource>
@@ -44,16 +50,13 @@ public:
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(id));
 	}
 
-	void registerResource(std::string_view packName, std::shared_ptr<BaseResource> resource);
 
 	std::shared_ptr<BaseResource> getResource(ResourceType resourceType, std::string_view name) const override;
 	std::shared_ptr<BaseResource> getResource(ResourceType resourceType, ResourceId id) const override;
+	BaseResourceManager& getManager(ResourceType resourceType) const override;
+	BaseResourceManager& getManager(ResourceType resourceType) override;
 
-	template<typename TResourceManager>
-	void registerManager() {
-		auto manager = std::make_unique<TResourceManager>(_resourcePathHelper, *this);
-		_registerManager(std::move(manager));
-	}
+	void registerManager(std::unique_ptr<BaseResourceManager> resourceManager);
 
 	template<typename TResourceManager>
 	void unregisterManager() {
@@ -61,16 +64,13 @@ public:
 		_unregisterManager(manager);
 	}
 
-	ResourcePathHelper& getResourcePathHelper() {
-		return _resourcePathHelper;
-	}
-
-	void forEachResource(std::function<void(BaseResource&)> callback);
+	void forEachResource(const std::function<void(const Pack&, const PackGroup&, const ResourceInfo&)>& callback);
+	void forEachManager(const std::function<void(const BaseResourceManager&)>& callback);
+	void forEachPack(const std::function<void(const Pack&)>& callback);
 
 private:
-	void _registerManager(std::unique_ptr<BaseResourceManager> resourceManager);
 	void _unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager);
-	void _loadResource(std::string_view packName, const nlohmann::json& descriptor, ResourceType resourceType);
+	void _loadExternalResource(std::string_view packName, std::string_view resourceName, ResourceType resourceType, const nlohmann::json& data);
 
 	template<typename TResource>
 	BaseResourceManager* _getManager() {
@@ -78,6 +78,9 @@ private:
 	}
 
 	BaseResourceManager* _getManager(ResourceType resourceType) {
+		if (!_resourceManagers.contains(resourceType)) {
+			throw Exception("Can't find manager for resource type: {}", toString(resourceType));
+		}
 		return _resourceManagers[resourceType].get();
 	}
 
@@ -90,7 +93,6 @@ private:
 		return _resourceManagers.at(resourceType).get();
 	}
 
-	ResourcePathHelper _resourcePathHelper;
 	std::unique_ptr<ResourcePackManager> _resourcePackManager;
 	std::unordered_map<ResourceType, std::unique_ptr<BaseResourceManager>> _resourceManagers;
 	std::filesystem::path _absoluteDataPath;

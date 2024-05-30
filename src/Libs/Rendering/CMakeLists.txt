@@ -12,8 +12,6 @@ set(HEADERS
     VertexBuffer.h
     VertexAttributes.h)
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
-
 add_library(libs_rendering STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_rendering
     PUBLIC

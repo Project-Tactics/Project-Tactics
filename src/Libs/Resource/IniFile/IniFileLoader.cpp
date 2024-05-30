@@ -1,27 +1,33 @@
 #include "IniFileLoader.h"
 
-#include <Libs/Resource/ResourcePathHelper.h>
-
-#include <filesystem>
+#include <Libs/FileSystem/FileSystem.h>
+#include <Libs/Utility/Exception.h>
 
 namespace tactics::resource {
 
 std::shared_ptr<IniFile> IniFileLoader::load(const IniFileLoadDescriptor& descriptor) {
-	auto path = _makeAbsolutePath(descriptor.path);
-	auto defaultPath = _makeAbsolutePath(descriptor.pathToDefault);
+	auto& fileSystem = _getFileSystem();
 
-	auto iniFile = std::make_unique<IniFile>(descriptor.name);
-	iniFile->filename = path;
-	iniFile->saveOnUnload = descriptor.saveOnUnload;
-	if (std::filesystem::exists(path)) {
-		iniFile->file.load(path);
+	auto iniFile = std::make_unique<IniFile>();
+	auto iniFileHandle = fileSystem.createIniFileHandle(descriptor.path);
+	if (iniFileHandle->exists()) {
+		iniFileHandle->load();
 	} else {
-		iniFile->file.save(path);
+		iniFileHandle->save();
 	}
 
-	std::ifstream defaultIniStream(defaultPath);
-	ini::IniFile file(defaultIniStream);
-	iniFile->file.merge(file);
+	iniFile->fileHandle = std::move(iniFileHandle);
+
+	if (!descriptor.pathToDefault.empty()) {
+		auto defaultIniHandle = fileSystem.createIniFileHandle(descriptor.pathToDefault);
+		if (defaultIniHandle->exists()) {
+			defaultIniHandle->load();
+			iniFile->merge(defaultIniHandle->getObject());
+		} else {
+			throw Exception("A default ini has been specified but could not be found: {}", descriptor.pathToDefault);
+		}
+	}
+
 	return iniFile;
 }
 

@@ -24,18 +24,21 @@ public:
 
 	virtual ResourceType getType() const = 0;
 	virtual void unload(ResourceId resourceId) = 0;
-	virtual void unload(std::vector<ResourceId> resourceIds) = 0;
-	virtual ResourceId load(const nlohmann::json& descriptor) = 0;
+	virtual std::shared_ptr<BaseResource> load(const std::string& name, const nlohmann::json& data) = 0;
 	virtual std::shared_ptr<BaseResource> getResource(std::string_view name) = 0;
 	virtual std::shared_ptr<BaseResource> getResource(ResourceId id) = 0;
 	virtual std::shared_ptr<BaseResource> getResource(std::string_view name) const = 0;
 	virtual std::shared_ptr<BaseResource> getResource(ResourceId id) const = 0;
-	virtual void forEachResource(std::function<void(BaseResource&)> callback) = 0;
+	virtual void forEachResource(const std::function<void(const BaseResource&)>& callback) const = 0;
 	virtual void registerResource(std::shared_ptr<BaseResource> resource) = 0;
+	virtual unsigned int getResourceCount() const = 0;
 };
 
 template<typename T>
 concept IsResourceLoader = std::is_base_of_v<ResourceLoader, T>;
+
+template <typename T, typename Ret, typename... Args>
+concept has_method = requires(T t, Args... args) { { t.load(args...) } -> std::same_as<Ret>; };
 
 /**
 * A manager class for a single resource type. This is what is mostly used to define a manager for a resource ( like textures, shaders, etc.. )
@@ -44,7 +47,7 @@ concept IsResourceLoader = std::is_base_of_v<ResourceLoader, T>;
 template<typename TResource, IsResourceLoader TResourceLoader>
 class ResourceManager: public BaseResourceManager {
 public:
-	ResourceManager(const ResourcePathHelper& pathHelper, const ResourceProvider& resourceProvider): _loader(pathHelper, resourceProvider) {
+	ResourceManager(std::unique_ptr<TResourceLoader> loader): _loader(std::move(loader)) {
 	}
 
 	std::shared_ptr<BaseResource> getResource(std::string_view name) override final {
@@ -67,14 +70,19 @@ public:
 		return TResource::TYPE;
 	}
 
-	ResourceId load(const nlohmann::json& descriptor) override final {
-		auto resource = _loader.load(descriptor);
-		if (!resource) {
-			throw Exception("Failed to load resource from descriptor. Resource Type: {} - Descriptor: {}", ResourceTypeSerialization::toString(TResource::TYPE), descriptor.dump());
+	std::shared_ptr<BaseResource> load(const std::string& name, const nlohmann::json& data) override final {
+		std::shared_ptr<TResource> resource;
+		if constexpr (has_method<TResourceLoader, std::shared_ptr<TResource>, const nlohmann::json&>) {
+			resource = _loader->load(data);
+			resource->name = name;
+		} else {
+			resource = _loader->load(name, data);
 		}
-		auto id = resource->id;
-		_registerResource(std::move(resource));
-		return id;
+		if (!resource) {
+			throw Exception("Failed to load resource from descriptor. Resource Type: {} - Descriptor: {}", toString(TResource::TYPE), data.dump());
+		}
+		_registerResource(resource);
+		return resource;
 	}
 
 	void unload(ResourceId resourceId) override final {
@@ -82,13 +90,7 @@ public:
 		_removeResource(resource);
 	}
 
-	void unload(std::vector<ResourceId> resourceIds) override final {
-		for (auto& resourceId : resourceIds) {
-			unload(resourceId);
-		}
-	}
-
-	void forEachResource(std::function<void(BaseResource&)> callback) override final {
+	void forEachResource(const std::function<void(const BaseResource&)>& callback) const override final {
 		for (auto& [id, resource] : _resources) {
 			callback(*resource);
 		}
@@ -97,9 +99,13 @@ public:
 	void registerResource(std::shared_ptr<BaseResource> resource) override final {
 		if (resource->type != getType()) {
 			throw Exception("Attempt to register a resource of the wrong type. Resource Type: {} - Expected Type: {} - Name: {} - ID: {}",
-					ResourceTypeSerialization::toString(resource->type), ResourceTypeSerialization::toString(TResource::TYPE), resource->name, resource->id);
+					toString(resource->type), toString(TResource::TYPE), resource->name, resource->id);
 		}
 		_registerResource(std::dynamic_pointer_cast<TResource>(resource));
+	}
+
+	unsigned int getResourceCount() const override final {
+		return static_cast<unsigned int>(_resources.size());
 	}
 
 private:
@@ -126,7 +132,7 @@ private:
 
 		if (itr == _resources.end()) {
 			throw Exception("Resource with name [{}] does not exist. Can't find resource in [{}] manager.",
-				name, ResourceTypeSerialization::toString(getType()));
+				name, toString(getType()));
 		}
 
 		return itr->second;
@@ -135,8 +141,17 @@ private:
 	void _registerResource(std::shared_ptr<TResource> resource) {
 		if (_resources.contains(resource->id)) {
 			throw Exception("Attempt to register a resource with the same id. Resource Id: {} - Name: {} - Type: {}",
-				resource->id, resource->name, ResourceTypeSerialization::toString(resource->type));
+				resource->id, resource->name, toString(resource->type));
 		}
+
+		auto itr = std::ranges::find_if(_resources, [resource] (const auto& pair) {
+			return pair.second->name == resource->name;
+		});
+		if (itr != _resources.end()) {
+			throw Exception("Attempt to register a resource with the same name. Resource Id: {} - Name: {} - Type: {}",
+				resource->id, resource->name, toString(resource->type));
+		}
+
 		_resources.insert({resource->id, std::move(resource)});
 	}
 
@@ -144,20 +159,20 @@ private:
 		auto itr = _resources.find(resource->id);
 		if (itr == _resources.end()) {
 			throw Exception("Attempt to remove a resource which is not registered in the Resource Manager. Resource Id: {} - Name: {} - Type: {}",
-				resource->id, resource->name, ResourceTypeSerialization::toString(resource->type));
+				resource->id, resource->name, toString(resource->type));
 		}
 
 		auto useCount = resource.use_count();
 		if (useCount > 1) {
 			throw Exception("Attempt to remove a resource which is still in use. Resource Id: {} - Name: {} - Type: {} - RefCount: {}",
-								resource->id, resource->name, ResourceTypeSerialization::toString(resource->type), useCount);
+								resource->id, resource->name, toString(resource->type), useCount);
 		}
 
 		_resources.erase(itr);
 	}
 
 	ResourceMap<TResource> _resources;
-	TResourceLoader _loader;
+	std::unique_ptr<TResourceLoader> _loader;
 };
 
 }

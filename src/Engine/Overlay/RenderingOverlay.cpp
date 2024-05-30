@@ -1,4 +1,4 @@
-#include "DebugOverlay.h"
+#include "RenderingOverlay.h"
 
 #include <Engine/Rendering/RenderSystem.h>
 #include <Engine/Rendering/Camera.h>
@@ -13,34 +13,31 @@ const auto xComponentColor = ImVec4(1.f, 0.f, 0.f, 1.f);
 const auto yComponentColor = ImVec4(0, 1.f, 0.f, 1.f);
 const auto zComponentColor = ImVec4(0.06f, 0.6f, 0.9f, 1.f);
 
-DebugOverlay::DebugOverlay(RenderSystem& renderSystem)
+RenderingOverlay::RenderingOverlay(RenderSystem& renderSystem)
 	: _renderSystem(renderSystem) {
 }
 
-void DebugOverlay::update() {
-	if (ImGui::BeginTabBar("MyTabBar", ImGuiTabBarFlags_None)) {
-		if (ImGui::BeginTabItem("Rendering")) {
-			_drawRenderStats();
-			ImGui::Separator();
-			_drawCameraStats();
-			ImGui::Separator();
-			_drawViewportStats();
-			ImGui::EndTabItem();
-		}
-		if (ImGui::BeginTabItem("Resources")) {
-			ImGui::TextWrapped("Would be good to show all the resource pack + resources loaded. Probably it would be better to have 2 different windows as well.");
-			ImGui::EndTabItem();
-		}
-		ImGui::EndTabBar();
-	}
+OverlayConfig RenderingOverlay::getConfig() {
+	OverlayConfig config;
+	config.position = {5, 30};
+	config.size = {300, 0};
+	return config;
 }
 
-void DebugOverlay::_drawRenderStats() {
+void RenderingOverlay::update() {
+	_drawRenderStats();
+	ImGui::Separator();
+	_drawCameraStats();
+	ImGui::Separator();
+	_drawViewportStats();
+}
+
+void RenderingOverlay::_drawRenderStats() {
 	ImGui::TextColored(titleColor, "%s", "STATS");
 	ImGui::Text("FPS: %f", ImGui::GetIO().Framerate);
 }
 
-void DebugOverlay::_drawViewportStats() {
+void RenderingOverlay::_drawViewportStats() {
 	auto& viewport = _renderSystem.getViewport();
 	ImGui::TextColored(titleColor, "%s", "VIEWPORT");
 	glm::vec2 topLeft = viewport.getTopLeft();
@@ -62,7 +59,7 @@ void DebugOverlay::_drawViewportStats() {
 	}
 }
 
-void DebugOverlay::_drawCameraStats() {
+void RenderingOverlay::_drawCameraStats() {
 	auto& camera = _renderSystem.getCamera();
 	ImGui::TextColored(titleColor, "%s", "CAMERA");
 	auto position = camera.getPosition();
@@ -79,7 +76,7 @@ void DebugOverlay::_drawCameraStats() {
 	ImGui::Text("Aspect Ratio: %f", camera.getAspectRatio());
 }
 
-bool DebugOverlay::_vector3(const char* label, glm::vec3& vec, float componentWidth, float componentSpeed) {
+bool RenderingOverlay::_vector3(const char* label, glm::vec3& vec, float componentWidth, float componentSpeed) {
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("%s", label);
 	if (componentWidth == 0) {
@@ -97,7 +94,7 @@ bool DebugOverlay::_vector3(const char* label, glm::vec3& vec, float componentWi
 	return valueChanged;
 }
 
-bool DebugOverlay::_vector2(const char* label, glm::vec2& vec, float componentWidth, float componentSpeed) {
+bool RenderingOverlay::_vector2(const char* label, glm::vec2& vec, float componentWidth, float componentSpeed) {
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("%s", label);
 	if (componentWidth == 0) {
@@ -113,7 +110,7 @@ bool DebugOverlay::_vector2(const char* label, glm::vec2& vec, float componentWi
 	return valueChanged;
 }
 
-bool DebugOverlay::_vecComponent(float* component, const ImVec4& color, float width, float speed, const char* id) {
+bool RenderingOverlay::_vecComponent(float* component, const ImVec4& color, float width, float speed, const char* id) {
 	ImVec2 squareSize(2, 23);
 	ImVec2 cursorPos = ImGui::GetCursorScreenPos();
 	ImDrawList* drawList = ImGui::GetWindowDrawList();

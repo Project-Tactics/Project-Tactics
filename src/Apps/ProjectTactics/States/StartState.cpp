@@ -16,8 +16,8 @@ FsmAction StartState::enter() {
 	using namespace renderstep;
 
 	auto& resourceSystem = getService<resource::ResourceSystem>();
-	resourceSystem.loadResourcePackDefinition("game_data.json");
-	resourceSystem.loadResourcePack("mainPackage");
+	resourceSystem.loadPackDefinition("game_data.json");
+	resourceSystem.loadPack("mainPackage");
 
 	auto& mainRenderQueue = getService<RenderSystem>().createRenderQueue();
 	mainRenderQueue.addStep<ClearViewport>();

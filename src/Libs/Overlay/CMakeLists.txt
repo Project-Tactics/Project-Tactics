@@ -17,8 +17,6 @@ set(HEADERS
         MainOverlay.h
         ScriptedOverlay.h)
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
-
 add_library(libs_overlay STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_overlay PUBLIC imgui libs_resource PRIVATE lua_wrapper libs_utility inicpp)
 add_to_libs_folder(libs_overlay)

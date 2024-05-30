@@ -25,8 +25,6 @@ set(HEADERS
     Material/MaterialLoader.h
     Material/Uniforms.h)
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
-
 add_library(engine_resource ${SOURCES} ${HEADERS})
 target_link_libraries(engine_resource
     PUBLIC

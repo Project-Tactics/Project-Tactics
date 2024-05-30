@@ -15,6 +15,10 @@ public:
 	using Resource<Mesh>::Resource;
 	Mesh(const std::string& name, std::unique_ptr<VertexBuffer> vertexBuffer, std::unique_ptr<IndexBuffer> indexBuffer, std::unique_ptr<VertexAttributes> vertexAttributes);
 	~Mesh();
+
+	unsigned int getVertexCount() const;
+	unsigned int getTrisCount() const;
+
 	std::unique_ptr<VertexBuffer> vertexBuffer;
 	std::unique_ptr<IndexBuffer> indexBuffer;
 	std::unique_ptr<VertexAttributes> vertexAttributes;

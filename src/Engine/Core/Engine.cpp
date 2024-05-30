@@ -1,14 +1,20 @@
 #include "Engine.h"
 
 #include "Application.h"
+#include "Engine/Overlay/RenderingOverlay.h"
+#include "Engine/Overlay/ResourcesOverlay.h"
 
 #include <Engine/ECS/EcsSystem.h>
 #include <Engine/Rendering/RenderSystem.h>
 #include <Engine/Resource/ResourceSystemInitializer.h>
 
 #include <Libs/Event/EventsSystem.h>
+#include <Libs/FileSystem/FileSystem.h>
+#include <Libs/FileSystem/FileLoader.h>
 #include <Libs/Fsm/FsmBuilder.h>
 #include <Libs/Overlay/OverlaySystem.h>
+#include <Libs/Overlay/MainOverlay.h>
+#include <Libs/Overlay/ExampleOverlay.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Utility/Service/ServiceLocator.h>
@@ -37,21 +43,30 @@ void Engine::_run(Application& application) {
 void Engine::_initialize(Application& application) {
 	_initializeSDL();
 
-	_resourceSystem = resource::ResourceSystemInitializer::initialize();
+	_fileSystem = std::make_unique<FileSystem>(std::make_unique<DefaultFileLoader>(), "data");
+
+	_resourceSystem = resource::ResourceSystemInitializer::initialize(*_fileSystem);
 
 	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devConfigFile");
-	_overlaySystem = std::make_unique<OverlaySystem>(debugConfigFile, _resourceSystem->getResourcePathHelper());
+	_overlaySystem = std::make_unique<OverlaySystem>(debugConfigFile, *_fileSystem);
 	_overlaySystem->setEnabled(true);
 
 	auto configFile = _resourceSystem->getResource<resource::IniFile>("configFile");
 	_renderSystem = std::make_unique<RenderSystem>(configFile);
-	_resourceSystem->loadResourcePack("builtinMeshes");
+	_resourceSystem->loadPack("builtinMeshes");
 
 	_eventsSystem = std::make_unique<EventsSystem>();
 	_ecsSystem = std::make_unique<EcsSystem>();
 
 	_setupServiceLocator();
 	_setupFsm(application);
+
+	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", true)) {
+		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
+		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem);
+		_overlaySystem->addOverlay<ResourcesOverlay>("Resources", false, *_resourceSystem);
+		_overlaySystem->addOverlay<ExampleOverlay>("ImGui Demo", false);
+	}
 }
 
 void Engine::_internalRun() {
@@ -68,22 +83,32 @@ void Engine::_internalRun() {
 }
 
 void Engine::_shutdown() {
+	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devConfigFile");
+	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
+		_overlaySystem->removeOverlay("Main");
+		_overlaySystem->removeOverlay("Rendering");
+		_overlaySystem->removeOverlay("ImGui Demo");
+	}
+	debugConfigFile.reset();
+
 	_eventsSystem->unregisterEventsListener(_fsm.get());
 	_renderSystem.reset();
 	_overlaySystem.reset();
-	_resourceSystem->unloadResourcePack("initialization");
-	_resourceSystem->unloadResourcePack("builtinMeshes");
+	_resourceSystem->unloadPack("initialization");
+	_resourceSystem->unloadPack("builtinMeshes");
 	_throwIfAnyResourceIsStillLoaded();
 	SDL_Quit();
 }
 
 void Engine::_throwIfAnyResourceIsStillLoaded() {
-	_resourceSystem->forEachResource([] (auto& resource) {
-		throw Exception(
-			"Resource [{}]:[{}] of type [{}] was not unloaded.",
-			resource.name,
-			resource.id,
-			resource::ResourceTypeSerialization::toString(resource.type));
+	_resourceSystem->forEachManager([] (auto& manager) {
+		manager.forEachResource([] (const auto& resource) {
+			throw Exception(
+				"Resource [{}]:[{}] of type [{}] was not unloaded.",
+				resource.name,
+				resource.id,
+				toString(resource.type));
+		});
 	});
 }
 
@@ -110,6 +135,7 @@ void Engine::_setupServiceLocator() {
 	_serviceLocator->addService(_renderSystem.get());
 	_serviceLocator->addService(_eventsSystem.get());
 	_serviceLocator->addService(_ecsSystem.get());
+	_serviceLocator->addService(_fileSystem.get());
 }
 
 }

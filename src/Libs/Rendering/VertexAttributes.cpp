@@ -1,4 +1,5 @@
 #include "VertexAttributes.h"
+#include "VertexBuffer.h"
 
 #include <glad/gl.h>
 
@@ -15,20 +16,12 @@ void VertexAttributes::Builder::attributef(int count) {
 }
 
 std::unique_ptr<VertexAttributes> VertexAttributes::Builder::create() {
-	auto attributes = std::make_unique<VertexAttributes>();
+	auto attributes = std::make_unique<VertexAttributes>(_stride / static_cast<unsigned int>(sizeof(float)));
 	_defineAttributes(*attributes);
 	return attributes;
 }
 
-void VertexAttributes::Builder::create(VertexAttributes* outVertexAttribute) {
-	outVertexAttribute->bind();
-	for (auto& attribute : _attributes) {
-		attribute();
-	}
-	outVertexAttribute->unbind();
-}
-
-VertexAttributes::VertexAttributes() {
+VertexAttributes::VertexAttributes(unsigned int componentPerVertex): _componentPerVertex(componentPerVertex) {
 	glGenVertexArrays(1, &_vao);
 }
 
@@ -54,6 +47,10 @@ void VertexAttributes::Builder::_defineAttributes(VertexAttributes& vertexAttrib
 		attribute();
 	}
 	vertexAttribute.unbind();
+}
+
+unsigned int VertexAttributes::getVerticesCount(const VertexBuffer& vbo) const {
+	return vbo.getSize() / _componentPerVertex;
 }
 
 }

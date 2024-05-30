@@ -12,7 +12,11 @@ std::string BattlegroundApplication::initialize(ServiceLocator& serviceLocator, 
 		.on("proceed").jumpTo("Map")
 
 		.state<DemoState>("Map", serviceLocator)
-		.on("exit").exitFsm();
+		.on("exit").exitFsm()
+		.on("alt").jumpTo("Empty")
+
+		.state<EmptyState>("Empty")
+		.on("proceed").exitFsm();
 
 	return "Start";
 }

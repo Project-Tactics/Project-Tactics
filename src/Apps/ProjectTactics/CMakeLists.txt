@@ -14,25 +14,25 @@ set(HEADERS
     States/StartState.h
     States/DemoState.h)
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
-
-add_executable(ProjectTactics ${SOURCES} ${HEADERS})
-target_link_libraries(ProjectTactics PUBLIC tactics_engine)
+set(TARGET_NAME ProjectTactics)
+add_executable(${TARGET_NAME} ${SOURCES} ${HEADERS})
+target_link_libraries(${TARGET_NAME} PUBLIC tactics_engine)
+add_to_apps_folder(${TARGET_NAME})
 
 # Set the working directory for visual studio
 set_target_properties(
-    ProjectTactics PROPERTIES
-    VS_DEBUGGER_WORKING_DIRECTORY $<TARGET_FILE_DIR:ProjectTactics>
+    ${TARGET_NAME} PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY $<TARGET_FILE_DIR:${TARGET_NAME}>
 )
 
 # Copy all the dependencies ( dll ) to the executable file directory
-add_custom_command(TARGET ProjectTactics POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:ProjectTactics> $<TARGET_RUNTIME_DLLS:ProjectTactics>
+add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${TARGET_NAME}> $<TARGET_RUNTIME_DLLS:${TARGET_NAME}>
   COMMAND_EXPAND_LISTS
 )
 # Copy all the dependencies ( dll ) and the data folder to the executable file directory
 add_custom_target(RunPostBuildCommand ALL
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources/data $<TARGET_FILE_DIR:ProjectTactics>/data
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources/data $<TARGET_FILE_DIR:${TARGET_NAME}>/data
   COMMAND_EXPAND_LISTS
 )
 
@@ -42,7 +42,7 @@ add_dependencies(RunPostBuildCommand framework_data)
 # Make the main target depend on the post-build command target
 add_dependencies(ProjectTactics RunPostBuildCommand)
 
-  set_property(TARGET RunPostBuildCommand PROPERTY FOLDER "postbuild")
+set_property(TARGET RunPostBuildCommand PROPERTY FOLDER "_cmakeAndPostBuild")
 
 unset(SOURCES)
 unset(HEADERS)

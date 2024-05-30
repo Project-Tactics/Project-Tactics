@@ -1,58 +1,48 @@
 {
-    "packs": [
-        {
-            "name": "mainPackage",
-            "shader": [
-                {
-                    "name": "main",
-                    "vertexShader": "shaders/main.vert",
-                    "fragmentShader": "shaders/main.frag"
-                }
-            ],
-            "texture": [
-                {
-                    "name": "tactics-icon",
-                    "path": "textures/tactics-icon.png",
-                    "useTransparency": true
-                },
-                {
-                    "name": "crate",
-                    "path": "textures/crate.jpg"
-                },
-                {
-                    "name": "colors",
-                    "path": "textures/colors.png"
-                },
-                {
-                    "name": "floor",
-                    "path": "textures/floor.jpg"
-                }
-            ],
-            "mesh": [
-                {
-                    "name": "book",
-                    "path": "meshes/book.fbx"
-                }
-            ],
-            "material": [
-                {
-                    "name": "texturedUnlit",
-                    "shader": "main",
-                    "uniforms": {
-                        "textures": {
-                            "u_Texture": "crate"
-                        },
-                        "vectors4": {
-                            "u_Color": {
-                                "x": 1.0,
-                                "y": 1.0,
-                                "z": 1.0,
-                                "w": 1.0
-                            }
+    "mainPackage": {
+        "shader": {
+            "main": {
+                "vertexShader": "shaders/main.vert",
+                "fragmentShader": "shaders/main.frag"
+            }
+        },
+        "texture": {
+            "tacticsIcon": {
+                "path": "textures/tactics_icon.png",
+                "useTransparency": true
+            },
+            "crate": {
+                "path": "textures/crate.jpg"
+            },
+            "colors": {
+                "path": "textures/colors.png"
+            },
+            "floor": {
+                "path": "textures/floor.jpg"
+            }
+        },
+        "mesh": {
+            "book": {
+                "path": "meshes/book.fbx"
+            }
+        },
+        "material": {
+            "texturedUnlit": {
+                "shader": "main",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "crate"
+                    },
+                    "vectors4": {
+                        "u_Color": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0,
+                            "w": 1.0
                         }
                     }
                 }
-            ]
+            }
         }
-    ]
+    }
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <imgui.h>
+
 namespace tactics {
 
 template<typename TOverlay, typename U>
@@ -13,6 +15,11 @@ enum class OverlayType {
 	Window,
 	MenuBar,
 	Custom
+};
+
+struct OverlayConfig {
+	ImVec2 position;
+	ImVec2 size;
 };
 
 }

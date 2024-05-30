@@ -1,6 +1,8 @@
 #pragma once
 
+#include <Libs/FileSystem/FileHandle/FileHandle.h>
 #include <Libs/Resource/Resource.h>
+
 #include <inicpp.h>
 
 namespace tactics::resource {
@@ -8,9 +10,8 @@ namespace tactics::resource {
 class IniFile: public Resource<IniFile> {
 public:
 	using Resource<IniFile>::Resource;
-	~IniFile();
-	void save();
-	void reload();
+	static const ResourceType TYPE = ResourceType::IniFile;
+
 	ini::IniSection& createSection(std::string_view section);
 
 	template<typename T>
@@ -28,11 +29,12 @@ public:
 
 	template<typename T>
 	T get(std::string_view sectionName, std::string_view key, T defaultValue) {
-		if (!file.contains(sectionName.data())) {
+		auto& iniFile = fileHandle->getObject();
+		if (!iniFile.contains(sectionName.data())) {
 			return defaultValue;
 		}
 
-		auto& section = file[sectionName];
+		auto& section = iniFile[sectionName];
 		auto itr = section.find(key.data());
 		if (itr == section.end()) {
 			return defaultValue;
@@ -43,13 +45,13 @@ public:
 
 	template<typename T>
 	void set(std::string_view sectionName, std::string_view key, T&& value) {
-		file[sectionName.data()][key.data()] = value;
+		auto& iniFile = fileHandle->getObject();
+		iniFile[sectionName.data()][key.data()] = value;
 	}
 
-	static const ResourceType TYPE = ResourceType::IniFile;
-	ini::IniFile file;
-	std::string filename;
-	bool saveOnUnload = false;
+	void merge(ini::IniFile& other);
+
+	std::unique_ptr<FileHandle<ini::IniFile>> fileHandle;
 };
 
 }

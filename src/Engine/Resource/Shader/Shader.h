@@ -21,6 +21,8 @@ public:
 	void setUniform(std::string_view uniformName, const glm::mat4& value);
 
 	unsigned int rendererId;
+	std::string fragmentSource;
+	std::string vertexSource;
 
 private:
 	// TODO(Gerark) Instead of trying to get or lazily create the uniform location, we should cache the uniform location when the shader is created by

@@ -4,9 +4,8 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
         UnitTestMain.cpp)
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
-
 add_executable(ProjectTactics_UnitTests ${SOURCES})
 target_link_libraries(ProjectTactics_UnitTests PUBLIC GTest::gtest GTest::gmock)
+add_to_apps_folder(ProjectTactics_UnitTests)
 
 unset(SOURCES)

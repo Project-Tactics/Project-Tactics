@@ -5,6 +5,7 @@
 #include <functional>
 
 namespace tactics {
+class VertexBuffer;
 
 class VertexAttributes {
 public:
@@ -12,16 +13,15 @@ public:
 	public:
 		void attributef(int count);
 		std::unique_ptr<VertexAttributes> create();
-		void create(VertexAttributes* outVertexAttribute);
 	private:
 		void _defineAttributes(VertexAttributes& vertexAttribute);
 
-		int _stride{};
+		unsigned int _stride{};
 		unsigned int _attributeIndex{};
 		std::vector<std::function<void()>> _attributes;
 	};
 
-	VertexAttributes();
+	VertexAttributes(unsigned int componentPerVertex);
 	~VertexAttributes();
 
 	VertexAttributes(const VertexAttributes&) = delete;
@@ -30,9 +30,11 @@ public:
 	void bind();
 	void unbind();
 	void release();
+	unsigned int getVerticesCount(const VertexBuffer& vbo) const;
 
 private:
 	unsigned int _vao;
+	unsigned int _componentPerVertex;
 };
 
 }

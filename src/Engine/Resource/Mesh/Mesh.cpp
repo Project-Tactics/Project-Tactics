@@ -28,4 +28,12 @@ Mesh::Mesh(const std::string& name, std::unique_ptr<VertexBuffer> vb, std::uniqu
 	}
 }
 
+unsigned int Mesh::getVertexCount() const {
+	return vertexAttributes->getVerticesCount(*vertexBuffer);
+}
+
+unsigned int Mesh::getTrisCount() const {
+	return indexBuffer->getSize() / 3;
+}
+
 }

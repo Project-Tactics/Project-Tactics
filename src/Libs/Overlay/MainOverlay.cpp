@@ -13,7 +13,7 @@ MainOverlay::MainOverlay(OverlaySystem& overlaySystem)
 MainOverlay::~MainOverlay() {}
 
 void MainOverlay::update() {
-	if (ImGui::BeginMenu("View")) {
+	if (ImGui::BeginMenu("Views")) {
 		_overlaySystem.forEachOverlay([this] (const std::string& name, OverlaySystem::OverlayItem& overlayItem) {
 			if (overlayItem.overlay.get() == this) {
 				return;

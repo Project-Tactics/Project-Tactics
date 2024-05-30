@@ -10,8 +10,6 @@ set(HEADERS
     Components/MeshComponent.h
     Components/TransformComponent.h)
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
-
 add_library(engine_ecs ${SOURCES} ${HEADERS})
 target_link_libraries(engine_ecs
     PUBLIC

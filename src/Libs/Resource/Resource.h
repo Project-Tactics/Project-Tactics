@@ -1,9 +1,11 @@
 #pragma once
 
-#include <stdint.h>
-#include <string>
+#include <Libs/Utility/String.h>
 
 #include <nlohmann/json.hpp>
+
+#include <stdint.h>
+#include <string>
 
 namespace tactics::resource {
 
@@ -14,13 +16,6 @@ enum class ResourceType: uint8_t {
 	IniFile,
 	Mesh,
 	Material
-};
-
-// TODO(Gerark) we should take a look at magic_enum lib or something else to automate this
-class ResourceTypeSerialization {
-public:
-	static ResourceType toEnum(std::string_view strValue);
-	static std::string toString(ResourceType resourceType);
 };
 
 using ResourceId = uint64_t;
@@ -42,16 +37,31 @@ template<typename TResource>
 class Resource: public BaseResource {
 public:
 	explicit Resource(const std::string& name): BaseResource(name, TResource::TYPE) {}
+	Resource(): BaseResource("", TResource::TYPE) {}
 };
 
 /*
  * Common file descriptor used to extract info from json objects when the resource has just a name and a path for the file
 */
 struct FileDescriptor {
-	std::string name;
 	std::string path;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(FileDescriptor, name, path);
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(FileDescriptor, path);
 };
+
+}
+
+namespace tactics {
+
+template<>
+class Str<resource::ResourceType> {
+public:
+	static std::string to(resource::ResourceType resourceType);
+	static resource::ResourceType from(std::string_view string);
+};
+
+namespace resource {
+using ResourceTypeStr = Str<resource::ResourceType>;
+}
 
 }

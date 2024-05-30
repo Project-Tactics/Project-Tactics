@@ -51,3 +51,5 @@ core_dependencies()
 
 # Set ProjectTactics as the default startup project for the generated Visual Studio solution
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ProjectTactics)
+# Set a custom folder for the predefined targets in the generated Visual Studio solution
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_cmakeAndPostBuild")

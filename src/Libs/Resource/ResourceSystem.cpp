@@ -10,49 +10,49 @@
 
 namespace tactics::resource {
 
-ResourceSystem::ResourceSystem(std::string_view relativeDataPath): _resourcePathHelper(relativeDataPath) {
-	auto managerProvider = [this] (ResourceType resourceType) -> BaseResourceManager& {
-		auto itr = _resourceManagers.find(resourceType);
-		if (itr == _resourceManagers.end()) {
-			throw Exception("Can't find manager for resource type: {}",
-				ResourceTypeSerialization::toString(resourceType));
-		}
-		return *itr->second;
-	};
-
-	_resourcePackManager = std::make_unique<ResourcePackManager>(_resourcePathHelper, managerProvider);
+ResourceSystem::ResourceSystem(FileSystem& fileSystem)
+	: _resourcePackManager(std::make_unique<ResourcePackManager>(fileSystem, *this)) {
 }
 
 ResourceSystem::~ResourceSystem() {
 }
 
-void ResourceSystem::loadResourcePackDefinition(std::string_view definitionPath) {
+void ResourceSystem::loadPackDefinition(std::string_view definitionPath) {
 	_resourcePackManager->loadPackDefinition(definitionPath);
 }
 
-void ResourceSystem::loadResourcePack(std::string_view resourcePackName) {
-	_resourcePackManager->loadPack(resourcePackName);
+void ResourceSystem::loadPack(std::string_view packName) {
+	_resourcePackManager->loadPack(packName);
 }
 
-void ResourceSystem::unloadResourcePack(std::string_view resourcePackName) {
-	_resourcePackManager->unloadPack(resourcePackName);
+void ResourceSystem::unloadPack(std::string_view packName) {
+	_resourcePackManager->unloadPack(packName);
 }
 
-void ResourceSystem::createResourcePack(std::string_view resourcePackName) {
-	_resourcePackManager->createPack(resourcePackName);
+void ResourceSystem::createManualPack(std::string_view packName) {
+	_resourcePackManager->createPack(packName, true);
 }
 
-void ResourceSystem::forEachResource(std::function<void(BaseResource&)> callback) {
+void ResourceSystem::forEachManager(const std::function<void(const BaseResourceManager&)>& callback) {
 	for (auto&& [type, manager] : _resourceManagers) {
-		manager->forEachResource(callback);
+		callback(*manager);
 	}
 }
 
-void ResourceSystem::_registerManager(std::unique_ptr<BaseResourceManager> resourceManager) {
+void ResourceSystem::forEachResource(const std::function<void(const Pack&, const PackGroup&, const ResourceInfo&)>& callback) {
+	_resourcePackManager->forEachPack([&] (const Pack& pack) {
+		pack.forEachResource(callback);
+	});
+}
+
+void ResourceSystem::forEachPack(const std::function<void(const Pack&)>& callback) {
+	_resourcePackManager->forEachPack(callback);
+}
+
+void ResourceSystem::registerManager(std::unique_ptr<BaseResourceManager> resourceManager) {
 	auto type = resourceManager->getType();
 	if (_resourceManagers.contains(type)) {
-		throw Exception("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.",
-			ResourceTypeSerialization::toString(type));
+		throw Exception("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.", toString(type));
 	}
 
 	_resourceManagers.insert({type, std::move(resourceManager)});
@@ -62,10 +62,22 @@ void ResourceSystem::_unregisterManager(std::unique_ptr<BaseResourceManager> res
 	auto itr = _resourceManagers.find(resourceManager->getType());
 	if (itr == _resourceManagers.end()) {
 		throw Exception("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.",
-			ResourceTypeSerialization::toString(resourceManager->getType()));
+			toString(resourceManager->getType()));
 	}
 
 	_resourceManagers.erase(itr);
+}
+
+BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) const {
+	if (auto itr = _resourceManagers.find(resourceType); itr != _resourceManagers.end()) {
+		return *itr->second;
+	}
+
+	throw Exception("Can't find manager for resource type: {}", toString(resourceType));
+}
+
+BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) {
+	return const_cast<ResourceSystem*>(this)->getManager(resourceType);
 }
 
 std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceType, std::string_view name) const {
@@ -76,12 +88,12 @@ std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceT
 	return _getManager(resourceType)->getResource(id);
 }
 
-void ResourceSystem::registerResource(std::string_view packName, std::shared_ptr<BaseResource> resource) {
-	_resourcePackManager->registerResource(packName, resource);
+void ResourceSystem::loadExternalResource(std::string_view packName, std::shared_ptr<BaseResource> resource) {
+	_resourcePackManager->loadExternalResource(packName, resource);
 }
 
-void ResourceSystem::_loadResource(std::string_view packName, const nlohmann::json& jsonObject, ResourceType resourceType) {
-	_resourcePackManager->loadResource(packName, jsonObject, resourceType);
+void ResourceSystem::_loadExternalResource(std::string_view packName, std::string_view resourceName, ResourceType resourceType, const nlohmann::json& data) {
+	_resourcePackManager->loadExternalResource(packName, resourceName, resourceType, data);
 }
 
 }

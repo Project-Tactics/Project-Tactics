@@ -10,10 +10,11 @@ namespace tactics {
 class RenderSystem;
 class OverlaySystem;
 
-class DebugOverlay: public Overlay {
+class RenderingOverlay: public Overlay {
 public:
-	DebugOverlay(RenderSystem& renderSystem);
+	RenderingOverlay(RenderSystem& renderSystem);
 	void update() override;
+	OverlayConfig getConfig() override;
 
 private:
 	bool _vector3(const char* label, glm::vec3& vec, float componentWidth = 0, float componentSpeed = 1.f);

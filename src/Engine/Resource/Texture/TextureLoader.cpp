@@ -1,7 +1,7 @@
 #include "TextureLoader.h"
 
-#include <Libs/Resource/ResourcePathHelper.h>
 #include <Libs/Utility/Exception.h>
+#include <Libs/FileSystem/FileSystem.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -9,10 +9,12 @@
 
 namespace tactics::resource {
 
-std::shared_ptr<Texture> TextureLoader::load(const TextureDescriptor& descriptor) {
+std::shared_ptr<Texture> TextureLoader::load(const std::string& name, const TextureDescriptor& descriptor) {
 	auto texture = _loadTexture(
-		descriptor.name,
-		_makeAbsolutePath(descriptor.path),
+		name,
+		// TODO(Gerark) FileSystem: We should have more control on how we load the textures through filesystem and not relying on stb to do the dirty job
+		// we should be able to load by providing a buffer like for stbi_load_from_memory
+		_getFileSystem().makeAbsolutePath(descriptor.path),
 		descriptor.useTransparency);
 	return texture;
 }

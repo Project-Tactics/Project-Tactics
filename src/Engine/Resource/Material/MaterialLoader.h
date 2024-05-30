@@ -20,11 +20,10 @@ struct MaterialDescriptorUniforms {
 };
 
 struct MaterialDescriptor {
-	std::string name;
 	std::string shader;
 	MaterialDescriptorUniforms uniforms;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MaterialDescriptor, name, shader, uniforms);
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MaterialDescriptor, shader, uniforms);
 };
 
 class MaterialLoader: public ResourceLoader {

@@ -24,6 +24,7 @@ add_subdirectory(fmt)
 
 # Adding sol2 as template library to easily bind c++ to lua
 # https://github.com/ThePhD/sol2
+set(SOL2_ENABLE_INSTALL "" OFF)
 add_subdirectory(sol2)
 
 # Adding stb library by only including std_image.h to load images
@@ -44,3 +45,5 @@ target_include_directories(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/singl
 
 # Let's keep things clean and tidy by moving all the thirdparty libs to a folder
 set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui fmt sol2 stb inicpp entt PROPERTY FOLDER "thirdparty")
+# sol2 is including these extra CI targets that we don't need. Let's move them to the same thirdparty folder but later we'll just get rid of them
+set_property(TARGET Continuous Experimental Nightly NightlyMemoryCheck PROPERTY FOLDER "thirdparty")

@@ -12,6 +12,7 @@ class ResourceSystem;
 class Application;
 class EcsSystem;
 class EventsSystem;
+class FileSystem;
 class Fsm;
 class OverlaySystem;
 class RenderSystem;
@@ -36,6 +37,7 @@ private:
 	void _setupServiceLocator();
 	void _setupFsm(Application& application);
 
+	std::unique_ptr<FileSystem> _fileSystem;
 	std::unique_ptr<resource::ResourceSystem> _resourceSystem;
 	std::unique_ptr<OverlaySystem> _overlaySystem;
 	std::unique_ptr<RenderSystem> _renderSystem;

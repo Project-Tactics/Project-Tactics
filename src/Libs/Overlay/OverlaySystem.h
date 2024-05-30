@@ -10,8 +10,8 @@
 namespace tactics {
 namespace resource {
 class IniFile;
-class ResourcePathHelper;
 }
+class FileSystem;
 
 /**
  * @brief An Overlay is a screen built in Immediate Mode GUI ( imgui ) which is displayed on top of any other ui and it's
@@ -21,7 +21,7 @@ class ResourcePathHelper;
  */
 class OverlaySystem {
 public:
-	OverlaySystem(std::shared_ptr<resource::IniFile> iniFile, const resource::ResourcePathHelper& resourcePathHelper);
+	OverlaySystem(std::shared_ptr<resource::IniFile> iniFile, const FileSystem& fileSystem);
 	~OverlaySystem();
 
 	template<typename TOverlay, typename ...TArgs>
@@ -46,6 +46,7 @@ public:
 		std::unique_ptr<Overlay> overlay;
 		bool enabled{};
 		OverlayType type{};
+		OverlayConfig config{};
 	};
 	void forEachOverlay(const std::function<void(const std::string&, OverlayItem&)>& callback);
 

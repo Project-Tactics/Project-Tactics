@@ -1,21 +1,19 @@
 #pragma once
 
-#include "ResourcePathHelper.h"
 #include "ResourceProvider.h"
+
+namespace tactics {
+class FileSystem;
+}
 
 namespace tactics::resource {
 
 class ResourceLoader {
 public:
-	ResourceLoader(const ResourcePathHelper& pathHelper, const ResourceProvider& resourceProvider)
-		: _pathHelper(pathHelper)
-		, _resourceProvider(resourceProvider) {
-	}
+	ResourceLoader(FileSystem& fileSystem, const ResourceProvider& resourceProvider);
 
 protected:
-	std::string _makeAbsolutePath(const std::string& path) {
-		return _pathHelper.makeAbsolutePath(path);
-	}
+	FileSystem& _getFileSystem() const;
 
 	template<typename TResource>
 	std::shared_ptr<TResource> _getResource(std::string_view name) {
@@ -28,7 +26,7 @@ protected:
 	}
 
 private:
-	const ResourcePathHelper& _pathHelper;
+	FileSystem& _fileSystem;
 	const ResourceProvider& _resourceProvider;
 };
 

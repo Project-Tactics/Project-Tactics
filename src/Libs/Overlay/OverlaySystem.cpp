@@ -5,13 +5,12 @@
 
 #include <Libs/Utility/Exception.h>
 #include <Libs/Resource/IniFile/IniFile.h>
-#include <Libs/Resource/ResourcePathHelper.h>
 
 #include <imgui/imgui.h>
 
 namespace tactics {
 
-OverlaySystem::OverlaySystem(std::shared_ptr<resource::IniFile> iniFile, const resource::ResourcePathHelper& resourcePathHelper): _iniFile(iniFile) {
+OverlaySystem::OverlaySystem(std::shared_ptr<resource::IniFile> iniFile, const FileSystem& fileSystem): _iniFile(iniFile) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -19,7 +18,7 @@ OverlaySystem::OverlaySystem(std::shared_ptr<resource::IniFile> iniFile, const r
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
 
-	OverlayStyleHelper::setupImGuiStyle(*_iniFile, resourcePathHelper);
+	OverlayStyleHelper::setupImGuiStyle(*_iniFile, fileSystem);
 }
 
 OverlaySystem::~OverlaySystem() {
@@ -32,7 +31,8 @@ void OverlaySystem::_addOverlay(std::string_view name, std::unique_ptr<Overlay> 
 	}
 
 	enabled = _getOrCreateOverlayStoredEnableValue(name, enabled);
-	_overlays.insert({name, OverlayItem{std::move(overlay), enabled, type}});
+	auto config = overlay->getConfig();
+	_overlays.insert({name, OverlayItem{std::move(overlay), enabled, type, config}});
 }
 
 void OverlaySystem::removeOverlay(std::string_view name) {
@@ -50,6 +50,8 @@ void OverlaySystem::update() {
 			switch (overlayItem.type) {
 			case OverlayType::Window: {
 				bool enabled = overlayItem.enabled;
+				ImGui::SetNextWindowPos(overlayItem.config.position, ImGuiCond_FirstUseEver);
+				ImGui::SetNextWindowSize(overlayItem.config.size, ImGuiCond_FirstUseEver);
 				if (ImGui::Begin(name.data(), &enabled)) {
 					overlayItem.overlay->update();
 				}
@@ -109,7 +111,7 @@ bool OverlaySystem::_getOrCreateOverlayStoredEnableValue(std::string_view name, 
 
 void OverlaySystem::_setOverlayStoredEnableValue(std::string_view name, bool enabled) {
 	_iniFile->set("overlay", name.data(), enabled);
-	_iniFile->save();
+	_iniFile->fileHandle->save();
 }
 
 }

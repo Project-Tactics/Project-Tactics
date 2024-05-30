@@ -2,54 +2,43 @@
 
 #include "../Resource.h"
 
+#include "ResourcePack.h"
+
 #include <Libs/Utility/TransparentTypes.h>
 
 #include <nlohmann/json.hpp>
 #include <memory>
 #include <functional>
 
+namespace tactics {
+class FileSystem;
+}
+
 namespace tactics::resource {
 
 class BaseResourceManager;
-class ResourcePathHelper;
-
-using ResourceManagerProvider = std::function<BaseResourceManager& (ResourceType)>;
 
 class ResourcePackManager {
 public:
-	ResourcePackManager(const ResourcePathHelper& pathHelper, const ResourceManagerProvider& managerProvider);
+	ResourcePackManager(FileSystem& pathHelper, const ResourceProvider& resourceProvider);
 	void loadPackDefinition(std::string_view packDefinitionPath);
 
 	void loadPack(std::string_view packName);
 	void unloadPack(std::string_view packName);
 	void unloadAllPacks();
-	void createPack(std::string_view packName);
-	void registerResource(std::string_view packName, std::shared_ptr<BaseResource> resource);
-	void loadResource(std::string_view packName, const nlohmann::json& descriptor, ResourceType type);
+	Pack& createPack(std::string_view packName, bool manuallyCreated);
+
+	void loadExternalResource(std::string_view packName, std::shared_ptr<BaseResource> resource);
+	void loadExternalResource(std::string_view packName, std::string_view resourceName, ResourceType type, const nlohmann::json& data);
+
+	void forEachPack(const std::function<void(const Pack&)>& callback);
 
 private:
-	struct PackGroup {
-		ResourceType type;
-		std::vector<nlohmann::ordered_json> descriptors;
-		std::vector<ResourceId> loadedResources;
-	};
+	[[nodiscard]] Pack& _getResourcePack(std::string_view packName);
 
-	struct Pack {
-		std::string name;
-		std::unordered_map<ResourceType, std::unique_ptr<PackGroup>> groups;
-		bool isLoaded{};
-		bool isManuallyCreated{};
-
-		PackGroup& getOrCreatePackGroup(ResourceType type);
-	};
-
-	Pack& _getResourcePack(std::string_view packName);
-	void _loadPack(Pack& pack);
-	void _unloadPack(Pack& pack);
-
-	const ResourcePathHelper& _pathHelper;
+	FileSystem& _fileSystem;
+	const ResourceProvider& _resourceProvider;
 	UnorderedStringMap<std::unique_ptr<Pack>> _packs;
-	ResourceManagerProvider _managerProvider;
 };
 
 }

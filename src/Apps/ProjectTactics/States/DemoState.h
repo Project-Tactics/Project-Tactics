@@ -7,9 +7,6 @@
 
 namespace tactics {
 
-class OverlaySystem;
-class RenderSystem;
-
 class DemoState: public FsmStateWithServices {
 public:
 	using FsmStateWithServices::FsmStateWithServices;
@@ -23,6 +20,7 @@ private:
 	entt::entity _createObject(const glm::vec3& position, std::string_view meshName, std::string_view materialName);
 
 	bool _exitNextFrame{};
+	bool _exitNextFrameAlt{};
 	float _cameraAngleX{};
 	entt::entity _customQuadEntity;
 };

@@ -5,23 +5,19 @@
 
 namespace tactics::resource {
 
-ResourceType ResourceTypeSerialization::toEnum(std::string_view strValue) {
-	if (strValue == "shader") {
-		return ResourceType::Shader;
-	} else if (strValue == "texture") {
-		return ResourceType::Texture;
-	} else if (strValue == "ini") {
-		return ResourceType::IniFile;
-	} else if (strValue == "mesh") {
-		return ResourceType::Mesh;
-	} else if (strValue == "material") {
-		return ResourceType::Material;
-	}
-
-	return ResourceType::Unkwown;
+BaseResource::BaseResource(const std::string& name, ResourceType type) {
+	this->id = generateUUID();
+	this->name = name;
+	this->type = type;
 }
 
-std::string ResourceTypeSerialization::toString(ResourceType resourceType) {
+}
+
+namespace tactics {
+
+std::string Str<resource::ResourceType>::to(resource::ResourceType resourceType) {
+	using namespace resource;
+
 	switch (resourceType) {
 	case ResourceType::Texture: {
 		return "texture";
@@ -43,10 +39,22 @@ std::string ResourceTypeSerialization::toString(ResourceType resourceType) {
 	return "Unknown";
 }
 
-BaseResource::BaseResource(const std::string& name, ResourceType type) {
-	this->id = generateUUID();
-	this->name = name;
-	this->type = type;
+resource::ResourceType Str<resource::ResourceType>::from(std::string_view string) {
+	using namespace resource;
+
+	if (string == "shader") {
+		return ResourceType::Shader;
+	} else if (string == "texture") {
+		return ResourceType::Texture;
+	} else if (string == "ini") {
+		return ResourceType::IniFile;
+	} else if (string == "mesh") {
+		return ResourceType::Mesh;
+	} else if (string == "material") {
+		return ResourceType::Material;
+	}
+
+	return ResourceType::Unkwown;
 }
 
 }

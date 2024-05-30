@@ -1,6 +1,6 @@
 #include "MeshLoader.h"
 
-#include <Libs/Resource/ResourcePathHelper.h>
+#include <Libs/FileSystem/FileSystem.h>
 #include <Libs/Utility/Exception.h>
 
 #include <regex>
@@ -12,21 +12,20 @@
 namespace tactics::resource {
 
 struct MeshInlineDescriptor {
-	std::string name;
 	std::string vertices;
 	std::string indices;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MeshInlineDescriptor, name, vertices, indices);
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MeshInlineDescriptor, vertices, indices);
 };
 
 std::shared_ptr<Mesh> MeshLoader::load(const nlohmann::json& descriptor) {
 	std::shared_ptr<Mesh> mesh;
 	if (!descriptor.contains("path")) {
 		auto meshDescriptor = descriptor.template get<MeshInlineDescriptor>();
-		mesh = _loadMesh(meshDescriptor.name, meshDescriptor.vertices, meshDescriptor.indices);
+		mesh = _loadMesh(meshDescriptor.vertices, meshDescriptor.indices);
 	} else {
 		auto meshDescriptor = descriptor.template get<FileDescriptor>();
-		mesh = _loadMesh(meshDescriptor.name, _makeAbsolutePath(meshDescriptor.path));
+		mesh = _loadMesh(_getFileSystem().makeAbsolutePath(meshDescriptor.path));
 	}
 	return mesh;
 }
@@ -55,7 +54,7 @@ std::vector<unsigned int> MeshLoader::_parseIndices(const std::string& strIndice
 	return parseString<unsigned int>(strIndices, [] (const std::string& str) { return std::stoul(str); });
 }
 
-std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::string& strVertices, const std::string& strIndices) {
+std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& strVertices, const std::string& strIndices) {
 	// TODO(Gerark) Using dynamic draw as usage but it should be best to receive this as a parameter
 	auto meshVertices = std::make_unique<VertexBuffer>(_parseVertices(strVertices), GL_DYNAMIC_DRAW);
 	meshVertices->bind();
@@ -63,15 +62,17 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::
 	meshVertices->unbind();
 
 	return std::make_shared<Mesh>(
-		name,
+		"",
 		std::move(meshVertices),
 		std::make_unique<IndexBuffer>(_parseIndices(strIndices), GL_DYNAMIC_DRAW),
 		std::move(vertexAttributes)
 	);
 }
 
-std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::string& path) {
+std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 	Assimp::Importer importer;
+	// TODO(Gerark) We should have more control on how we load the meshes through filesystem and not relying on assimp to do the dirty job
+	// assimp gives us the option to define our way of accessing files and filesystem ops.
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenNormals);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
@@ -115,7 +116,7 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& name, const std::
 	meshVertices->unbind();
 
 	return std::make_shared<Mesh>(
-		name,
+		"",
 		std::move(meshVertices),
 		std::make_unique<IndexBuffer>(indices, GL_DYNAMIC_DRAW),
 		std::move(vertexAttributes)

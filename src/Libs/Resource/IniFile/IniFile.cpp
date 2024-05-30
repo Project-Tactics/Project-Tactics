@@ -2,25 +2,16 @@
 
 namespace tactics::resource {
 
-IniFile::~IniFile() {
-	if (saveOnUnload) {
-		save();
-	}
-}
-
-void IniFile::save() {
-	file.save(filename);
-}
-
-void IniFile::reload() {
-	file.load(filename);
-}
-
 ini::IniSection& IniFile::createSection(std::string_view section) {
+	auto& file = fileHandle->getObject();
 	if (!file.contains(section.data())) {
 		file[section.data()] = {};
 	}
 	return file[section.data()];
+}
+
+void IniFile::merge(ini::IniFile& other) {
+	fileHandle->getObject().merge(other);
 }
 
 }

@@ -5,20 +5,20 @@ set(HEADERS
     ClassId.h
     Color.h
     Exception.h
-    Math.h
-    TransparentTypes.h
-    UUID.h
     Json/MathJsonSerializer.h
-    Service/ServiceLocator.h)
+    Math.h
+    Service/ServiceLocator.h
+    String.h
+    TransparentTypes.h
+    UUID.h)
 
 set(SOURCES
     Color.cpp
     Exception.cpp
     Math.cpp
     Json/MathJsonSerializer.cpp
+    String.cpp
     UUID.cpp)
-
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS})
 
 add_library(libs_utility STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_utility PUBLIC glm fmt::fmt json_wrapper)
