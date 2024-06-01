@@ -39,6 +39,11 @@ void VertexAttributes::unbind() {
 
 void VertexAttributes::release() {
 	glDeleteVertexArrays(1, &_vao);
+	_vao = 0;
+}
+
+bool VertexAttributes::isValid() const {
+	return _vao != 0;
 }
 
 void VertexAttributes::Builder::_defineAttributes(VertexAttributes& vertexAttribute) {

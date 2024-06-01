@@ -16,6 +16,7 @@ struct Transform;
 
 namespace resource {
 class Mesh;
+class SubMesh;
 }
 
 class EntityComponentSystem;
@@ -41,7 +42,7 @@ public:
 
 private:
 	void _drawMesh(const glm::mat4x4& viewProjection, component::Transform& transform, const component::Mesh& mesh);
-	void _drawGeometry(const resource::Mesh& mesh);
+	void _drawGeometry(const resource::SubMesh& mesh);
 	void _drawOpaqueGeometry(const glm::mat4x4& viewProjection);
 	void _drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, component::Transform& cameraTransform);
 

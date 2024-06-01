@@ -34,6 +34,11 @@ public:
 
 	void release() {
 		glDeleteBuffers(1, &_id);
+		_id = 0;
+	}
+
+	bool isValid() const {
+		return _id != 0;
 	}
 
 	void setData(const std::vector<T>& data, GLenum usage = GL_STATIC_DRAW) {

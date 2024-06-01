@@ -61,12 +61,14 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& strVertices, cons
 	auto vertexAttributes = _createDefaultVertexAttributes();
 	meshVertices->unbind();
 
-	return std::make_shared<Mesh>(
-		"",
+	auto mesh = std::make_shared<Mesh>("");
+	mesh->subMeshes.emplace_back(
+		0,
 		std::move(meshVertices),
 		std::make_unique<IndexBuffer>(_parseIndices(strIndices), GL_DYNAMIC_DRAW),
 		std::move(vertexAttributes)
 	);
+	return mesh;
 }
 
 std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
@@ -79,12 +81,13 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 		throw Exception("Failed to load mesh: {}", importer.GetErrorString());
 	}
 
-	std::vector<float> vertices;
-	std::vector<unsigned int> indices;
+	auto meshResource = std::make_shared<Mesh>("");
 
 	// TODO(Gerark) This is a very simple loader, it only loads the first UV channel and the vertices and indices
 	// It should be improved to load more data from the mesh like normals, tangents, bitangents, etc.
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
+		std::vector<float> vertices;
+		std::vector<unsigned int> indices;
 		const aiMesh* mesh = scene->mMeshes[meshIndex];
 		for (unsigned int vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
 
@@ -108,20 +111,21 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 				indices.push_back(face.mIndices[index]);
 			}
 		}
+
+		// TODO(Gerark) Using dynamic draw is just temporary, we should have a way to define this through the descriptor
+		auto meshVertices = std::make_unique<VertexBuffer>(vertices, GL_DYNAMIC_DRAW);
+		meshVertices->bind();
+		auto vertexAttributes = _createDefaultVertexAttributes();
+		meshVertices->unbind();
+
+		meshResource->subMeshes.emplace_back(
+			meshIndex,
+			std::move(meshVertices),
+			std::make_unique<IndexBuffer>(indices, GL_DYNAMIC_DRAW),
+			std::move(vertexAttributes)
+		);
 	}
-
-	// TODO(Gerark) Using dynamic draw as usage but it should be best to receive this as a parameter
-	auto meshVertices = std::make_unique<VertexBuffer>(vertices, GL_DYNAMIC_DRAW);
-	meshVertices->bind();
-	auto vertexAttributes = _createDefaultVertexAttributes();
-	meshVertices->unbind();
-
-	return std::make_shared<Mesh>(
-		"",
-		std::move(meshVertices),
-		std::make_unique<IndexBuffer>(indices, GL_DYNAMIC_DRAW),
-		std::move(vertexAttributes)
-	);
+	return meshResource;
 }
 
 std::unique_ptr<VertexAttributes> MeshLoader::_createDefaultVertexAttributes() {

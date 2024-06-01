@@ -59,13 +59,15 @@ FsmAction DemoState::enter() {
 	// with a custom material/shader and add it to the resource system
 	resourceSystem.createManualPack("CustomPack");
 	auto geometryBuilder = GeometryBuilder({{3}, {2}});
+	geometryBuilder.beginSubMesh();
 	geometryBuilder.addVertex({-10.f, -10.f, 0.0f, 0, 0});
 	geometryBuilder.addVertex({10.f, -10.f, 0.0f, 1, 0});
 	geometryBuilder.addVertex({10, 10.0f, 0.0f, 1, 1});
 	geometryBuilder.addVertex({-10, 10.0f, 0.0f, 0, 1});
 	geometryBuilder.addIndices({0, 1, 2});
 	geometryBuilder.addIndices({2, 3, 0});
-	auto triangleMesh = geometryBuilder.build<resource::Mesh>("customQuadMesh");
+	geometryBuilder.endSubMesh();
+	auto triangleMesh = geometryBuilder.build("customQuadMesh");
 	resourceSystem.loadExternalResource("CustomPack", triangleMesh);
 
 	// We can also create a resource by simulating the usual pack loading

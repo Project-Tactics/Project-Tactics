@@ -76,8 +76,8 @@ void ResourceOverlayHelper::drawResource(const resource::IniFile& iniFile) {
 
 void ResourceOverlayHelper::drawResource(const resource::Mesh& mesh) {
 	using namespace resource;
-	ImGui::Text("Vertices: %d", mesh.getVertexCount());
-	ImGui::Text("Tris: %d", mesh.getTrisCount());
+	ImGui::Text("Vertices: %d", mesh.getTotalVertexCount());
+	ImGui::Text("Tris: %d", mesh.getTotalTrisCount());
 }
 
 void ResourceOverlayHelper::drawResource(const resource::Material& material) {

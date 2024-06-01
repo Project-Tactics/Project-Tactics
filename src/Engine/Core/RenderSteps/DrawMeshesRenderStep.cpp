@@ -75,17 +75,19 @@ void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection, component::Transfo
 	auto& mesh = inMesh.mesh;
 	auto& shader = material->parent->shader;
 
-	mesh->vertexAttributes->bind();
+	for (auto& subMesh : mesh->subMeshes) {
+		subMesh.vertexAttributes->bind();
 
-	// TODO(Gerark) Optimization: only bind the shader if it's different from the last one
-	shader->bind();
-	material->updateShaderUniforms();
-	glm::mat4 mvp = viewProjection * transform.computeMatrix();
-	shader->setUniform("u_ModelViewProjection", mvp);
-	_drawGeometry(*mesh);
+		// TODO(Gerark) Optimization: only bind the shader if it's different from the last one
+		shader->bind();
+		material->updateShaderUniforms();
+		glm::mat4 mvp = viewProjection * transform.computeMatrix();
+		shader->setUniform("u_ModelViewProjection", mvp);
+		_drawGeometry(subMesh);
+	}
 }
 
-void DrawMeshes::_drawGeometry(const resource::Mesh& mesh) {
+void DrawMeshes::_drawGeometry(const resource::SubMesh& mesh) {
 	mesh.vertexBuffer->bind();
 	if (mesh.indexBuffer->getSize() > 0) {
 		mesh.indexBuffer->bind();

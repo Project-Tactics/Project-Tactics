@@ -36,6 +36,9 @@
             },
             "map": {
                 "path": "meshes/map.fbx"
+            },
+            "map1": {
+                "path": "meshes/map1.fbx"
             }
         },
         "material": {

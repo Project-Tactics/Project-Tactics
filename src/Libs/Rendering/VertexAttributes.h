@@ -30,11 +30,12 @@ public:
 	void bind();
 	void unbind();
 	void release();
+	bool isValid() const;
 	unsigned int getVerticesCount(const VertexBuffer& vbo) const;
 
 private:
-	unsigned int _vao;
-	unsigned int _componentPerVertex;
+	unsigned int _vao{};
+	unsigned int _componentPerVertex{};
 };
 
 }

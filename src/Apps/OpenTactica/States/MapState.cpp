@@ -1,6 +1,5 @@
 #include "MapState.h"
 
-
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
@@ -23,8 +22,8 @@ FsmAction MapState::enter() {
 	cameraEntity.getComponent<component::Transform>().setPosition({0, 0, 0});
 	cameraEntity.getComponent<component::Frustum>().fov = 60;
 
-	auto entity = _createTerrainObject({0, 0, 0}, "dirt");
-	entity.getComponent<component::Transform>().rotate(glm::radians(90.f), Vector3::left);
+	sceneSystem.createEntity({}, "map1", "texturedUnlit");
+	//entity.getComponent<component::Transform>().rotate(glm::radians(90.f), Vector3::left);
 	/*
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -75,7 +74,7 @@ Entity MapState::_createTerrainObject(const glm::vec3& position, std::string_vie
 	using namespace component;
 
 	auto& sceneSystem = getService<SceneSystem>();
-	auto entity = sceneSystem.createEntity(position, "map", "texturedUnlit");
+	auto entity = sceneSystem.createEntity(position, "block", "texturedUnlit");
 
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 	auto texture = resourceSystem.getResource<Texture>(textureName);
