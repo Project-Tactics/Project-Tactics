@@ -14,8 +14,9 @@ set(HEADERS
 add_library(engine_overlay ${SOURCES} ${HEADERS})
 target_link_libraries(engine_overlay
     PRIVATE
-    engine_rendering
-    engine_resource
+    libs_rendering
+    libs_resource
+    libs_ecs
     libs_overlay
     libs_utility
     glm)

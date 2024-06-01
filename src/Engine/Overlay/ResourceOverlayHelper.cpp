@@ -1,12 +1,11 @@
 #include "ResourceOverlayHelper.h"
 
-#include <Engine/Resource/Mesh/Mesh.h>
-#include <Engine/Resource/Material/Material.h>
-#include <Engine/Resource/Shader/Shader.h>
-#include <Engine/Resource/Texture/Texture.h>
-
 #include <Libs/Resource/IniFile/IniFile.h>
+#include <Libs/Resource/Mesh/Mesh.h>
+#include <Libs/Resource/Material/Material.h>
 #include <Libs/Resource/ResourcePack/ResourcePack.h>
+#include <Libs/Resource/Shader/Shader.h>
+#include <Libs/Resource/Texture/Texture.h>
 
 namespace tactics {
 

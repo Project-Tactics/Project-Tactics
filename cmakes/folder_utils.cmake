@@ -7,7 +7,7 @@ macro(add_to_libs_folder TARGET_NAME)
 endmacro()
 
 macro(add_to_data_folder TARGET_NAME)
-    add_to_folder(${TARGET_NAME} "tactics/data")
+    add_to_folder(${TARGET_NAME} "apps/data")
 endmacro()
 
 macro(add_to_thirdparty_folder TARGET_NAME)

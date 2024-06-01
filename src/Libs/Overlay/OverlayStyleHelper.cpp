@@ -2,53 +2,12 @@
 
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/FileSystem/FileSystem.h>
+#include <Libs/Utility/Ini/IniMathConverter.h>
 
 #include <imgui/imgui.h>
 
 #include <sstream>
 #include <array>
-
-// TODO(Gerark) Move this to a utility file, especially if we have other use cases
-std::array<float, 4> ParseStringToFloats(const std::string& str) {
-	std::array<float, 4> result = {0.0f, 0.0f, 0.0f, 0.0f};
-	std::stringstream ss(str);
-	std::string temp;
-	size_t index = 0;
-
-	while (std::getline(ss, temp, ',') && index < result.size()) {
-		result[index++] = std::stof(temp);
-	}
-
-	return result;
-}
-
-template<>
-struct ini::Convert<ImVec2> {
-	void decode(const std::string& value, ImVec2& result) {
-		auto floats = ParseStringToFloats(value);
-		result.x = floats[0];
-		result.y = floats[1];
-	}
-
-	void encode(const ImVec2 value, std::string& result) {
-		result = std::to_string(value.x) + "," + std::to_string(value.y);
-	}
-};
-
-template<>
-struct ini::Convert<ImVec4> {
-	void decode(const std::string& value, ImVec4& result) {
-		auto floats = ParseStringToFloats(value);
-		result.x = floats[0];
-		result.y = floats[1];
-		result.z = floats[2];
-		result.w = floats[3];
-	}
-
-	void encode(const ImVec4 value, std::string& result) {
-		result = std::to_string(value.x) + "," + std::to_string(value.y) + "," + std::to_string(value.z) + "," + std::to_string(value.w);
-	}
-};
 
 namespace tactics {
 

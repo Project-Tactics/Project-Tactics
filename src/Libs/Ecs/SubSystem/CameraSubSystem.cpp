@@ -1,0 +1,28 @@
+#include "CameraSubSystem.h"
+
+#include "../Component/CameraComponent.h"
+#include "../Component/FrustumComponent.h"
+#include "../Component/TransformComponent.h"
+#include "../Component/ViewportComponent.h"
+
+namespace tactics {
+
+void CameraSubSystem::update() {
+	using namespace component;
+
+	// Update all cameras matrices
+	_reg().view<Frustum, Transform, Camera>().each([] (auto& frustum, auto& transform, auto& camera) {
+		auto target = transform.getPosition() + (transform.getRotation() * Vector3::forward);
+		camera.view = glm::lookAt(transform.getPosition(), target, Vector3::up);
+		camera.projection = glm::perspective(glm::radians(frustum.fov), frustum.aspectRatio, frustum.near, frustum.far);
+	});
+
+	// Update the main camera aspect ratio
+	_reg().view<Viewport, CurrentViewport>().each([this] (Viewport& viewport) {
+		_reg().view<Frustum, CurrentCamera>().each([&viewport] (Frustum& frustum) {
+			frustum.aspectRatio = static_cast<float>(viewport.size.x) / viewport.size.y;
+		});
+	});
+}
+
+}

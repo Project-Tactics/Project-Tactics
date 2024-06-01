@@ -19,11 +19,23 @@
             },
             "floor": {
                 "path": "textures/floor.jpg"
+            },
+            "grass": {
+                "path": "textures/grass_origin_top.png"
+            },
+            "dirt": {
+                "path": "textures/dirt_loamy.png"
+            },
+            "stone": {
+                "path": "textures/stone.png"
             }
         },
         "mesh": {
             "book": {
                 "path": "meshes/book.fbx"
+            },
+            "map": {
+                "path": "meshes/map.fbx"
             }
         },
         "material": {

@@ -10,13 +10,14 @@ class ResourceSystem;
 }
 
 class Application;
-class EcsSystem;
+class EntityComponentSystem;
 class EventsSystem;
 class FileSystem;
 class Fsm;
 class OverlaySystem;
 class RenderSystem;
 class ServiceLocator;
+class SceneSystem;
 
 class Engine {
 public:
@@ -42,7 +43,8 @@ private:
 	std::unique_ptr<OverlaySystem> _overlaySystem;
 	std::unique_ptr<RenderSystem> _renderSystem;
 	std::unique_ptr<EventsSystem> _eventsSystem;
-	std::unique_ptr<EcsSystem> _ecsSystem;
+	std::unique_ptr<EntityComponentSystem> _ecsSystem;
+	std::unique_ptr<SceneSystem> _sceneSystem;
 	std::unique_ptr<Fsm> _fsm;
 	std::unique_ptr<ServiceLocator> _serviceLocator;
 };

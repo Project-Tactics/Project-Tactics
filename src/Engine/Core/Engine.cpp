@@ -1,13 +1,13 @@
 #include "Engine.h"
 
 #include "Application.h"
-#include "Engine/Overlay/RenderingOverlay.h"
-#include "Engine/Overlay/ResourcesOverlay.h"
+#include "ResourceSystemInitializer.h"
 
-#include <Engine/ECS/EcsSystem.h>
-#include <Engine/Rendering/RenderSystem.h>
-#include <Engine/Resource/ResourceSystemInitializer.h>
+#include <Engine/Overlay/RenderingOverlay.h>
+#include <Engine/Overlay/ResourcesOverlay.h>
+#include <Engine/Scene/SceneSystem.h>
 
+#include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Event/EventsSystem.h>
 #include <Libs/FileSystem/FileSystem.h>
 #include <Libs/FileSystem/FileLoader.h>
@@ -15,10 +15,12 @@
 #include <Libs/Overlay/OverlaySystem.h>
 #include <Libs/Overlay/MainOverlay.h>
 #include <Libs/Overlay/ExampleOverlay.h>
-#include <Libs/Resource/ResourceSystem.h>
+#include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/IniFile/IniFile.h>
+#include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Utility/Service/ServiceLocator.h>
 #include <Libs/Utility/Exception.h>
+#include <Libs/Utility/Math.h>
 
 #include <imgui/imgui.h>
 #include <SDL.h>
@@ -45,7 +47,7 @@ void Engine::_initialize(Application& application) {
 
 	_fileSystem = std::make_unique<FileSystem>(std::make_unique<DefaultFileLoader>(), "data");
 
-	_resourceSystem = resource::ResourceSystemInitializer::initialize(*_fileSystem);
+	_resourceSystem = ResourceSystemInitializer::initialize(*_fileSystem);
 
 	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devConfigFile");
 	_overlaySystem = std::make_unique<OverlaySystem>(debugConfigFile, *_fileSystem);
@@ -56,14 +58,15 @@ void Engine::_initialize(Application& application) {
 	_resourceSystem->loadPack("builtinMeshes");
 
 	_eventsSystem = std::make_unique<EventsSystem>();
-	_ecsSystem = std::make_unique<EcsSystem>();
+	_ecsSystem = std::make_unique<EntityComponentSystem>();
+	_sceneSystem = std::make_unique<SceneSystem>(*_ecsSystem, *_resourceSystem);
 
 	_setupServiceLocator();
 	_setupFsm(application);
 
 	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", true)) {
 		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
-		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem);
+		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem, *_ecsSystem);
 		_overlaySystem->addOverlay<ResourcesOverlay>("Resources", false, *_resourceSystem);
 		_overlaySystem->addOverlay<ExampleOverlay>("ImGui Demo", false);
 	}
@@ -77,7 +80,7 @@ void Engine::_internalRun() {
 		}
 
 		_fsm->update();
-
+		_ecsSystem->update();
 		_renderSystem->render();
 	}
 }
@@ -135,6 +138,7 @@ void Engine::_setupServiceLocator() {
 	_serviceLocator->addService(_renderSystem.get());
 	_serviceLocator->addService(_eventsSystem.get());
 	_serviceLocator->addService(_ecsSystem.get());
+	_serviceLocator->addService(_sceneSystem.get());
 	_serviceLocator->addService(_fileSystem.get());
 }
 

@@ -1,8 +1,12 @@
 #include "RenderingOverlay.h"
 
-#include <Engine/Rendering/RenderSystem.h>
-#include <Engine/Rendering/Camera.h>
-#include <Engine/Rendering/Viewport.h>
+#include <Libs/Rendering/RenderSystem.h>
+
+#include <Libs/Ecs/EntityComponentSystem.h>
+#include <Libs/Ecs/Component/CameraComponent.h>
+#include <Libs/Ecs/Component/FrustumComponent.h>
+#include <Libs/Ecs/Component/TransformComponent.h>
+#include <Libs/Ecs/Component/ViewportComponent.h>
 
 #include <string>
 
@@ -13,8 +17,9 @@ const auto xComponentColor = ImVec4(1.f, 0.f, 0.f, 1.f);
 const auto yComponentColor = ImVec4(0, 1.f, 0.f, 1.f);
 const auto zComponentColor = ImVec4(0.06f, 0.6f, 0.9f, 1.f);
 
-RenderingOverlay::RenderingOverlay(RenderSystem& renderSystem)
-	: _renderSystem(renderSystem) {
+RenderingOverlay::RenderingOverlay(RenderSystem& renderSystem, EntityComponentSystem& ecs)
+	: _renderSystem(renderSystem)
+	, _ecs(ecs) {
 }
 
 OverlayConfig RenderingOverlay::getConfig() {
@@ -38,42 +43,50 @@ void RenderingOverlay::_drawRenderStats() {
 }
 
 void RenderingOverlay::_drawViewportStats() {
-	auto& viewport = _renderSystem.getViewport();
-	ImGui::TextColored(titleColor, "%s", "VIEWPORT");
-	glm::vec2 topLeft = viewport.getTopLeft();
-	glm::vec2 size = viewport.getSize();
-	bool dirty = false;
-	dirty |= _vector2("TopLeft", topLeft);
-	dirty |= _vector2("Size", size);
-	if (dirty) {
-		viewport.setDimensions(topLeft, size);
-	}
+	using namespace component;
+	auto view = _ecs.view<Viewport>();
+	view.each([&] (Viewport& viewport) {
+		ImGui::TextColored(titleColor, "%s", "VIEWPORT");
+		glm::vec2 topLeft = viewport.topLeft;
+		glm::vec2 size = viewport.size;
+		bool dirty = false;
+		dirty |= _vector2("TopLeft", topLeft);
+		dirty |= _vector2("Size", size);
+		if (dirty) {
+			viewport.topLeft = topLeft;
+			viewport.size = size;
+		}
 
-	ImGui::AlignTextToFramePadding();
-	ImGui::Text("%s", "Clear Color");
-	auto clearColor = viewport.getClearColor();
-	ImGui::SameLine();
-	ImVec4 color = ImVec4(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
-	if (ImGui::ColorEdit3("##clear-color", (float*)&color)) {
-		viewport.setClearColor(glm::vec4(color.x, color.y, color.z, clearColor.w));
-	}
+		ImGui::AlignTextToFramePadding();
+		ImGui::Text("%s", "Clear Color");
+		auto clearColor = viewport.clearColor;
+		ImGui::SameLine();
+		ImVec4 color = ImVec4(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+		if (ImGui::ColorEdit3("##clear-color", (float*)&color)) {
+			viewport.clearColor = glm::vec4(color.x, color.y, color.z, clearColor.w);
+		}
+	});
 }
 
 void RenderingOverlay::_drawCameraStats() {
-	auto& camera = _renderSystem.getCamera();
-	ImGui::TextColored(titleColor, "%s", "CAMERA");
-	auto position = camera.getPosition();
-	if (_vector3("Position", position, 0, 0.1f)) {
-		camera.setPosition(position);
-	}
-	auto direction = camera.getDirection();
-	if (_vector3("Direction", direction, 0, 0.01f)) {
-		camera.setDirection(direction);
-	}
-	ImGui::Text("Fov: %f", camera.getFov());
-	ImGui::Text("Near: %f", camera.getNearPlane());
-	ImGui::Text("Far: %f", camera.getFarPlane());
-	ImGui::Text("Aspect Ratio: %f", camera.getAspectRatio());
+	using namespace component;
+	auto view = _ecs.view<Transform, Frustum, Camera>();
+	view.each([&] (Transform& transform, Frustum& frustum, Camera&) {
+		ImGui::TextColored(titleColor, "%s", "Camera");
+		auto position = transform.getPosition();
+		if (_vector3("Position", position, 0, 0.1f)) {
+			transform.setPosition(position);
+		}
+
+		glm::vec2 angles = glm::eulerAngles(transform.getRotation());
+		if (_vector2("Rotation", angles, 0, 0.01f)) {
+			transform.setRotation(glm::quat(glm::vec3(angles.x, angles.y, 0.f)));
+		}
+		ImGui::Text("Fov: %f", frustum.fov);
+		ImGui::Text("Near: %f", frustum.near);
+		ImGui::Text("Far: %f", frustum.far);
+		ImGui::Text("Aspect Ratio: %f", frustum.aspectRatio);
+	});
 }
 
 bool RenderingOverlay::_vector3(const char* label, glm::vec3& vec, float componentWidth, float componentSpeed) {

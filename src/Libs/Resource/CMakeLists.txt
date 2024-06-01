@@ -9,7 +9,16 @@ set(SOURCES
     ResourceManager.cpp
     ResourceSystem.cpp
     ResourcePack/ResourcePackManager.cpp
-    ResourcePack/ResourcePack.cpp)
+    ResourcePack/ResourcePack.cpp
+    Mesh/Mesh.cpp
+    Mesh/MeshLoader.cpp
+    Shader/Shader.cpp
+    Shader/ShaderLoader.cpp
+    Texture/Texture.cpp
+    Texture/TextureLoader.cpp
+    Material/Material.cpp
+    Material/MaterialLoader.cpp
+    Material/Uniforms.cpp)
     
 set(HEADERS
     IniFile/IniFile.h
@@ -20,15 +29,27 @@ set(HEADERS
     ResourceProvider.h
     ResourceSystem.h
     ResourcePack/ResourcePackManager.h
-    ResourcePack/ResourcePack.h)
+    ResourcePack/ResourcePack.h
+    Mesh/Mesh.h
+    Mesh/MeshLoader.h
+    Shader/Shader.h
+    Shader/ShaderLoader.h
+    Texture/Texture.h
+    Texture/TextureLoader.h
+    Material/Material.h
+    Material/MaterialLoader.h
+    Material/Uniforms.h)
 
 add_library(libs_resource STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_resource
     PUBLIC
+    libs_filesystem
+    libs_utility
     inicpp
     json_wrapper
-    libs_filesystem
-    libs_utility)
+    glad
+    stb
+    assimp_wrapper)
 add_to_libs_folder(libs_resource)
 
 set(TEST_SOURCES 

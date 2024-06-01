@@ -7,12 +7,12 @@
 
 namespace tactics {
 
+class EntityComponentSystem;
 class RenderSystem;
-class OverlaySystem;
 
 class RenderingOverlay: public Overlay {
 public:
-	RenderingOverlay(RenderSystem& renderSystem);
+	RenderingOverlay(RenderSystem& renderSystem, EntityComponentSystem& ecs);
 	void update() override;
 	OverlayConfig getConfig() override;
 
@@ -26,6 +26,7 @@ private:
 	void _drawRenderStats();
 
 	RenderSystem& _renderSystem;
+	EntityComponentSystem& _ecs;
 };
 
 }
