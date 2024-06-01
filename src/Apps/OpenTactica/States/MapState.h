@@ -16,8 +16,8 @@ public:
 private:
 	bool onKeyPress(SDL_KeyboardEvent& event) override;
 
-	EntityObject _createTerrainObject(const glm::vec3& position, std::string_view textureName);
-	EntityObject _createCharacterObject();
+	Entity _createTerrainObject(const glm::vec3& position, std::string_view textureName);
+	Entity _createCharacterObject();
 
 	bool _exitNextFrame{};
 };

@@ -36,7 +36,7 @@ SceneSystem::~SceneSystem() {
 	_ecs.unregisterSubSystem(_cameraSubSystem.get());
 }
 
-EntityObject& SceneSystem::getCurrentCamera() {
+Entity& SceneSystem::getCurrentCamera() {
 	if (_currentCameraEntity == entt::null) {
 		throw Exception("Trying to get the current camera but the current entity is not valid.");
 	}
@@ -51,7 +51,7 @@ void SceneSystem::_onCurrentCameraConstructed(entt::registry&, entt::entity curr
 		}
 	});
 
-	_currentCameraEntity = EntityObject::create(currentCameraEntity, &_ecs);
+	_currentCameraEntity = Entity::create(currentCameraEntity, &_ecs);
 }
 
 void SceneSystem::_onCurrentViewportConstructed(entt::registry&, entt::entity currentViewportEntity) {
@@ -83,13 +83,13 @@ void SceneSystem::_updateAlphaBlended(entt::registry& registry, entt::entity ent
 	}
 }
 
-EntityObject SceneSystem::createViewport(const glm::vec2& topLeft, const glm::vec2& size, const glm::vec4& clearColor) {
-	auto entity = EntityObject::create("viewport", &_ecs);
+Entity SceneSystem::createViewport(const glm::vec2& topLeft, const glm::vec2& size, const glm::vec4& clearColor) {
+	auto entity = Entity::create("viewport", &_ecs);
 	entity.addComponent<component::Viewport>(topLeft, size, clearColor);
 	return entity;
 }
 
-EntityObject SceneSystem::createCamera(
+Entity SceneSystem::createCamera(
 	const entt::hashed_string& name,
 	const glm::vec3& position,
 	const glm::vec3& direction,
@@ -99,7 +99,7 @@ EntityObject SceneSystem::createCamera(
 	float far
 ) {
 	using namespace component;
-	auto entity = EntityObject::create(name, &_ecs);
+	auto entity = Entity::create(name, &_ecs);
 	auto& transform = entity.addComponent<Transform>();
 	transform.setPosition(position);
 	transform.setRotation(glm::quatLookAt(direction, up));
@@ -109,7 +109,7 @@ EntityObject SceneSystem::createCamera(
 	return entity;
 }
 
-EntityObject SceneSystem::createEntity(
+Entity SceneSystem::createEntity(
 		const glm::vec3& position,
 		std::string_view meshName,
 		std::string_view materialName,
@@ -117,7 +117,7 @@ EntityObject SceneSystem::createEntity(
 		const glm::vec3& scale
 ) {
 	using namespace component;
-	auto entity = EntityObject::create("", &_ecs);
+	auto entity = Entity::create("", &_ecs);
 	auto& transform = entity.addComponent<Transform>();
 	transform.setPosition(position);
 	transform.setRotation(rotation);

@@ -19,12 +19,12 @@ public:
 		resource::ResourceSystem& resourceSystem);
 	~SceneSystem();
 
-	EntityObject createViewport(
+	Entity createViewport(
 		const glm::vec2& topLeft,
 		const glm::vec2& size,
 		const glm::vec4& clearColor = Color::black);
 
-	EntityObject createCamera(
+	Entity createCamera(
 		const entt::hashed_string& name,
 		const glm::vec3& position,
 		const glm::vec3& direction,
@@ -34,14 +34,14 @@ public:
 		float far
 	);
 
-	EntityObject createEntity(
+	Entity createEntity(
 		const glm::vec3& position,
 		std::string_view meshName,
 		std::string_view materialName,
 		const glm::quat& rotation = Quaternion::identity,
 		const glm::vec3& scale = Vector3::one);
 
-	EntityObject& getCurrentCamera();
+	Entity& getCurrentCamera();
 
 private:
 	void _onMeshConstructed(entt::registry& registry, entt::entity entity);
@@ -53,7 +53,7 @@ private:
 	EntityComponentSystem& _ecs;
 	resource::ResourceSystem& _resourceSystem;
 	std::unique_ptr<CameraSubSystem> _cameraSubSystem;
-	EntityObject _currentCameraEntity;
+	Entity _currentCameraEntity;
 };
 
 }

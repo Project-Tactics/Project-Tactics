@@ -9,15 +9,15 @@ namespace tactics {
 
 class EntityComponentSystem;
 
-class EntityObject {
+class Entity {
 private:
-	EntityObject(const char* name, EntityComponentSystem* ecs);
+	Entity(const char* name, EntityComponentSystem* ecs);
 
 public:
-	EntityObject();
+	Entity();
 
-	static EntityObject create(const char* name, EntityComponentSystem* ecs);
-	static EntityObject create(entt::entity entity, EntityComponentSystem* ecs);
+	static Entity create(const char* name, EntityComponentSystem* ecs);
+	static Entity create(entt::entity entity, EntityComponentSystem* ecs);
 
 	void replaceEntity(entt::entity entity);
 

@@ -65,12 +65,12 @@ bool MapState::onKeyPress(SDL_KeyboardEvent& event) {
 	return false;
 }
 
-EntityObject MapState::_createCharacterObject() {
+Entity MapState::_createCharacterObject() {
 	auto& sceneSystem = getService<SceneSystem>();
 	return sceneSystem.createEntity({}, "map", "texturedUnlit");
 }
 
-EntityObject MapState::_createTerrainObject(const glm::vec3& position, std::string_view textureName) {
+Entity MapState::_createTerrainObject(const glm::vec3& position, std::string_view textureName) {
 	using namespace resource;
 	using namespace component;
 
