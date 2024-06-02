@@ -14,7 +14,20 @@ void CameraSubSystem::update() {
 	_reg().view<Frustum, Transform, Camera>().each([] (auto& frustum, auto& transform, auto& camera) {
 		auto target = transform.getPosition() + (transform.getRotation() * Vector3::forward);
 		camera.view = glm::lookAt(transform.getPosition(), target, Vector3::up);
-		camera.projection = glm::perspective(glm::radians(frustum.fov), frustum.aspectRatio, frustum.near, frustum.far);
+		switch (camera.projectionType) {
+		case ProjectionType::Perspective: {
+			camera.projection = glm::perspective(glm::radians(frustum.fov), frustum.aspectRatio, frustum.near, frustum.far);
+			break;
+		}
+		case ProjectionType::Orthographic: {
+			camera.projection = glm::ortho(
+				-frustum.orthoSize * frustum.aspectRatio,
+				frustum.orthoSize * frustum.aspectRatio,
+				-frustum.orthoSize, frustum.orthoSize,
+				frustum.near, frustum.far);
+			break;
+		}
+		}
 	});
 
 	// Update the main camera aspect ratio

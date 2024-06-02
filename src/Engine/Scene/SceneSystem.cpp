@@ -74,9 +74,15 @@ void SceneSystem::_onMeshUpdated(entt::registry& registry, entt::entity entity) 
 void SceneSystem::_updateAlphaBlended(entt::registry& registry, entt::entity entity) {
 	using namespace component;
 
+	// Todo(Gerark) This is quite a weak check to know if a Mesh needs AlphaBlending.
+	// If a mesh with multiple submeshes have only one submesh with transparency, the whole mesh will be considered as alpha blended, and that's wrong.
 	auto& material = registry.get<Mesh>(entity);
-	auto itr = std::ranges::find_if(material.material->getTextures(), [] (auto& pair) { return pair.second->info.useTransparency; });
-	if (itr != material.material->getTextures().end()) {
+	auto itr = std::ranges::find_if(material.materials, [] (auto& material) {
+		return std::ranges::find_if(material->getTextures(), [] (auto& pair) {
+			return pair.second->info.useTransparency;
+		}) != material->getTextures().end();
+	});
+	if (itr != material.materials.end()) {
 		registry.emplace<AlphaBlended>(entity);
 	} else {
 		registry.remove<AlphaBlended>(entity);
@@ -125,8 +131,11 @@ Entity SceneSystem::createEntity(
 
 	Mesh meshComp;
 	auto material = _resourceSystem.getResource<resource::Material>(materialName);
-	meshComp.material = resource::Material::createInstance(material);
 	meshComp.mesh = _resourceSystem.getResource<resource::Mesh>(meshName);
+	// TODO(Gerark) Big assumption on the fact that the same material is applied to every submesh. This must be changed.
+	for (auto i = 0; i < meshComp.mesh->subMeshes.size(); ++i) {
+		meshComp.materials.push_back(resource::Material::createInstance(material));
+	}
 	entity.addComponent<Mesh>(meshComp);
 	return entity;
 }

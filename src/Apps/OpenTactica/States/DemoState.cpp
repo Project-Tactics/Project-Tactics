@@ -29,16 +29,16 @@ FsmAction DemoState::enter() {
 	auto& planeTransform = plane.getComponent<Transform>();
 	planeTransform.setScale({200, 200, 200});
 	planeTransform.setRotation(glm::radians(90.0f), Vector3::right);
-	plane.getComponent<Mesh>().material->set("u_Texture", resourceSystem.getResource<resource::Texture>("floor"));
+	plane.getComponent<Mesh>().materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("floor"));
 
 	auto book = sceneSystem.createEntity({0.0f, 0.0f, 0.0f}, "book", "texturedUnlit");
 	auto& transform = book.getComponent<Transform>();
 	transform.setRotation(glm::radians(90.0f), Vector3::up);
-	book.getComponent<Mesh>().material->set("u_Texture", resourceSystem.getResource<resource::Texture>("colors"));
+	book.getComponent<Mesh>().materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("colors"));
 
 	auto crate = sceneSystem.createEntity({40.0f, 5.0f, 0.0f}, "cube", "texturedUnlit");
 	crate.getComponent<Transform>().setScale({10, 10, 10});
-	crate.getComponent<Mesh>().material->set("u_Texture", resourceSystem.getResource<resource::Texture>("crate"));
+	crate.getComponent<Mesh>().materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("crate"));
 
 	auto camera = sceneSystem.getCurrentCamera();
 	camera.addComponent<RotateAroundPoint>(0.005f, 0.f, 100.0f, Vector3::up * 10.f, Vector3::zero);
@@ -50,7 +50,7 @@ FsmAction DemoState::enter() {
 			auto quad = sceneSystem.createEntity({-40.0f + y * 20.f, 10.0f, x * 10.f}, "quad", "texturedUnlit");
 			quad.getComponent<Transform>().setScale({15, 15, 15});
 			quad.updateComponent<Mesh>([&resourceSystem] (auto& mesh) {
-				mesh.material->set("u_Texture", resourceSystem.getResource<resource::Texture>("tacticsIcon"));
+				mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("tacticsIcon"));
 			});
 		}
 	}

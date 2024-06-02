@@ -71,11 +71,14 @@ void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, co
 }
 
 void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection, component::Transform& transform, const component::Mesh& inMesh) {
-	auto& material = inMesh.material;
+	auto& materials = inMesh.materials;
 	auto& mesh = inMesh.mesh;
-	auto& shader = material->parent->shader;
 
+	unsigned int materialIndex = 0;
 	for (auto& subMesh : mesh->subMeshes) {
+		auto& material = materials[materialIndex];
+		auto& shader = material->parent->shader;
+
 		subMesh.vertexAttributes->bind();
 
 		// TODO(Gerark) Optimization: only bind the shader if it's different from the last one
@@ -84,6 +87,8 @@ void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection, component::Transfo
 		glm::mat4 mvp = viewProjection * transform.computeMatrix();
 		shader->setUniform("u_ModelViewProjection", mvp);
 		_drawGeometry(subMesh);
+
+		++materialIndex;
 	}
 }
 

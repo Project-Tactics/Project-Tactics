@@ -3,11 +3,12 @@
 #include <Libs/FileSystem/FileSystem.h>
 #include <Libs/Utility/Exception.h>
 
-#include <regex>
-#include <functional>
+#include <glm/glm.hpp>
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
+#include <regex>
+#include <functional>
 
 namespace tactics::resource {
 
@@ -83,7 +84,7 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 
 	auto meshResource = std::make_shared<Mesh>("");
 
-	// TODO(Gerark) This is a very simple loader, it only loads the first UV channel and the vertices and indices
+	// TODO(Gerark) This is a very simple loader, it only loads the first UV channel and the vertices and indices of each mesh
 	// It should be improved to load more data from the mesh like normals, tangents, bitangents, etc.
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		std::vector<float> vertices;
@@ -91,9 +92,11 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 		const aiMesh* mesh = scene->mMeshes[meshIndex];
 		for (unsigned int vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
 
-			vertices.push_back(mesh->mVertices[vertexIndex].x);
-			vertices.push_back(mesh->mVertices[vertexIndex].y);
-			vertices.push_back(mesh->mVertices[vertexIndex].z);
+			auto vertex = scene->mRootNode->mTransformation * mesh->mVertices[vertexIndex];
+
+			vertices.push_back(vertex.x);
+			vertices.push_back(vertex.y);
+			vertices.push_back(vertex.z);
 
 			unsigned int uvCount = mesh->GetNumUVChannels();
 			for (unsigned int uvIndex = 0; uvIndex < uvCount; ++uvIndex) {

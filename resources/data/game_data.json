@@ -28,6 +28,46 @@
             },
             "stone": {
                 "path": "textures/stone.png"
+            },
+            "temp0": {
+                "path": "textures/temp_test/map0.png",
+                "useTransparency": true
+            },
+            "temp1": {
+                "path": "textures/temp_test/map1.png",
+                "useTransparency": true
+            },
+            "temp2": {
+                "path": "textures/temp_test/map2.png",
+                "useTransparency": true
+            },
+            "temp3": {
+                "path": "textures/temp_test/map3.png",
+                "useTransparency": true
+            },
+            "temp4": {
+                "path": "textures/temp_test/map4.png",
+                "useTransparency": true
+            },
+            "temp5": {
+                "path": "textures/temp_test/map5.png",
+                "useTransparency": true
+            },
+            "temp6": {
+                "path": "textures/temp_test/map6.png",
+                "useTransparency": true
+            },
+            "temp7": {
+                "path": "textures/temp_test/map7.png",
+                "useTransparency": true
+            },
+            "temp8": {
+                "path": "textures/temp_test/map8.png",
+                "useTransparency": true
+            },
+            "temp9": {
+                "path": "textures/temp_test/map9.png",
+                "useTransparency": true
             }
         },
         "mesh": {

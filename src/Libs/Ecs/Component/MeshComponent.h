@@ -7,7 +7,7 @@ namespace tactics::component {
 
 struct Mesh {
 	std::shared_ptr<resource::Mesh> mesh;
-	std::shared_ptr<resource::Material::Instance> material;
+	std::vector<std::shared_ptr<resource::Material::Instance>> materials;
 };
 
 }

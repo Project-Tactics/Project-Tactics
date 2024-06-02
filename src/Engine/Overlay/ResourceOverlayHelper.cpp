@@ -59,7 +59,21 @@ void ResourceOverlayHelper::drawResource(const resource::ResourceInfo& resourceI
 void ResourceOverlayHelper::drawResource(const resource::Texture& texture) {
 	using namespace tactics::resource;
 	ImGui::Text("Size: %dx%d", texture.info.width, texture.info.height);
-	ImGui::Image((void*)(intptr_t)texture.rendererId, ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0), {1, 1, 1, 1}, toColor(ResourceType::Texture));
+	auto width = static_cast<float>(texture.info.width);
+	auto height = static_cast<float>(texture.info.height);
+	auto ratio = height / width;
+	if (ImGui::ImageButton((void*)(intptr_t)texture.rendererId, ImVec2(100, 100 * ratio), ImVec2(0, 1), ImVec2(1, 0), 1)) {
+		ImGui::OpenPopup("Texture Viewer");
+	}
+
+	// In order to show the X button on the top right corner we have to pass a bool to the BeginPopupModal.
+	// It doesn't matter if the bool is always true as the popup is controlled by other means.
+	bool popupOpened = true;
+	if (ImGui::BeginPopupModal("Texture Viewer", &popupOpened, ImGuiWindowFlags_AlwaysAutoResize)) {
+		auto previewWidth = std::min(width, 512.f);
+		ImGui::Image((void*)(intptr_t)texture.rendererId, {previewWidth, previewWidth * ratio}, ImVec2(0, 1), ImVec2(1, 0), {1, 1, 1, 1});
+		ImGui::EndPopup();
+	}
 }
 
 void ResourceOverlayHelper::drawResource(const resource::IniFile& iniFile) {

@@ -1,6 +1,9 @@
 #include "MapState.h"
 
+#include "../Component/RotateAroundPoint.h"
+
 #include <Libs/Ecs/EntityComponentSystem.h>
+#include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/Component/FrustumComponent.h>
@@ -18,24 +21,23 @@ FsmAction MapState::enter() {
 
 	auto& sceneSystem = getService<SceneSystem>();
 
+	// TODO(Gerark) In theory this setup of mesh with materials should be done in a resource file ( prefab/scene file? )
+	auto map = sceneSystem.createEntity({}, "map1", "texturedUnlit");
+	map.updateComponent<component::Mesh>([this] (auto& mapMesh) {
+		for (int i = 0; i < 10; i++) {
+			auto textureName = fmt::format("temp{}", i);
+			mapMesh.materials[i]->set("u_Texture", getService<resource::ResourceSystem>().getResource<resource::Texture>(textureName));
+		}
+		mapMesh.materials[10]->set("u_Color", Color::black);
+	});
+
 	auto cameraEntity = sceneSystem.getCurrentCamera();
 	cameraEntity.getComponent<component::Transform>().setPosition({0, 0, 0});
-	cameraEntity.getComponent<component::Frustum>().fov = 60;
-
-	sceneSystem.createEntity({}, "map1", "texturedUnlit");
-	//entity.getComponent<component::Transform>().rotate(glm::radians(90.f), Vector3::left);
-	/*
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distr(0, 2);
-	std::array<std::string_view, 3> textures = {"grass", "dirt", "stone"};
-	int mapHalfSizeX = 8;
-	int mapHalfSizeZ = 4;
-	for (int i = -mapHalfSizeX; i < mapHalfSizeX; i++) {
-		for (int j = -mapHalfSizeZ; j < mapHalfSizeZ; j++) {
-			_createTerrainObject({i, 0, j}, textures[distr(gen)]);
-		}
-	}*/
+	auto& frustum = cameraEntity.getComponent<component::Frustum>();
+	frustum.fov = 60;
+	frustum.orthoSize = 3.f;
+	cameraEntity.addComponent<component::RotateAroundPoint>(0.005f, 0.f, 30.0f, Vector3::up * 20.f, Vector3::zero);
+	cameraEntity.getComponent<component::Camera>().projectionType = component::ProjectionType::Orthographic;
 
 	return FsmAction::none();
 }
@@ -44,6 +46,9 @@ FsmAction MapState::update() {
 	if (_exitNextFrame) {
 		return FsmAction::transition("exit");
 	}
+
+	auto& ecs = getService<EntityComponentSystem>();
+	component::RotateAroundPointSystem::update(ecs.view<component::Transform, component::RotateAroundPoint>());
 
 	return FsmAction::none();
 }
@@ -62,25 +67,6 @@ bool MapState::onKeyPress(SDL_KeyboardEvent& event) {
 	}
 
 	return false;
-}
-
-Entity MapState::_createCharacterObject() {
-	auto& sceneSystem = getService<SceneSystem>();
-	return sceneSystem.createEntity({}, "map", "texturedUnlit");
-}
-
-Entity MapState::_createTerrainObject(const glm::vec3& position, std::string_view textureName) {
-	using namespace resource;
-	using namespace component;
-
-	auto& sceneSystem = getService<SceneSystem>();
-	auto entity = sceneSystem.createEntity(position, "block", "texturedUnlit");
-
-	auto& resourceSystem = getService<resource::ResourceSystem>();
-	auto texture = resourceSystem.getResource<Texture>(textureName);
-
-	entity.getComponent<component::Mesh>().material->set("u_Texture", texture);
-	return entity;
 }
 
 }

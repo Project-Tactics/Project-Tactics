@@ -4,7 +4,13 @@
 
 namespace tactics::component {
 
+enum ProjectionType {
+	Perspective,
+	Orthographic
+};
+
 struct Camera {
+	ProjectionType projectionType = ProjectionType::Perspective;
 	glm::mat4 projection;
 	glm::mat4 view;
 };
