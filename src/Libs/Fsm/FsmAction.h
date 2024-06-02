@@ -19,4 +19,13 @@ private:
 	std::string _transitionName;
 };
 
+class FsmInputAction {
+public:
+	static FsmInputAction none();
+	static FsmInputAction transition(std::string_view transitionName);
+	static FsmInputAction consume();
+
+	bool isConsumed() const;
+};
+
 }

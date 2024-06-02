@@ -19,6 +19,8 @@ public:
 	void bind(unsigned int slot) const;
 	void unbind() const;
 
+	static std::shared_ptr<Texture> createNullTexture();
+
 	TextureInfo info;
 	unsigned int rendererId;
 };

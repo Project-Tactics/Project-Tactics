@@ -24,7 +24,7 @@ public:
 	[[nodiscard]] bool hasReachedExitState() const;
 
 	/**
-	 * Global string used to specify the state used to exit from the Fsm.
+	 * Global string whish specify the state used to exit from the Fsm.
 	 * When the Fsm jumps to this state, Fsm::hasReachedExitState() will return true.
 	 */
 	static const std::string_view exitState;

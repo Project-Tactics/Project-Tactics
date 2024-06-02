@@ -16,6 +16,11 @@ public:
 
 private:
 	bool onKeyPress(SDL_KeyboardEvent& event) override;
+	void _createPlane();
+	void _createTeapot();
+	void _createCrate();
+	void _createQuads();
+	void _createCustomQuadWithCustomResources();
 
 	bool _exitNextFrame{};
 	bool _exitNextFrameAlt{};

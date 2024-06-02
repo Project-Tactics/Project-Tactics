@@ -18,6 +18,7 @@
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/ResourceSystem.h>
+#include <Libs/Resource/Texture/Texture.h>
 #include <Libs/Utility/Service/ServiceLocator.h>
 #include <Libs/Utility/Exception.h>
 #include <Libs/Utility/Math.h>
@@ -56,6 +57,8 @@ void Engine::_initialize(Application& application) {
 	auto configFile = _resourceSystem->getResource<resource::IniFile>("configFile");
 	_renderSystem = std::make_unique<RenderSystem>(configFile);
 	_resourceSystem->loadPack("builtinMeshes");
+	_resourceSystem->createManualPack("_internalCustomPack");
+	_resourceSystem->loadExternalResource("_internalCustomPack", resource::Texture::createNullTexture());
 
 	_eventsSystem = std::make_unique<EventsSystem>();
 	_ecsSystem = std::make_unique<EntityComponentSystem>();
@@ -99,6 +102,7 @@ void Engine::_shutdown() {
 	_overlaySystem.reset();
 	_resourceSystem->unloadPack("initialization");
 	_resourceSystem->unloadPack("builtinMeshes");
+	_resourceSystem->unloadPack("_internalCustomPack");
 	_throwIfAnyResourceIsStillLoaded();
 	SDL_Quit();
 }

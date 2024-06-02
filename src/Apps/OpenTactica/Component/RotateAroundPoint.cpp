@@ -6,7 +6,7 @@ void RotateAroundPointSystem::update(ecs_view<Transform, RotateAroundPoint> view
 	view.each([] (Transform& transform, RotateAroundPoint& rotate) {
 		rotate.currentAngle += rotate.speed;
 		if (rotate.currentAngle > 2 * Math::PI) {
-			rotate.currentAngle -= 2 * Math::PI;
+			rotate.currentAngle = 0;
 		}
 
 		float distance = rotate.distanceFromPoint;

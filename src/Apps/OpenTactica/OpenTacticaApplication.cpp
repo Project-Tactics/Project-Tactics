@@ -16,7 +16,7 @@ std::string OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, F
 		.on("exit").jumpTo("Unload")
 		.on("alt").jumpTo("Empty")
 
-		.state<MapState>("Map", serviceLocator)
+		.state<MapState>("Map", serviceLocator, 0)
 		.on("exit").jumpTo("Unload")
 		.on("alt").jumpTo("Empty")
 

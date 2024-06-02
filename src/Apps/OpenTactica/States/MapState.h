@@ -8,7 +8,7 @@ namespace tactics {
 
 class MapState: public FsmStateWithServices {
 public:
-	using FsmStateWithServices::FsmStateWithServices;
+	MapState(ServiceLocator& serviceLocator, unsigned int mapIndex);
 	FsmAction enter() override;
 	FsmAction update() override;
 	void exit() override;
@@ -17,6 +17,7 @@ private:
 	bool onKeyPress(SDL_KeyboardEvent& event) override;
 
 	bool _exitNextFrame{};
+	unsigned int _mapIndex{};
 };
 
 }

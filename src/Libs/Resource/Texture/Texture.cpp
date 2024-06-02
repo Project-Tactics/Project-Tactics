@@ -17,4 +17,10 @@ void Texture::unbind() const {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+std::shared_ptr<Texture> Texture::createNullTexture() {
+	auto texture = std::make_shared<Texture>("_nullTexture");
+	texture->rendererId = 0;
+	return texture;
+}
+
 }
