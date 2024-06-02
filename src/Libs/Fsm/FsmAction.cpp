@@ -27,5 +27,4 @@ const std::string& FsmAction::transitionName() const {
 	return _transitionName;
 }
 
-
 }
