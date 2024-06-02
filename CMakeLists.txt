@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 project("ProjectTactics")
 
 # Set C++20 as the standard to be used
-set(CMAKE_CXX_STANDARD 20)
-# Generate an error if C++20 support is not available
+set(CMAKE_CXX_STANDARD 23)
+# Generate an error if C++23 support is not available
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Avoid conflicts with <Windows.h> min-max functions

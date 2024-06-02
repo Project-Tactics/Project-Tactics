@@ -1,15 +1,20 @@
 #include "Entity.h"
 
+#include "Component/NameComponent.h"
+
 namespace tactics {
 
 Entity::Entity(const char* name, EntityComponentSystem* ecs): _ecs(ecs) {
-	_name = hash_string(name);
 	_entity = ecs->create();
+	ecs->emplace<component::Name>(_entity, hash_string(name));
 }
 
 Entity::Entity() {
 	_entity = entt::null;
-	_name = hash_string("NoName");
+}
+
+const hash_string& Entity::getName() const {
+	return getComponent<component::Name>().name;
 }
 
 Entity Entity::create(const char* name, EntityComponentSystem* ecs) {
@@ -23,8 +28,12 @@ Entity Entity::create(entt::entity entity, EntityComponentSystem* ecs) {
 	return entityObject;
 }
 
-void Entity::replaceEntity(entt::entity entity) {
-	_entity = entity;
+bool Entity::operator==(entt::entity entity) const {
+	return _entity == entity;
+}
+
+Entity::operator bool() const {
+	return _entity != entt::null;
 }
 
 }

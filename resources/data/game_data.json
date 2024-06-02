@@ -20,54 +20,11 @@
             },
             "floor": {
                 "path": "textures/demo/floor.jpg"
-            },
-            "map00_0": {
-                "path": "textures/map00/texture0.png",
-                "useTransparency": true
-            },
-            "map00_1": {
-                "path": "textures/map00/texture1.png",
-                "useTransparency": true
-            },
-            "map00_2": {
-                "path": "textures/map00/texture2.png",
-                "useTransparency": true
-            },
-            "map00_3": {
-                "path": "textures/map00/texture3.png",
-                "useTransparency": true
-            },
-            "map00_4": {
-                "path": "textures/map00/texture4.png",
-                "useTransparency": true
-            },
-            "map00_5": {
-                "path": "textures/map00/texture5.png",
-                "useTransparency": true
-            },
-            "map00_6": {
-                "path": "textures/map00/texture6.png",
-                "useTransparency": true
-            },
-            "map00_7": {
-                "path": "textures/map00/texture7.png",
-                "useTransparency": true
-            },
-            "map00_8": {
-                "path": "textures/map00/texture8.png",
-                "useTransparency": true
-            },
-            "map00_9": {
-                "path": "textures/map00/texture9.png",
-                "useTransparency": true
             }
         },
         "mesh": {
             "teapot": {
                 "path": "meshes/teapot.obj"
-            },
-            "map00": {
-                "path": "meshes/map00.fbx"
             }
         },
         "material": {

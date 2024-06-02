@@ -15,6 +15,7 @@ set(HEADERS
     Component/CameraComponent.h
     Component/FrustumComponent.h
     Component/MeshComponent.h
+    Component/NameComponent.h
     Component/TransformComponent.h
     Component/ViewportComponent.h
     SubSystem/EntityComponentSubSystem.h

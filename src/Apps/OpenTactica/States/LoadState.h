@@ -17,6 +17,7 @@ public:
 	void exit() override;
 
 private:
+	void _loadMapTexturesThroughCustomPack();
 	Action _action;
 };
 

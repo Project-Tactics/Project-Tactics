@@ -21,6 +21,7 @@ MapState::MapState(ServiceLocator& serviceLocator, unsigned int mapIndex): FsmSt
 
 FsmAction MapState::enter() {
 	_exitNextFrame = false;
+	_exitNextFrameWithNextTransition = false;
 
 	auto& sceneSystem = getService<SceneSystem>();
 
@@ -28,11 +29,12 @@ FsmAction MapState::enter() {
 	auto mapName = fmt::format("map{:02d}", _mapIndex);
 	auto map = sceneSystem.createEntity({}, mapName, "texturedUnlit");
 	map.updateComponent<component::Mesh>([this, &mapName] (auto& mapMesh) {
-		for (int i = 0; i < 10; i++) {
-			auto textureName = fmt::format("{}_{}", mapName, i);
+		int i = 0;
+		for (; i < mapMesh.mesh->subMeshes.size() - 1; i++) {
+			auto textureName = fmt::format("{}_{:02d}", mapName, i);
 			mapMesh.materials[i]->set("u_Texture", getService<resource::ResourceSystem>().getResource<resource::Texture>(textureName));
 		}
-		mapMesh.materials[10]->set("u_Color", Color::black);
+		mapMesh.materials[i]->set("u_Color", Color::black);
 	});
 
 	auto cameraEntity = sceneSystem.getCurrentCamera();
@@ -48,7 +50,11 @@ FsmAction MapState::enter() {
 
 FsmAction MapState::update() {
 	if (_exitNextFrame) {
+		_exitNextFrame = false;
 		return FsmAction::transition("exit");
+	} else if (_exitNextFrameWithNextTransition) {
+		_exitNextFrameWithNextTransition = false;
+		return FsmAction::transition("next");
 	}
 
 	auto& ecs = getService<EntityComponentSystem>();
@@ -62,17 +68,20 @@ void MapState::exit() {
 	ecsSystem.view<component::Mesh>().each([&ecsSystem] (auto entity, auto&) {
 		ecsSystem.destroy(entity);
 	});
+
+	auto& sceneSystem = getService<SceneSystem>();
+	auto& cameraEntity = sceneSystem.getCurrentCamera();
+	cameraEntity.removeComponent<component::RotateAroundPoint>();
 }
 
 bool MapState::onKeyPress(SDL_KeyboardEvent& event) {
 	if (event.keysym.scancode == SDL_SCANCODE_ESCAPE) {
 		_exitNextFrame = true;
 		return true;
-	} else if (event.keysym.scancode == SDL_SCANCODE_1) {
-
+	} else if (event.keysym.scancode == SDL_SCANCODE_RETURN) {
+		_exitNextFrameWithNextTransition = true;
 		return true;
 	}
-
 
 	return false;
 }

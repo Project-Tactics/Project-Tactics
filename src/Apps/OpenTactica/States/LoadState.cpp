@@ -11,6 +11,7 @@
 #include <Libs/Overlay/OverlaySystem.h>
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/ResourceSystem.h>
+#include <Libs/Resource/Mesh/Mesh.h>
 #include <Libs/Rendering/RenderQueue.h>
 #include <Libs/Utility/Math.h>
 
@@ -43,9 +44,13 @@ FsmAction LoadState::enter() {
 		mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithAlphaBlend);
 		mainRenderQueue.addStep<ImGuiRender>(getService<OverlaySystem>());
 
+		// Load the textures programmatically so we don't have to manually copy paste a lot of texture names in the json files
+		_loadMapTexturesThroughCustomPack();
+
 	} else {
 		auto& resourceSystem = getService<resource::ResourceSystem>();
 		resourceSystem.unloadPack("mainPackage");
+		resourceSystem.unloadPack("mapTextures");
 	}
 
 	return FsmAction::transition("proceed");
@@ -56,6 +61,34 @@ void LoadState::exit() {
 
 FsmAction LoadState::update() {
 	return FsmAction::none();
+}
+
+// TODO(Gerark) of course this should disappear in favor of a prefab/scene resource which takes care of loading all the resources
+void LoadState::_loadMapTexturesThroughCustomPack() {
+	auto& resourceSystem = getService<resource::ResourceSystem>();
+
+	std::array<int, 5> mapTextureCounts = {10, 13, 8, 5, 14};
+
+	resourceSystem.createManualPack("mapTextures");
+
+	for (auto mapIndex = 0; mapIndex < mapTextureCounts.size(); ++mapIndex) {
+		std::string mapName = fmt::format("map{:02d}", mapIndex);
+		for (int i = 0; i < mapTextureCounts[mapIndex]; i++) {
+			std::string path = fmt::format("textures/{}/tex{:02d}.png", mapName, i);
+			nlohmann::json descriptor = {
+				{"path", path},
+				{"useTransparency", true}
+			};
+			std::string textureName = fmt::format("{}_{:02d}", mapName, i);
+			resourceSystem.loadExternalResource<resource::Texture>("mapTextures", textureName, descriptor);
+		}
+
+		std::string path = fmt::format("meshes/{}.fbx", mapName);
+		nlohmann::json descriptor = {
+			{"path", path}
+		};
+		resourceSystem.loadExternalResource<resource::Mesh>("mapTextures", mapName, descriptor);
+	}
 }
 
 }

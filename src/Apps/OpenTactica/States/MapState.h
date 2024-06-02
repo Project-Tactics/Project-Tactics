@@ -17,6 +17,7 @@ private:
 	bool onKeyPress(SDL_KeyboardEvent& event) override;
 
 	bool _exitNextFrame{};
+	bool _exitNextFrameWithNextTransition{};
 	unsigned int _mapIndex{};
 };
 

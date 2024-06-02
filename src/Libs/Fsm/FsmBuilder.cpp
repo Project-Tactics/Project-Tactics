@@ -6,6 +6,9 @@
 namespace tactics {
 
 FsmBuilder& FsmBuilder::state(std::string_view stateName, std::unique_ptr<FsmState> state) {
+	if (_states.contains(stateName)) {
+		throw Exception("Can't add state with name [{}]. State already exists", stateName);
+	}
 	_latestOnTransition.clear();
 	auto entry = std::make_unique<FsmStateEntry>();
 	entry->name = stateName;
