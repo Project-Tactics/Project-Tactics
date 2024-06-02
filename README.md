@@ -18,6 +18,6 @@ cmake --build ./build --config Debug
 ```
 ### Run
 ```
-cd .\build\src\Apps\ProjectTactics\Debug
-.\ProjectTactics.exe
+cd .\build\src\Apps\OpenTactica\Debug
+.\OpenTactica.exe
 ```
