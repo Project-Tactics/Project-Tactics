@@ -38,7 +38,7 @@ SceneSystem::~SceneSystem() {
 
 Entity& SceneSystem::getCurrentCamera() {
 	if (!_currentCameraEntity) {
-		throw Exception("Trying to get the current camera but the current entity is not valid.");
+		throw TACTICS_EXCEPTION("Trying to get the current camera but the current entity is not valid.");
 	}
 	return _currentCameraEntity;
 }

@@ -17,12 +17,12 @@ ResourcePackManager::ResourcePackManager(FileSystem& fileSystem, const ResourceP
 void ResourcePackManager::loadPackDefinition(std::string_view packDefinitionPath) {
 	auto fileHandle = _fileSystem.createJsonFileHandle(packDefinitionPath);
 	if (!fileHandle || !fileHandle->exists()) {
-		throw Exception("Could not find pack definition file [{}]", packDefinitionPath);
+		throw TACTICS_EXCEPTION("Could not find pack definition file [{}]", packDefinitionPath);
 	}
 	fileHandle->load();
 
 	if (fileHandle->getObject().empty()) {
-		throw Exception("Pack definition file [{}] is empty", packDefinitionPath);
+		throw TACTICS_EXCEPTION("Pack definition file [{}] is empty", packDefinitionPath);
 	}
 
 	for (auto&& [packName, packData] : fileHandle->getObject().items()) {
@@ -49,7 +49,7 @@ void ResourcePackManager::unloadPack(std::string_view packName) {
 
 Pack& ResourcePackManager::createPack(std::string_view packName, bool isManuallyCreated) {
 	if (_packs.contains(packName)) {
-		throw Exception("Can't create custom pack [{}]. A pack with the same name already exists.", packName);
+		throw TACTICS_EXCEPTION("Can't create custom pack [{}]. A pack with the same name already exists.", packName);
 	}
 
 	auto pack = std::make_unique<Pack>(packName, isManuallyCreated);
@@ -64,7 +64,7 @@ void ResourcePackManager::unloadAllPacks() {
 
 Pack& ResourcePackManager::_getResourcePack(std::string_view packName) {
 	if (!_packs.contains(packName)) {
-		throw Exception("Can't find resource pack with name [{}]. The Resource Pack does not exists", packName);
+		throw TACTICS_EXCEPTION("Can't find resource pack with name [{}]. The Resource Pack does not exists", packName);
 	}
 
 	return *_packs[packName];

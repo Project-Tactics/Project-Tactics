@@ -27,7 +27,7 @@ OverlaySystem::~OverlaySystem() {
 
 void OverlaySystem::_addOverlay(std::string_view name, std::unique_ptr<Overlay> overlay, OverlayType type, bool enabled) {
 	if (_overlays.contains(name)) {
-		throw Exception("Can't add overlay \"{}\". Another overlay with the same name already exists.", name);
+		throw TACTICS_EXCEPTION("Can't add overlay \"{}\". Another overlay with the same name already exists.", name);
 	}
 
 	enabled = _getOrCreateOverlayStoredEnableValue(name, enabled);
@@ -94,7 +94,7 @@ void OverlaySystem::forEachOverlay(const std::function<void(const std::string&, 
 
 void OverlaySystem::enableOverlay(std::string_view name, bool enabled) {
 	if (!_overlays.contains(name)) {
-		throw Exception("Can't {} overlay \"{}\". Overlay not found.", name, enabled ? "enable" : "disable");
+		throw TACTICS_EXCEPTION("Can't {} overlay \"{}\". Overlay not found.", name, enabled ? "enable" : "disable");
 	}
 
 	auto& overlay = _overlays[name];

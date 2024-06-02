@@ -63,7 +63,7 @@ void RenderSystem::_createWindow() {
 		SDL_WINDOW_OPENGL
 	);
 	if (_window == nullptr) {
-		throw Exception("Failed to open window: %s\n", SDL_GetError());
+		throw TACTICS_EXCEPTION("Failed to open window: %s\n", SDL_GetError());
 	}
 }
 
@@ -74,7 +74,7 @@ void RenderSystem::_initializeGlContext() {
 
 	int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
 	if (version == 0) {
-		throw Exception("Failed to initialize OpenGL context\n");
+		throw TACTICS_EXCEPTION("Failed to initialize OpenGL context\n");
 	}
 
 	// TODO(Gerark) Move this printf once we have a proper Log System ( don't forget of removing the useless headers after that )
@@ -127,7 +127,7 @@ void RenderSystem::_setupVSync() {
 	} else if (enableVSyncStr == "adaptive") {
 		swapInterval = -1;
 	} else {
-		throw Exception("Invalid value for enableVSync in the config file. Expected 'true/false/adaptive', got %s", enableVSyncStr.c_str());
+		throw TACTICS_EXCEPTION("Invalid value for enableVSync in the config file. Expected 'true/false/adaptive', got %s", enableVSyncStr.c_str());
 	}
 	SDL_GL_SetSwapInterval(swapInterval);
 }
@@ -141,7 +141,7 @@ void RenderSystem::_setupOglContextProfile() {
 	} else if (contextProfile == "es") {
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 	} else {
-		throw Exception("Invalid rendering context profile provided: %s, check your ini config file.", contextProfile);
+		throw TACTICS_EXCEPTION("Invalid rendering context profile provided: %s, check your ini config file.", contextProfile);
 	}
 }
 

@@ -79,7 +79,7 @@ public:
 			resource = _loader->load(name, data);
 		}
 		if (!resource) {
-			throw Exception("Failed to load resource from descriptor. Resource Type: {} - Descriptor: {}", toString(TResource::TYPE), data.dump());
+			throw TACTICS_EXCEPTION("Failed to load resource from descriptor. Resource Type: {} - Descriptor: {}", toString(TResource::TYPE), data.dump());
 		}
 		_registerResource(resource);
 		return resource;
@@ -98,7 +98,7 @@ public:
 
 	void registerResource(std::shared_ptr<BaseResource> resource) override final {
 		if (resource->type != getType()) {
-			throw Exception("Attempt to register a resource of the wrong type. Resource Type: {} - Expected Type: {} - Name: {} - ID: {}",
+			throw TACTICS_EXCEPTION("Attempt to register a resource of the wrong type. Resource Type: {} - Expected Type: {} - Name: {} - ID: {}",
 					toString(resource->type), toString(TResource::TYPE), resource->name, resource->id);
 		}
 		_registerResource(std::dynamic_pointer_cast<TResource>(resource));
@@ -119,7 +119,7 @@ private:
 
 	const std::shared_ptr<TResource>& _getTResource(ResourceId id) const {
 		if (!_resources.contains(id)) {
-			throw Exception("Resource with id \"{}\" does not exist. Can't find resource.", id);
+			throw TACTICS_EXCEPTION("Resource with id \"{}\" does not exist. Can't find resource.", id);
 		}
 
 		return _resources.at(id);
@@ -131,7 +131,7 @@ private:
 		});
 
 		if (itr == _resources.end()) {
-			throw Exception("Resource with name [{}] does not exist. Can't find resource in [{}] manager.",
+			throw TACTICS_EXCEPTION("Resource with name [{}] does not exist. Can't find resource in [{}] manager.",
 				name, toString(getType()));
 		}
 
@@ -140,7 +140,7 @@ private:
 
 	void _registerResource(std::shared_ptr<TResource> resource) {
 		if (_resources.contains(resource->id)) {
-			throw Exception("Attempt to register a resource with the same id. Resource Id: {} - Name: {} - Type: {}",
+			throw TACTICS_EXCEPTION("Attempt to register a resource with the same id. Resource Id: {} - Name: {} - Type: {}",
 				resource->id, resource->name, toString(resource->type));
 		}
 
@@ -148,7 +148,7 @@ private:
 			return pair.second->name == resource->name;
 		});
 		if (itr != _resources.end()) {
-			throw Exception("Attempt to register a resource with the same name. Resource Id: {} - Name: {} - Type: {}",
+			throw TACTICS_EXCEPTION("Attempt to register a resource with the same name. Resource Id: {} - Name: {} - Type: {}",
 				resource->id, resource->name, toString(resource->type));
 		}
 
@@ -158,13 +158,13 @@ private:
 	void _removeResource(std::shared_ptr<TResource>& resource) {
 		auto itr = _resources.find(resource->id);
 		if (itr == _resources.end()) {
-			throw Exception("Attempt to remove a resource which is not registered in the Resource Manager. Resource Id: {} - Name: {} - Type: {}",
+			throw TACTICS_EXCEPTION("Attempt to remove a resource which is not registered in the Resource Manager. Resource Id: {} - Name: {} - Type: {}",
 				resource->id, resource->name, toString(resource->type));
 		}
 
 		auto useCount = resource.use_count();
 		if (useCount > 1) {
-			throw Exception("Attempt to remove a resource which is still in use. Resource Id: {} - Name: {} - Type: {} - RefCount: {}",
+			throw TACTICS_EXCEPTION("Attempt to remove a resource which is still in use. Resource Id: {} - Name: {} - Type: {} - RefCount: {}",
 								resource->id, resource->name, toString(resource->type), useCount);
 		}
 

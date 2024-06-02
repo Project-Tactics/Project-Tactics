@@ -14,7 +14,7 @@ IniFileHandle::~IniFileHandle() {
 void IniFileHandle::load() {
 	std::ifstream file(_path);
 	if (!file.is_open()) {
-		throw Exception("Could not open file: {}", _path.string());
+		throw TACTICS_EXCEPTION("Could not open file: {}", _path.string());
 	}
 	getObject().decode(file);
 }
@@ -22,7 +22,7 @@ void IniFileHandle::load() {
 void IniFileHandle::save() {
 	std::ofstream file(_path);
 	if (!file.is_open()) {
-		throw Exception("Could not open file: {}", _path.string());
+		throw TACTICS_EXCEPTION("Could not open file: {}", _path.string());
 	}
 	getObject().encode(file);
 }

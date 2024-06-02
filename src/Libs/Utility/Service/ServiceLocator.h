@@ -39,7 +39,7 @@ public:
 	void addService(TService* service) {
 		auto id = ClassId<TService>::ID();
 		if (_services.contains(id)) {
-			throw Exception("Service is already registered. Class ID: {}", id);
+			throw TACTICS_EXCEPTION("Service is already registered. Class ID: {}", id);
 		}
 		_services[id] = std::make_unique<WrappedService<TService>>(service);
 	}
@@ -50,7 +50,7 @@ public:
 		if (auto itr = _services.find(id); itr != _services.end()) {
 			_services.erase(itr);
 		} else {
-			throw Exception("Can't remove Service. Service not found. Class ID: {}", id);
+			throw TACTICS_EXCEPTION("Can't remove Service. Service not found. Class ID: {}", id);
 		}
 	}
 
@@ -60,7 +60,7 @@ public:
 		if (auto itr = _services.find(id); itr != _services.end()) {
 			return static_cast<WrappedService<TService>*>(itr->second.get())->get();
 		} else {
-			throw Exception("Can't find Service. Class ID: {}", id);
+			throw TACTICS_EXCEPTION("Can't find Service. Class ID: {}", id);
 		}
 	}
 

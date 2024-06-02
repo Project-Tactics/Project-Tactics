@@ -11,7 +11,7 @@ const std::string_view Fsm::exitState = "_Exit";
 
 Fsm::Fsm(FsmStateEntries states, std::string_view startStateName): _states(std::move(states)), _startStateName(startStateName) {
 	if (!_states.contains(startStateName)) {
-		throw Exception("Cannot create Fsm with starting state [{}]. The state does not exist.", _startStateName);
+		throw TACTICS_EXCEPTION("Cannot create Fsm with starting state [{}]. The state does not exist.", _startStateName);
 	}
 }
 
@@ -30,7 +30,7 @@ void Fsm::update() {
 void Fsm::_goToState(std::string_view stateName) {
 	FsmStateEntry* nextState = _getStateByName(stateName);
 	if (!nextState) {
-		throw Exception("Cannot jump to state [{}]. The state does not exist.", stateName);
+		throw TACTICS_EXCEPTION("Cannot jump to state [{}]. The state does not exist.", stateName);
 	}
 
 	if (_currentState) {
@@ -57,7 +57,7 @@ void Fsm::_executeTransition(std::string_view transition) {
 	FsmTransitions& transitions = _currentState->transitions;
 	auto itr = transitions.find(transition.data());
 	if (itr == transitions.end()) {
-		throw Exception("Cannot execute transition from state [{}]. Transition [{}] does not exist.", _currentState->name, transition);
+		throw TACTICS_EXCEPTION("Cannot execute transition from state [{}]. Transition [{}] does not exist.", _currentState->name, transition);
 	}
 
 	// Check if there's at least one transition condition that evaluates to true
@@ -69,7 +69,7 @@ void Fsm::_executeTransition(std::string_view transition) {
 		}
 	}
 	if (!transitionTarget) {
-		throw Exception("Cannot execute transition [{}] from state [{}]. No condition evaluated to true", transition, _currentState->name);
+		throw TACTICS_EXCEPTION("Cannot execute transition [{}] from state [{}]. No condition evaluated to true", transition, _currentState->name);
 	}
 
 	_hasReachedExitState = transitionTarget->stateName == exitState;

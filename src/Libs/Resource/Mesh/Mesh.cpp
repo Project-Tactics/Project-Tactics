@@ -25,15 +25,15 @@ SubMesh::SubMesh(unsigned int index, std::unique_ptr<VertexBuffer> vb, std::uniq
 	, indexBuffer(std::move(ib))
 	, vertexAttributes(std::move(vao)) {
 	if (vertexBuffer->getSize() == 0) {
-		throw Exception("Vertex buffer must not be empty, SubMesh: {}", index);
+		throw TACTICS_EXCEPTION("Vertex buffer must not be empty, SubMesh: {}", index);
 	}
 
 	if (indexBuffer->getSize() == 0) {
-		throw Exception("Index buffer must not be empty, SubMesh: {}", index);
+		throw TACTICS_EXCEPTION("Index buffer must not be empty, SubMesh: {}", index);
 	}
 
 	if (indexBuffer->getSize() % 3 != 0) {
-		throw Exception("Index buffer size must be a multiple of 3, SubMesh: {}", index);
+		throw TACTICS_EXCEPTION("Index buffer size must be a multiple of 3, SubMesh: {}", index);
 	}
 }
 

@@ -20,7 +20,7 @@ void StringFileHandle::save() {
 void StringFileHandle::load() {
 	std::ifstream file(_path);
 	if (!file.is_open()) {
-		throw Exception("Could not open file: {}", _path.string());
+		throw TACTICS_EXCEPTION("Could not open file: {}", _path.string());
 	}
 
 	std::string content;

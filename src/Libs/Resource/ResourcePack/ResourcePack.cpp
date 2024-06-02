@@ -22,14 +22,14 @@ ResourceInfo::ResourceInfo(BaseResourceManager& manager, std::shared_ptr<BaseRes
 
 void ResourceInfo::load(BaseResourceManager& manager) {
 	if (isLoaded()) {
-		throw Exception("Resource [{}] is already loaded. Can't load again.", _name);
+		throw TACTICS_EXCEPTION("Resource [{}] is already loaded. Can't load again.", _name);
 	}
 	_resource = manager.load(_name, _data);
 }
 
 void ResourceInfo::unload(BaseResourceManager& manager) {
 	if (!isLoaded()) {
-		throw Exception("Can't unload Resource [{}] because it is not loaded.", _name);
+		throw TACTICS_EXCEPTION("Can't unload Resource [{}] because it is not loaded.", _name);
 	}
 	auto id = _resource->id;
 	_resource = nullptr;
@@ -130,10 +130,10 @@ PackGroup& Pack::getOrCreatePackGroup(ResourceType type) {
 
 void Pack::load(const ResourceProvider& resourceProvider) {
 	if (_isManuallyCreated) {
-		throw Exception("Can't load pack [{}]. A manually created pack is considered loaded by default and can't be reloaded again.", _name);
+		throw TACTICS_EXCEPTION("Can't load pack [{}]. A manually created pack is considered loaded by default and can't be reloaded again.", _name);
 	}
 	if (_isLoaded) {
-		throw Exception("Can't load pack [{}]. The pack is already loaded.", _name);
+		throw TACTICS_EXCEPTION("Can't load pack [{}]. The pack is already loaded.", _name);
 	}
 
 	for (auto&& [resourceType, group] : _groups) {
@@ -145,7 +145,7 @@ void Pack::load(const ResourceProvider& resourceProvider) {
 
 void Pack::unload(const ResourceProvider& resourceProvider) {
 	if (!_isLoaded) {
-		throw Exception("Can't unload pack [{}]. The pack has not been loaded yet.", _name);
+		throw TACTICS_EXCEPTION("Can't unload pack [{}]. The pack has not been loaded yet.", _name);
 	}
 
 	for (auto&& [resourceType, group] : _groups | std::views::reverse) {
@@ -164,7 +164,7 @@ void Pack::unload(const ResourceProvider& resourceProvider) {
 
 void Pack::loadExternalResource(const ResourceProvider& resourceProvider, std::shared_ptr<BaseResource> resource) {
 	if (!_isManuallyCreated) {
-		throw Exception("Can't register manual resource [{}] of type [{}] to pack [{}]. The pack is not manually created.",
+		throw TACTICS_EXCEPTION("Can't register manual resource [{}] of type [{}] to pack [{}]. The pack is not manually created.",
 			resource->name, toString(resource->type), _name);
 	}
 
@@ -175,7 +175,7 @@ void Pack::loadExternalResource(const ResourceProvider& resourceProvider, std::s
 
 void Pack::loadExternalResource(const ResourceProvider& resourceProvider, std::string_view name, ResourceType type, const nlohmann::json& data) {
 	if (!isManuallyCreated()) {
-		throw Exception("Can't load resource [{}] of type [{}] to pack [{}]. The pack has not been created manually. Descriptor: {}",
+		throw TACTICS_EXCEPTION("Can't load resource [{}] of type [{}] to pack [{}]. The pack has not been created manually. Descriptor: {}",
 			name, toString(type), _name, data.dump());
 	}
 	auto& group = getOrCreatePackGroup(type);

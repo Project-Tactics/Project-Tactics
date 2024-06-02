@@ -10,7 +10,7 @@ void ScriptingHelper::executeFunction(sol::state_view& luaState, sol::reference&
 		auto result = function();
 		if (!result.valid()) {
 			sol::error error = result;
-			throw Exception("Lua Error while executing a function: {}", error.what());
+			throw TACTICS_EXCEPTION("Lua Error while executing a function: {}", error.what());
 		}
 	}
 }

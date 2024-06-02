@@ -52,7 +52,7 @@ void ResourceSystem::forEachPack(const std::function<void(const Pack&)>& callbac
 void ResourceSystem::registerManager(std::unique_ptr<BaseResourceManager> resourceManager) {
 	auto type = resourceManager->getType();
 	if (_resourceManagers.contains(type)) {
-		throw Exception("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.", toString(type));
+		throw TACTICS_EXCEPTION("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.", toString(type));
 	}
 
 	_resourceManagers.insert({type, std::move(resourceManager)});
@@ -61,7 +61,7 @@ void ResourceSystem::registerManager(std::unique_ptr<BaseResourceManager> resour
 void ResourceSystem::_unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager) {
 	auto itr = _resourceManagers.find(resourceManager->getType());
 	if (itr == _resourceManagers.end()) {
-		throw Exception("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.",
+		throw TACTICS_EXCEPTION("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.",
 			toString(resourceManager->getType()));
 	}
 
@@ -73,7 +73,7 @@ BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) const
 		return *itr->second;
 	}
 
-	throw Exception("Can't find manager for resource type: {}", toString(resourceType));
+	throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", toString(resourceType));
 }
 
 BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) {

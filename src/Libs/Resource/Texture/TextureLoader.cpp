@@ -21,11 +21,11 @@ std::shared_ptr<Texture> TextureLoader::load(const std::string& name, const Text
 
 std::shared_ptr<Texture> TextureLoader::_loadTexture(const std::string& name, const std::string& filename, bool useTransparency) {
 	if (filename.empty()) {
-		throw Exception("Can't load texture. Filename is empty while trying to load texture [{}]", name);
+		throw TACTICS_EXCEPTION("Can't load texture. Filename is empty while trying to load texture [{}]", name);
 	}
 
 	if (!std::filesystem::exists(filename)) {
-		throw Exception("Can't load texture. File [{}] does not exist", filename);
+		throw TACTICS_EXCEPTION("Can't load texture. File [{}] does not exist", filename);
 	}
 
 	auto texture = std::make_shared<Texture>(name);

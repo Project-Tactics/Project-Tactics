@@ -79,7 +79,7 @@ private:
 
 	BaseResourceManager* _getManager(ResourceType resourceType) {
 		if (!_resourceManagers.contains(resourceType)) {
-			throw Exception("Can't find manager for resource type: {}", toString(resourceType));
+			throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", toString(resourceType));
 		}
 		return _resourceManagers[resourceType].get();
 	}

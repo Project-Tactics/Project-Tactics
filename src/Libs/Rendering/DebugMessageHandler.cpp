@@ -48,7 +48,7 @@ void DebugMessageHandler::checkGlErrors(const char* context) const {
 			break;
 		}
 
-		throw Exception("OpenGL error in {}: {} - Code: {}", context, error, errorCode);
+		throw TACTICS_EXCEPTION("OpenGL error in {}: {} - Code: {}", context, error, errorCode);
 	}
 }
 

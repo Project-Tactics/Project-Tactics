@@ -26,7 +26,7 @@ public:
 		if (hasComponent<Type>()) {
 			return _ecs->get<Type>(_entity);
 		}
-		throw Exception("Can't get component. Entity {} does not have the requested component", toString(getName()));
+		throw TACTICS_EXCEPTION("Can't get component. Entity {} does not have the requested component", toString(getName()));
 	}
 
 	template<typename Type>
@@ -34,7 +34,7 @@ public:
 		if (hasComponent<Type>()) {
 			return _ecs->get<Type>(_entity);
 		}
-		throw Exception("Can't get component. Entity {} does not have the requested component", toString(getName()));
+		throw TACTICS_EXCEPTION("Can't get component. Entity {} does not have the requested component", toString(getName()));
 	}
 
 	template<typename Type, typename... Func>
@@ -42,7 +42,7 @@ public:
 		if (hasComponent<Type>()) {
 			return _ecs->patch<Type>(_entity, std::forward<Func>(func)...);
 		}
-		throw Exception("Can't update component. Entity {} does not have the requested component", toString(getName()));
+		throw TACTICS_EXCEPTION("Can't update component. Entity {} does not have the requested component", toString(getName()));
 	}
 
 	template<typename Type>
@@ -53,7 +53,7 @@ public:
 	template<typename Type, typename ...TArgs>
 	decltype(auto) addComponent(TArgs&&... args) {
 		if (hasComponent<Type>()) {
-			throw Exception("Entity {} already has the requested component", toString(getName()));
+			throw TACTICS_EXCEPTION("Entity {} already has the requested component", toString(getName()));
 		}
 		return _ecs->emplace<Type>(_entity, std::forward<TArgs&&>(args)...);
 	}
@@ -61,7 +61,7 @@ public:
 	template<typename Type>
 	decltype(auto) removeComponent() {
 		if (!hasComponent<Type>()) {
-			throw Exception("Can't remove component. Entity {} does not have a component of that type", toString(getName()));
+			throw TACTICS_EXCEPTION("Can't remove component. Entity {} does not have a component of that type", toString(getName()));
 		}
 		return _ecs->remove<Type>(_entity);
 	}

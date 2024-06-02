@@ -25,8 +25,23 @@
 
 #include <imgui/imgui.h>
 #include <SDL.h>
+#include <fmt/format.h>
+#include <source_location>
 
 namespace tactics {
+
+void _printCallstack(const std::stacktrace& callstack) {
+	auto currentStackTrace = std::stacktrace::current();
+	std::filesystem::path rootPath((*currentStackTrace.begin()).source_file());
+	// TODO(Gerark) Very hacky to retrieve the src base folder
+	rootPath = rootPath.parent_path().parent_path().parent_path().parent_path();
+	for (auto&& entry : callstack) {
+		std::filesystem::path entryPath(entry.source_file());
+		std::filesystem::path relativePath = entryPath.lexically_relative(rootPath);
+		auto stackEntryStr = fmt::format("---\n.\\{}:{}\n{}\n", relativePath.string(), entry.source_line(), entry.description());
+		printf("%s", stackEntryStr.c_str());
+	}
+}
 
 void Engine::_run(Application& application) {
 	try {
@@ -36,7 +51,9 @@ void Engine::_run(Application& application) {
 		engine._shutdown();
 	}
 	catch (Exception& exception) {
-		printf("%s", exception.what());
+		// TODO(Gerark) Add a logger
+		printf("%s\nCallstack:\n", exception.what());
+		_printCallstack(exception.stackTrace());
 	}
 	catch (std::exception& exception) {
 		printf("%s", exception.what());
@@ -110,7 +127,7 @@ void Engine::_shutdown() {
 void Engine::_throwIfAnyResourceIsStillLoaded() {
 	_resourceSystem->forEachManager([] (auto& manager) {
 		manager.forEachResource([] (const auto& resource) {
-			throw Exception(
+			throw TACTICS_EXCEPTION(
 				"Resource [{}]:[{}] of type [{}] was not unloaded.",
 				resource.name,
 				resource.id,
@@ -121,7 +138,7 @@ void Engine::_throwIfAnyResourceIsStillLoaded() {
 
 void Engine::_initializeSDL() {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		throw Exception("SDL could not initialize! SDL_Error: {}\n", SDL_GetError());
+		throw TACTICS_EXCEPTION("SDL could not initialize! SDL_Error: {}\n", SDL_GetError());
 	}
 }
 
@@ -129,7 +146,7 @@ void Engine::_setupFsm(Application& application) {
 	auto builder = FsmBuilder();
 	auto fsmStartingStateName = application.initialize(*_serviceLocator, builder);
 	if (fsmStartingStateName.empty()) {
-		throw Exception("Application did not return a valid name for the starting state for the FSM. The name is empty");
+		throw TACTICS_EXCEPTION("Application did not return a valid name for the starting state for the FSM. The name is empty");
 	}
 	_fsm = builder.build(fsmStartingStateName);
 	_eventsSystem->registerEventsListener(_fsm.get());

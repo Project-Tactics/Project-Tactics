@@ -10,7 +10,7 @@ namespace tactics {
 std::string OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 	fsmBuilder
 		.state<LoadState>("Load", serviceLocator, LoadState::Action::Load)
-		.on("proceed").jumpTo("Map00")
+		.on("proceed").jumpTo("DemoScene")
 
 		.state<DemoState>("DemoScene", serviceLocator)
 		.on("exit").jumpTo("Unload")
