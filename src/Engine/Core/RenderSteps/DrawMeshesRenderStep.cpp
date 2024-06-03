@@ -45,6 +45,7 @@ void DrawMeshes::_drawOpaqueGeometry(const glm::mat4x4& viewProjection) {
 	using namespace component;
 
 	glDisable(GL_BLEND);
+	glDepthMask(GL_TRUE);
 
 	auto view = _ecs.view<Transform, Mesh>(entt::exclude<AlphaBlended>);
 	for (auto&& [entity, transform, mesh] : view.each()) {

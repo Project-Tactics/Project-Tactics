@@ -72,7 +72,7 @@ void RenderingOverlay::_drawCameraStats() {
 	using namespace component;
 	auto view = _ecs.view<Transform, Frustum, Camera>();
 	view.each([&] (Transform& transform, Frustum& frustum, Camera&) {
-		ImGui::TextColored(titleColor, "%s", "Camera");
+		ImGui::TextColored(titleColor, "%s", "CAMERA");
 		auto position = transform.getPosition();
 		if (_vector3("Position", position, 0, 0.1f)) {
 			transform.setPosition(position);

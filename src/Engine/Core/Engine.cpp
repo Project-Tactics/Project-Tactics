@@ -84,7 +84,7 @@ void Engine::_initialize(Application& application) {
 	_setupServiceLocator();
 	_setupFsm(application);
 
-	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", true)) {
+	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
 		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
 		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem, *_ecsSystem);
 		_overlaySystem->addOverlay<ResourcesOverlay>("Resources", false, *_resourceSystem);

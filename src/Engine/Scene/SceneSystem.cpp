@@ -75,7 +75,8 @@ void SceneSystem::_updateAlphaBlended(entt::registry& registry, entt::entity ent
 	using namespace component;
 
 	// Todo(Gerark) This is quite a weak check to know if a Mesh needs AlphaBlending.
-	// If a mesh with multiple submeshes have only one submesh with transparency, the whole mesh will be considered as alpha blended, and that's wrong.
+	// If a mesh with multiple submeshes have only one submesh with transparency, the whole mesh will be considered as alpha blended
+	// and that's going to render in a wrong way.
 	auto& material = registry.get<Mesh>(entity);
 	auto itr = std::ranges::find_if(material.materials, [] (auto& material) {
 		return std::ranges::find_if(material->getTextures(), [] (auto& pair) {

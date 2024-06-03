@@ -2,11 +2,13 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
+    FsmOverlay.cpp
     RenderingOverlay.cpp
     ResourceOverlayHelper.cpp
     ResourcesOverlay.cpp)
     
 set(HEADERS
+    FsmOverlay.h
     RenderingOverlay.h
     ResourceOverlayHelper.h
     ResourcesOverlay.h)

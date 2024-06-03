@@ -76,8 +76,7 @@ void LoadState::_loadMapTexturesThroughCustomPack() {
 		for (int i = 0; i < mapTextureCounts[mapIndex]; i++) {
 			std::string path = fmt::format("textures/{}/tex{:02d}.png", mapName, i);
 			nlohmann::json descriptor = {
-				{"path", path},
-				{"useTransparency", true}
+				{"path", path}
 			};
 			std::string textureName = fmt::format("{}_{:02d}", mapName, i);
 			resourceSystem.loadExternalResource<resource::Texture>("mapTextures", textureName, descriptor);

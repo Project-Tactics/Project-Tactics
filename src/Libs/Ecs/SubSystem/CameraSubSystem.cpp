@@ -10,7 +10,7 @@ namespace tactics {
 void CameraSubSystem::update() {
 	using namespace component;
 
-	// Update all cameras matrices
+	// Update all camera matrices
 	_reg().view<Frustum, Transform, Camera>().each([] (auto& frustum, auto& transform, auto& camera) {
 		auto target = transform.getPosition() + (transform.getRotation() * Vector3::forward);
 		camera.view = glm::lookAt(transform.getPosition(), target, Vector3::up);
