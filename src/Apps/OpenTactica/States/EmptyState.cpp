@@ -11,15 +11,11 @@ void EmptyState::exit() {
 }
 
 FsmAction EmptyState::update() {
-	if (_exitNextFrame) {
-		return FsmAction::transition("proceed");
-	}
 	return FsmAction::none();
 }
 
-bool EmptyState::onKeyPress(SDL_KeyboardEvent& /*event*/) {
-	_exitNextFrame = true;
-	return true;
+FsmEventAction EmptyState::onKeyPress(SDL_KeyboardEvent& /*event*/) {
+	return FsmEventAction::transition("proceed");
 }
 
 }

@@ -38,6 +38,13 @@ private:
 	void _executeTransition(std::string_view transition);
 	[[nodiscard]] FsmStateEntry* _getStateByName(std::string_view stateName);
 
+	template<typename TAction>
+	void _performAction(const TAction& action) {
+		if (action.hasTransition()) {
+			_executeTransition(action.transitionName());
+		}
+	}
+
 	FsmStateEntries _states;
 	FsmStateEntry* _currentState{};
 

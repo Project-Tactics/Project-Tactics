@@ -15,6 +15,11 @@ public:
 		, _stackTrace(stackTrace) {
 	}
 
+	template<class... Args>
+	Exception(fmt::format_string<Args...> formatString, Args&&... args)
+		: std::runtime_error(fmt::format(formatString, std::forward<Args>(args)...).c_str()) {
+	}
+
 	const std::stacktrace& stackTrace() const {
 		return _stackTrace;
 	}

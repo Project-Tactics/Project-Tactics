@@ -24,7 +24,7 @@ void Fsm::update() {
 		return;
 
 	FsmAction action = _currentState->state->update();
-	_performAction(action);
+	_performAction<FsmAction>(action);
 }
 
 void Fsm::_goToState(std::string_view stateName) {
@@ -38,14 +38,8 @@ void Fsm::_goToState(std::string_view stateName) {
 	}
 	_currentState = nextState;
 	nextState = nullptr;
-	FsmAction action = _currentState->state->enter();
-	_performAction(action);
-}
-
-void Fsm::_performAction(FsmAction& action) {
-	if (action) {
-		_executeTransition(action.transitionName());
-	}
+	auto action = _currentState->state->enter();
+	_performAction<FsmAction>(action);
 }
 
 bool Fsm::hasReachedExitState() const {
@@ -90,7 +84,9 @@ FsmStateEntry* Fsm::_getStateByName(std::string_view stateName) {
 
 bool Fsm::onEvent(SDL_Event& event) {
 	if (_currentState) {
-		return _currentState->state->onEvent(event);
+		auto action = _currentState->state->onEvent(event);
+		_performAction<FsmEventAction>(action);
+		return action.wantsToCaptureInput();
 	}
 	return false;
 }

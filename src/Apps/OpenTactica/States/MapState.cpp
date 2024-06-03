@@ -20,9 +20,6 @@ MapState::MapState(ServiceLocator& serviceLocator, unsigned int mapIndex): FsmSt
 }
 
 FsmAction MapState::enter() {
-	_exitNextFrame = false;
-	_exitNextFrameWithNextTransition = false;
-
 	auto& sceneSystem = getService<SceneSystem>();
 
 	// TODO(Gerark) In theory this setup of mesh with materials should be done in a resource file ( prefab/scene file? )
@@ -38,25 +35,18 @@ FsmAction MapState::enter() {
 	});
 
 	auto cameraEntity = sceneSystem.getCurrentCamera();
-	cameraEntity.getComponent<component::Transform>().setPosition({0, 0, 0});
 	auto& frustum = cameraEntity.getComponent<component::Frustum>();
 	frustum.fov = 60;
 	frustum.orthoSize = 3.f;
-	cameraEntity.addComponent<component::RotateAroundPoint>(0.0035f, 0.f, 30.0f, Vector3::up * 20.f, Vector3::up * 1.f);
+	if (!cameraEntity.hasComponent<component::RotateAroundPoint>()) {
+		cameraEntity.addComponent<component::RotateAroundPoint>(0.0035f, 0.f, 30.0f, Vector3::up * 20.f, Vector3::up * 1.f);
+	}
 	cameraEntity.getComponent<component::Camera>().projectionType = component::ProjectionType::Orthographic;
 
 	return FsmAction::none();
 }
 
 FsmAction MapState::update() {
-	if (_exitNextFrame) {
-		_exitNextFrame = false;
-		return FsmAction::transition("exit");
-	} else if (_exitNextFrameWithNextTransition) {
-		_exitNextFrameWithNextTransition = false;
-		return FsmAction::transition("next");
-	}
-
 	auto& ecs = getService<EntityComponentSystem>();
 	component::RotateAroundPointSystem::update(ecs.view<component::Transform, component::RotateAroundPoint>());
 
@@ -68,22 +58,18 @@ void MapState::exit() {
 	ecsSystem.view<component::Mesh>().each([&ecsSystem] (auto entity, auto&) {
 		ecsSystem.destroy(entity);
 	});
-
-	auto& sceneSystem = getService<SceneSystem>();
-	auto& cameraEntity = sceneSystem.getCurrentCamera();
-	cameraEntity.removeComponent<component::RotateAroundPoint>();
 }
 
-bool MapState::onKeyPress(SDL_KeyboardEvent& event) {
+FsmEventAction MapState::onKeyPress(SDL_KeyboardEvent& event) {
 	if (event.keysym.scancode == SDL_SCANCODE_ESCAPE) {
-		_exitNextFrame = true;
-		return true;
+		return FsmEventAction::transition("exit");
 	} else if (event.keysym.scancode == SDL_SCANCODE_RETURN) {
-		_exitNextFrameWithNextTransition = true;
-		return true;
+		return FsmEventAction::transition("next");
+	} else if (event.keysym.scancode == SDL_SCANCODE_SPACE) {
+		return FsmEventAction::transition("empty");
 	}
 
-	return false;
+	return FsmEventAction::none();
 }
 
 }

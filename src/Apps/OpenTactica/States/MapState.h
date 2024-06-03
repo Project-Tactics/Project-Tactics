@@ -14,10 +14,7 @@ public:
 	void exit() override;
 
 private:
-	bool onKeyPress(SDL_KeyboardEvent& event) override;
-
-	bool _exitNextFrame{};
-	bool _exitNextFrameWithNextTransition{};
+	FsmEventAction onKeyPress(SDL_KeyboardEvent& event) override;
 	unsigned int _mapIndex{};
 };
 

@@ -2,8 +2,8 @@
 
 #include <string_view>
 
-#include <Libs/Event/EventsListener.h>
 #include "FsmAction.h"
+#include "FsmEventListener.h"
 
 /**
  * @brief Implement this abstract class to create a new State that can be added to an Fsm.
@@ -12,7 +12,7 @@
  */
 namespace tactics {
 
-class FsmState: public EventsListener {
+class FsmState: public FsmEventListener {
 public:
 	virtual ~FsmState() = default;
 

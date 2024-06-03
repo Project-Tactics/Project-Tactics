@@ -18,10 +18,6 @@
 namespace tactics {
 
 FsmAction DemoState::enter() {
-	using namespace component;
-	_exitNextFrame = false;
-	_exitNextFrameAlt = false;
-
 	_createPlane();
 	_createTeapot();
 	_createCrate();
@@ -30,7 +26,7 @@ FsmAction DemoState::enter() {
 
 	auto& sceneSystem = getService<SceneSystem>();
 	auto camera = sceneSystem.getCurrentCamera();
-	camera.addComponent<RotateAroundPoint>(0.005f, 0.f, 100.0f, Vector3::up * 10.f, Vector3::zero);
+	camera.addComponent<component::RotateAroundPoint>(0.005f, 0.f, 100.0f, Vector3::up * 10.f, Vector3::zero);
 
 	return FsmAction::none();
 }
@@ -48,12 +44,6 @@ void DemoState::exit() {
 }
 
 FsmAction DemoState::update() {
-	if (_exitNextFrame) {
-		return FsmAction::transition("exit");
-	} else if (_exitNextFrameAlt) {
-		return FsmAction::transition("alt");
-	}
-
 	auto& ecs = getService<EntityComponentSystem>();
 	component::RotateItemSystem::update(ecs.view<component::Transform, component::RotateItem>());
 	component::RotateAroundPointSystem::update(ecs.view<component::Transform, component::RotateAroundPoint>());
@@ -61,16 +51,14 @@ FsmAction DemoState::update() {
 	return FsmAction::none();
 }
 
-bool DemoState::onKeyPress(SDL_KeyboardEvent& event) {
+FsmEventAction DemoState::onKeyPress(SDL_KeyboardEvent& event) {
 	if (event.keysym.scancode == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
-		_exitNextFrame = true;
-		return true;
+		return FsmEventAction::transition("exit");
 	} else if (event.keysym.scancode == SDL_Scancode::SDL_SCANCODE_SPACE) {
-		_exitNextFrameAlt = true;
-		return true;
+		return FsmEventAction::transition("empty");
 	}
 
-	return false;
+	return FsmEventAction::none();
 }
 
 void DemoState::_createCrate() {
