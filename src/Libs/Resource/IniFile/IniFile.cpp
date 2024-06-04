@@ -12,6 +12,10 @@ ini::IniSection& IniFile::createSection(std::string_view section) {
 
 void IniFile::merge(ini::IniFile& other) {
 	fileHandle->getObject().merge(other);
+	for (auto& [otherSectionName, otherSection] : other) {
+		auto& thisSection = fileHandle->getObject()[otherSectionName];
+		thisSection.merge(otherSection);
+	}
 }
 
 }

@@ -10,7 +10,7 @@
 
 namespace tactics {
 
-OverlaySystem::OverlaySystem(std::shared_ptr<resource::IniFile> iniFile, const FileSystem& fileSystem): _iniFile(iniFile) {
+OverlaySystem::OverlaySystem(std::shared_ptr<resource::IniFile> devUserSettings, resource::IniFile& imGuiSettings, const FileSystem& fileSystem): _devUserSettings(devUserSettings) {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -18,7 +18,7 @@ OverlaySystem::OverlaySystem(std::shared_ptr<resource::IniFile> iniFile, const F
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
 
-	OverlayStyleHelper::setupImGuiStyle(*_iniFile, fileSystem);
+	OverlayStyleHelper::setupImGuiStyle(imGuiSettings, fileSystem);
 }
 
 OverlaySystem::~OverlaySystem() {
@@ -32,7 +32,7 @@ void OverlaySystem::_addOverlay(std::string_view name, std::unique_ptr<Overlay> 
 
 	enabled = _getOrCreateOverlayStoredEnableValue(name, enabled);
 	auto config = overlay->getConfig();
-	_overlays.insert({name, OverlayItem{std::move(overlay), enabled, type, config}});
+	_overlays.insert({name, OverlayItem{std::move(overlay), config, type, enabled}});
 }
 
 void OverlaySystem::removeOverlay(std::string_view name) {
@@ -62,7 +62,10 @@ void OverlaySystem::update() {
 				break;
 			}
 			case OverlayType::MenuBar: {
-				if (ImGui::BeginMainMenuBar()) {
+				ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+				auto openMainMenu = ImGui::BeginMainMenuBar();
+				ImGui::PopStyleColor(1);
+				if (openMainMenu) {
 					overlayItem.overlay->update();
 					ImGui::EndMainMenuBar();
 				}
@@ -106,12 +109,12 @@ void OverlaySystem::enableOverlay(std::string_view name, bool enabled) {
 }
 
 bool OverlaySystem::_getOrCreateOverlayStoredEnableValue(std::string_view name, bool defaultValue) {
-	return _iniFile->getOrCreate("overlay", name, defaultValue);
+	return _devUserSettings->getOrCreate("overlay", name, defaultValue);
 }
 
 void OverlaySystem::_setOverlayStoredEnableValue(std::string_view name, bool enabled) {
-	_iniFile->set("overlay", name.data(), enabled);
-	_iniFile->fileHandle->save();
+	_devUserSettings->set("overlay", name.data(), enabled);
+	_devUserSettings->fileHandle->save();
 }
 
 }

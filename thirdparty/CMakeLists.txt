@@ -17,6 +17,8 @@ add_subdirectory(glm)
 # Adding imgui as immediate mode UI
 # https://github.com/ocornut/imgui/tree/docking
 add_subdirectory(imgui)
+# https://github.com/thedmd/imgui-node-editor
+add_subdirectory(imgui-node-editor)
 
 # Adding fmt lib preferred to std::format for its runtime format string capabilities ( waiting for c++23 to get rid of it? )
 # https://github.com/fmtlib/fmt

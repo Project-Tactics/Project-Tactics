@@ -27,6 +27,10 @@ private:
 
 	RenderSystem& _renderSystem;
 	EntityComponentSystem& _ecs;
+	ImVec4 _titleColor;
+	ImVec4 _xComponentColor;
+	ImVec4 _yComponentColor;
+	ImVec4 _zComponentColor;
 };
 
 }

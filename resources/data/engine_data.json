@@ -5,9 +5,11 @@
                 "path": "config.ini",
                 "pathToDefault": "default_config.ini"
             },
-            "devConfigFile": {
-                "path": "dev/dev_config.ini",
-                "pathToDefault": "dev/default_dev_config.ini"
+            "devUserConfigFile": {
+                "path": "dev/dev_user_config.ini"
+            },
+            "imguiSettings": {
+                "path": "dev/imgui_settings.ini"
             }
         }
     },

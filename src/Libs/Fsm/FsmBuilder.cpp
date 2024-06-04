@@ -58,16 +58,24 @@ FsmBuilder& FsmBuilder::jumpTo(std::function<bool()> condition, std::string_view
 	return *this;
 }
 
-std::unique_ptr<Fsm> FsmBuilder::build(std::string_view startStateName) {
+std::tuple<std::unique_ptr<Fsm>, std::unique_ptr<FsmInfo>> FsmBuilder::build(std::string_view startStateName, FsmExternalController* externalController) {
 	if (!_states.contains(startStateName)) {
 		throw TACTICS_EXCEPTION("Can't build FSM. Start state [{}] is not valid", startStateName);
 	} else if (_states.empty()) {
 		throw TACTICS_EXCEPTION("Can't build FSM. No states have been added to the FSM");
 	}
-	auto fsm = std::make_unique<Fsm>(std::move(_states), startStateName);
+
+	auto fsmInfo = std::make_unique<FsmInfo>();
+	fsmInfo->startState = startStateName;
+	for (auto& [name, state] : _states) {
+		fsmInfo->states.emplace_back(name, state->transitions);
+	}
+
+	auto fsm = std::make_unique<Fsm>(std::move(_states), startStateName, externalController);
 	_states.clear();
 	_latestOnTransition.clear();
-	return std::move(fsm);
+
+	return {std::move(fsm), std::move(fsmInfo)};
 }
 
 }

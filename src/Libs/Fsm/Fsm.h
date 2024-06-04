@@ -9,9 +9,11 @@
 
 namespace tactics {
 
+class FsmExternalController;
+
 class Fsm: public EventsListener {
 public:
-	Fsm(FsmStateEntries states, std::string_view startStateName);
+	Fsm(FsmStateEntries states, std::string_view startStateName, FsmExternalController* externalController);
 
 	/**
 	 * @brief Updates the current state of the Fsm and executes any transition.
@@ -31,12 +33,13 @@ public:
 
 private:
 	// FsmEventHandler implementation
-	bool onEvent(SDL_Event& event) override;
+	[[nodiscard]] bool onEvent(SDL_Event& event) override;
 
 	void _goToState(std::string_view stateName);
 	void _performAction(FsmAction& action);
 	void _executeTransition(std::string_view transition);
 	[[nodiscard]] FsmStateEntry* _getStateByName(std::string_view stateName);
+	bool _performExternalUpdateTransition();
 
 	template<typename TAction>
 	void _performAction(const TAction& action) {
@@ -47,6 +50,13 @@ private:
 
 	FsmStateEntries _states;
 	FsmStateEntry* _currentState{};
+
+	/**
+	 * The External Controller is mostly meant to control the transition of the fsm by requesting them during the update() method
+	 * Its main purpose is to allow debug or external control of the Fsm in dev mode.
+	 * It doesn't replace the Fsm/FsmState logic and shouldn't be used for domain logic reason.
+	 */
+	FsmExternalController* _externalController{};
 
 	bool _hasReachedExitState{};
 	std::string _startStateName;

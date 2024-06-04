@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
     Application.cpp
+    DefaultFsmExternalController.cpp
     Engine.cpp
     ResourceSystemInitializer.cpp
     RenderSteps/PrepareViewportRenderStep.cpp
@@ -11,6 +12,7 @@ set(SOURCES
     
 set(HEADERS
     Application.h
+    DefaultFsmExternalController.h
     Engine.h
     ResourceSystemInitializer.h
     RenderSteps/PrepareViewportRenderStep.h

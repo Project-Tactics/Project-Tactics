@@ -27,6 +27,7 @@ target_link_libraries(imgui PRIVATE sdl2_wrapper)
 target_include_directories(imgui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
 # disable warning as error for imgui
 target_compile_options(imgui PRIVATE /wd4701)
+target_compile_options(imgui PRIVATE /wd4996)
 
 unset(SOURCES)
 unset(HEADERS)

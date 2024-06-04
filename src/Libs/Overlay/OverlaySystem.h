@@ -21,7 +21,7 @@ class FileSystem;
  */
 class OverlaySystem {
 public:
-	OverlaySystem(std::shared_ptr<resource::IniFile> iniFile, const FileSystem& fileSystem);
+	OverlaySystem(std::shared_ptr<resource::IniFile> devUserSettings, resource::IniFile& imGuiSettings, const FileSystem& fileSystem);
 	~OverlaySystem();
 
 	template<typename TOverlay, typename ...TArgs>
@@ -44,9 +44,9 @@ public:
 
 	struct OverlayItem {
 		std::unique_ptr<Overlay> overlay;
-		bool enabled{};
-		OverlayType type{};
 		OverlayConfig config{};
+		OverlayType type{};
+		bool enabled{};
 	};
 	void forEachOverlay(const std::function<void(const std::string&, OverlayItem&)>& callback);
 
@@ -57,7 +57,7 @@ private:
 
 	UnorderedStringMap<OverlayItem> _overlays;
 	bool _isEnabled{};
-	std::shared_ptr<resource::IniFile> _iniFile;
+	std::shared_ptr<resource::IniFile> _devUserSettings;
 };
 
 }

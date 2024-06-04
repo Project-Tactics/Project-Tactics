@@ -1,5 +1,7 @@
 #include "ResourceOverlayHelper.h"
 
+#include "CustomOverlayColors.h"
+
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/Mesh/Mesh.h>
 #include <Libs/Resource/Material/Material.h>
@@ -160,25 +162,26 @@ bool ResourceOverlayHelper::_beginTabItem(const char* name, resource::ResourceTy
 }
 
 ImVec4 ResourceOverlayHelper::toColor(resource::ResourceType resourceType, float multiplier, float alphaMultiplier) {
+	auto& colors = CustomOverlayColors::getColors();
 	ImVec4 result{};
 	switch (resourceType) {
 	case resource::ResourceType::Texture:
-		result = ImVec4(1.f, 0.f, 0.f, 1.f);
+		result = colors.TextureColor;
 		break;
 	case resource::ResourceType::Mesh:
-		result = ImVec4(0, 1.f, 0.f, 1.f);
+		result = colors.MeshColor;
 		break;
 	case resource::ResourceType::Material:
-		result = ImVec4(0.2f, 0.651f, 0.878f, 1.f);
+		result = colors.MaterialColor;
 		break;
 	case resource::ResourceType::Shader:
-		result = ImVec4(0.839f, 0.827f, 0.114f, 1.f);
+		result = colors.ShaderColor;
 		break;
 	case resource::ResourceType::IniFile:
-		result = ImVec4(1.f, 0.5f, 0.f, 1.f);
+		result = colors.IniFileColor;
 		break;
 	default:
-		result = ImVec4(1.f, 1.f, 1.f, 1.f);
+		result = colors.ResourceColor;
 		break;
 	}
 	result.x *= multiplier;

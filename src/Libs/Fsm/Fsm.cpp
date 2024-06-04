@@ -1,5 +1,7 @@
 #include "Fsm.h"
 
+#include "FsmExternalController.h"
+
 #include <Libs/Utility/Exception.h>
 
 #include <string>
@@ -9,7 +11,10 @@ namespace tactics {
 
 const std::string_view Fsm::exitState = "_Exit";
 
-Fsm::Fsm(FsmStateEntries states, std::string_view startStateName): _states(std::move(states)), _startStateName(startStateName) {
+Fsm::Fsm(FsmStateEntries states, std::string_view startStateName, FsmExternalController* externalController)
+	: _states(std::move(states))
+	, _startStateName(startStateName)
+	, _externalController(externalController) {
 	if (!_states.contains(startStateName)) {
 		throw TACTICS_EXCEPTION("Cannot create Fsm with starting state [{}]. The state does not exist.", _startStateName);
 	}
@@ -20,11 +25,27 @@ void Fsm::update() {
 		_goToState(_startStateName);
 	}
 
-	if (_hasReachedExitState)
+	if (_hasReachedExitState) {
 		return;
+	}
+
+	if (_performExternalUpdateTransition()) {
+		return;
+	}
 
 	FsmAction action = _currentState->state->update();
 	_performAction<FsmAction>(action);
+}
+
+bool Fsm::_performExternalUpdateTransition() {
+	if (_externalController) {
+		FsmAction action = _externalController->update(_currentState->name);
+		if (action.hasTransition()) {
+			_executeTransition(action.transitionName());
+			return true;
+		}
+	}
+	return false;
 }
 
 void Fsm::_goToState(std::string_view stateName) {

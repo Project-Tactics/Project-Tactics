@@ -16,6 +16,7 @@ OverlayConfig ResourcesOverlay::getConfig() {
 	OverlayConfig config;
 	config.position = {310, 30};
 	config.size = {300, 0};
+	config.isMenuBarButton = true;
 	return config;
 }
 

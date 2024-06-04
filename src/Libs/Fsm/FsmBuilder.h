@@ -41,7 +41,7 @@ public:
 	FsmBuilder& jumpTo(std::string_view targetState);
 	FsmBuilder& jumpTo(std::function<bool()> condition, std::string_view targetState);
 
-	std::unique_ptr<Fsm> build(std::string_view startStateName);
+	std::tuple<std::unique_ptr<Fsm>, std::unique_ptr<FsmInfo>> build(std::string_view startStateName, FsmExternalController* externalController);
 
 private:
 	FsmStateEntries _states;

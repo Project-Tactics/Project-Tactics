@@ -26,4 +26,14 @@ struct FsmStateEntry {
 
 using FsmStateEntries = UnorderedStringMap<std::unique_ptr<FsmStateEntry>>;
 
+struct FsmStateInfo {
+	std::string name;
+	FsmTransitions transitions;
+};
+
+struct FsmInfo {
+	std::vector<FsmStateInfo> states;
+	std::string startState;
+};
+
 }

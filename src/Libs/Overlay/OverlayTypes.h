@@ -18,8 +18,9 @@ enum class OverlayType {
 };
 
 struct OverlayConfig {
-	ImVec2 position;
-	ImVec2 size;
+	ImVec2 position{};
+	ImVec2 size{};
+	bool isMenuBarButton{};
 };
 
 }

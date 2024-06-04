@@ -1,5 +1,7 @@
 #include "RenderingOverlay.h"
 
+#include "CustomOverlayColors.h"
+
 #include <Libs/Rendering/RenderSystem.h>
 
 #include <Libs/Ecs/EntityComponentSystem.h>
@@ -12,20 +14,20 @@
 
 namespace tactics {
 
-const auto titleColor = ImVec4(0.059f, 0.600f, 0.851f, 1.f);
-const auto xComponentColor = ImVec4(1.f, 0.f, 0.f, 1.f);
-const auto yComponentColor = ImVec4(0, 1.f, 0.f, 1.f);
-const auto zComponentColor = ImVec4(0.06f, 0.6f, 0.9f, 1.f);
-
 RenderingOverlay::RenderingOverlay(RenderSystem& renderSystem, EntityComponentSystem& ecs)
 	: _renderSystem(renderSystem)
 	, _ecs(ecs) {
+	_titleColor = CustomOverlayColors::getColors().TitleTextColor;
+	_xComponentColor = CustomOverlayColors::getColors().XComponentColor;
+	_yComponentColor = CustomOverlayColors::getColors().YComponentColor;
+	_zComponentColor = CustomOverlayColors::getColors().ZComponentColor;
 }
 
 OverlayConfig RenderingOverlay::getConfig() {
 	OverlayConfig config;
 	config.position = {5, 30};
 	config.size = {300, 0};
+	config.isMenuBarButton = true;
 	return config;
 }
 
@@ -38,7 +40,7 @@ void RenderingOverlay::update() {
 }
 
 void RenderingOverlay::_drawRenderStats() {
-	ImGui::TextColored(titleColor, "%s", "STATS");
+	ImGui::TextColored(_titleColor, "%s", "STATS");
 	ImGui::Text("FPS: %f", ImGui::GetIO().Framerate);
 }
 
@@ -46,7 +48,7 @@ void RenderingOverlay::_drawViewportStats() {
 	using namespace component;
 	auto view = _ecs.view<Viewport>();
 	view.each([&] (Viewport& viewport) {
-		ImGui::TextColored(titleColor, "%s", "VIEWPORT");
+		ImGui::TextColored(_titleColor, "%s", "VIEWPORT");
 		glm::vec2 topLeft = viewport.topLeft;
 		glm::vec2 size = viewport.size;
 		bool dirty = false;
@@ -72,7 +74,7 @@ void RenderingOverlay::_drawCameraStats() {
 	using namespace component;
 	auto view = _ecs.view<Transform, Frustum, Camera>();
 	view.each([&] (Transform& transform, Frustum& frustum, Camera&) {
-		ImGui::TextColored(titleColor, "%s", "CAMERA");
+		ImGui::TextColored(_titleColor, "%s", "CAMERA");
 		auto position = transform.getPosition();
 		if (_vector3("Position", position, 0, 0.1f)) {
 			transform.setPosition(position);
@@ -98,11 +100,11 @@ bool RenderingOverlay::_vector3(const char* label, glm::vec3& vec, float compone
 	ImGui::BeginGroup();
 	ImGui::SameLine();
 	bool valueChanged = false;
-	valueChanged |= _vecComponent(&vec.x, xComponentColor, componentWidth, componentSpeed, ("##x" + std::string(label)).c_str());
+	valueChanged |= _vecComponent(&vec.x, _xComponentColor, componentWidth, componentSpeed, ("##x" + std::string(label)).c_str());
 	ImGui::SameLine();
-	valueChanged |= _vecComponent(&vec.y, yComponentColor, componentWidth, componentSpeed, ("##y" + std::string(label)).c_str());
+	valueChanged |= _vecComponent(&vec.y, _yComponentColor, componentWidth, componentSpeed, ("##y" + std::string(label)).c_str());
 	ImGui::SameLine();
-	valueChanged |= _vecComponent(&vec.z, zComponentColor, componentWidth, componentSpeed, ("##z" + std::string(label)).c_str());
+	valueChanged |= _vecComponent(&vec.z, _zComponentColor, componentWidth, componentSpeed, ("##z" + std::string(label)).c_str());
 	ImGui::EndGroup();
 	return valueChanged;
 }
@@ -116,9 +118,9 @@ bool RenderingOverlay::_vector2(const char* label, glm::vec2& vec, float compone
 	ImGui::BeginGroup();
 	ImGui::SameLine();
 	bool valueChanged = false;
-	valueChanged |= _vecComponent(&vec.x, xComponentColor, componentWidth, componentSpeed, ("##x" + std::string(label)).c_str());
+	valueChanged |= _vecComponent(&vec.x, _xComponentColor, componentWidth, componentSpeed, ("##x" + std::string(label)).c_str());
 	ImGui::SameLine();
-	valueChanged |= _vecComponent(&vec.y, yComponentColor, componentWidth, componentSpeed, ("##y" + std::string(label)).c_str());
+	valueChanged |= _vecComponent(&vec.y, _yComponentColor, componentWidth, componentSpeed, ("##y" + std::string(label)).c_str());
 	ImGui::EndGroup();
 	return valueChanged;
 }

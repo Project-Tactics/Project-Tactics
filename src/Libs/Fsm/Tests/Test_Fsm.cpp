@@ -21,7 +21,7 @@ protected:
 	}
 
 	std::unique_ptr<Fsm> _createFsm(std::string_view startingStateName) {
-		return std::make_unique<Fsm>(std::move(_states), startingStateName);
+		return std::make_unique<Fsm>(std::move(_states), startingStateName, nullptr);
 	}
 
 	FsmStateEntries _states;

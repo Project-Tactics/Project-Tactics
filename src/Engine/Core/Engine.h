@@ -10,6 +10,7 @@ class ResourceSystem;
 }
 
 class Application;
+class DefaultFsmExternalController;
 class EntityComponentSystem;
 class EventsSystem;
 class FileSystem;
@@ -18,6 +19,7 @@ class OverlaySystem;
 class RenderSystem;
 class ServiceLocator;
 class SceneSystem;
+struct FsmInfo;
 
 class Engine {
 public:
@@ -46,7 +48,9 @@ private:
 	std::unique_ptr<EntityComponentSystem> _ecsSystem;
 	std::unique_ptr<SceneSystem> _sceneSystem;
 	std::unique_ptr<Fsm> _fsm;
+	std::unique_ptr<FsmInfo> _fsmInfo;
 	std::unique_ptr<ServiceLocator> _serviceLocator;
+	std::unique_ptr<DefaultFsmExternalController> _fsmExternalController;
 };
 
 }

@@ -34,7 +34,7 @@ public:
 			return defaultValue;
 		}
 
-		auto& section = iniFile[sectionName];
+		auto& section = iniFile[std::string(sectionName)];
 		auto itr = section.find(key.data());
 		if (itr == section.end()) {
 			return defaultValue;

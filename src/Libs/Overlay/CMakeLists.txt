@@ -18,7 +18,7 @@ set(HEADERS
         ScriptedOverlay.h)
 
 add_library(libs_overlay STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_overlay PUBLIC imgui libs_resource PRIVATE lua_wrapper libs_utility inicpp)
+target_link_libraries(libs_overlay PUBLIC imgui imgui_node_editor libs_resource PRIVATE lua_wrapper libs_utility inicpp)
 add_to_libs_folder(libs_overlay)
 
 unset(SOURCES)

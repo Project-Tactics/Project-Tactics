@@ -11,6 +11,7 @@ set(HEADERS
         FsmAction.h
         FsmBuilder.h
         FsmEventListener.h
+        FsmExternalController.h
         FsmState.h
         FsmStateWithServices.h
         FsmTypes.h)

@@ -1,10 +1,13 @@
 #include "Engine.h"
 
 #include "Application.h"
+#include "DefaultFsmExternalController.h"
 #include "ResourceSystemInitializer.h"
 
+#include <Engine/Overlay/FsmOverlay.h>
 #include <Engine/Overlay/RenderingOverlay.h>
 #include <Engine/Overlay/ResourcesOverlay.h>
+#include <Engine/Overlay/CustomOverlayColors.h>
 #include <Engine/Scene/SceneSystem.h>
 
 #include <Libs/Ecs/EntityComponentSystem.h>
@@ -67,9 +70,11 @@ void Engine::_initialize(Application& application) {
 
 	_resourceSystem = ResourceSystemInitializer::initialize(*_fileSystem);
 
-	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devConfigFile");
-	_overlaySystem = std::make_unique<OverlaySystem>(debugConfigFile, *_fileSystem);
+	auto devUserConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
+	auto imguiSettings = _resourceSystem->getResource<resource::IniFile>("imguiSettings");
+	_overlaySystem = std::make_unique<OverlaySystem>(devUserConfigFile, *imguiSettings, *_fileSystem);
 	_overlaySystem->setEnabled(true);
+	CustomOverlayColors::initialize(*imguiSettings);
 
 	auto configFile = _resourceSystem->getResource<resource::IniFile>("configFile");
 	_renderSystem = std::make_unique<RenderSystem>(configFile);
@@ -84,10 +89,11 @@ void Engine::_initialize(Application& application) {
 	_setupServiceLocator();
 	_setupFsm(application);
 
-	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
+	if (devUserConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
 		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
 		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem, *_ecsSystem);
 		_overlaySystem->addOverlay<ResourcesOverlay>("Resources", false, *_resourceSystem);
+		_overlaySystem->addOverlay<FsmOverlay>("Fsm", false, *_fsmExternalController, *_fsmInfo);
 		_overlaySystem->addOverlay<ExampleOverlay>("ImGui Demo", false);
 	}
 }
@@ -106,7 +112,7 @@ void Engine::_internalRun() {
 }
 
 void Engine::_shutdown() {
-	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devConfigFile");
+	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
 	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
 		_overlaySystem->removeOverlay("Main");
 		_overlaySystem->removeOverlay("Rendering");
@@ -148,7 +154,9 @@ void Engine::_setupFsm(Application& application) {
 	if (fsmStartingStateName.empty()) {
 		throw TACTICS_EXCEPTION("Application did not return a valid name for the starting state for the FSM. The name is empty");
 	}
-	_fsm = builder.build(fsmStartingStateName);
+
+	_fsmExternalController = std::make_unique<DefaultFsmExternalController>();
+	std::tie(_fsm, _fsmInfo) = builder.build(fsmStartingStateName, _fsmExternalController.get());
 	_eventsSystem->registerEventsListener(_fsm.get());
 }
 
