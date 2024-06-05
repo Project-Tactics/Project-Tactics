@@ -54,13 +54,14 @@ void RenderSystem::_createWindow() {
 	auto windowSize = _getConfigValue("windowSize", glm::u32vec2{1280, 720});
 	auto windowPosition = _getConfigValue("windowPosition", glm::u32vec2{100, 100});
 	auto windowTitle = _getConfigValue("windowTitle", std::string("Project-Tactics-Sample"));
+	auto fullscreen = _getConfigValue("fullscreen", false);
 	_window = SDL_CreateWindow(
 		windowTitle.c_str(),
 		windowPosition.x,
 		windowPosition.y,
 		windowSize.x,
 		windowSize.y,
-		SDL_WINDOW_OPENGL
+		SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0)
 	);
 	if (_window == nullptr) {
 		throw TACTICS_EXCEPTION("Failed to open window: %s\n", SDL_GetError());
