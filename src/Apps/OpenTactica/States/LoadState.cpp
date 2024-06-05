@@ -30,7 +30,7 @@ FsmAction LoadState::enter() {
 
 		auto& renderSystem = getService<RenderSystem>();
 		auto& scene = getService<SceneSystem>();
-		auto mainCamera = scene.createCamera("MainCamera"_hs, Vector3::zero, Vector3::forward, Vector3::up, 60, 1, 1000);
+		auto mainCamera = scene.createCamera(hash("MainCamera"), Vector3::zero, Vector3::forward, Vector3::up, 60, 1, 1000);
 		mainCamera.addComponent<component::CurrentCamera>();
 
 		auto mainViewport = scene.createViewport({0, 0}, renderSystem.getWindowSize());

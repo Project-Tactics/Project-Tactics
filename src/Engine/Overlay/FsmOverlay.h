@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Libs/Overlay/Overlay.h>
+#include <Libs/Ecs/EntityUtilities.h>
 
 #include <string>
 #include <optional>
@@ -14,6 +15,7 @@ namespace tactics {
 class DefaultFsmExternalController;
 struct FsmInfo;
 struct FsmStateInfo;
+struct FsmTransitionTarget;
 
 class FsmOverlay: public Overlay {
 public:
@@ -22,22 +24,52 @@ public:
 	OverlayConfig getConfig() override;
 
 private:
-	void _drawCurrentState();
+	void _drawSidePanel();
 	void _drawNodeGraph();
-	void _drawNode(FsmStateInfo& state, std::optional<ImVec2> position, bool showInput, bool showOutput);
-	void _drawNodeTitleBar(FsmStateInfo& state);
-	void _drawNodeInputPorts(FsmStateInfo& state);
-	void _drawNodeOutputPorts(FsmStateInfo& state);
-	void _drawLinks(FsmStateInfo& state);
-	void _drawTransitionButton(const std::string& transition, const ImVec2& pos);
-	void _drawStateList();
 
 	[[nodiscard]] FsmStateInfo& _getStateInfo(const std::string& stateName);
 
 	DefaultFsmExternalController& _externalController;
 	FsmInfo& _fsmInfo;
-	std::string _hoveredStateTransition;
-	bool _isAnyButtonTransitionHovered{};
+
+	struct Link {
+		hash_string id;
+		hash_string outputPinId;
+		hash_string inputPinId;
+		bool highlighted{};
+	};
+
+	struct Pin {
+		hash_string id;
+		std::string name;
+		bool highlighted{};
+	};
+
+	struct Target {
+		hash_string id;
+		std::string name;
+		Pin inputPin;
+	};
+
+	struct Model {
+		std::string currentStateName;
+		hash_string currentStateId;
+		std::vector<Pin> outputPins;
+		std::vector<Link> links;
+		std::vector<Target> targets;
+		bool isAnyHovered;
+	};
+
+	void _buildModel();
+	void _drawMainState();
+	void _drawTargetStates();
+	void _drawTargetState(Target& target, const ImVec2& position);
+	void _drawTargetStatePorts(Target& target);
+	void _drawMainStatePorts();
+	void _drawTransitionButton(Pin& pin, const ImVec2& position);
+	void _drawLinks();
+
+	Model _model;
 	ax::NodeEditor::EditorContext* _nodeGraphContext;
 };
 

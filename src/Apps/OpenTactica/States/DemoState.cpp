@@ -130,7 +130,7 @@ void DemoState::_createCustomQuadWithCustomResources() {
 
 	// We can also create a resource by simulating the usual pack loading
 	nlohmann::json descriptor = {
-		{"vertexShader", "shaders/main.vert"},
+		{"vertexShader", "shaders/default.vert"},
 		{"fragmentShader", R"(
 				#version 330 core
 				layout(location = 0) out vec4 color;

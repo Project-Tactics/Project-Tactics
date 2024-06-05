@@ -5,6 +5,7 @@
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
+#include <Libs/Ecs/Component/NameComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/Component/FrustumComponent.h>
 #include <Libs/Rendering/RenderSystem.h>
