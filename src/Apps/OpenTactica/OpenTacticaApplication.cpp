@@ -6,6 +6,7 @@
 #include "States/DemoState.h"
 #include "States/EmptyState.h"
 #include "States/LoadState.h"
+#include "States/UnloadState.h"
 #include "States/MapState.h"
 
 #include <Libs/Utility/Reflection.h>
@@ -19,7 +20,7 @@ void OpenTacticaApplication::setupComponentReflections() {
 
 std::string OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 	fsmBuilder
-		.state<LoadState>("Load", serviceLocator, LoadState::Action::Load)
+		.state<LoadState>("Load", serviceLocator)
 		.on("proceed").jumpTo("Map00")
 
 		.state<DemoState>("DemoScene", serviceLocator)
@@ -29,7 +30,7 @@ std::string OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, F
 		.state<EmptyState>("Empty")
 		.on("proceed").jumpTo("Unload")
 
-		.state<LoadState>("Unload", serviceLocator, LoadState::Action::Unload)
+		.state<UnloadState>("Unload", serviceLocator)
 		.on("proceed").exitFsm();
 
 	for (auto mapIndex = 0; mapIndex < 5; ++mapIndex) {

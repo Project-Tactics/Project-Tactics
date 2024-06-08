@@ -8,6 +8,7 @@ set(SOURCES
     States/EmptyState.cpp
     States/LoadState.cpp
     States/MapState.cpp
+    States/UnloadState.cpp
     Component/RotateAroundPoint.cpp
     Component/RotateItem.cpp)
     
@@ -17,6 +18,7 @@ set(HEADERS
     States/EmptyState.h
     States/LoadState.h
     States/MapState.h
+    States/UnloadState.h
     Component/RotateAroundPoint.h
     Component/RotateItem.h)
 
