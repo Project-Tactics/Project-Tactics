@@ -69,7 +69,7 @@
                 }
             },
             {
-                "material": "texturedUnlit",
+                "material": "texturedUnlitWithAlpha",
                 "uniforms": {
                     "textures": {
                         "u_Texture": "map00_06"
