@@ -6,18 +6,17 @@ using namespace entt::literals;
 
 namespace tactics {
 
-class EntityComponentSystem: public entt::registry {
+class EntityComponentSystem {
 public:
 	EntityComponentSystem();
 
-	const entt::registry& getPrefabRegistry() const;
-	entt::registry& getPrefabRegistry();
-	Entity createPrefab(const std::string& name);
-
-	entt::registry& asRegistry();
+	entt::registry& sceneRegistry();
+	entt::registry& prefabRegistry();
+	const entt::registry& sceneRegistry() const;
+	const entt::registry& prefabRegistry() const;
 
 private:
-	// This is a separate registry which is used to store prefabs entities only
+	entt::registry _sceneRegistry;
 	entt::registry _prefabRegistry;
 };
 

@@ -12,7 +12,7 @@ PrepareViewport::PrepareViewport(EntityComponentSystem& ecs): _ecs(ecs) {
 }
 
 void PrepareViewport::execute(RenderStepInfo&) {
-	auto view = _ecs.view<component::Viewport, component::CurrentViewport>();
+	auto view = _ecs.sceneRegistry().view<component::Viewport, component::CurrentViewport>();
 
 	// Probably an overkill to check this but it's better to be safe than sorry
 	// We can always remove or put this under a debug flag

@@ -1,5 +1,6 @@
 #include "SceneSystem.h"
 
+#include "Scene.h"
 
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/Component/AlphaBlendedComponent.h>
@@ -25,23 +26,23 @@ SceneSystem::SceneSystem(
 	: _ecs(ecs)
 	, _resourceSystem(resourceSystem) {
 	using namespace component;
-	_ecs.on_construct<Mesh>().connect<&SceneSystem::_onMeshConstructed>(this);
-	_ecs.on_update<Mesh>().connect<&SceneSystem::_onMeshUpdated>(this);
-	_ecs.on_construct<CurrentCamera>().connect<&SceneSystem::_onCurrentCameraConstructed>(this);
-	_ecs.on_construct<CurrentViewport>().connect<&SceneSystem::_onCurrentViewportConstructed>(this);
+	_ecs.sceneRegistry().on_construct<Mesh>().connect<&SceneSystem::_onMeshConstructed>(this);
+	_ecs.sceneRegistry().on_update<Mesh>().connect<&SceneSystem::_onMeshUpdated>(this);
+	_ecs.sceneRegistry().on_construct<CurrentCamera>().connect<&SceneSystem::_onCurrentCameraConstructed>(this);
+	_ecs.sceneRegistry().on_construct<CurrentViewport>().connect<&SceneSystem::_onCurrentViewportConstructed>(this);
 }
 
 SceneSystem::~SceneSystem() {
 }
 
 void SceneSystem::clearScene(bool clearCameras) {
-	_ecs.view<component::Mesh>().each([this] (auto entity, auto&) {
-		_ecs.destroy(entity);
+	_ecs.sceneRegistry().view<component::Mesh>().each([this] (auto entity, auto&) {
+		_ecs.sceneRegistry().destroy(entity);
 	});
 
 	if (clearCameras) {
-		_ecs.view<component::Camera>().each([this] (auto entity, auto&) {
-			_ecs.destroy(entity);
+		_ecs.sceneRegistry().view<component::Camera>().each([this] (auto entity, auto&) {
+			_ecs.sceneRegistry().destroy(entity);
 		});
 	}
 }
@@ -55,20 +56,20 @@ Entity& SceneSystem::getCurrentCamera() {
 
 void SceneSystem::_onCurrentCameraConstructed(entt::registry&, entt::entity currentCameraEntity) {
 	using namespace component;
-	_ecs.view<CurrentCamera>().each([this, currentCameraEntity] (auto entity) {
+	_ecs.sceneRegistry().view<CurrentCamera>().each([this, currentCameraEntity] (auto entity) {
 		if (currentCameraEntity != entity) {
-			_ecs.remove<CurrentCamera>(entity);
+			_ecs.sceneRegistry().remove<CurrentCamera>(entity);
 		}
 	});
 
-	_currentCameraEntity = Entity::create(currentCameraEntity, &_ecs);
+	_currentCameraEntity = Entity::create(currentCameraEntity, &_ecs.sceneRegistry());
 }
 
 void SceneSystem::_onCurrentViewportConstructed(entt::registry&, entt::entity currentViewportEntity) {
 	using namespace component;
-	_ecs.view<CurrentViewport>().each([this, currentViewportEntity] (auto entity) {
+	_ecs.sceneRegistry().view<CurrentViewport>().each([this, currentViewportEntity] (auto entity) {
 		if (currentViewportEntity != entity) {
-			_ecs.remove<CurrentViewport>(entity);
+			_ecs.sceneRegistry().remove<CurrentViewport>(entity);
 		}
 	});
 }
@@ -105,7 +106,7 @@ void SceneSystem::_updateAlphaBlendFlags(entt::registry& registry, entt::entity 
 }
 
 Entity SceneSystem::createViewport(const glm::vec2& topLeft, const glm::vec2& size, const glm::vec4& clearColor) {
-	auto entity = Entity::create("viewport", &_ecs);
+	auto entity = Entity::create("viewport", &_ecs.sceneRegistry());
 	entity.addComponent<component::Viewport>(topLeft, size, clearColor);
 	return entity;
 }
@@ -120,7 +121,7 @@ Entity SceneSystem::createCamera(
 	float far
 ) {
 	using namespace component;
-	auto entity = Entity::create(name, &_ecs);
+	auto entity = Entity::create(name, &_ecs.sceneRegistry());
 	auto& transform = entity.addComponent<Transform>();
 	transform.setPosition(position);
 	transform.setRotation(glm::quatLookAt(direction, up));
@@ -138,7 +139,7 @@ Entity SceneSystem::createEntity(
 	const glm::vec3& scale
 ) {
 	using namespace component;
-	auto entity = Entity::create("", &_ecs);
+	auto entity = Entity::create("", &_ecs.sceneRegistry());
 	auto& transform = entity.addComponent<Transform>();
 	transform.setPosition(position);
 	transform.setRotation(rotation);
@@ -160,7 +161,7 @@ Entity SceneSystem::createEntity(
 	std::string_view prefabName
 ) {
 	auto prefab = _resourceSystem.getResource<resource::Prefab>(prefabName);
-	auto entity = Entity::create(name, &_ecs);
+	auto entity = Entity::create(name, &_ecs.sceneRegistry());
 
 	for (auto& [key, value] : prefab->jsonData.items()) {
 		auto id = hash(key);
@@ -186,7 +187,7 @@ void SceneSystem::_buildComponentRecursively(entt::meta_any& instance, const nlo
 	auto type = instance.type();
 
 	if (auto deserializer = type.func(hash("deserializer"))) {
-		deserializer.invoke(instance, &_ecs.asRegistry(), jsonData);
+		deserializer.invoke(instance, &_ecs.sceneRegistry(), jsonData);
 		return;
 	}
 

@@ -19,7 +19,7 @@ void serializeFromAngleAxis(glm::quat& quat, const nlohmann::ordered_json& jsonD
 	quat = glm::angleAxis(glm::radians(angle), axis);
 }
 
-void ComponentReflection::initializeBasicTypes(entt::registry&) {
+void ComponentReflection::initializeBasicTypes() {
 	entt::meta<glm::vec2>()
 		.type(hash("vec2"))
 		.data<&glm::vec2::x>(hash("x"))
@@ -40,7 +40,7 @@ void ComponentReflection::initializeBasicTypes(entt::registry&) {
 		.data<&glm::quat::w>(hash("w"));
 }
 
-void ComponentReflection::initializeCommonComponents(entt::registry&) {
+void ComponentReflection::initializeCommonComponents() {
 	using namespace component;
 	defineComponentsReflection<Transform, Mesh, Camera, Frustum, CurrentCamera>();
 }

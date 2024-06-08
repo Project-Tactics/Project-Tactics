@@ -48,8 +48,8 @@ void DemoState::exit() {
 
 FsmAction DemoState::update() {
 	auto& ecs = getService<EntityComponentSystem>();
-	component::RotateItemSystem::update(ecs.view<component::Transform, component::RotateItem>());
-	component::RotateAroundPointSystem::update(ecs.view<component::Transform, component::RotateAroundPoint>());
+	component::RotateItemSystem::update(ecs.sceneRegistry().view<component::Transform, component::RotateItem>());
+	component::RotateAroundPointSystem::update(ecs.sceneRegistry().view<component::Transform, component::RotateAroundPoint>());
 
 	return FsmAction::none();
 }

@@ -32,7 +32,7 @@ FsmAction MapState::enter() {
 
 FsmAction MapState::update() {
 	auto& ecs = getService<EntityComponentSystem>();
-	component::RotateAroundPointSystem::update(ecs.view<component::Transform, component::RotateAroundPoint>());
+	component::RotateAroundPointSystem::update(ecs.sceneRegistry().view<component::Transform, component::RotateAroundPoint>());
 
 	return FsmAction::none();
 }

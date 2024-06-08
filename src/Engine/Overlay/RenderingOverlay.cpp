@@ -46,7 +46,7 @@ void RenderingOverlay::_drawRenderStats() {
 
 void RenderingOverlay::_drawViewportStats() {
 	using namespace component;
-	auto view = _ecs.view<Viewport>();
+	auto view = _ecs.sceneRegistry().view<Viewport>();
 	view.each([&] (Viewport& viewport) {
 		ImGui::TextColored(_titleColor, "%s", "VIEWPORT");
 		glm::vec2 topLeft = viewport.topLeft;
@@ -72,7 +72,7 @@ void RenderingOverlay::_drawViewportStats() {
 
 void RenderingOverlay::_drawCameraStats() {
 	using namespace component;
-	auto view = _ecs.view<Transform, Frustum, Camera>();
+	auto view = _ecs.sceneRegistry().view<Transform, Frustum, Camera>();
 	view.each([&] (Transform& transform, Frustum& frustum, Camera&) {
 		ImGui::TextColored(_titleColor, "%s", "CAMERA");
 		auto position = transform.getPosition();

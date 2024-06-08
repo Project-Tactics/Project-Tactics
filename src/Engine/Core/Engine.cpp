@@ -178,17 +178,18 @@ void Engine::_setupServiceLocator() {
 	_serviceLocator->addService(_sceneSystem.get());
 	_serviceLocator->addService(_fileSystem.get());
 
-	_ecs->ctx().emplace<ServiceLocator*>(_serviceLocator.get());
+	_ecs->sceneRegistry().ctx().emplace<ServiceLocator*>(_serviceLocator.get());
 }
 
 void Engine::_updateCommonComponentSystems() {
 	using namespace component;
 
-	CameraSystem::updateCameraMatrices(_ecs->view<Frustum, Transform, Camera>());
+	auto& registry = _ecs->sceneRegistry();
+	CameraSystem::updateCameraMatrices(registry.view<Frustum, Transform, Camera>());
 	CameraSystem::updateCameraAspectRatios(
-		_ecs->view<Viewport, CurrentViewport>(),
-		_ecs->view<Frustum, CurrentCamera>());
-	TransformSystem::updateTransformMatrices(_ecs->view<Transform>());
+		registry.view<Viewport, CurrentViewport>(),
+		registry.view<Frustum, CurrentCamera>());
+	TransformSystem::updateTransformMatrices(registry.view<Transform>());
 }
 
 }

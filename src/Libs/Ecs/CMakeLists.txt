@@ -9,6 +9,7 @@ set(SOURCES
     Entity.cpp
     EntityComponentSystem.cpp
     EntityUtilities.cpp
+    PrefabManager.cpp
     System/CameraSystem.cpp
     System/TransformSystem.cpp)
     
@@ -25,6 +26,7 @@ set(HEADERS
     Entity.inl
     EntityComponentSystem.h
     EntityUtilities.h
+    PrefabManager.h
     System/CameraSystem.h
     System/TransformSystem.h)
 

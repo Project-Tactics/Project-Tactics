@@ -2,31 +2,27 @@
 
 #include "Component/ComponentReflection.h"
 
-#include <Libs/Utility/Exception.h>
-
-#include <ranges>
-
 namespace tactics {
 
 EntityComponentSystem::EntityComponentSystem() {
-	ComponentReflection::initializeBasicTypes(*this);
-	ComponentReflection::initializeCommonComponents(*this);
+	ComponentReflection::initializeBasicTypes();
+	ComponentReflection::initializeCommonComponents();
 }
 
-entt::registry& EntityComponentSystem::asRegistry() {
-	return *this;
+entt::registry& EntityComponentSystem::sceneRegistry() {
+	return _sceneRegistry;
 }
 
-const entt::registry& EntityComponentSystem::getPrefabRegistry() const {
+entt::registry& EntityComponentSystem::prefabRegistry() {
 	return _prefabRegistry;
 }
 
-entt::registry& EntityComponentSystem::getPrefabRegistry() {
-	return _prefabRegistry;
+const entt::registry& EntityComponentSystem::sceneRegistry() const {
+	return _sceneRegistry;
 }
 
-Entity EntityComponentSystem::createPrefab(const std::string& name) {
-	return Entity::create(name, &_prefabRegistry);
+const entt::registry& EntityComponentSystem::prefabRegistry() const {
+	return _prefabRegistry;
 }
 
 }

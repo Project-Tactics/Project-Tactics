@@ -13,6 +13,7 @@ class ResourceSystem;
 }
 
 class EntityComponentSystem;
+class Scene;
 
 class SceneSystem {
 public:
@@ -66,6 +67,8 @@ private:
 	EntityComponentSystem& _ecs;
 	resource::ResourceSystem& _resourceSystem;
 	Entity _currentCameraEntity;
+
+
 };
 
 }
