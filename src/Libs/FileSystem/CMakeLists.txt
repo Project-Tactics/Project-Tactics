@@ -5,7 +5,8 @@ set(SOURCES
         FileHandle/JsonFileHandle.cpp
         FileHandle/StringFileHandle.cpp
         FileLoader.cpp
-        FileSystem.cpp)
+        FileSystem.cpp
+        PathHelper.cpp)
 
 set(HEADERS
         FileHandle/FileHandle.h
@@ -13,10 +14,11 @@ set(HEADERS
         FileHandle/JsonFileHandle.h
         FileHandle/StringFileHandle.h
         FileLoader.h
-        FileSystem.h)
+        FileSystem.h
+        PathHelper.h)
 
 add_library(libs_filesystem STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_filesystem PUBLIC libs_utility inicpp)
+target_link_libraries(libs_filesystem PUBLIC libs_utility inicpp PRIVATE lua_wrapper)
 add_to_libs_folder(libs_filesystem)
 
 unset(SOURCES)

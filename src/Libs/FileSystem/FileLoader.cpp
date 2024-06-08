@@ -10,15 +10,17 @@
 
 namespace tactics {
 
-std::unique_ptr<FileHandle<std::string>> DefaultFileLoader::createStringFile(std::string_view path) const {
+DefaultFileLoader::DefaultFileLoader(PathHelper& pathHelper): _pathHelper(pathHelper) {}
+
+std::unique_ptr<FileHandle<std::string>> DefaultFileLoader::createStringFile(const std::filesystem::path& path) const {
 	return std::make_unique<StringFileHandle>(path);
 }
 
-std::unique_ptr<FileHandle<nlohmann::ordered_json>> DefaultFileLoader::createJsonFile(std::string_view path) const {
-	return std::make_unique<JsonFileHandle>(path);
+std::unique_ptr<FileHandle<nlohmann::ordered_json>> DefaultFileLoader::createJsonFile(const std::filesystem::path& path) const {
+	return std::make_unique<JsonFileHandle>(path, _pathHelper);
 }
 
-std::unique_ptr<FileHandle<ini::IniFile>> DefaultFileLoader::createIni(std::string_view path) const {
+std::unique_ptr<FileHandle<ini::IniFile>> DefaultFileLoader::createIni(const std::filesystem::path& path) const {
 	return std::make_unique<IniFileHandle>(path);
 }
 

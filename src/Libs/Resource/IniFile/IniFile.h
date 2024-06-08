@@ -29,7 +29,7 @@ public:
 
 	template<typename T>
 	T get(std::string_view sectionName, std::string_view key, T defaultValue) {
-		auto& iniFile = fileHandle->getObject();
+		auto& iniFile = fileHandle->getContent();
 		if (!iniFile.contains(sectionName.data())) {
 			return defaultValue;
 		}
@@ -45,7 +45,7 @@ public:
 
 	template<typename T>
 	void set(std::string_view sectionName, std::string_view key, T&& value) {
-		auto& iniFile = fileHandle->getObject();
+		auto& iniFile = fileHandle->getContent();
 		iniFile[sectionName.data()][key.data()] = value;
 	}
 

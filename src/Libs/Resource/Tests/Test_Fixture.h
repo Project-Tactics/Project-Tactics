@@ -46,9 +46,9 @@ using MockTextureManager = ResourceManager<MockTextureResource, MockTextureLoade
 
 class MockFileLoader: public FileLoader {
 public:
-	MOCK_METHOD(std::unique_ptr<FileHandle<std::string>>, createStringFile, (std::string_view), (const override));
-	MOCK_METHOD(std::unique_ptr<FileHandle<nlohmann::ordered_json>>, createJsonFile, (std::string_view), (const override));
-	MOCK_METHOD(std::unique_ptr<FileHandle<ini::IniFile>>, createIni, (std::string_view), (const override));
+	MOCK_METHOD(std::unique_ptr<FileHandle<std::string>>, createStringFile, (const std::filesystem::path&), (const override));
+	MOCK_METHOD(std::unique_ptr<FileHandle<nlohmann::ordered_json>>, createJsonFile, (const std::filesystem::path&), (const override));
+	MOCK_METHOD(std::unique_ptr<FileHandle<ini::IniFile>>, createIni, (const std::filesystem::path&), (const override));
 };
 
 class MockJsonFileHandle: public FileHandle<nlohmann::ordered_json> {
@@ -57,7 +57,7 @@ public:
 	MOCK_METHOD(void, save, (), (override));
 	MOCK_METHOD(void, load, (), (override));
 	void setData(const nlohmann::ordered_json& data) {
-		_setObject(data);
+		_setContent(data);
 	}
 };
 
@@ -74,7 +74,7 @@ public:
 	void SetUp() {
 		auto fileLoader = std::make_unique<MockFileLoader>();
 		_fileLoader = fileLoader.get();
-		_fileSystem = std::make_unique<FileSystem>(std::move(fileLoader), "data");
+		_fileSystem = std::make_unique<FileSystem>(std::move(fileLoader), std::make_unique<PathHelper>(""));
 		_resourceSystem = std::make_unique<ResourceSystem>(*_fileSystem);
 	}
 

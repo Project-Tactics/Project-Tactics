@@ -4,6 +4,7 @@
 
 #include "ResourcePack.h"
 
+#include <Libs/FileSystem/FileSystem.h>
 #include <Libs/Utility/TransparentTypes.h>
 
 #include <nlohmann/json.hpp>
@@ -21,7 +22,7 @@ class BaseResourceManager;
 class ResourcePackManager {
 public:
 	ResourcePackManager(FileSystem& pathHelper, const ResourceProvider& resourceProvider);
-	void loadPackDefinition(std::string_view packDefinitionPath);
+	void loadPackDefinition(const std::filesystem::path& packDefinitionPath);
 
 	void loadPack(std::string_view packName);
 	void unloadPack(std::string_view packName);
@@ -35,6 +36,7 @@ public:
 
 private:
 	[[nodiscard]] Pack& _getResourcePack(std::string_view packName);
+	[[nodiscard]] std::unique_ptr<FileHandle<nlohmann::ordered_json>> _loadPackDefinition(const std::filesystem::path& packDefinitionPath);
 
 	FileSystem& _fileSystem;
 	const ResourceProvider& _resourceProvider;

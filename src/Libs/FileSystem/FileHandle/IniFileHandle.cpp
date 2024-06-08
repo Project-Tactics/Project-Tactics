@@ -16,7 +16,7 @@ void IniFileHandle::load() {
 	if (!file.is_open()) {
 		throw TACTICS_EXCEPTION("Could not open file: {}", _path.string());
 	}
-	getObject().decode(file);
+	getContent().decode(file);
 }
 
 void IniFileHandle::save() {
@@ -24,7 +24,7 @@ void IniFileHandle::save() {
 	if (!file.is_open()) {
 		throw TACTICS_EXCEPTION("Could not open file: {}", _path.string());
 	}
-	getObject().encode(file);
+	getContent().encode(file);
 }
 
 bool IniFileHandle::exists() const {

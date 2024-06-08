@@ -14,7 +14,7 @@ bool StringFileHandle::exists() const {
 
 void StringFileHandle::save() {
 	std::ofstream file(_path);
-	file << getObject();
+	file << getContent();
 }
 
 void StringFileHandle::load() {
@@ -23,14 +23,9 @@ void StringFileHandle::load() {
 		throw TACTICS_EXCEPTION("Could not open file: {}", _path.string());
 	}
 
-	std::string content;
-	file.seekg(0, std::ios::end);
-	content.resize(file.tellg());
-	file.seekg(0, std::ios::beg);
-	file.read(content.data(), content.size());
-	file.close();
-
-	_setObject(content);
+	std::ostringstream oss;
+	oss << file.rdbuf();
+	_setContent(oss.str());
 }
 
 }

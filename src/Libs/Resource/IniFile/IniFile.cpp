@@ -3,7 +3,7 @@
 namespace tactics::resource {
 
 ini::IniSection& IniFile::createSection(std::string_view section) {
-	auto& file = fileHandle->getObject();
+	auto& file = fileHandle->getContent();
 	if (!file.contains(section.data())) {
 		file[section.data()] = {};
 	}
@@ -11,9 +11,9 @@ ini::IniSection& IniFile::createSection(std::string_view section) {
 }
 
 void IniFile::merge(ini::IniFile& other) {
-	fileHandle->getObject().merge(other);
+	fileHandle->getContent().merge(other);
 	for (auto& [otherSectionName, otherSection] : other) {
-		auto& thisSection = fileHandle->getObject()[otherSectionName];
+		auto& thisSection = fileHandle->getContent()[otherSectionName];
 		thisSection.merge(otherSection);
 	}
 }

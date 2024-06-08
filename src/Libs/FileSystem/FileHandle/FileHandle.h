@@ -12,20 +12,20 @@ public:
 	virtual void load() = 0;
 };
 
-template<typename TObject>
+template<typename TContent>
 class FileHandle: public BaseFileHandle {
 public:
-	TObject& getObject() {
-		return _object;
+	TContent& getContent() {
+		return _content;
 	}
 
 protected:
-	void _setObject(const TObject& object) {
-		_object = object;
+	void _setContent(const TContent& content) {
+		_content = content;
 	}
 
 private:
-	TObject _object;
+	TContent _content;
 };
 
 }

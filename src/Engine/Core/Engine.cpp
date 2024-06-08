@@ -68,7 +68,10 @@ void Engine::_run(Application& application) {
 void Engine::_initialize(Application& application) {
 	_initializeSDL();
 
-	_fileSystem = std::make_unique<FileSystem>(std::make_unique<DefaultFileLoader>(), "data");
+	auto pathHelper = std::make_unique<PathHelper>("data");
+	auto fileLoader = std::make_unique<DefaultFileLoader>(*pathHelper.get());
+	_fileSystem = std::make_unique<FileSystem>(std::move(fileLoader), std::move(pathHelper));
+
 	_ecs = std::make_unique<EntityComponentSystem>();
 
 	_resourceSystem = ResourceSystemInitializer::initialize(*_fileSystem, *_ecs);

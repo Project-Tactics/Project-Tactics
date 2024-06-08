@@ -42,7 +42,7 @@ std::tuple<unsigned int, std::string> ShaderLoader::_loadShader(unsigned int sha
 	if (shaderPath.extension() == ".vert" || shaderPath.extension() == ".frag") {
 		auto fileHandle = _getFileSystem().createStringFileHandle(shaderContent);
 		fileHandle->load();
-		shaderCode = fileHandle->getObject();
+		shaderCode = fileHandle->getContent();
 	}
 	char* code = const_cast<char*>(shaderCode.c_str());
 

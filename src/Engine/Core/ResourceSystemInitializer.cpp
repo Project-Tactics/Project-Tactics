@@ -28,7 +28,7 @@ std::unique_ptr<resource::ResourceSystem> ResourceSystemInitializer::initialize(
 	registerManager<Prefab, PrefabLoader>(fileSystem, *resourceSystem, ecs);
 
 	// Let's initialize some engine data
-	resourceSystem->loadPackDefinition("engine_data.json");
+	resourceSystem->loadPackDefinition("resource_definitions/engine_data.json");
 	resourceSystem->loadPack("initialization");
 
 	return resourceSystem;

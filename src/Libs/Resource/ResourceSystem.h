@@ -28,7 +28,7 @@ public:
 	ResourceSystem(FileSystem& fileSystem);
 	~ResourceSystem();
 
-	void loadPackDefinition(std::string_view definitionPath);
+	void loadPackDefinition(const std::filesystem::path& definitionPath);
 	void loadPack(std::string_view packName);
 	void unloadPack(std::string_view packName);
 	void createManualPack(std::string_view packName);

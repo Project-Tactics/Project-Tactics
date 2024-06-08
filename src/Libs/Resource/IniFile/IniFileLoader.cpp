@@ -22,7 +22,7 @@ std::shared_ptr<IniFile> IniFileLoader::load(const IniFileLoadDescriptor& descri
 		auto defaultIniHandle = fileSystem.createIniFileHandle(descriptor.pathToDefault);
 		if (defaultIniHandle->exists()) {
 			defaultIniHandle->load();
-			iniFile->merge(defaultIniHandle->getObject());
+			iniFile->merge(defaultIniHandle->getContent());
 		} else {
 			throw TACTICS_EXCEPTION("A default ini has been specified but could not be found: {}", descriptor.pathToDefault);
 		}

@@ -26,7 +26,7 @@ std::shared_ptr<Mesh> MeshLoader::load(const nlohmann::json& descriptor) {
 		mesh = _loadMesh(meshDescriptor.vertices, meshDescriptor.indices);
 	} else {
 		auto meshDescriptor = descriptor.template get<FileDescriptor>();
-		mesh = _loadMesh(_getFileSystem().makeAbsolutePath(meshDescriptor.path));
+		mesh = _loadMesh(_getFileSystem().getPathHelper().makeAbsolutePath(meshDescriptor.path));
 	}
 	return mesh;
 }

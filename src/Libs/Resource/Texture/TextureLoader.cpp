@@ -14,7 +14,7 @@ std::shared_ptr<Texture> TextureLoader::load(const std::string& name, const Text
 		name,
 		// TODO(Gerark) FileSystem: We should have more control on how we load the textures through filesystem and not relying on stb to do the dirty job
 		// we should be able to load by providing a buffer like for stbi_load_from_memory
-		_getFileSystem().makeAbsolutePath(descriptor.path),
+		_getFileSystem().getPathHelper().makeAbsolutePath(descriptor.path),
 		descriptor.useTransparency);
 	return texture;
 }

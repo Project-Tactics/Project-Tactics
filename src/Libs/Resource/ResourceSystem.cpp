@@ -17,7 +17,7 @@ ResourceSystem::ResourceSystem(FileSystem& fileSystem)
 ResourceSystem::~ResourceSystem() {
 }
 
-void ResourceSystem::loadPackDefinition(std::string_view definitionPath) {
+void ResourceSystem::loadPackDefinition(const std::filesystem::path& definitionPath) {
 	_resourcePackManager->loadPackDefinition(definitionPath);
 }
 

@@ -4,34 +4,25 @@
 
 namespace tactics {
 
-FileSystem::FileSystem(std::unique_ptr<FileLoader> fileLoader, std::string_view dataPath): _fileLoader(std::move(fileLoader)) {
-	_updateDataRelativePath(dataPath);
+FileSystem::FileSystem(std::unique_ptr<FileLoader> fileLoader, std::unique_ptr<PathHelper> pathHelper)
+	: _fileLoader(std::move(fileLoader))
+	, _pathHelper(std::move(pathHelper)) {
 }
 
-void FileSystem::_updateDataRelativePath(std::string_view dataPath) {
-	_dataRelativePath = dataPath;
-	_dataAbsolutePath = std::filesystem::current_path();
-	_dataAbsolutePath /= dataPath;
+const PathHelper& FileSystem::getPathHelper() const {
+	return *_pathHelper;
 }
 
-std::string FileSystem::makeAbsolutePath(std::string_view path) const {
-	return (_dataAbsolutePath / path).string();
+std::unique_ptr<FileHandle<ini::IniFile>> FileSystem::createIniFileHandle(const std::filesystem::path& path) {
+	return _fileLoader->createIni(_pathHelper->makeAbsolutePath(path));
 }
 
-bool FileSystem::dataPathExists(std::string_view path) const {
-	return std::filesystem::exists(makeAbsolutePath(path));
+std::unique_ptr<FileHandle<std::string>> FileSystem::createStringFileHandle(const std::filesystem::path& path) {
+	return _fileLoader->createStringFile(_pathHelper->makeAbsolutePath(path));
 }
 
-std::unique_ptr<FileHandle<ini::IniFile>> FileSystem::createIniFileHandle(std::string_view path) {
-	return _fileLoader->createIni(makeAbsolutePath(path));
-}
-
-std::unique_ptr<FileHandle<std::string>> FileSystem::createStringFileHandle(std::string_view path) {
-	return _fileLoader->createStringFile(makeAbsolutePath(path));
-}
-
-std::unique_ptr<FileHandle<nlohmann::ordered_json>> FileSystem::createJsonFileHandle(std::string_view path) {
-	return _fileLoader->createJsonFile(makeAbsolutePath(path));
+std::unique_ptr<FileHandle<nlohmann::ordered_json>> FileSystem::createJsonFileHandle(const std::filesystem::path& path) {
+	return _fileLoader->createJsonFile(_pathHelper->makeAbsolutePath(path));
 }
 
 }

@@ -16,7 +16,7 @@ void OverlayStyleHelper::setupImGuiStyle(const resource::IniFile& iniFile, const
 
 	// TODO(Gerark) Yes, we should have a serializer for all of this.
 	std::string category = "imguiSpacing";
-	auto& file = iniFile.fileHandle->getObject();
+	auto& file = iniFile.fileHandle->getContent();
 	style->WindowPadding = file.at(category).at("windowPadding").as<ImVec2>();
 	style->WindowRounding = file.at(category).at("windowRounding").as<float>();
 	style->FramePadding = file.at(category).at("framePadding").as<ImVec2>();
@@ -68,7 +68,7 @@ void OverlayStyleHelper::setupImGuiStyle(const resource::IniFile& iniFile, const
 
 	category = "imguiFonts";
 	// TODO(Gerark) FileSystem: We should provide a FileHandle to the font file instead of relying on this custom code.
-	std::filesystem::path fontPath = fileSystem.makeAbsolutePath(file.at(category).at("fontPath").as<std::string>());
+	std::filesystem::path fontPath = fileSystem.getPathHelper().makeAbsolutePath(file.at(category).at("fontPath").as<std::string>());
 	if (std::filesystem::exists(fontPath)) {
 		auto fontPathStr = fontPath.string();
 		auto& io = ImGui::GetIO();

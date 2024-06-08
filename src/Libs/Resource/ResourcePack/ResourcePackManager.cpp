@@ -3,7 +3,6 @@
 #include "../ResourceManager.h"
 
 #include <Libs/Utility/Exception.h>
-#include <Libs/FileSystem/FileSystem.h>
 
 #include <fstream>
 
@@ -14,18 +13,10 @@ ResourcePackManager::ResourcePackManager(FileSystem& fileSystem, const ResourceP
 	, _resourceProvider(resourceProvider) {
 }
 
-void ResourcePackManager::loadPackDefinition(std::string_view packDefinitionPath) {
-	auto fileHandle = _fileSystem.createJsonFileHandle(packDefinitionPath);
-	if (!fileHandle || !fileHandle->exists()) {
-		throw TACTICS_EXCEPTION("Could not find pack definition file [{}]", packDefinitionPath);
-	}
-	fileHandle->load();
+void ResourcePackManager::loadPackDefinition(const std::filesystem::path& packDefinitionPath) {
+	auto fileHandle = _loadPackDefinition(packDefinitionPath);
 
-	if (fileHandle->getObject().empty()) {
-		throw TACTICS_EXCEPTION("Pack definition file [{}] is empty", packDefinitionPath);
-	}
-
-	for (auto&& [packName, packData] : fileHandle->getObject().items()) {
+	for (auto&& [packName, packData] : fileHandle->getContent().items()) {
 		auto& pack = createPack(packName, false);
 
 		for (auto&& [resourceType, value] : packData.items()) {
@@ -84,6 +75,16 @@ void ResourcePackManager::forEachPack(const std::function<void(const Pack&)>& ca
 	for (auto&& [packName, pack] : _packs) {
 		callback(*pack);
 	}
+}
+
+std::unique_ptr<FileHandle<nlohmann::ordered_json>> ResourcePackManager::_loadPackDefinition(const std::filesystem::path& packDefinitionPath) {
+	auto jsonFileHandle = _fileSystem.createJsonFileHandle(packDefinitionPath);
+	jsonFileHandle->load();
+
+	if (jsonFileHandle->getContent().empty()) {
+		throw TACTICS_EXCEPTION("Pack definition file [{}] is empty", packDefinitionPath.string());
+	}
+	return jsonFileHandle;
 }
 
 }

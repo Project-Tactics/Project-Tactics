@@ -80,7 +80,7 @@ void ResourceOverlayHelper::drawResource(const resource::Texture& texture) {
 
 void ResourceOverlayHelper::drawResource(const resource::IniFile& iniFile) {
 	using namespace resource;
-	auto& data = iniFile.fileHandle->getObject();
+	auto& data = iniFile.fileHandle->getContent();
 	for (auto& [sectionName, section] : data) {
 		ImGui::TextColored(toColor(ResourceType::IniFile), "[%s]", sectionName.c_str());
 		for (auto& [key, value] : section) {
