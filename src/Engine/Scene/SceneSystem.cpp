@@ -8,12 +8,14 @@
 #include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/Component/ViewportComponent.h>
-#include <Libs/Ecs/SubSystem/CameraSubSystem.h>
+#include <Libs/Ecs/System/CameraSystem.h>
 #include <Libs/Resource/Material/Material.h>
 #include <Libs/Resource/Mesh/Mesh.h>
+#include <Libs/Resource/Prefab/Prefab.h>
 #include <Libs/Resource/ResourceSystem.h>
 
 #include <ranges>
+#include <regex>
 
 namespace tactics {
 
@@ -27,13 +29,9 @@ SceneSystem::SceneSystem(
 	_ecs.on_update<Mesh>().connect<&SceneSystem::_onMeshUpdated>(this);
 	_ecs.on_construct<CurrentCamera>().connect<&SceneSystem::_onCurrentCameraConstructed>(this);
 	_ecs.on_construct<CurrentViewport>().connect<&SceneSystem::_onCurrentViewportConstructed>(this);
-
-	_cameraSubSystem = std::make_unique<CameraSubSystem>(_ecs);
-	_ecs.registerSubSystem(_cameraSubSystem.get());
 }
 
 SceneSystem::~SceneSystem() {
-	_ecs.unregisterSubSystem(_cameraSubSystem.get());
 }
 
 Entity& SceneSystem::getCurrentCamera() {
@@ -64,29 +62,34 @@ void SceneSystem::_onCurrentViewportConstructed(entt::registry&, entt::entity cu
 }
 
 void SceneSystem::_onMeshConstructed(entt::registry& registry, entt::entity entity) {
-	_updateAlphaBlended(registry, entity);
+	_updateAlphaBlendFlags(registry, entity);
 }
 
 void SceneSystem::_onMeshUpdated(entt::registry& registry, entt::entity entity) {
-	_updateAlphaBlended(registry, entity);
+	_updateAlphaBlendFlags(registry, entity);
 }
 
-void SceneSystem::_updateAlphaBlended(entt::registry& registry, entt::entity entity) {
+void SceneSystem::_updateAlphaBlendFlags(entt::registry& registry, entt::entity entity) {
 	using namespace component;
 
-	// Todo(Gerark) This is quite a weak check to know if a Mesh needs AlphaBlending.
-	// If a mesh with multiple submeshes have only one submesh with transparency, the whole mesh will be considered as alpha blended
-	// and that's going to render in a wrong way.
-	auto& material = registry.get<Mesh>(entity);
-	auto itr = std::ranges::find_if(material.materials, [] (auto& material) {
-		return std::ranges::find_if(material->getTextures(), [] (auto& pair) {
-			return pair.second->info.useTransparency;
-		}) != material->getTextures().end();
-	});
-	if (itr != material.materials.end()) {
+	auto& mesh = registry.get<Mesh>(entity);
+
+	auto isFullyTransparent = true;
+	auto isMixedAlphaBlended = false;
+	for (auto& material : mesh.materials) {
+		material->updateTextureTransparencyInfo();
+		isMixedAlphaBlended |= material->useTransparency;
+		isFullyTransparent &= material->useTransparency;
+	}
+
+	registry.remove<AlphaBlended>(entity);
+	registry.remove<FullyAlphaBlended>(entity);
+
+	if (isFullyTransparent) {
+		registry.emplace<FullyAlphaBlended>(entity);
 		registry.emplace<AlphaBlended>(entity);
-	} else {
-		registry.remove<AlphaBlended>(entity);
+	} else if (isMixedAlphaBlended) {
+		registry.emplace<AlphaBlended>(entity);
 	}
 }
 
@@ -97,7 +100,7 @@ Entity SceneSystem::createViewport(const glm::vec2& topLeft, const glm::vec2& si
 }
 
 Entity SceneSystem::createCamera(
-	const entt::hashed_string& name,
+	std::string_view name,
 	const glm::vec3& position,
 	const glm::vec3& direction,
 	const glm::vec3& up,
@@ -119,7 +122,7 @@ Entity SceneSystem::createCamera(
 Entity SceneSystem::createEntity(
 		const glm::vec3& position,
 		std::string_view meshName,
-		std::string_view materialName,
+		std::vector<std::string> materials,
 		const glm::quat& rotation,
 		const glm::vec3& scale
 ) {
@@ -131,14 +134,77 @@ Entity SceneSystem::createEntity(
 	transform.setScale(scale);
 
 	Mesh meshComp;
-	auto material = _resourceSystem.getResource<resource::Material>(materialName);
 	meshComp.mesh = _resourceSystem.getResource<resource::Mesh>(meshName);
-	// TODO(Gerark) Big assumption on the fact that the same material is applied to every submesh. This must be changed.
 	for (auto i = 0; i < meshComp.mesh->subMeshes.size(); ++i) {
+		const std::string& materialName = i < materials.size() ? materials[i] : materials.back();
+		auto material = _resourceSystem.getResource<resource::Material>(materialName);
 		meshComp.materials.push_back(resource::Material::createInstance(material));
 	}
 	entity.addComponent<Mesh>(meshComp);
 	return entity;
+}
+
+Entity SceneSystem::createEntity(
+	std::string_view name,
+	std::string_view prefabName
+) {
+	auto prefab = _resourceSystem.getResource<resource::Prefab>(prefabName);
+	auto entity = Entity::create(name, &_ecs);
+
+	for (auto& [key, value] : prefab->jsonData.items()) {
+		auto id = hash(key);
+		auto type = entt::resolve(id);
+
+		if (!type) {
+			throw TACTICS_EXCEPTION("Component type not found while loading prefab: [{}]", key);
+		}
+
+		auto componentInstance = type.construct();
+		_buildComponentRecursively(componentInstance, value);
+		type.func(hash("emplace")).invoke(componentInstance, entity);
+	}
+
+	return entity;
+}
+
+void SceneSystem::_buildComponentRecursively(entt::meta_any& instance, const nlohmann::ordered_json& jsonData) {
+	auto type = instance.type();
+
+	if (auto deserializer = type.func(hash("deserializer"))) {
+		deserializer.invoke(instance, &_ecs.asRegistry(), jsonData);
+		return;
+	}
+
+	for (auto& [key, value] : jsonData.items()) {
+		auto id = hash(key);
+		auto data = type.data(id);
+
+		if (!data) {
+			throw TACTICS_EXCEPTION("Can't find data type while loading prefab: [{}]", key);
+		}
+
+		auto memberType = data.type();
+
+		if (memberType.is_integral() || memberType.is_enum()) {
+			data.set(instance, value.get<int>());
+		} else if (memberType.is_arithmetic()) {
+			data.set(instance, value.get<float>());
+		} else if (memberType.is_class()) {
+			auto memberInstance = data.get(instance);
+			_buildComponentRecursively(memberInstance, value);
+			data.set(instance, memberInstance);
+		}
+	}
+}
+
+std::tuple<bool, resource::ResourceType, std::string> SceneSystem::_extractResourceInfo(const std::string& value) {
+	std::smatch match;
+	std::regex resourceRegex(R"(R:([^=]+)=([^=]+))");
+	if (std::regex_search(value, match, resourceRegex)) {
+		return {true, fromString<resource::ResourceType>(match[1].str()), match[2].str()};
+	}
+
+	return {false, resource::ResourceType::Unkwown, ""};
 }
 
 }

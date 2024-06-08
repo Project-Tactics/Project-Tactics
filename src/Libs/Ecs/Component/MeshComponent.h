@@ -8,6 +8,8 @@ namespace tactics::component {
 struct Mesh {
 	std::shared_ptr<resource::Mesh> mesh;
 	std::vector<std::shared_ptr<resource::Material::Instance>> materials;
+
+	static void defineReflection();
 };
 
 }

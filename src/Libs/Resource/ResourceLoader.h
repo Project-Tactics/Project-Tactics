@@ -14,6 +14,7 @@ public:
 
 protected:
 	FileSystem& _getFileSystem() const;
+	const ResourceProvider& _getResourceProvider() const;
 
 	template<typename TResource>
 	std::shared_ptr<TResource> _getResource(std::string_view name) {

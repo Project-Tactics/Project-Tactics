@@ -10,6 +10,7 @@
 #include <Libs/Ecs/Component/FrustumComponent.h>
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/Material/Material.h>
+#include <Libs/Resource/Prefab/Prefab.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Utility/Math.h>
 
@@ -23,17 +24,8 @@ MapState::MapState(ServiceLocator& serviceLocator, unsigned int mapIndex): FsmSt
 FsmAction MapState::enter() {
 	auto& sceneSystem = getService<SceneSystem>();
 
-	// TODO(Gerark) In theory this setup of mesh with materials should be done in a resource file ( prefab/scene file? )
 	auto mapName = fmt::format("map{:02d}", _mapIndex);
-	auto map = sceneSystem.createEntity({}, mapName, "texturedUnlit");
-	map.updateComponent<component::Mesh>([this, &mapName] (auto& mapMesh) {
-		int i = 0;
-		for (; i < mapMesh.mesh->subMeshes.size() - 1; i++) {
-			auto textureName = fmt::format("{}_{:02d}", mapName, i);
-			mapMesh.materials[i]->set("u_Texture", getService<resource::ResourceSystem>().getResource<resource::Texture>(textureName));
-		}
-		mapMesh.materials[i]->set("u_Color", Color::black);
-	});
+	sceneSystem.createEntity("map", mapName);
 
 	auto cameraEntity = sceneSystem.getCurrentCamera();
 	auto& frustum = cameraEntity.getComponent<component::Frustum>();

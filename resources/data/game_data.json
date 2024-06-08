@@ -57,6 +57,23 @@
                     }
                 }
             }
+        },
+        "prefab": {
+            "map00": {
+                "path": "prefabs/map00.prefab"
+            },
+            "map01": {
+                "path": "prefabs/map01.prefab"
+            },
+            "map02": {
+                "path": "prefabs/map02.prefab"
+            },
+            "map03": {
+                "path": "prefabs/map03.prefab"
+            },
+            "map04": {
+                "path": "prefabs/map04.prefab"
+            }
         }
     }
 }

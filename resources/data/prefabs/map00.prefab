@@ -1,0 +1,118 @@
+{
+    "transform": {
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 0
+        },
+        "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+        }
+    },
+    "mesh": {
+        "mesh": "map00",
+        "materials": [
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00_00"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00_01"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00_02"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00_03"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00_04"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00_05"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00_06"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00_07"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00_08"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00_09"
+                    }
+                }
+            },
+            {
+                "material": "coloredUnlit",
+                "uniforms": {
+                    "vectors4": {
+                        "u_Color": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

@@ -49,4 +49,16 @@ void Material::Instance::updateShaderUniforms() {
 	_updateUniforms(parent->shader, parent->getMatrices(), getMatrices());
 }
 
+void Material::Instance::updateTextureTransparencyInfo() {
+	useTransparency = false;
+
+	for (auto&& [uniformName, texture] : parent->getTextures()) {
+		if (auto itr = getTextures().find(uniformName); itr != getTextures().end()) {
+			useTransparency |= itr->second->info.useTransparency;
+		} else {
+			useTransparency |= texture->info.useTransparency;
+		}
+	}
+}
+
 }

@@ -68,7 +68,7 @@ TEST_F(ResourceTest, LoadValidPackAndGetResourceWithWrongName) {
 
 	_resourceSystem->loadPack("mainPackage");
 
-	EXPECT_THROW(_resourceSystem->getResource<MockShaderResource>("MyResource"), Exception);
+	EXPECT_THROW([[maybe_unused]] auto res = _resourceSystem->getResource<MockShaderResource>("MyResource"), Exception);
 }
 
 TEST_F(ResourceTest, LoadPackTwice) {
@@ -192,7 +192,7 @@ TEST_F(ResourceTest, RegisterExternalResourceWithJson) {
 	_resourceSystem->loadExternalResource<MockShaderResource>("customPackage", "MyResourceName1", json);
 
 	EXPECT_EQ(getNumberOfLoadedResources(), 1);
-	_resourceSystem->getResource<MockShaderResource>("MyResourceName1");
+	[[maybe_unused]] auto res = _resourceSystem->getResource<MockShaderResource>("MyResourceName1");
 }
 
 TEST_F(ResourceTest, RegisterExternalResourceWithSameName) {

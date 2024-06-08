@@ -1,20 +1,22 @@
 #include "Texture.h"
 
-#include <glad/gl.h>
+#include <Libs/Rendering/RenderCalls/RenderCalls.h>
 
 namespace tactics::resource {
 
 Texture::~Texture() {
-	glDeleteTextures(1, &rendererId);
+	render::pipeline::deleteTextures(1, &rendererId);
 }
 
 void Texture::bind(unsigned int slot) const {
-	glActiveTexture(GL_TEXTURE0 + slot);
-	glBindTexture(GL_TEXTURE_2D, rendererId);
+	using namespace render::pipeline;
+	activeTexture(slot);
+	bindTexture<TextureType::Texture2D>(rendererId);
 }
 
 void Texture::unbind() const {
-	glBindTexture(GL_TEXTURE_2D, 0);
+	using namespace render::pipeline;
+	unbindTexture<TextureType::Texture2D>();
 }
 
 std::shared_ptr<Texture> Texture::createNullTexture() {

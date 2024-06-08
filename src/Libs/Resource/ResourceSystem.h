@@ -41,20 +41,20 @@ public:
 	}
 
 	template<typename TResource>
-	std::shared_ptr<TResource> getResource(std::string_view name) {
+	[[nodiscard]] std::shared_ptr<TResource> getResource(std::string_view name) {
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(name));
 	}
 
 	template<typename TResource>
-	std::shared_ptr<TResource> getResource(ResourceId id) {
+	[[nodiscard]] std::shared_ptr<TResource> getResource(ResourceId id) {
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(id));
 	}
 
 
-	std::shared_ptr<BaseResource> getResource(ResourceType resourceType, std::string_view name) const override;
-	std::shared_ptr<BaseResource> getResource(ResourceType resourceType, ResourceId id) const override;
-	BaseResourceManager& getManager(ResourceType resourceType) const override;
-	BaseResourceManager& getManager(ResourceType resourceType) override;
+	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType, std::string_view name) const override;
+	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType, ResourceId id) const override;
+	[[nodiscard]] BaseResourceManager& getManager(ResourceType resourceType) const override;
+	[[nodiscard]] BaseResourceManager& getManager(ResourceType resourceType) override;
 
 	void registerManager(std::unique_ptr<BaseResourceManager> resourceManager);
 
@@ -78,10 +78,7 @@ private:
 	}
 
 	BaseResourceManager* _getManager(ResourceType resourceType) {
-		if (!_resourceManagers.contains(resourceType)) {
-			throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", toString(resourceType));
-		}
-		return _resourceManagers[resourceType].get();
+		return const_cast<BaseResourceManager*>(const_cast<const ResourceSystem*>(this)->_getManager(resourceType));
 	}
 
 	template<typename TResource>
@@ -90,6 +87,9 @@ private:
 	}
 
 	const BaseResourceManager* _getManager(ResourceType resourceType) const {
+		if (!_resourceManagers.contains(resourceType)) {
+			throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", toString(resourceType));
+		}
 		return _resourceManagers.at(resourceType).get();
 	}
 

@@ -11,6 +11,8 @@
 #include <Engine/Scene/SceneSystem.h>
 
 #include <Libs/Ecs/EntityComponentSystem.h>
+#include <Libs/Ecs/System/CameraSystem.h>
+#include <Libs/Ecs/System/TransformSystem.h>
 #include <Libs/Event/EventsSystem.h>
 #include <Libs/FileSystem/FileSystem.h>
 #include <Libs/FileSystem/FileLoader.h>
@@ -67,8 +69,9 @@ void Engine::_initialize(Application& application) {
 	_initializeSDL();
 
 	_fileSystem = std::make_unique<FileSystem>(std::make_unique<DefaultFileLoader>(), "data");
+	_ecs = std::make_unique<EntityComponentSystem>();
 
-	_resourceSystem = ResourceSystemInitializer::initialize(*_fileSystem);
+	_resourceSystem = ResourceSystemInitializer::initialize(*_fileSystem, *_ecs);
 
 	auto devUserConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
 	auto imguiSettings = _resourceSystem->getResource<resource::IniFile>("imguiSettings");
@@ -83,15 +86,15 @@ void Engine::_initialize(Application& application) {
 	_resourceSystem->loadExternalResource("_internalCustomPack", resource::Texture::createNullTexture());
 
 	_eventsSystem = std::make_unique<EventsSystem>();
-	_ecsSystem = std::make_unique<EntityComponentSystem>();
-	_sceneSystem = std::make_unique<SceneSystem>(*_ecsSystem, *_resourceSystem);
+
+	_sceneSystem = std::make_unique<SceneSystem>(*_ecs, *_resourceSystem);
 
 	_setupServiceLocator();
 	_setupFsm(application);
 
 	if (devUserConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
 		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
-		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem, *_ecsSystem);
+		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem, *_ecs);
 		_overlaySystem->addOverlay<ResourcesOverlay>("Resources", false, *_resourceSystem);
 		_overlaySystem->addOverlay<FsmOverlay>("Fsm", false, *_fsmExternalController, *_fsmInfo);
 		_overlaySystem->addOverlay<ExampleOverlay>("ImGui Demo", false);
@@ -106,7 +109,7 @@ void Engine::_internalRun() {
 		}
 
 		_fsm->update();
-		_ecsSystem->update();
+		_updateCommonComponentSystems();
 		_renderSystem->render();
 	}
 }
@@ -166,9 +169,21 @@ void Engine::_setupServiceLocator() {
 	_serviceLocator->addService(_overlaySystem.get());
 	_serviceLocator->addService(_renderSystem.get());
 	_serviceLocator->addService(_eventsSystem.get());
-	_serviceLocator->addService(_ecsSystem.get());
+	_serviceLocator->addService(_ecs.get());
 	_serviceLocator->addService(_sceneSystem.get());
 	_serviceLocator->addService(_fileSystem.get());
+
+	_ecs->ctx().emplace<ServiceLocator*>(_serviceLocator.get());
+}
+
+void Engine::_updateCommonComponentSystems() {
+	using namespace component;
+
+	CameraSystem::updateCameraMatrices(_ecs->view<Frustum, Transform, Camera>());
+	CameraSystem::updateCameraAspectRatios(
+		_ecs->view<Viewport, CurrentViewport>(),
+		_ecs->view<Frustum, CurrentCamera>());
+	TransformSystem::updateTransformMatrices(_ecs->view<Transform>());
 }
 
 }

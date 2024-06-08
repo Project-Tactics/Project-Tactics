@@ -1,6 +1,6 @@
 #include "EntityComponentSystem.h"
 
-#include "SubSystem/EntityComponentSubSystem.h"
+#include "Component/ComponentReflection.h"
 
 #include <Libs/Utility/Exception.h>
 
@@ -9,27 +9,24 @@
 namespace tactics {
 
 EntityComponentSystem::EntityComponentSystem() {
+	ComponentReflection::InitializeBasicTypes(*this);
+	ComponentReflection::InitializeCommonComponents(*this);
 }
 
-void EntityComponentSystem::registerSubSystem(EntityComponentSubSystem* subSystem) {
-	if (std::ranges::find(_ecsSubSystems, subSystem) != _ecsSubSystems.end()) {
-		throw TACTICS_EXCEPTION("SubSystem already registered");
-	}
-	_ecsSubSystems.push_back(subSystem);
+entt::registry& EntityComponentSystem::asRegistry() {
+	return *this;
 }
 
-void EntityComponentSystem::update() {
-	for (auto& subSystem : _ecsSubSystems) {
-		subSystem->update();
-	}
+const entt::registry& EntityComponentSystem::getPrefabRegistry() const {
+	return _prefabRegistry;
 }
 
-void EntityComponentSystem::unregisterSubSystem(EntityComponentSubSystem* subSystem) {
-	if (auto itr = std::ranges::find(_ecsSubSystems, subSystem); itr != _ecsSubSystems.end()) {
-		_ecsSubSystems.erase(itr);
-	} else {
-		throw TACTICS_EXCEPTION("SubSystem can't be removed cause it's not registered");
-	}
+entt::registry& EntityComponentSystem::getPrefabRegistry() {
+	return _prefabRegistry;
+}
+
+Entity EntityComponentSystem::createPrefab(const std::string& name) {
+	return Entity::create(name, &_prefabRegistry);
 }
 
 }

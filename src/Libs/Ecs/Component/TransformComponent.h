@@ -6,6 +6,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+template<class Archive>
+void serialize(Archive& archive, glm::vec3& vec) {
+	archive(vec.x, vec.y, vec.z);
+}
+
+template<class Archive>
+void serialize(Archive& archive, glm::quat& quat) {
+	archive(quat.x, quat.y, quat.z, quat.w);
+}
+
 namespace tactics::component {
 
 struct Transform {
@@ -14,68 +24,27 @@ private:
 	glm::vec3 position = Vector3::zero;
 	glm::quat rotation = Quaternion::identity;
 	glm::vec3 scale = Vector3::one;
-	bool _dirty{};
+	bool _dirty{true};
 
 public:
-	void setPosition(const glm::vec3& newPosition) {
-		position = newPosition;
-		_dirty = true;
+	void setPosition(const glm::vec3& newPosition);
+	void setRotation(const glm::quat& newRotation);
+	void setRotation(float eulerX, float eulerY, float eulerZ);
+	void setRotation(const glm::vec3& eulerAngles);
+	void setRotation(float radians, const glm::vec3& axis);
+	void lookAt(const glm::vec3& target, const glm::vec3& up);
+	void rotate(float radians, const glm::vec3& axis);
+	void setScale(const glm::vec3& newScale);
+	const glm::vec3& getPosition() const;
+	const glm::quat& getRotation() const;
+	const glm::mat4x4& computeMatrix();
+	const glm::mat4x4& getMatrix() const;
+
+	template<class Archive>
+	void serialize(Archive& archive) {
+		archive(position, rotation, scale);
 	}
 
-	void setRotation(const glm::quat& newRotation) {
-		rotation = newRotation;
-		_dirty = true;
-	}
-
-	void setRotation(float eulerX, float eulerY, float eulerZ) {
-		setRotation({eulerX, eulerY, eulerZ});
-		_dirty = true;
-	}
-
-	void setRotation(const glm::vec3& eulerAngles) {
-		rotation = glm::quat(eulerAngles);
-	}
-
-	void setRotation(float radians, const glm::vec3& axis) {
-		rotation = glm::angleAxis(radians, axis);
-		_dirty = true;
-	}
-
-	void lookAt(const glm::vec3& target, const glm::vec3& up) {
-		rotation = glm::quatLookAt(glm::normalize(target - position), up);
-		_dirty = true;
-	}
-
-	void rotate(float radians, const glm::vec3& axis) {
-		rotation = glm::angleAxis(radians, axis) * rotation;
-		_dirty = true;
-	}
-
-	void setScale(const glm::vec3& newScale) {
-		scale = newScale;
-		_dirty = true;
-		transformMatrix = glm::scale(transformMatrix, scale);
-	}
-
-	const glm::vec3& getPosition() const {
-		return position;
-	}
-
-	const glm::quat& getRotation() const {
-		return rotation;
-	}
-
-	const glm::mat4x4& computeMatrix() {
-		if (_dirty) {
-			_dirty = false;
-			glm::mat4 pivotTransform = glm::translate(glm::mat4(1.0f), position);
-			glm::mat4 rotationTransform = glm::mat4_cast(rotation);
-			glm::mat4 finalTransform = glm::translate(pivotTransform * rotationTransform, -position);
-			transformMatrix = finalTransform;
-			transformMatrix = glm::translate(transformMatrix, position);
-			transformMatrix = glm::scale(transformMatrix, scale);
-		}
-		return transformMatrix;
-	}
+	static void defineReflection();
 };
 }

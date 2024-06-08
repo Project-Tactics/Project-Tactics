@@ -30,22 +30,22 @@ public:
 	void set(const std::unordered_map<std::string, glm::vec4>& vectors4);
 	void set(const std::unordered_map<std::string, glm::mat4>& matrices);
 
-	const UnorderedStringMap<std::shared_ptr<Texture>>& getTextures() const;
-	const UnorderedStringMap<int>& getInts() const;
-	const UnorderedStringMap<float>& getFloats() const;
-	const UnorderedStringMap<glm::vec2>& getVectors2() const;
-	const UnorderedStringMap<glm::vec3>& getVectors3() const;
-	const UnorderedStringMap<glm::vec4>& getVectors4() const;
-	const UnorderedStringMap<glm::mat4>& getMatrices() const;
+	const std::unordered_map<std::string, std::shared_ptr<Texture>>& getTextures() const;
+	const std::unordered_map<std::string, int>& getInts() const;
+	const std::unordered_map<std::string, float>& getFloats() const;
+	const std::unordered_map<std::string, glm::vec2>& getVectors2() const;
+	const std::unordered_map<std::string, glm::vec3>& getVectors3() const;
+	const std::unordered_map<std::string, glm::vec4>& getVectors4() const;
+	const std::unordered_map<std::string, glm::mat4>& getMatrices() const;
 
 private:
-	UnorderedStringMap<std::shared_ptr<Texture>> _textures;
-	UnorderedStringMap<int> _ints;
-	UnorderedStringMap<float> _floats;
-	UnorderedStringMap<glm::vec2> _vectors2;
-	UnorderedStringMap<glm::vec3> _vectors3;
-	UnorderedStringMap<glm::vec4> _vectors4;
-	UnorderedStringMap<glm::mat4> _matrices;
+	std::unordered_map<std::string, std::shared_ptr<Texture>> _textures;
+	std::unordered_map<std::string, int> _ints;
+	std::unordered_map<std::string, float> _floats;
+	std::unordered_map<std::string, glm::vec2> _vectors2;
+	std::unordered_map<std::string, glm::vec3> _vectors3;
+	std::unordered_map<std::string, glm::vec4> _vectors4;
+	std::unordered_map<std::string, glm::mat4> _matrices;
 };
 
 }

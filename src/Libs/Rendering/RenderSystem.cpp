@@ -120,7 +120,7 @@ void RenderSystem::_setupOglVersion() {
 
 void RenderSystem::_setupVSync() {
 	auto enableVSyncStr = _getConfigValue("enableVSync", std::string("true"));
-	int swapInterval = 0;
+	auto swapInterval = 0;
 	if (enableVSyncStr == "true")
 		swapInterval = 1;
 	else if (enableVSyncStr == "false") {

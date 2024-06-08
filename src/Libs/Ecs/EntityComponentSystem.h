@@ -1,24 +1,24 @@
 #pragma once
 
-#include <entt/entt.hpp>
+#include "Entity.h"
 
 using namespace entt::literals;
 
 namespace tactics {
 
-class EntityComponentSubSystem;
-
 class EntityComponentSystem: public entt::registry {
 public:
 	EntityComponentSystem();
 
-	void registerSubSystem(EntityComponentSubSystem* subSystem);
-	void unregisterSubSystem(EntityComponentSubSystem* subSystem);
+	const entt::registry& getPrefabRegistry() const;
+	entt::registry& getPrefabRegistry();
+	Entity createPrefab(const std::string& name);
 
-	void update();
+	entt::registry& asRegistry();
 
 private:
-	std::vector<EntityComponentSubSystem*> _ecsSubSystems;
+	// This is a separate registry which is used to store prefabs entities only
+	entt::registry _prefabRegistry;
 };
 
 }

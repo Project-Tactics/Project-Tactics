@@ -19,20 +19,23 @@ std::string Str<resource::ResourceType>::to(resource::ResourceType resourceType)
 	using namespace resource;
 
 	switch (resourceType) {
-	case ResourceType::Texture: {
-		return "texture";
-	}
-	case ResourceType::Shader: {
-		return "shader";
-	}
 	case ResourceType::IniFile: {
 		return "ini";
+	}
+	case ResourceType::Material: {
+		return "material";
 	}
 	case ResourceType::Mesh: {
 		return "mesh";
 	}
-	case ResourceType::Material: {
-		return "material";
+	case ResourceType::Prefab: {
+		return "prefab";
+	}
+	case ResourceType::Shader: {
+		return "shader";
+	}
+	case ResourceType::Texture: {
+		return "texture";
 	}
 	}
 
@@ -42,16 +45,18 @@ std::string Str<resource::ResourceType>::to(resource::ResourceType resourceType)
 resource::ResourceType Str<resource::ResourceType>::from(std::string_view string) {
 	using namespace resource;
 
-	if (string == "shader") {
+	if (string == "ini") {
+		return ResourceType::IniFile;
+	} else if (string == "material") {
+		return ResourceType::Material;
+	} else if (string == "mesh") {
+		return ResourceType::Mesh;
+	} else if (string == "prefab") {
+		return ResourceType::Prefab;
+	} else if (string == "shader") {
 		return ResourceType::Shader;
 	} else if (string == "texture") {
 		return ResourceType::Texture;
-	} else if (string == "ini") {
-		return ResourceType::IniFile;
-	} else if (string == "mesh") {
-		return ResourceType::Mesh;
-	} else if (string == "material") {
-		return ResourceType::Material;
 	}
 
 	return ResourceType::Unkwown;

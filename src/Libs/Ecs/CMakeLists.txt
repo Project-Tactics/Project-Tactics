@@ -1,25 +1,30 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
+    Component/ComponentReflection.cpp
+    Component/MeshComponent.cpp
+    Component/TransformComponent.cpp
     Entity.cpp
     EntityComponentSystem.cpp
     EntityUtilities.cpp
-    Component/MeshComponent.cpp
-    SubSystem/CameraSubSystem.cpp)
+    System/CameraSystem.cpp
+    System/TransformSystem.cpp)
     
 set(HEADERS
-    Entity.h
-    EntityComponentSystem.h
-    EntityUtilities.h
     Component/AlphaBlendedComponent.h
     Component/CameraComponent.h
+    Component/ComponentReflection.h
     Component/FrustumComponent.h
     Component/MeshComponent.h
     Component/NameComponent.h
     Component/TransformComponent.h
     Component/ViewportComponent.h
-    SubSystem/EntityComponentSubSystem.h
-    SubSystem/CameraSubSystem.h)
+    Entity.h
+    Entity.inl
+    EntityComponentSystem.h
+    EntityUtilities.h
+    System/CameraSystem.h
+    System/TransformSystem.h)
 
 add_library(libs_ecs STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_ecs PUBLIC entt glad libs_utility)

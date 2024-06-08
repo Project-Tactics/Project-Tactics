@@ -6,7 +6,7 @@ TEST_F(ResourceTest, EmptySystemWithNoResources) {
 }
 
 TEST_F(ResourceTest, GetResourceWithoutManager) {
-	EXPECT_THROW(_resourceSystem->getResource<MockTextureResource>("MyResourceName1"), Exception);
+	EXPECT_THROW([[maybe_unused]] auto res = _resourceSystem->getResource<MockTextureResource>("MyResourceName1"), Exception);
 }
 
 TEST_F(ResourceTest, KeepReferenceToResource) {

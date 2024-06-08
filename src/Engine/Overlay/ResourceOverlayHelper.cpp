@@ -165,20 +165,23 @@ ImVec4 ResourceOverlayHelper::toColor(resource::ResourceType resourceType, float
 	auto& colors = CustomOverlayColors::getColors();
 	ImVec4 result{};
 	switch (resourceType) {
-	case resource::ResourceType::Texture:
-		result = colors.TextureColor;
-		break;
-	case resource::ResourceType::Mesh:
-		result = colors.MeshColor;
+	case resource::ResourceType::IniFile:
+		result = colors.IniFileColor;
 		break;
 	case resource::ResourceType::Material:
 		result = colors.MaterialColor;
 		break;
+	case resource::ResourceType::Mesh:
+		result = colors.MeshColor;
+		break;
+	case resource::ResourceType::Prefab:
+		result = colors.PrefabColor;
+		break;
 	case resource::ResourceType::Shader:
 		result = colors.ShaderColor;
 		break;
-	case resource::ResourceType::IniFile:
-		result = colors.IniFileColor;
+	case resource::ResourceType::Texture:
+		result = colors.TextureColor;
 		break;
 	default:
 		result = colors.ResourceColor;

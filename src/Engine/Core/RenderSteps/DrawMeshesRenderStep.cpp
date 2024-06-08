@@ -47,9 +47,9 @@ void DrawMeshes::_drawOpaqueGeometry(const glm::mat4x4& viewProjection) {
 	glDisable(GL_BLEND);
 	glDepthMask(GL_TRUE);
 
-	auto view = _ecs.view<Transform, Mesh>(entt::exclude<AlphaBlended>);
+	auto view = _ecs.view<Transform, Mesh>(entt::exclude<FullyAlphaBlended>);
 	for (auto&& [entity, transform, mesh] : view.each()) {
-		_drawMesh(viewProjection, transform, mesh);
+		_drawMesh(viewProjection, transform, mesh, false);
 	}
 }
 
@@ -65,28 +65,37 @@ void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, co
 		auto diff2 = _ecs.get<Transform>(rhs).getPosition() - cameraTransform.getPosition();
 		return glm::length2(diff1) > glm::length2(diff2);
 	});
-	auto view2 = _ecs.view<Transform, Mesh, AlphaBlended>();
-	for (auto&& [entity, transform, mesh] : view2.each()) {
-		_drawMesh(viewProjection, transform, mesh);
+	auto view = _ecs.view<Transform, Mesh, AlphaBlended>();
+	for (auto&& [entity, transform, mesh] : view.each()) {
+		_drawMesh(viewProjection, transform, mesh, true);
 	}
 }
 
-void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection, component::Transform& transform, const component::Mesh& inMesh) {
+void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection, component::Transform& transform, const component::Mesh& inMesh, bool filterTransparent) {
 	auto& materials = inMesh.materials;
 	auto& mesh = inMesh.mesh;
 
 	unsigned int materialIndex = 0;
 	for (auto& subMesh : mesh->subMeshes) {
 		auto& material = materials[materialIndex];
+		if (filterTransparent != material->useTransparency) {
+			++materialIndex;
+			continue;
+		}
+
 		auto& shader = material->parent->shader;
 
 		subMesh.vertexAttributes->bind();
 
-		// TODO(Gerark) Optimization: only bind the shader if it's different from the last one
+		// TODO(Gerark) Optimization: Group Shader/Materials instead of constantly binding and unbinding
 		shader->bind();
 		material->updateShaderUniforms();
-		glm::mat4 mvp = viewProjection * transform.computeMatrix();
+
+		// TODO(Gerark) Need to add way more than just the ModelViewProjection matrix as standard uniform but we should
+		// parse the shader to check what are the standard uniforms it's requiring
+		glm::mat4 mvp = viewProjection * transform.getMatrix();
 		shader->setUniform("u_ModelViewProjection", mvp);
+
 		_drawGeometry(subMesh);
 
 		++materialIndex;

@@ -30,7 +30,7 @@ FsmAction LoadState::enter() {
 
 		auto& renderSystem = getService<RenderSystem>();
 		auto& scene = getService<SceneSystem>();
-		auto mainCamera = scene.createCamera(hash("MainCamera"), Vector3::zero, Vector3::forward, Vector3::up, 60, 1, 1000);
+		auto mainCamera = scene.createCamera("MainCamera", Vector3::zero, Vector3::forward, Vector3::up, 60, 1, 1000);
 		mainCamera.addComponent<component::CurrentCamera>();
 
 		auto mainViewport = scene.createViewport({0, 0}, renderSystem.getWindowSize());
@@ -76,7 +76,8 @@ void LoadState::_loadMapTexturesThroughCustomPack() {
 		for (int i = 0; i < mapTextureCounts[mapIndex]; i++) {
 			std::string path = fmt::format("textures/{}/tex{:02d}.png", mapName, i);
 			nlohmann::json descriptor = {
-				{"path", path}
+				{"path", path},
+				{"useTransparency", i == 6}
 			};
 			std::string textureName = fmt::format("{}_{:02d}", mapName, i);
 			resourceSystem.loadExternalResource<resource::Texture>("mapTextures", textureName, descriptor);

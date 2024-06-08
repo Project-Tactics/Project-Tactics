@@ -40,12 +40,14 @@ private:
 	void _setupServiceLocator();
 	void _setupFsm(Application& application);
 
+	void _updateCommonComponentSystems();
+
 	std::unique_ptr<FileSystem> _fileSystem;
 	std::unique_ptr<resource::ResourceSystem> _resourceSystem;
 	std::unique_ptr<OverlaySystem> _overlaySystem;
 	std::unique_ptr<RenderSystem> _renderSystem;
 	std::unique_ptr<EventsSystem> _eventsSystem;
-	std::unique_ptr<EntityComponentSystem> _ecsSystem;
+	std::unique_ptr<EntityComponentSystem> _ecs;
 	std::unique_ptr<SceneSystem> _sceneSystem;
 	std::unique_ptr<Fsm> _fsm;
 	std::unique_ptr<FsmInfo> _fsmInfo;

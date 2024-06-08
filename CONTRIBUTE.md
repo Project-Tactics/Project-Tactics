@@ -44,7 +44,7 @@ The thirdparty folder contains libraries developed by others. These external lib
 #### Control Structures
 - Place the else statement on the same line as the closing brace of the if block.
 ### CMake
-emember to treat CMake files as code; they should be reviewed and properly commented.
+Remember to treat CMake files as code; they should be reviewed and properly commented.
 
 
 ### WIP ...

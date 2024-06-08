@@ -11,6 +11,7 @@ set(HEADERS
     Ini/IniMathConverter.h
     String.h
     TransparentTypes.h
+    Uniforms/UniformsDescriptor.h
     UUID.h)
 
 set(SOURCES
@@ -20,6 +21,7 @@ set(SOURCES
     Ini/IniMathConverter.cpp
     Json/MathJsonSerializer.cpp
     String.cpp
+    Uniforms/UniformsDescriptor.cpp
     UUID.cpp)
 
 add_library(libs_utility STATIC ${SOURCES} ${HEADERS})

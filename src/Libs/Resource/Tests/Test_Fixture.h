@@ -61,6 +61,14 @@ public:
 	}
 };
 
+class MockResourceProvider: public ResourceProvider {
+public:
+	MOCK_METHOD(std::shared_ptr<BaseResource>, getResource, (ResourceType, std::string_view), (const override));
+	MOCK_METHOD(std::shared_ptr<BaseResource>, getResource, (ResourceType, ResourceId), (const override));
+	MOCK_METHOD(BaseResourceManager&, getManager, (ResourceType), (const override));
+	MOCK_METHOD(BaseResourceManager&, getManager, (ResourceType), (override));
+};
+
 class ResourceTest: public testing::Test {
 public:
 	void SetUp() {

@@ -57,7 +57,7 @@ std::vector<unsigned int> MeshLoader::_parseIndices(const std::string& strIndice
 
 std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& strVertices, const std::string& strIndices) {
 	// TODO(Gerark) Using dynamic draw as usage but it should be best to receive this as a parameter
-	auto meshVertices = std::make_unique<VertexBuffer>(_parseVertices(strVertices), GL_DYNAMIC_DRAW);
+	auto meshVertices = std::make_unique<VertexBuffer>(_parseVertices(strVertices), rp::DynamicDraw::value);
 	meshVertices->bind();
 	auto vertexAttributes = _createDefaultVertexAttributes();
 	meshVertices->unbind();
@@ -66,7 +66,7 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& strVertices, cons
 	mesh->subMeshes.emplace_back(
 		0,
 		std::move(meshVertices),
-		std::make_unique<IndexBuffer>(_parseIndices(strIndices), GL_DYNAMIC_DRAW),
+		std::make_unique<IndexBuffer>(_parseIndices(strIndices), rp::DynamicDraw::value),
 		std::move(vertexAttributes)
 	);
 	return mesh;
@@ -116,7 +116,7 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 		}
 
 		// TODO(Gerark) Using dynamic draw is just temporary, we should have a way to define this through the descriptor
-		auto meshVertices = std::make_unique<VertexBuffer>(vertices, GL_DYNAMIC_DRAW);
+		auto meshVertices = std::make_unique<VertexBuffer>(vertices, rp::DynamicDraw::value);
 		meshVertices->bind();
 		auto vertexAttributes = _createDefaultVertexAttributes();
 		meshVertices->unbind();
@@ -124,7 +124,7 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 		meshResource->subMeshes.emplace_back(
 			meshIndex,
 			std::move(meshVertices),
-			std::make_unique<IndexBuffer>(indices, GL_DYNAMIC_DRAW),
+			std::make_unique<IndexBuffer>(indices, rp::DynamicDraw::value),
 			std::move(vertexAttributes)
 		);
 	}

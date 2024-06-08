@@ -22,11 +22,13 @@ public:
 	public:
 		explicit Instance(std::shared_ptr<Material> parent);
 		void updateShaderUniforms();
+		void updateTextureTransparencyInfo();
 
+		bool useTransparency{};
 		std::shared_ptr<Material> parent;
 	};
 
-	static std::shared_ptr<Material::Instance> createInstance(std::shared_ptr<Material> parentMaterial);
+	[[nodiscard]] static std::shared_ptr<Material::Instance> createInstance(std::shared_ptr<Material> parentMaterial);
 
 	std::shared_ptr<Shader> shader;
 };

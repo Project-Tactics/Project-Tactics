@@ -11,4 +11,8 @@ FileSystem& ResourceLoader::_getFileSystem() const {
 	return _fileSystem;
 }
 
+const ResourceProvider& ResourceLoader::_getResourceProvider() const {
+	return _resourceProvider;
+}
+
 }

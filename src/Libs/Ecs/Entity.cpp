@@ -4,9 +4,9 @@
 
 namespace tactics {
 
-Entity::Entity(const char* name, EntityComponentSystem* ecs): _ecs(ecs) {
-	_entity = ecs->create();
-	ecs->emplace<component::Name>(_entity, hash_string(name));
+Entity::Entity(std::string_view name, entt::registry* registry): _registry(registry) {
+	_entity = registry->create();
+	_registry->emplace<component::Name>(_entity, hash(name));
 }
 
 Entity::Entity() {
@@ -17,14 +17,14 @@ const hash_string& Entity::getName() const {
 	return getComponent<component::Name>().name;
 }
 
-Entity Entity::create(const char* name, EntityComponentSystem* ecs) {
-	return Entity(name, ecs);
+Entity Entity::create(std::string_view name, entt::registry* registry) {
+	return Entity(name, registry);
 }
 
-Entity Entity::create(entt::entity entity, EntityComponentSystem* ecs) {
+Entity Entity::create(entt::entity entity, entt::registry* registry) {
 	Entity entityObject;
 	entityObject._entity = entity;
-	entityObject._ecs = ecs;
+	entityObject._registry = registry;
 	return entityObject;
 }
 

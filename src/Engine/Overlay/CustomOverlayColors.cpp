@@ -11,11 +11,12 @@ ImVec4 CustomOverlayColors::Colors::SelectedButtonColor;
 ImVec4 CustomOverlayColors::Colors::XComponentColor;
 ImVec4 CustomOverlayColors::Colors::YComponentColor;
 ImVec4 CustomOverlayColors::Colors::ZComponentColor;
-ImVec4 CustomOverlayColors::Colors::TextureColor;
-ImVec4 CustomOverlayColors::Colors::MeshColor;
-ImVec4 CustomOverlayColors::Colors::MaterialColor;
-ImVec4 CustomOverlayColors::Colors::ShaderColor;
 ImVec4 CustomOverlayColors::Colors::IniFileColor;
+ImVec4 CustomOverlayColors::Colors::MaterialColor;
+ImVec4 CustomOverlayColors::Colors::MeshColor;
+ImVec4 CustomOverlayColors::Colors::PrefabColor;
+ImVec4 CustomOverlayColors::Colors::ShaderColor;
+ImVec4 CustomOverlayColors::Colors::TextureColor;
 ImVec4 CustomOverlayColors::Colors::ResourceColor;
 
 void CustomOverlayColors::initialize(resource::IniFile& configFile) {
@@ -25,12 +26,13 @@ void CustomOverlayColors::initialize(resource::IniFile& configFile) {
 	_colors.XComponentColor = configFile.get(category, "xComponentColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.YComponentColor = configFile.get(category, "yComponentColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.ZComponentColor = configFile.get(category, "zComponentColor", ImVec4{1, 0.5f, 0.5f, 1.f});
-	_colors.TextureColor = configFile.get(category, "textureColor", ImVec4{1, 0.5f, 0.5f, 1.f});
-	_colors.MeshColor = configFile.get(category, "meshColor", ImVec4{1, 0.5f, 0.5f, 1.f});
-	_colors.MaterialColor = configFile.get(category, "materialColor", ImVec4{1, 0.5f, 0.5f, 1.f});
-	_colors.ShaderColor = configFile.get(category, "shaderColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.IniFileColor = configFile.get(category, "iniFileColor", ImVec4{1, 0.5f, 0.5f, 1.f});
+	_colors.MaterialColor = configFile.get(category, "materialColor", ImVec4{1, 0.5f, 0.5f, 1.f});
+	_colors.MeshColor = configFile.get(category, "meshColor", ImVec4{1, 0.5f, 0.5f, 1.f});
+	_colors.PrefabColor = configFile.get(category, "prefabColor", ImVec4{1, 0.0f, 0.5f, 1.f});
 	_colors.ResourceColor = configFile.get(category, "resourceColor", ImVec4{1, 0.5f, 0.5f, 1.f});
+	_colors.ShaderColor = configFile.get(category, "shaderColor", ImVec4{1, 0.5f, 0.5f, 1.f});
+	_colors.TextureColor = configFile.get(category, "textureColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 }
 
 const CustomOverlayColors::Colors& CustomOverlayColors::getColors() {

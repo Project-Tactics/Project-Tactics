@@ -1,39 +1,40 @@
 #pragma once
 
+#include <Libs/Rendering/RenderCalls/RenderCalls.h>
+
 #include <vector>
-#include <glad/gl.h>
 
 namespace tactics {
 
-template<typename T, GLenum BufferType>
+template<typename T, rp::BufferType BufferType>
 class BaseBuffer {
 public:
 	BaseBuffer() {
-		glGenBuffers(1, &_id);
+		rp::generateBuffers(1, &_id);
 	}
 
-	BaseBuffer(const std::vector<T>& data, GLenum usage = GL_STATIC_DRAW) {
-		glGenBuffers(1, &_id);
+	BaseBuffer(const std::vector<T>& data, unsigned int usage) {
+		rp::generateBuffers(1, &_id);
 		setData(data, usage);
 	}
 
 	~BaseBuffer() {
-		glDeleteBuffers(1, &_id);
+		rp::deleteBuffers(1, &_id);
 	}
 
 	BaseBuffer(const BaseBuffer&) = delete;
 	BaseBuffer& operator=(const BaseBuffer&) = delete;
 
 	void bind() const {
-		glBindBuffer(BufferType, _id);
+		rp::bindBuffer(rp::BufferTypeValue<BufferType>::value, _id);
 	}
 
 	void unbind() const {
-		glBindBuffer(BufferType, 0);
+		rp::unbindBuffer(rp::BufferTypeValue<BufferType>::value);
 	}
 
 	void release() {
-		glDeleteBuffers(1, &_id);
+		rp::deleteBuffers(1, &_id);
 		_id = 0;
 	}
 
@@ -41,9 +42,9 @@ public:
 		return _id != 0;
 	}
 
-	void setData(const std::vector<T>& data, GLenum usage = GL_STATIC_DRAW) {
+	void setData(const std::vector<T>& data, unsigned int usage) {
 		bind();
-		glBufferData(BufferType, data.size() * sizeof(T), data.data(), usage);
+		rp::bufferData(rp::BufferTypeValue<BufferType>::value, static_cast<unsigned int>(data.size() * sizeof(T)), data.data(), usage);
 		_size = static_cast<unsigned int>(data.size());
 		unbind();
 	}

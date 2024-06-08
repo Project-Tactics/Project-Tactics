@@ -6,6 +6,7 @@ set(SOURCES
 
 add_executable(ProjectTactics_UnitTests ${SOURCES})
 target_link_libraries(ProjectTactics_UnitTests PUBLIC GTest::gtest GTest::gmock)
+
 add_to_apps_folder(ProjectTactics_UnitTests)
 
 unset(SOURCES)

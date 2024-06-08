@@ -1,17 +1,9 @@
-#include "CameraSubSystem.h"
+#include "CameraSystem.h"
 
-#include "../Component/CameraComponent.h"
-#include "../Component/FrustumComponent.h"
-#include "../Component/TransformComponent.h"
-#include "../Component/ViewportComponent.h"
+namespace tactics::component {
 
-namespace tactics {
-
-void CameraSubSystem::update() {
-	using namespace component;
-
-	// Update all camera matrices
-	_reg().view<Frustum, Transform, Camera>().each([] (auto& frustum, auto& transform, auto& camera) {
+void CameraSystem::updateCameraMatrices(const ecs_view<Frustum, Transform, Camera>& view) {
+	view.each([] (auto& frustum, auto& transform, auto& camera) {
 		auto target = transform.getPosition() + (transform.getRotation() * Vector3::forward);
 		camera.view = glm::lookAt(transform.getPosition(), target, Vector3::up);
 		switch (camera.projectionType) {
@@ -29,10 +21,13 @@ void CameraSubSystem::update() {
 		}
 		}
 	});
+}
 
-	// Update the main camera aspect ratio
-	_reg().view<Viewport, CurrentViewport>().each([this] (Viewport& viewport) {
-		_reg().view<Frustum, CurrentCamera>().each([&viewport] (Frustum& frustum) {
+void CameraSystem::updateCameraAspectRatios(const ecs_view<Viewport, CurrentViewport>& view1, const ecs_view<Frustum, CurrentCamera>& view2) {
+	// TODO(Gerark) In theory we should go for a simple solution instead of iterating in a nested loop like that. This is working just cause
+	// we have only one viewport and one camera in the scene. We should just assign a camera to each active viewport.
+	view1.each([view2] (Viewport& viewport) {
+		view2.each([&viewport] (Frustum& frustum) {
 			frustum.aspectRatio = static_cast<float>(viewport.size.x) / viewport.size.y;
 		});
 	});

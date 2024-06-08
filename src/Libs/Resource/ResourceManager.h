@@ -10,8 +10,6 @@
 
 namespace tactics::resource {
 
-class BaseResourceProvider;
-
 template<typename TResource>
 using ResourceMap = std::unordered_map<ResourceId, std::shared_ptr<TResource>>;
 

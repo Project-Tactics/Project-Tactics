@@ -1,6 +1,5 @@
 #pragma once
 
-#include "EntityComponentSystem.h"
 #include "EntityUtilities.h"
 
 #include <Libs/Utility/Exception.h>
@@ -11,70 +10,48 @@ class EntityComponentSystem;
 
 class Entity {
 private:
-	Entity(const char* name, EntityComponentSystem* ecs);
+	Entity(std::string_view name, entt::registry* registry);
 
 public:
 	Entity();
 
-	static Entity create(const char* name, EntityComponentSystem* ecs);
-	static Entity create(entt::entity entity, EntityComponentSystem* ecs);
+	static Entity create(std::string_view name, entt::registry* registry);
+	static Entity create(entt::entity entity, entt::registry* registry);
 
 	const hash_string& getName() const;
 
 	template<typename Type>
-	decltype(auto) getComponent() {
-		if (hasComponent<Type>()) {
-			return _ecs->get<Type>(_entity);
-		}
-		throw TACTICS_EXCEPTION("Can't get component. Entity {} does not have the requested component", toString(getName()));
-	}
+	decltype(auto) getComponent();
 
 	template<typename Type>
-	decltype(auto) getComponent() const {
-		if (hasComponent<Type>()) {
-			return _ecs->get<Type>(_entity);
-		}
-		throw TACTICS_EXCEPTION("Can't get component. Entity {} does not have the requested component", toString(getName()));
-	}
+	decltype(auto) getComponent() const;
 
 	template<typename Type, typename... Func>
-	decltype(auto) updateComponent(Func &&...func) {
-		if (hasComponent<Type>()) {
-			return _ecs->patch<Type>(_entity, std::forward<Func>(func)...);
-		}
-		throw TACTICS_EXCEPTION("Can't update component. Entity {} does not have the requested component", toString(getName()));
-	}
+	decltype(auto) updateComponent(Func &&...func);
 
 	template<typename Type>
-	bool hasComponent() const {
-		return _ecs->any_of<Type>(_entity);
-	}
+	bool hasComponent() const;
 
 	template<typename Type, typename ...TArgs>
-	decltype(auto) addComponent(TArgs&&... args) {
-		if (hasComponent<Type>()) {
-			throw TACTICS_EXCEPTION("Entity {} already has the requested component", toString(getName()));
-		}
-		return _ecs->emplace<Type>(_entity, std::forward<TArgs&&>(args)...);
-	}
+	decltype(auto) addComponent(TArgs&&... args);
 
 	template<typename Type>
-	decltype(auto) removeComponent() {
-		if (!hasComponent<Type>()) {
-			throw TACTICS_EXCEPTION("Can't remove component. Entity {} does not have a component of that type", toString(getName()));
-		}
-		return _ecs->remove<Type>(_entity);
-	}
+	decltype(auto) addComponent(Type& component);
+
+	template<typename Type>
+	decltype(auto) removeComponent();
 
 	bool operator==(entt::entity entity) const;
 	explicit operator bool() const;
 
+	template<typename Type>
+	static Type& explicitAddComponent(Type& component, Entity& entity);
+
 private:
 	entt::entity _entity;
-
-	// TODO(Gerark) It bugs me a lot that I have to pass the ECS to the Entity class
-	// Might be worth to look again at the design later. If then there's no better way, then we can remove the TODO
-	EntityComponentSystem* _ecs{};
+	entt::registry* _registry{};
 };
 
 }
+
+#include "Entity.inl"
