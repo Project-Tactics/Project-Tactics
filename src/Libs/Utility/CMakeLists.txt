@@ -9,6 +9,7 @@ set(HEADERS
     Math.h
     Service/ServiceLocator.h
     Ini/IniMathConverter.h
+    Reflection.h
     String.h
     TransparentTypes.h
     Uniforms/UniformsDescriptor.h

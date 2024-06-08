@@ -17,6 +17,11 @@ public:
 	void exit() override;
 
 private:
+	void _loadResources();
+	void _createViewport();
+	void _createCamera();
+	void _setupRenderSteps();
+
 	Action _action;
 };
 

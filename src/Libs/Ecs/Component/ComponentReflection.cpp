@@ -2,13 +2,24 @@
 
 #include "TransformComponent.h"
 #include "MeshComponent.h"
+#include "CameraComponent.h"
+#include "FrustumComponent.h"
 #include "../EntityUtilities.h"
+
+#include <Libs/Utility/Json/MathJsonSerializer.h>
+#include <Libs/Utility/Reflection.h>
 
 #include <entt/entt.hpp>
 
 namespace tactics {
 
-void ComponentReflection::InitializeBasicTypes(entt::registry&) {
+void serializeFromAngleAxis(glm::quat& quat, const nlohmann::ordered_json& jsonData) {
+	glm::vec3 axis = jsonData.at("axis");
+	float angle = jsonData.at("angle");
+	quat = glm::angleAxis(glm::radians(angle), axis);
+}
+
+void ComponentReflection::initializeBasicTypes(entt::registry&) {
 	entt::meta<glm::vec2>()
 		.type(hash("vec2"))
 		.data<&glm::vec2::x>(hash("x"))
@@ -22,16 +33,16 @@ void ComponentReflection::InitializeBasicTypes(entt::registry&) {
 
 	entt::meta<glm::quat>()
 		.type(hash("quat"))
+		.func<&serializeFromAngleAxis>(hash("fromAngleAxis"))
 		.data<&glm::quat::x>(hash("x"))
 		.data<&glm::quat::y>(hash("y"))
 		.data<&glm::quat::z>(hash("z"))
 		.data<&glm::quat::w>(hash("w"));
 }
 
-void ComponentReflection::InitializeCommonComponents(entt::registry&) {
+void ComponentReflection::initializeCommonComponents(entt::registry&) {
 	using namespace component;
-	Transform::defineReflection();
-	Mesh::defineReflection();
+	defineComponentsReflection<Transform, Mesh, Camera, Frustum, CurrentCamera>();
 }
 
 }

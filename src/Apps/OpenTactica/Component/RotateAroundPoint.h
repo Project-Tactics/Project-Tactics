@@ -12,6 +12,8 @@ struct RotateAroundPoint {
 	float distanceFromPoint = 10.f;
 	glm::vec3 offset = Vector3::zero;
 	glm::vec3 point = Vector3::zero;
+
+	static void defineReflection();
 };
 
 struct RotateAroundPointSystem {

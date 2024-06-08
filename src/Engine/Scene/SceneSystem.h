@@ -21,6 +21,8 @@ public:
 		resource::ResourceSystem& resourceSystem);
 	~SceneSystem();
 
+	void clearScene(bool clearCameras = false);
+
 	Entity createViewport(
 		const glm::vec2& topLeft,
 		const glm::vec2& size,

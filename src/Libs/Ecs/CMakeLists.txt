@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
+    Component/CameraComponent.cpp
     Component/ComponentReflection.cpp
+    Component/FrustumComponent.cpp
     Component/MeshComponent.cpp
     Component/TransformComponent.cpp
     Entity.cpp

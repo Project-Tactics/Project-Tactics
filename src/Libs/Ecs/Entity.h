@@ -45,7 +45,7 @@ public:
 	explicit operator bool() const;
 
 	template<typename Type>
-	static Type& explicitAddComponent(Type& component, Entity& entity);
+	static decltype(auto) explicitAddComponent(Type& component, Entity& entity);
 
 private:
 	entt::entity _entity;

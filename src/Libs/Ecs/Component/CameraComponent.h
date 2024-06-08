@@ -13,8 +13,12 @@ struct Camera {
 	ProjectionType projectionType = ProjectionType::Perspective;
 	glm::mat4 projection;
 	glm::mat4 view;
+
+	static void defineReflection();
 };
 
-struct CurrentCamera {};
+struct CurrentCamera {
+	static void defineReflection();
+};
 
 }

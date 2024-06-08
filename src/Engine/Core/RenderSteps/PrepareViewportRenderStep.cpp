@@ -16,7 +16,7 @@ void PrepareViewport::execute(RenderStepInfo&) {
 
 	// Probably an overkill to check this but it's better to be safe than sorry
 	// We can always remove or put this under a debug flag
-	if (view.size_hint() != 1) {
+	if (view.size_hint() > 1) {
 		throw TACTICS_EXCEPTION("There must be exactly one entity with a CurrentViewport component");
 	}
 

@@ -8,6 +8,7 @@
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
+#include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Rendering/GeometryBuilder.h>
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/ResourceSystem.h>
@@ -22,22 +23,24 @@ FsmAction DemoState::enter() {
 	_createTeapot();
 	_createCrate();
 	_createQuads();
+	_createExtraRotatingQuads();
 	_createCustomQuadWithCustomResources();
 
 	auto& sceneSystem = getService<SceneSystem>();
-	auto camera = sceneSystem.getCurrentCamera();
-	camera.addComponent<component::RotateAroundPoint>(0.005f, 0.f, 100.0f, Vector3::up * 10.f, Vector3::zero);
+	auto cameraEntity = sceneSystem.getCurrentCamera();
+	cameraEntity.getComponent<component::Camera>().projectionType = component::ProjectionType::Perspective;
+	auto& rotateAroundPoint = cameraEntity.getComponent<component::RotateAroundPoint>();
+	rotateAroundPoint.distanceFromPoint = 100.f;
+	rotateAroundPoint.offset = Vector3::up * 20.f;
+	rotateAroundPoint.point = Vector3::zero;
+	rotateAroundPoint.speed = 0.005f;
 
 	return FsmAction::none();
 }
 
 void DemoState::exit() {
-	using namespace component;
-
-	auto& ecsSystem = getService<EntityComponentSystem>();
-	ecsSystem.view<Mesh, Transform>().each([&ecsSystem] (auto entity, auto&, auto&) {
-		ecsSystem.destroy(entity);
-	});
+	auto& sceneSystem = getService<SceneSystem>();
+	sceneSystem.clearScene();
 
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 	resourceSystem.unloadPack("CustomPack");
@@ -86,15 +89,7 @@ void DemoState::_createTeapot() {
 
 void DemoState::_createPlane() {
 	auto& sceneSystem = getService<SceneSystem>();
-	auto& resourceSystem = getService<resource::ResourceSystem>();
-
-	auto plane = sceneSystem.createEntity({0.0f, 0.0f, 0.0f}, "quad", {"texturedUnlit"});
-	auto& planeTransform = plane.getComponent<component::Transform>();
-	planeTransform.setScale({200, 200, 200});
-	planeTransform.setRotation(glm::radians(90.0f), Vector3::right);
-	plane.updateComponent<component::Mesh>([&resourceSystem] (auto& mesh) {
-		mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("floor"));
-	});
+	sceneSystem.createEntity("plane", "plane");
 }
 
 void DemoState::_createQuads() {
@@ -105,11 +100,47 @@ void DemoState::_createQuads() {
 	const int height = 4;
 	for (auto x = -width / 2; x < width / 2; ++x) {
 		for (auto y = -height / 2; y < height / 2; ++y) {
-			auto quad = sceneSystem.createEntity({-50.0f + y * 20.f, 10.0f, x * 10.f}, "quad", {"texturedUnlit"});
+			auto quad = sceneSystem.createEntity({-50.0f + y * 20.f, 10.0f, x * 10.f}, "quad", {"texturedUnlitWithAlpha"});
 			quad.getComponent<component::Transform>().setScale({15, 15, 15});
 			quad.updateComponent<component::Mesh>([&resourceSystem] (auto& mesh) {
 				mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("tacticsIcon"));
 			});
+		}
+	}
+}
+
+void DemoState::_createExtraRotatingQuads() {
+	auto& sceneSystem = getService<SceneSystem>();
+
+	const int width = 4;
+	const int height = 4;
+	const int distance = 3;
+	glm::vec3 offset = {40, 25, 0};
+	for (auto x = -width / 2; x < width / 2; ++x) {
+		for (auto y = -height / 2; y < height / 2; ++y) {
+			auto quad = sceneSystem.createEntity("rotatingQuad", "simpleRotatingQuad");
+			auto position = glm::vec3{x * distance, y * distance, 0.0f};
+			quad.getComponent<component::Transform>().setPosition(offset + position);
+		}
+	}
+
+	offset = {52, 25, 0};
+	for (auto x = -width / 2; x < width / 2; ++x) {
+		for (auto y = -height / 2; y < height / 2; ++y) {
+			auto quad = sceneSystem.createEntity("rotatingQuad", "simpleRotatingQuad");
+			auto position = glm::vec3{x * distance, y * distance, 0.0f};
+			quad.getComponent<component::Transform>().setPosition(offset + position);
+			quad.getComponent<component::RotateItem>().axis = Vector3::up;
+		}
+	}
+
+	offset = {28, 25, 0};
+	for (auto x = -width / 2; x < width / 2; ++x) {
+		for (auto y = -height / 2; y < height / 2; ++y) {
+			auto quad = sceneSystem.createEntity("rotatingQuad", "simpleRotatingQuad");
+			auto position = glm::vec3{x * distance, y * distance, 0.0f};
+			quad.getComponent<component::Transform>().setPosition(offset + position);
+			quad.getComponent<component::RotateItem>().axis = Vector3::forward;
 		}
 	}
 }

@@ -10,6 +10,8 @@ namespace tactics::component {
 struct RotateItem {
 	float speed;
 	glm::vec3 axis;
+
+	static void defineReflection();
 };
 
 class RotateItemSystem {

@@ -27,15 +27,6 @@ FsmAction MapState::enter() {
 	auto mapName = fmt::format("map{:02d}", _mapIndex);
 	sceneSystem.createEntity("map", mapName);
 
-	auto cameraEntity = sceneSystem.getCurrentCamera();
-	auto& frustum = cameraEntity.getComponent<component::Frustum>();
-	frustum.fov = 60;
-	frustum.orthoSize = 3.f;
-	if (!cameraEntity.hasComponent<component::RotateAroundPoint>()) {
-		cameraEntity.addComponent<component::RotateAroundPoint>(0.0035f, 0.f, 30.0f, Vector3::up * 20.f, Vector3::up * 1.f);
-	}
-	cameraEntity.getComponent<component::Camera>().projectionType = component::ProjectionType::Orthographic;
-
 	return FsmAction::none();
 }
 
@@ -47,10 +38,8 @@ FsmAction MapState::update() {
 }
 
 void MapState::exit() {
-	auto& ecsSystem = getService<EntityComponentSystem>();
-	ecsSystem.view<component::Mesh>().each([&ecsSystem] (auto entity, auto&) {
-		ecsSystem.destroy(entity);
-	});
+	auto& sceneSystem = getService<SceneSystem>();
+	sceneSystem.clearScene();
 }
 
 FsmEventAction MapState::onKeyPress(SDL_KeyboardEvent& event) {

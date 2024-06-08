@@ -9,8 +9,8 @@
 namespace tactics {
 
 EntityComponentSystem::EntityComponentSystem() {
-	ComponentReflection::InitializeBasicTypes(*this);
-	ComponentReflection::InitializeCommonComponents(*this);
+	ComponentReflection::initializeBasicTypes(*this);
+	ComponentReflection::initializeCommonComponents(*this);
 }
 
 entt::registry& EntityComponentSystem::asRegistry() {

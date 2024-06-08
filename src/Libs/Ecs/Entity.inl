@@ -13,7 +13,8 @@ decltype(auto) Entity::getComponent() const {
 	if (hasComponent<Type>()) {
 		return _registry->get<Type>(_entity);
 	}
-	throw TACTICS_EXCEPTION("Can't get component. Entity {} does not have the requested component", toString(getName()));
+	throw TACTICS_EXCEPTION("Can't get component {}. Entity {} does not have the requested component",
+		entt::resolve<Type>().info().name(), toString(getName()));
 }
 
 template<typename Type, typename... Func>
@@ -54,7 +55,7 @@ decltype(auto) Entity::removeComponent() {
 }
 
 template<typename Type>
-static Type& Entity::explicitAddComponent(Type& component, Entity& entity) {
+static decltype(auto) Entity::explicitAddComponent(Type& component, Entity& entity) {
 	return entity.addComponent<Type>(component);
 }
 

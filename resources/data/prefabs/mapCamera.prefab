@@ -1,0 +1,45 @@
+{
+    "currentCamera": {},
+    "transform": {
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 0
+        },
+        "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+        }
+    },
+    "camera": {
+        "projectionType": "orthographic"
+    },
+    "frustum": {
+        "fov": 60,
+        "near": 1,
+        "far": 1000,
+        "orthoSize": 3
+    },
+    "rotateAroundPoint": {
+        "speed": 0.0035,
+        "distanceFromPoint": 10,
+        "currentAngle": 0,
+        "point": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+        },
+        "offset": {
+            "x": 0,
+            "y": 7,
+            "z": 0
+        }
+    }
+}

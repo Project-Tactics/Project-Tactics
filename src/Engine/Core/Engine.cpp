@@ -93,6 +93,8 @@ void Engine::_initialize(Application& application) {
 	_sceneSystem = std::make_unique<SceneSystem>(*_ecs, *_resourceSystem);
 
 	_setupServiceLocator();
+
+	application.setupComponentReflections();
 	_setupFsm(application);
 
 	if (devUserConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {

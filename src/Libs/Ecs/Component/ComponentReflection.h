@@ -6,8 +6,8 @@ namespace tactics {
 
 class ComponentReflection {
 public:
-	static void InitializeBasicTypes(entt::registry& registry);
-	static void InitializeCommonComponents(entt::registry& registry);
+	static void initializeBasicTypes(entt::registry& registry);
+	static void initializeCommonComponents(entt::registry& registry);
 };
 
 }

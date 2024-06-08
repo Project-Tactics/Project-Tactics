@@ -1,11 +1,21 @@
 #include "OpenTacticaApplication.h"
 
+#include "Component/RotateItem.h"
+#include "Component/RotateAroundPoint.h"
+
 #include "States/DemoState.h"
 #include "States/EmptyState.h"
 #include "States/LoadState.h"
 #include "States/MapState.h"
 
+#include <Libs/Utility/Reflection.h>
+
 namespace tactics {
+
+void OpenTacticaApplication::setupComponentReflections() {
+	using namespace component;
+	defineComponentsReflection<RotateItem, RotateAroundPoint>();
+}
 
 std::string OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 	fsmBuilder
@@ -21,7 +31,6 @@ std::string OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, F
 
 		.state<LoadState>("Unload", serviceLocator, LoadState::Action::Unload)
 		.on("proceed").exitFsm();
-
 
 	for (auto mapIndex = 0; mapIndex < 5; ++mapIndex) {
 		fsmBuilder

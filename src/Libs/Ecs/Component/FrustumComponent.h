@@ -8,6 +8,8 @@ struct Frustum {
 	float far = 1000.0f;
 	float aspectRatio = 1.0f;
 	float orthoSize = 5.0f;
+
+	static void defineReflection();
 };
 
 }

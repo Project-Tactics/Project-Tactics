@@ -21,30 +21,12 @@ LoadState::LoadState(ServiceLocator& services, Action action): FsmStateWithServi
 }
 
 FsmAction LoadState::enter() {
-	using namespace renderstep;
 
 	if (_action == Action::Load) {
-		auto& resourceSystem = getService<resource::ResourceSystem>();
-		resourceSystem.loadPackDefinition("resource_definitions/game_data.json");
-		resourceSystem.loadPackDefinition("resource_definitions/map_resources_data.lua");
-		resourceSystem.loadPack("mainPackage");
-		resourceSystem.loadPack("mapTextures");
-
-		auto& renderSystem = getService<RenderSystem>();
-		auto& scene = getService<SceneSystem>();
-		auto mainCamera = scene.createCamera("MainCamera", Vector3::zero, Vector3::forward, Vector3::up, 60, 1, 1000);
-		mainCamera.addComponent<component::CurrentCamera>();
-
-		auto mainViewport = scene.createViewport({0, 0}, renderSystem.getWindowSize());
-		mainViewport.addComponent<component::CurrentViewport>();
-
-		auto& mainRenderQueue = getService<RenderSystem>().createRenderQueue();
-
-		auto& ecs = getService<EntityComponentSystem>();
-		mainRenderQueue.addStep<PrepareViewport>(ecs);
-		mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithoutAlphaBlend);
-		mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithAlphaBlend);
-		mainRenderQueue.addStep<ImGuiRender>(getService<OverlaySystem>());
+		_loadResources();
+		_createViewport();
+		_createCamera();
+		_setupRenderSteps();
 	} else {
 		auto& resourceSystem = getService<resource::ResourceSystem>();
 		resourceSystem.unloadPack("mainPackage");
@@ -59,6 +41,37 @@ void LoadState::exit() {
 
 FsmAction LoadState::update() {
 	return FsmAction::none();
+}
+
+void LoadState::_loadResources() {
+	auto& resourceSystem = getService<resource::ResourceSystem>();
+	resourceSystem.loadPackDefinition("resource_definitions/game_data.json");
+	resourceSystem.loadPackDefinition("resource_definitions/map_resources_data.lua");
+	resourceSystem.loadPack("mainPackage");
+	resourceSystem.loadPack("mapTextures");
+}
+
+void LoadState::_createViewport() {
+	auto& renderSystem = getService<RenderSystem>();
+	auto& sceneSystem = getService<SceneSystem>();
+	auto mainViewport = sceneSystem.createViewport({0, 0}, renderSystem.getWindowSize());
+	mainViewport.addComponent<component::CurrentViewport>();
+}
+
+void LoadState::_createCamera() {
+	auto& sceneSystem = getService<SceneSystem>();
+	sceneSystem.createEntity("camera", "mapCamera");
+}
+
+void LoadState::_setupRenderSteps() {
+	using namespace renderstep;
+	auto& renderSystem = getService<RenderSystem>();
+	auto& mainRenderQueue = renderSystem.createRenderQueue();
+	auto& ecs = getService<EntityComponentSystem>();
+	mainRenderQueue.addStep<PrepareViewport>(ecs);
+	mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithoutAlphaBlend);
+	mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithAlphaBlend);
+	mainRenderQueue.addStep<ImGuiRender>(getService<OverlaySystem>());
 }
 
 }

@@ -1,0 +1,40 @@
+{
+    "transform": {
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "scale": {
+            "x": 3,
+            "y": 3,
+            "z": 3
+        }
+    },
+    "rotateItem": {
+        "axis": {
+            "x": 1,
+            "y": 0,
+            "z": 0
+        },
+        "speed": 0.05
+    },
+    "mesh": {
+        "mesh": "quad",
+        "materials": [
+            {
+                "material": "coloredUnlit",
+                "uniforms": {
+                    "vectors4": {
+                        "u_Color": {
+                            "x": 1,
+                            "y": 0.5,
+                            "z": 0,
+                            "w": 1
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

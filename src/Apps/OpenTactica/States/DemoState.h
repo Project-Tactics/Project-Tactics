@@ -20,6 +20,7 @@ private:
 	void _createTeapot();
 	void _createCrate();
 	void _createQuads();
+	void _createExtraRotatingQuads();
 	void _createCustomQuadWithCustomResources();
 };
 

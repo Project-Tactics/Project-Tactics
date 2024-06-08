@@ -14,6 +14,14 @@ Entity::Entity() {
 }
 
 const hash_string& Entity::getName() const {
+	// Why we're not calling getComponent<component::Name>() directly?
+	// If the entity has no component::Name we end up in a stack overflow otherwise.
+	// This is because getComponent<component::Name>() calls getName() which calls getComponent<component::Name>() and so on.
+	if (!hasComponent<component::Name>()) {
+		static auto noNameComponent = hash("[No Name Component]");
+		return noNameComponent;
+	}
+
 	return getComponent<component::Name>().name;
 }
 
