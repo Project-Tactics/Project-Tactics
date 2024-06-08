@@ -92,9 +92,6 @@
             "map04": {
                 "path": "prefabs/map04.prefab"
             },
-            "defaultCamera": {
-                "path": "prefabs/defaultCamera.prefab"
-            },
             "mapCamera": {
                 "path": "prefabs/mapCamera.prefab"
             },
