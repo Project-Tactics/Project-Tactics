@@ -10,6 +10,7 @@ struct Mesh {
 	std::vector<std::shared_ptr<resource::Material::Instance>> materials;
 
 	static void defineReflection();
+	Mesh clone();
 };
 
 }

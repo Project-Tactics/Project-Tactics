@@ -30,10 +30,10 @@ FsmAction LoadState::update() {
 
 void LoadState::_loadResources() {
 	auto& resourceSystem = getService<resource::ResourceSystem>();
-	resourceSystem.loadPackDefinition("resource_definitions/game_data.json");
 	resourceSystem.loadPackDefinition("resource_definitions/map_resources_data.lua");
-	resourceSystem.loadPack("mainPackage");
+	resourceSystem.loadPackDefinition("resource_definitions/game_data.json");
 	resourceSystem.loadPack("mapTextures");
+	resourceSystem.loadPack("mainPackage");
 }
 
 void LoadState::_createViewport() {

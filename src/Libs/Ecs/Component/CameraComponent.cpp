@@ -1,6 +1,7 @@
 #include "CameraComponent.h"
 
-#include "../EntityUtilities.h"
+#include <Libs/Utility/Reflection.h>
+
 #include "../Entity.h"
 
 namespace tactics::component {
@@ -10,16 +11,16 @@ void Camera::defineReflection() {
 		.data<ProjectionType::Perspective>(hash("perspective"))
 		.data<ProjectionType::Orthographic>(hash("orthographic"));
 
-	entt::meta<Camera>()
-		.type(hash("camera"))
-		.func<&Entity::explicitAddComponent<Camera>>(hash("emplace"))
+	componentReflection<Camera>("camera")
 		.data<&Camera::projectionType>(hash("projectionType"));
 }
 
+Camera Camera::clone() {
+	return *this;
+}
+
 void CurrentCamera::defineReflection() {
-	entt::meta<CurrentCamera>()
-		.type(hash("currentCamera"))
-		.func<&Entity::explicitAddComponent<CurrentCamera>>(hash("emplace"));
+	componentReflection<CurrentCamera>("currentCamera");
 }
 
 }

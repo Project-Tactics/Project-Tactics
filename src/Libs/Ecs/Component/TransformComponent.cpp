@@ -1,16 +1,13 @@
 #include "TransformComponent.h"
 
-#include "../EntityUtilities.h"
-#include "../Entity.h"
+#include <Libs/Utility/Reflection.h>
 
 #include <entt/entt.hpp>
 
 namespace tactics::component {
 
 void Transform::defineReflection() {
-	entt::meta<Transform>()
-		.type(hash("transform"))
-		.func<&Entity::explicitAddComponent<Transform>>(hash("emplace"))
+	componentReflection<Transform>("transform")
 		.data<&Transform::position>(hash("position"))
 		.data<&Transform::rotation>(hash("rotation"))
 		.data<&Transform::scale>(hash("scale"));

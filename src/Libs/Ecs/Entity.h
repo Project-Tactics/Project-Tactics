@@ -17,6 +17,7 @@ public:
 
 	static Entity create(std::string_view name, entt::registry* registry);
 	static Entity create(entt::entity entity, entt::registry* registry);
+	void destroy();
 
 	const hash_string& getName() const;
 
@@ -43,9 +44,6 @@ public:
 
 	bool operator==(entt::entity entity) const;
 	explicit operator bool() const;
-
-	template<typename Type>
-	static decltype(auto) explicitAddComponent(Type& component, Entity& entity);
 
 private:
 	entt::entity _entity;

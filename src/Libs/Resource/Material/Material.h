@@ -13,23 +13,24 @@
 
 namespace tactics::resource {
 
-class Material : public Resource<Material>, public Uniforms {
-    public:
-    static const ResourceType TYPE = ResourceType::Material;
-    using Resource<Material>::Resource;
+class Material: public Resource<Material>, public Uniforms {
+public:
+	static const ResourceType TYPE = ResourceType::Material;
+	using Resource<Material>::Resource;
 
-    class Instance : public Uniforms {
-        public:
-        explicit Instance(std::shared_ptr<Material> parent);
-        void updateShaderUniforms();
+	class Instance: public Uniforms {
+	public:
+		explicit Instance(std::shared_ptr<Material> parent);
+		void updateShaderUniforms();
+		[[nodiscard]] std::shared_ptr<Instance> clone();
 
-        std::shared_ptr<Material> parent;
-    };
+		std::shared_ptr<Material> parent;
+	};
 
-    [[nodiscard]] static std::shared_ptr<Material::Instance> createInstance(std::shared_ptr<Material> parentMaterial);
+	[[nodiscard]] static std::shared_ptr<Material::Instance> createInstance(std::shared_ptr<Material> parentMaterial);
 
-    bool hasAlphaBlend{};
-    std::shared_ptr<Shader> shader;
+	bool hasAlphaBlend{};
+	std::shared_ptr<Shader> shader;
 };
 
 }

@@ -54,9 +54,27 @@ decltype(auto) Entity::removeComponent() {
 	return _registry->remove<Type>(_entity);
 }
 
-template<typename Type>
-static decltype(auto) Entity::explicitAddComponent(Type& component, Entity& entity) {
-	return entity.addComponent<Type>(component);
+template<typename TComponent>
+static decltype(auto) emplaceComponent(TComponent& component, Entity& entity) {
+	return entity.addComponent<TComponent>(component);
+}
+
+template <typename T>
+concept HasClone = requires(T obj) {
+	{ obj.clone() } -> std::convertible_to<T>;
+};
+
+template<typename TComponent>
+static void cloneComponent(const Entity& from, Entity& to) {
+	if constexpr (sizeof(TComponent) == 1u) {
+		to.addComponent<TComponent>();
+	} else if constexpr (HasClone<TComponent>) {
+		auto& component = from.getComponent<TComponent>();
+		to.addComponent<TComponent>(component.clone());
+	} else {
+		auto& component = from.getComponent<TComponent>();
+		to.addComponent<TComponent>(component);
+	}
 }
 
 }

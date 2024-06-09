@@ -2,11 +2,9 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
-    Scene.cpp
     SceneSystem.cpp)
     
 set(HEADERS
-    Scene.h
     SceneSystem.h)
 
 add_library(engine_scene ${SOURCES} ${HEADERS})

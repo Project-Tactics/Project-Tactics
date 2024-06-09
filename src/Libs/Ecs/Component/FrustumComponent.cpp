@@ -1,16 +1,13 @@
 #include "FrustumComponent.h"
 
-#include "../EntityUtilities.h"
-#include "../Entity.h"
+#include <Libs/Utility/Reflection.h>
 
 namespace tactics::component {
 
 void Frustum::defineReflection() {
 	using namespace entt::literals;
 
-	entt::meta<Frustum>()
-		.type(hash("frustum"))
-		.func<&Entity::explicitAddComponent<Frustum>>(hash("emplace"))
+	componentReflection<Frustum>("frustum")
 		.data<&Frustum::fov>(hash("fov"))
 		.data<&Frustum::near>(hash("near"))
 		.data<&Frustum::far>(hash("far"))

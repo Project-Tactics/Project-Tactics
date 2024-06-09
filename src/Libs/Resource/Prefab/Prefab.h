@@ -10,7 +10,8 @@ class Prefab: public Resource<Prefab> {
 public:
 	static const ResourceType TYPE = ResourceType::Prefab;
 	using Resource<Prefab>::Resource;
-	nlohmann::ordered_json jsonData;
+	~Prefab();
+	Entity entity;
 };
 
 }

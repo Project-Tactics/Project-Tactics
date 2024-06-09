@@ -60,10 +60,6 @@ private:
 	void _onCurrentCameraConstructed(entt::registry& registry, entt::entity entity);
 	void _onCurrentViewportConstructed(entt::registry& registry, entt::entity entity);
 
-	// TODO(Gerark) Methods used to build an entity from a prefab. Should be moved to a dedicated helper class probably.
-	void _buildComponentRecursively(entt::meta_any& instance, const nlohmann::ordered_json& jsonData);
-	std::tuple<bool, resource::ResourceType, std::string> _extractResourceInfo(const std::string& value);
-
 	EntityComponentSystem& _ecs;
 	resource::ResourceSystem& _resourceSystem;
 	Entity _currentCameraEntity;

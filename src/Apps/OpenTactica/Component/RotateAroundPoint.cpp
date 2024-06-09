@@ -1,16 +1,13 @@
 #include "RotateAroundPoint.h"
 
-#include <Libs/Ecs/EntityUtilities.h>
-#include <Libs/Ecs/Entity.h>
+#include <Libs/Utility/Reflection.h>
 
 namespace tactics::component {
 
 void RotateAroundPoint::defineReflection() {
 	using namespace entt::literals;
 
-	entt::meta<RotateAroundPoint>()
-		.type(hash("rotateAroundPoint"))
-		.func<&Entity::explicitAddComponent<RotateAroundPoint>>(hash("emplace"))
+	componentReflection<RotateAroundPoint>("rotateAroundPoint")
 		.data<&RotateAroundPoint::point>(hash("point"))
 		.data<&RotateAroundPoint::offset>(hash("offset"))
 		.data<&RotateAroundPoint::distanceFromPoint>(hash("distanceFromPoint"))

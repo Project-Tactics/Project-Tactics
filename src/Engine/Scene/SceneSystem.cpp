@@ -1,7 +1,5 @@
 #include "SceneSystem.h"
 
-#include "Scene.h"
-
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/Component/AlphaBlendedComponent.h>
 #include <Libs/Ecs/Component/CameraComponent.h>
@@ -161,72 +159,8 @@ Entity SceneSystem::createEntity(
 	std::string_view prefabName
 ) {
 	auto prefab = _resourceSystem.getResource<resource::Prefab>(prefabName);
-	auto entity = Entity::create(name, &_ecs.sceneRegistry());
-
-	for (auto& [key, value] : prefab->jsonData.items()) {
-		auto id = hash(key);
-		auto type = entt::resolve(id);
-
-		if (!type) {
-			throw TACTICS_EXCEPTION("Component type not found while loading prefab: [{}]", key);
-		}
-
-		auto componentInstance = type.construct();
-		_buildComponentRecursively(componentInstance, value);
-		if (auto func = type.func(hash("emplace"))) {
-			type.func(hash("emplace")).invoke(componentInstance, entity);
-		} else {
-			throw TACTICS_EXCEPTION("Missing [emplace] function for Component. A component reflection must provide it. Component: [{}]", key);
-		}
-	}
-
+	auto entity = _ecs.createEntityFromPrefab(std::string(name), prefab->entity);
 	return entity;
-}
-
-void SceneSystem::_buildComponentRecursively(entt::meta_any& instance, const nlohmann::ordered_json& jsonData) {
-	auto type = instance.type();
-
-	if (auto deserializer = type.func(hash("deserializer"))) {
-		deserializer.invoke(instance, &_ecs.sceneRegistry(), jsonData);
-		return;
-	}
-
-	for (auto& [key, value] : jsonData.items()) {
-		auto id = hash(key);
-
-		if (auto customSerializer = type.func(hash(key))) {
-			type.func(id).invoke(instance, value);
-		} else {
-			auto data = type.data(id);
-			if (!data) {
-				throw TACTICS_EXCEPTION("Can't find data type while loading prefab: [{}]", key);
-			}
-
-			auto memberType = data.type();
-
-			if (memberType.is_integral()) {
-				data.set(instance, value.get<int>());
-			} else if (memberType.is_arithmetic()) {
-				data.set(instance, value.get<float>());
-			} else if (memberType.is_enum()) {
-				data.set(instance, memberType.data(hash(value.get<std::string>())).get({}));
-			} else if (memberType.is_class()) {
-				auto memberInstance = data.get(instance);
-				_buildComponentRecursively(memberInstance, value);
-				data.set(instance, memberInstance);
-			}
-		}
-	}
-}
-
-std::tuple<bool, resource::ResourceType, std::string> SceneSystem::_extractResourceInfo(const std::string& value) {
-	std::smatch match;
-	std::regex resourceRegex(R"(R:([^=]+)=([^=]+))");
-	if (std::regex_search(value, match, resourceRegex)) {
-		return {true, fromString<resource::ResourceType>(match[1].str()), match[2].str()};
-	}
-
-	return {false, resource::ResourceType::Unkwown, ""};
 }
 
 }

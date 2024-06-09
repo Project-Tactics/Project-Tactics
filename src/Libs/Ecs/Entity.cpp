@@ -13,6 +13,12 @@ Entity::Entity() {
 	_entity = entt::null;
 }
 
+void Entity::destroy() {
+	if (_entity != entt::null) {
+		_registry->destroy(_entity);
+	}
+}
+
 const hash_string& Entity::getName() const {
 	// Why we're not calling getComponent<component::Name>() directly?
 	// If the entity has no component::Name we end up in a stack overflow otherwise.

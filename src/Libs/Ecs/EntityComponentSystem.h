@@ -1,14 +1,20 @@
 #pragma once
 
 #include "Entity.h"
-
-using namespace entt::literals;
+#include "PrefabManager.h"
 
 namespace tactics {
+namespace resource {
+class ResourceProvider;
+}
 
 class EntityComponentSystem {
 public:
 	EntityComponentSystem();
+
+	Entity createPrefab(const std::string& name, const nlohmann::ordered_json& jsonData, const resource::ResourceProvider& resourceProvider);
+	Entity createEntityFromPrefab(const std::string& name, const Entity& prefabEntity);
+	void clearPrefabsRegistry();
 
 	entt::registry& sceneRegistry();
 	entt::registry& prefabRegistry();
@@ -17,7 +23,7 @@ public:
 
 private:
 	entt::registry _sceneRegistry;
-	entt::registry _prefabRegistry;
+	PrefabManager _prefabManager;
 };
 
 }

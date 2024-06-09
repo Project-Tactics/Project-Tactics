@@ -131,6 +131,7 @@ void Engine::_shutdown() {
 	_eventsSystem->unregisterEventsListener(_fsm.get());
 	_renderSystem.reset();
 	_overlaySystem.reset();
+	_ecs->clearPrefabsRegistry();
 	_resourceSystem->unloadPack("initialization");
 	_resourceSystem->unloadPack("builtinMeshes");
 	_resourceSystem->unloadPack("_internalCustomPack");

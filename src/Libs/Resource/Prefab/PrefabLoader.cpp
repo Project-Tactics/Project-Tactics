@@ -25,7 +25,7 @@ std::shared_ptr<Prefab> PrefabLoader::load(const std::string& name, const FileDe
 	auto& fileSystem = _getFileSystem();
 	auto jsonHandle = fileSystem.createJsonFileHandle(descriptor.path);
 	jsonHandle->load();
-	prefab->jsonData = jsonHandle->getContent();
+	prefab->entity = _ecs.createPrefab(name, jsonHandle->getContent(), _getResourceProvider());
 	return prefab;
 }
 

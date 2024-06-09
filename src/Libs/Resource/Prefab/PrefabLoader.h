@@ -4,7 +4,7 @@
 
 #include "Prefab.h"
 
-#include <entt/entt.hpp>
+#include <Libs/Ecs/Entity.h>
 
 namespace tactics {
 class EntityComponentSystem;
@@ -16,7 +16,7 @@ public:
 	PrefabLoader(FileSystem& fileSystem, const ResourceProvider& resourceProvider, EntityComponentSystem& ecs);
 	std::shared_ptr<Prefab> load(const std::string& name, const FileDescriptor& descriptor);
 private:
-	void _fillComponentThroughReflection(entt::meta_any& anyValue, const nlohmann::ordered_json& jsonValue);
+	Entity _createPrefab(const std::string& name, const nlohmann::ordered_json& json);
 
 	EntityComponentSystem& _ecs;
 };

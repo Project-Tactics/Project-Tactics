@@ -5,7 +5,6 @@
 #include <entt/entt.hpp>
 
 namespace tactics {
-
 using hash_string = entt::hashed_string;
 
 [[nodiscard]] hash_string hash(const char* str);
@@ -18,10 +17,5 @@ using hash_string = entt::hashed_string;
 
 template<typename ...TComponents>
 using ecs_view = const entt::view<entt::get_t<TComponents...>>;
-
-template<typename TService>
-[[nodiscard]] TService& getService(entt::registry& registry) {
-	return registry.ctx().get<ServiceLocator*>()->getService<TService>();
-}
 
 }

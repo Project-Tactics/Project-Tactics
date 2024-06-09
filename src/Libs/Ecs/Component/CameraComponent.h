@@ -15,6 +15,7 @@ struct Camera {
 	glm::mat4 view;
 
 	static void defineReflection();
+	Camera clone();
 };
 
 struct CurrentCamera {
