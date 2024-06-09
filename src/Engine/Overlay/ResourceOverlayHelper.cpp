@@ -162,36 +162,12 @@ bool ResourceOverlayHelper::_beginTabItem(const char* name, resource::ResourceTy
 }
 
 ImVec4 ResourceOverlayHelper::toColor(resource::ResourceType resourceType, float multiplier, float alphaMultiplier) {
-	auto& colors = CustomOverlayColors::getColors();
-	ImVec4 result{};
-	switch (resourceType) {
-	case resource::ResourceType::IniFile:
-		result = colors.IniFileColor;
-		break;
-	case resource::ResourceType::Material:
-		result = colors.MaterialColor;
-		break;
-	case resource::ResourceType::Mesh:
-		result = colors.MeshColor;
-		break;
-	case resource::ResourceType::Prefab:
-		result = colors.PrefabColor;
-		break;
-	case resource::ResourceType::Shader:
-		result = colors.ShaderColor;
-		break;
-	case resource::ResourceType::Texture:
-		result = colors.TextureColor;
-		break;
-	default:
-		result = colors.ResourceColor;
-		break;
-	}
-	result.x *= multiplier;
-	result.y *= multiplier;
-	result.z *= multiplier;
-	result.w *= alphaMultiplier;
-	return result;
+	auto color = CustomOverlayColors::getResourceTypeColor(resourceType);
+	color.x *= multiplier;
+	color.y *= multiplier;
+	color.z *= multiplier;
+	color.w *= alphaMultiplier;
+	return color;
 }
 
 }

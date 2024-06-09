@@ -15,9 +15,10 @@ ImVec4 CustomOverlayColors::Colors::IniFileColor;
 ImVec4 CustomOverlayColors::Colors::MaterialColor;
 ImVec4 CustomOverlayColors::Colors::MeshColor;
 ImVec4 CustomOverlayColors::Colors::PrefabColor;
-ImVec4 CustomOverlayColors::Colors::ShaderColor;
-ImVec4 CustomOverlayColors::Colors::TextureColor;
 ImVec4 CustomOverlayColors::Colors::ResourceColor;
+ImVec4 CustomOverlayColors::Colors::ShaderColor;
+ImVec4 CustomOverlayColors::Colors::SpriteColor;
+ImVec4 CustomOverlayColors::Colors::TextureColor;
 
 void CustomOverlayColors::initialize(resource::IniFile& configFile) {
 	auto category = "imguiCustomColors";
@@ -32,11 +33,40 @@ void CustomOverlayColors::initialize(resource::IniFile& configFile) {
 	_colors.PrefabColor = configFile.get(category, "prefabColor", ImVec4{1, 0.0f, 0.5f, 1.f});
 	_colors.ResourceColor = configFile.get(category, "resourceColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.ShaderColor = configFile.get(category, "shaderColor", ImVec4{1, 0.5f, 0.5f, 1.f});
+	_colors.SpriteColor = configFile.get(category, "spriteColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.TextureColor = configFile.get(category, "textureColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 }
 
 const CustomOverlayColors::Colors& CustomOverlayColors::getColors() {
 	return _colors;
+}
+
+const ImVec4& CustomOverlayColors::getResourceTypeColor(resource::ResourceType type) {
+	switch (type) {
+	case resource::ResourceType::IniFile: {
+		return _colors.IniFileColor;
+	}
+	case resource::ResourceType::Material: {
+		return _colors.MaterialColor;
+	}
+	case resource::ResourceType::Mesh: {
+		return _colors.MeshColor;
+	}
+	case resource::ResourceType::Prefab: {
+		return _colors.PrefabColor;
+	}
+	case resource::ResourceType::Shader: {
+		return _colors.ShaderColor;
+	}
+	case resource::ResourceType::Sprite: {
+		return _colors.SpriteColor;
+	}
+	case resource::ResourceType::Texture: {
+		return _colors.TextureColor;
+	}
+	}
+
+	return _colors.ResourceColor;
 }
 
 }

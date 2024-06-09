@@ -1,10 +1,12 @@
 #pragma once
 
 #include <imgui.h>
+#include <stdint.h>
 
 namespace tactics {
 namespace resource {
 class IniFile;
+enum class ResourceType;
 }
 
 class CustomOverlayColors {
@@ -21,11 +23,13 @@ public:
 		static ImVec4 PrefabColor;
 		static ImVec4 ResourceColor;
 		static ImVec4 ShaderColor;
+		static ImVec4 SpriteColor;
 		static ImVec4 TextureColor;
 	};
 
 	static void initialize(resource::IniFile& configFile);
 	static const Colors& getColors();
+	static const ImVec4& getResourceTypeColor(resource::ResourceType type);
 
 private:
 	static Colors _colors;

@@ -3,8 +3,9 @@
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/Component/AlphaBlendedComponent.h>
 #include <Libs/Ecs/Component/CameraComponent.h>
-#include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
+#include <Libs/Ecs/Component/SpriteComponent.h>
+#include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Rendering/IndexBuffer.h>
 #include <Libs/Rendering/VertexBuffer.h>
 #include <Libs/Rendering/VertexAttributes.h>
@@ -25,13 +26,15 @@ DrawMeshes::DrawMeshes(EntityComponentSystem& ecs, AlphaBlendedFlag alphaBlended
 void DrawMeshes::execute(RenderStepInfo&) {
 	using namespace component;
 
+	auto& registry = _ecs.sceneRegistry();
+
 	if (_alphaBlendedFlag == AlphaBlendedFlag::WithoutAlphaBlend) {
-		_ecs.sceneRegistry().view<Camera, CurrentCamera>().each([this] (auto& camera) {
+		registry.view<Camera, CurrentCamera>().each([this] (auto& camera) {
 			auto viewProjectionMatrix = camera.projection * camera.view;
 			_drawOpaqueGeometry(viewProjectionMatrix);
 		});
 	} else {
-		_ecs.sceneRegistry().view<Camera, Transform, CurrentCamera>().each([this] (auto& camera, auto& transform) {
+		registry.view<Camera, Transform, CurrentCamera>().each([this] (auto& camera, auto& transform) {
 			auto viewProjectionMatrix = camera.projection * camera.view;
 			_drawAlphaBlendedGeometry(viewProjectionMatrix, transform);
 		});

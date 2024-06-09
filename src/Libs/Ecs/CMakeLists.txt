@@ -6,12 +6,14 @@ set(SOURCES
     Component/FrustumComponent.cpp
     Component/MeshComponent.cpp
     Component/PrefabComponent.cpp
+    Component/SpriteComponent.cpp
     Component/TransformComponent.cpp
     Entity.cpp
     EntityComponentSystem.cpp
     EntityUtilities.cpp
     PrefabManager.cpp
     System/CameraSystem.cpp
+    System/SpriteSystem.cpp
     System/TransformSystem.cpp)
     
 set(HEADERS
@@ -22,6 +24,7 @@ set(HEADERS
     Component/MeshComponent.h
     Component/NameComponent.h
     Component/PrefabComponent.h
+    Component/SpriteComponent.h 
     Component/TransformComponent.h
     Component/ViewportComponent.h
     Entity.h
@@ -30,6 +33,7 @@ set(HEADERS
     EntityUtilities.h
     PrefabManager.h
     System/CameraSystem.h
+    System/SpriteSystem.h
     System/TransformSystem.h)
 
 add_library(libs_ecs STATIC ${SOURCES} ${HEADERS})

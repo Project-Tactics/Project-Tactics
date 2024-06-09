@@ -9,12 +9,13 @@
 
 namespace tactics::resource {
 
-enum class ResourceType: uint8_t {
+enum class ResourceType {
 	IniFile,
 	Material,
 	Mesh,
 	Prefab,
 	Shader,
+	Sprite,
 	Texture,
 	Unkwown
 };

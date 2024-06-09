@@ -1,9 +1,6 @@
 #pragma once
 
 #include <Libs/Fsm/FsmStateWithServices.h>
-#include <Libs/Ecs/Entity.h>
-
-#include <glm/glm.hpp>
 
 namespace tactics {
 

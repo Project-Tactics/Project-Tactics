@@ -2,8 +2,6 @@
 
 #include <Libs/Fsm/FsmStateWithServices.h>
 
-#include <Engine/Scene/SceneSystem.h>
-
 namespace tactics {
 
 class MapState: public FsmStateWithServices {

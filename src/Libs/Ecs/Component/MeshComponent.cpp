@@ -26,8 +26,10 @@ void deserializeMesh(Mesh& mesh, const resource::ResourceProvider* resourceProvi
 	MeshDescriptor descriptor = jsonData;
 	mesh.mesh = resourceProvider->getResource<resource::Mesh>(descriptor.mesh);
 
-	if (mesh.mesh->subMeshes.size() != descriptor.materials.size()) {
-		throw TACTICS_EXCEPTION("Number of materials does not match number of submeshes");
+	auto subMeshCount = mesh.mesh->subMeshes.size();
+	if (subMeshCount != descriptor.materials.size()) {
+		throw TACTICS_EXCEPTION("Number of materials does not match number of submeshes. SubMeshes: {} - Materials: {}",
+			subMeshCount, descriptor.materials.size());
 	}
 
 	for (auto& material : descriptor.materials) {

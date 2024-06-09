@@ -33,6 +33,14 @@ SceneSystem::SceneSystem(
 SceneSystem::~SceneSystem() {
 }
 
+entt::registry& SceneSystem::getRegistry() {
+	return _ecs.sceneRegistry();
+}
+
+const entt::registry& SceneSystem::getRegistry() const {
+	return _ecs.sceneRegistry();
+}
+
 void SceneSystem::clearScene(bool clearCameras) {
 	_ecs.sceneRegistry().view<component::Mesh>().each([this] (auto entity, auto&) {
 		_ecs.sceneRegistry().destroy(entity);

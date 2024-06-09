@@ -14,7 +14,7 @@ Entity::Entity() {
 }
 
 void Entity::destroy() {
-	if (_entity != entt::null) {
+	if (_entity != entt::null && _registry->valid(_entity)) {
 		_registry->destroy(_entity);
 	}
 }

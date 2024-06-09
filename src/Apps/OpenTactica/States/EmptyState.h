@@ -12,7 +12,6 @@ public:
 
 private:
 	FsmEventAction onKeyPress(SDL_KeyboardEvent& event) override;
-	bool _exitNextFrame{};
 };
 
 }

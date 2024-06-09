@@ -24,6 +24,9 @@ public:
 
 	void clearScene(bool clearCameras = false);
 
+	const entt::registry& getRegistry() const;
+	entt::registry& getRegistry();
+
 	Entity createViewport(
 		const glm::vec2& topLeft,
 		const glm::vec2& size,
