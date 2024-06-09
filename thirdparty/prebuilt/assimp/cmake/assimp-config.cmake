@@ -35,13 +35,13 @@ set(ASSIMP_INCLUDE_DIR ${install_dir}/include)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(LIB_POSTFIX -mtd)
+    set(ZLIB_LIBRARY ${install_dir}/lib/zlibstaticd.lib)
 else()
     set(LIB_POSTFIX -mt)
+    set(ZLIB_LIBRARY ${install_dir}/lib/zlibstatic.lib)
 endif()
 
 set(ASSIMP_LIBRARY ${install_dir}/lib/assimp-vc143${LIB_POSTFIX}.lib)
-# TODO(Gerark) Maybe we should use the non-debug version when linking in release
-set(ZLIB_LIBRARY ${install_dir}/lib/zlibstaticd.lib)
 
 unset(LIB_POSTFIX)
 
