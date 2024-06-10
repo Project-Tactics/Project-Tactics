@@ -13,6 +13,7 @@
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/System/CameraSystem.h>
 #include <Libs/Ecs/System/TransformSystem.h>
+#include <Libs/Ecs/System/BillboardSystem.h>
 #include <Libs/Event/EventsSystem.h>
 #include <Libs/FileSystem/FileSystem.h>
 #include <Libs/FileSystem/FileLoader.h>
@@ -186,10 +187,17 @@ void Engine::_updateCommonComponentSystems() {
 	using namespace component;
 
 	auto& registry = _ecs->sceneRegistry();
-	CameraSystem::updateCameraMatrices(registry.view<Frustum, Transform, Camera>());
+
 	CameraSystem::updateCameraAspectRatios(
 		registry.view<Viewport, CurrentViewport>(),
 		registry.view<Frustum, CurrentCamera>());
+
+	CameraSystem::updateCameraMatrices(registry.view<Frustum, Transform, Camera>());
+
+	BillboardSystem::update(
+		registry.view<Transform, Camera, CurrentCamera>(),
+		registry.view<Transform, Billboard>());
+
 	TransformSystem::updateTransformMatrices(registry.view<Transform>());
 }
 

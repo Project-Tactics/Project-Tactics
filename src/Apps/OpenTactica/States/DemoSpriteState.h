@@ -4,16 +4,15 @@
 
 namespace tactics {
 
-class MapState: public FsmStateWithServices {
+class DemoSpriteState: public FsmStateWithServices {
 public:
-	MapState(ServiceLocator& serviceLocator, unsigned int mapIndex);
-	FsmAction enter() override;
+	using FsmStateWithServices::FsmStateWithServices;
 	FsmAction update() override;
+	FsmAction enter() override;
 	void exit() override;
 
 private:
 	FsmEventAction onKeyPress(SDL_KeyboardEvent& event) override;
-	unsigned int _mapIndex{};
 };
 
 }

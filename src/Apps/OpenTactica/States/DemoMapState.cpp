@@ -1,6 +1,7 @@
-#include "MapState.h"
+#include "DemoMapState.h"
 
 #include "../Component/RotateAroundPoint.h"
+#include "../Component/RotateItem.h"
 
 #include <Engine/Scene/SceneSystem.h>
 
@@ -9,10 +10,7 @@
 
 namespace tactics {
 
-MapState::MapState(ServiceLocator& serviceLocator, unsigned int mapIndex): FsmStateWithServices(serviceLocator), _mapIndex(mapIndex) {
-}
-
-FsmAction MapState::enter() {
+FsmAction DemoMapState::enter() {
 	auto& sceneSystem = getService<SceneSystem>();
 	auto mapName = fmt::format("map{:02d}", _mapIndex);
 	sceneSystem.createEntity("map", mapName);
@@ -20,25 +18,28 @@ FsmAction MapState::enter() {
 	return FsmAction::none();
 }
 
-FsmAction MapState::update() {
+FsmAction DemoMapState::update() {
 	auto& scene = getService<SceneSystem>();
 	component::RotateAroundPointSystem::update(scene.getRegistry().view<component::Transform, component::RotateAroundPoint>());
+	component::RotateItemSystem::update(scene.getRegistry().view<component::Transform, component::RotateItem>());
 
 	return FsmAction::none();
 }
 
-void MapState::exit() {
+void DemoMapState::exit() {
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.clearScene();
 }
 
-FsmEventAction MapState::onKeyPress(SDL_KeyboardEvent& event) {
+FsmEventAction DemoMapState::onKeyPress(SDL_KeyboardEvent& event) {
 	if (event.keysym.scancode == SDL_SCANCODE_ESCAPE) {
 		return FsmEventAction::transition("exit");
 	} else if (event.keysym.scancode == SDL_SCANCODE_RETURN) {
-		return FsmEventAction::transition("next");
-	} else if (event.keysym.scancode == SDL_SCANCODE_SPACE) {
-		return FsmEventAction::transition("empty");
+		auto& sceneSystem = getService<SceneSystem>();
+		sceneSystem.clearScene();
+		_mapIndex = (_mapIndex + 1) % 5;
+		auto mapName = fmt::format("map{:02d}", _mapIndex);
+		sceneSystem.createEntity("map", mapName);
 	}
 
 	return FsmEventAction::none();

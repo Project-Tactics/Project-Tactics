@@ -4,7 +4,7 @@
 
 namespace tactics {
 
-class DemoState: public FsmStateWithServices {
+class DemoSimpleState: public FsmStateWithServices {
 public:
 	using FsmStateWithServices::FsmStateWithServices;
 	FsmAction update() override;

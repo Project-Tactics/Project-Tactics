@@ -4,20 +4,22 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
     OpenTacticaApplication.cpp
     main.cpp
-    States/DemoState.cpp
+    States/DemoMapState.cpp
+    States/DemoSimpleState.cpp
+    States/DemoSpriteState.cpp
     States/EmptyState.cpp
     States/LoadState.cpp
-    States/MapState.cpp
     States/UnloadState.cpp
     Component/RotateAroundPoint.cpp
     Component/RotateItem.cpp)
     
 set(HEADERS
     OpenTacticaApplication.h
-    States/DemoState.h
+    States/DemoMapState.h
+    States/DemoSimpleState.h
+    States/DemoSpriteState.h
     States/EmptyState.h
     States/LoadState.h
-    States/MapState.h
     States/UnloadState.h
     Component/RotateAroundPoint.h
     Component/RotateItem.h)

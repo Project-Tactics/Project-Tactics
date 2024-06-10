@@ -1,30 +1,18 @@
 {
-    "mainPackage": {
+    "common": {
         "shader": {
             "texturedUnlit": {
-                "vertexShader": "shaders/default.vert",
-                "fragmentShader": "shaders/texturedUnlit.frag"
+                "vertexShader": "common/shaders/default.vert",
+                "fragmentShader": "common/shaders/texturedUnlit.frag"
             },
             "coloredUnlit": {
-                "vertexShader": "shaders/default.vert",
-                "fragmentShader": "shaders/coloredUnlit.frag"
+                "vertexShader": "common/shaders/default.vert",
+                "fragmentShader": "common/shaders/coloredUnlit.frag"
             }
         },
         "texture": {
-            "tacticsIcon": {
-                "path": "textures/demo/tactics_icon.png",
-                "useTransparency": true
-            },
-            "crate": {
-                "path": "textures/demo/crate.jpg"
-            },
-            "floor": {
-                "path": "textures/demo/floor.jpg"
-            }
-        },
-        "mesh": {
-            "teapot": {
-                "path": "meshes/teapot.obj"
+            "none": {
+                "path": "common/textures/none.png"
             }
         },
         "material": {
@@ -33,7 +21,7 @@
                 "surface": "opaque",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "crate"
+                        "u_Texture": "none"
                     },
                     "vectors4": {
                         "u_Color": {
@@ -50,7 +38,7 @@
                 "alphaBlended": true,
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "crate"
+                        "u_Texture": "none"
                     },
                     "vectors4": {
                         "u_Color": {
@@ -77,29 +65,8 @@
             }
         },
         "prefab": {
-            "map00": {
-                "path": "prefabs/map00.prefab"
-            },
-            "map01": {
-                "path": "prefabs/map01.prefab"
-            },
-            "map02": {
-                "path": "prefabs/map02.prefab"
-            },
-            "map03": {
-                "path": "prefabs/map03.prefab"
-            },
-            "map04": {
-                "path": "prefabs/map04.prefab"
-            },
-            "mapCamera": {
-                "path": "prefabs/mapCamera.prefab"
-            },
-            "plane": {
-                "path": "prefabs/testPlane.prefab"
-            },
-            "simpleRotatingQuad": {
-                "path": "prefabs/simpleRotatingQuad.prefab"
+            "simpleCamera": {
+                "path": "common/prefabs/simpleCamera.prefab"
             }
         }
     }

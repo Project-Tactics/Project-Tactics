@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
+    Component/BillboardComponent.cpp
     Component/CameraComponent.cpp
     Component/ComponentReflection.cpp
     Component/FrustumComponent.cpp
@@ -12,12 +13,14 @@ set(SOURCES
     EntityComponentSystem.cpp
     EntityUtilities.cpp
     PrefabManager.cpp
+    System/BillboardSystem.cpp
     System/CameraSystem.cpp
     System/SpriteSystem.cpp
     System/TransformSystem.cpp)
     
 set(HEADERS
     Component/AlphaBlendedComponent.h
+    Component/BillboardComponent.h
     Component/CameraComponent.h
     Component/ComponentReflection.h
     Component/FrustumComponent.h
@@ -32,6 +35,7 @@ set(HEADERS
     EntityComponentSystem.h
     EntityUtilities.h
     PrefabManager.h
+    System/BillboardSystem.h
     System/CameraSystem.h
     System/SpriteSystem.h
     System/TransformSystem.h)

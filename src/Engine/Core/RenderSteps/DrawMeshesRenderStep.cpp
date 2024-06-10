@@ -37,6 +37,7 @@ void DrawMeshes::execute(RenderStepInfo&) {
 		registry.view<Camera, Transform, CurrentCamera>().each([this] (auto& camera, auto& transform) {
 			auto viewProjectionMatrix = camera.projection * camera.view;
 			_drawAlphaBlendedGeometry(viewProjectionMatrix, transform);
+			_drawSprite(viewProjectionMatrix);
 		});
 	}
 
@@ -53,6 +54,30 @@ void DrawMeshes::_drawOpaqueGeometry(const glm::mat4x4& viewProjection) {
 	auto view = _ecs.sceneRegistry().view<Transform, Mesh>(entt::exclude<FullyAlphaBlended>);
 	for (auto&& [entity, transform, mesh] : view.each()) {
 		_drawMesh(viewProjection, transform, mesh, false);
+	}
+}
+
+/*
+* TODO(Gerark) The way how Sprites are rendered is very inefficient. We're changing states for each of them
+* No batching is currently involved and that should be one of the first steps to follow once we're ready to scale this up
+*/
+void DrawMeshes::_drawSprite(const glm::mat4x4& viewProjection) {
+	using namespace component;
+
+	auto view = _ecs.sceneRegistry().view<Transform, Sprite>();
+	for (auto&& [entity, transform, sprite] : view.each()) {
+		auto& subMesh = sprite.mesh->subMeshes[0];
+		auto& material = sprite.material;
+		auto& shader = material->parent->shader;
+
+		subMesh.vertexAttributes->bind();
+
+		shader->bind();
+		material->updateShaderUniforms();
+
+		glm::mat4 mvp = viewProjection * transform.getMatrix();
+		shader->setUniform("u_ModelViewProjection", mvp);
+		_drawGeometry(subMesh);
 	}
 }
 

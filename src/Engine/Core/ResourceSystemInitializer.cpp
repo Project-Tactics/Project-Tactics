@@ -6,11 +6,11 @@
 #include <Libs/Resource/Prefab/PrefabLoader.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/Shader/ShaderLoader.h>
+#include <Libs/Resource/Sprite/SpriteLoader.h>
 #include <Libs/Resource/Texture/TextureLoader.h>
 
 namespace tactics {
 
-// Little helper function to keep the registration of a Resource Manager way cleaner
 template<typename TResource, typename TResourceLoader, typename ...TArgs>
 void registerManager(FileSystem& fileSystem, resource::ResourceSystem& resourceSystem, TArgs&&... args) {
 	auto loader = std::make_unique<TResourceLoader>(fileSystem, resourceSystem, std::forward<TArgs>(args)...);
@@ -25,10 +25,10 @@ std::unique_ptr<resource::ResourceSystem> ResourceSystemInitializer::initialize(
 	registerManager<Shader, ShaderLoader>(fileSystem, *resourceSystem);
 	registerManager<Mesh, MeshLoader>(fileSystem, *resourceSystem);
 	registerManager<Material, MaterialLoader>(fileSystem, *resourceSystem);
+	registerManager<Sprite, SpriteLoader>(fileSystem, *resourceSystem);
 	registerManager<Prefab, PrefabLoader>(fileSystem, *resourceSystem, ecs);
 
-	// Let's initialize some engine data
-	resourceSystem->loadPackDefinition("resource_definitions/engine_data.json");
+	resourceSystem->loadPackDefinition("engine_data.json");
 	resourceSystem->loadPack("initialization");
 
 	return resourceSystem;

@@ -30,6 +30,7 @@ void Transform::setRotation(float eulerX, float eulerY, float eulerZ) {
 
 void Transform::setRotation(const glm::vec3& eulerAngles) {
 	rotation = glm::quat(eulerAngles);
+	_dirty = true;
 }
 
 void Transform::setRotation(float radians, const glm::vec3& axis) {
@@ -49,8 +50,8 @@ void Transform::rotate(float radians, const glm::vec3& axis) {
 
 void Transform::setScale(const glm::vec3& newScale) {
 	scale = newScale;
-	_dirty = true;
 	transformMatrix = glm::scale(transformMatrix, scale);
+	_dirty = true;
 }
 
 const glm::vec3& Transform::getPosition() const {

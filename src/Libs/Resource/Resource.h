@@ -20,6 +20,16 @@ enum class ResourceType {
 	Unkwown
 };
 
+const std::array<ResourceType, 7> resourceTypeLoadingOrder = {
+	ResourceType::IniFile,
+	ResourceType::Shader,
+	ResourceType::Texture,
+	ResourceType::Material,
+	ResourceType::Mesh,
+	ResourceType::Sprite,
+	ResourceType::Prefab
+};
+
 using ResourceId = uint64_t;
 
 class BaseResource {

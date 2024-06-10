@@ -4,11 +4,22 @@
 
 namespace tactics::resource {
 
+enum class TextureFilter {
+	Linear,
+	Nearest
+};
+
+NLOHMANN_JSON_SERIALIZE_ENUM(TextureFilter, {
+	{TextureFilter::Linear, "linear"},
+	{TextureFilter::Nearest, "nearest"},
+})
+
 struct TextureInfo {
 	int width;
 	int height;
 	int channelsCount;
 	bool useTransparency;
+	TextureFilter filter;
 };
 
 class Texture: public Resource<Texture> {

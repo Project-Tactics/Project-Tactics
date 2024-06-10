@@ -54,7 +54,7 @@ public:
 		std::string_view prefabName
 	);
 
-	Entity& getCurrentCamera();
+	Entity getCurrentCamera();
 
 private:
 	void _onMeshConstructed(entt::registry& registry, entt::entity entity);
@@ -65,7 +65,6 @@ private:
 
 	EntityComponentSystem& _ecs;
 	resource::ResourceSystem& _resourceSystem;
-	Entity _currentCameraEntity;
 
 
 };

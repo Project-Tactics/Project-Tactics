@@ -14,12 +14,11 @@ std::shared_ptr<Texture> TextureLoader::load(const std::string& name, const Text
 		name,
 		// TODO(Gerark) FileSystem: We should have more control on how we load the textures through filesystem and not relying on stb to do the dirty job
 		// we should be able to load by providing a buffer like for stbi_load_from_memory
-		_getFileSystem().getPathHelper().makeAbsolutePath(descriptor.path),
-		descriptor.useTransparency);
+		_getFileSystem().getPathHelper().makeAbsolutePath(descriptor.path), descriptor);
 	return texture;
 }
 
-std::shared_ptr<Texture> TextureLoader::_loadTexture(const std::string& name, const std::string& filename, bool useTransparency) {
+std::shared_ptr<Texture> TextureLoader::_loadTexture(const std::string& name, const std::string& filename, const TextureDescriptor& descriptor) {
 	if (filename.empty()) {
 		throw TACTICS_EXCEPTION("Can't load texture. Filename is empty while trying to load texture [{}]", name);
 	}
@@ -29,7 +28,9 @@ std::shared_ptr<Texture> TextureLoader::_loadTexture(const std::string& name, co
 	}
 
 	auto texture = std::make_shared<Texture>(name);
-	texture->info.useTransparency = useTransparency;
+	texture->info.useTransparency = descriptor.useTransparency;
+	texture->info.filter = descriptor.filter;
+
 	auto& info = texture->info;
 
 	stbi_set_flip_vertically_on_load(true);
@@ -39,8 +40,8 @@ std::shared_ptr<Texture> TextureLoader::_loadTexture(const std::string& name, co
 	glGenTextures(1, &texture->rendererId);
 	glBindTexture(GL_TEXTURE_2D, texture->rendererId);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture->info.filter == TextureFilter::Linear ? GL_LINEAR : GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture->info.filter == TextureFilter::Linear ? GL_LINEAR : GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, info.width, info.height, 0, info.channelsCount > 3 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, textureData);

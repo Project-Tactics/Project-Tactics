@@ -13,6 +13,13 @@
 
 namespace tactics {
 
+LoadState::LoadState(ServiceLocator& services, const std::string& resourceDefinitionPath, const std::string& resourcePackName, const std::string& cameraPrefab)
+	: FsmStateWithServices(services)
+	, _resourceDefinitionPath(resourceDefinitionPath)
+	, _resourcePackName(resourcePackName)
+	, _cameraPrefab(cameraPrefab) {
+}
+
 FsmAction LoadState::enter() {
 	_loadResources();
 	_createViewport();
@@ -30,10 +37,10 @@ FsmAction LoadState::update() {
 
 void LoadState::_loadResources() {
 	auto& resourceSystem = getService<resource::ResourceSystem>();
-	resourceSystem.loadPackDefinition("resource_definitions/map_resources_data.lua");
-	resourceSystem.loadPackDefinition("resource_definitions/game_data.json");
-	resourceSystem.loadPack("mapTextures");
-	resourceSystem.loadPack("mainPackage");
+	resourceSystem.loadPackDefinition("common/resources.json");
+	resourceSystem.loadPackDefinition(_resourceDefinitionPath);
+	resourceSystem.loadPack("common");
+	resourceSystem.loadPack(_resourcePackName);
 }
 
 void LoadState::_createViewport() {
@@ -45,7 +52,7 @@ void LoadState::_createViewport() {
 
 void LoadState::_createCamera() {
 	auto& sceneSystem = getService<SceneSystem>();
-	sceneSystem.createEntity("camera", "mapCamera");
+	sceneSystem.createEntity("camera", _cameraPrefab);
 }
 
 void LoadState::_setupRenderSteps() {

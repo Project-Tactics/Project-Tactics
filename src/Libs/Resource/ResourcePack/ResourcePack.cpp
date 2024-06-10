@@ -136,9 +136,11 @@ void Pack::load(const ResourceProvider& resourceProvider) {
 		throw TACTICS_EXCEPTION("Can't load pack [{}]. The pack is already loaded.", _name);
 	}
 
-	for (auto&& [resourceType, group] : _groups) {
-		auto& manager = resourceProvider.getManager(group->getType());
-		group->load(manager);
+	for (auto&& resourceType : resourceTypeLoadingOrder) {
+		if (auto itr = _groups.find(resourceType); itr != _groups.end()) {
+			auto& manager = resourceProvider.getManager(resourceType);
+			itr->second->load(manager);
+		}
 	}
 	_isLoaded = true;
 }
@@ -148,9 +150,11 @@ void Pack::unload(const ResourceProvider& resourceProvider) {
 		throw TACTICS_EXCEPTION("Can't unload pack [{}]. The pack has not been loaded yet.", _name);
 	}
 
-	for (auto&& [resourceType, group] : _groups | std::views::reverse) {
-		auto& manager = resourceProvider.getManager(resourceType);
-		group->unload(manager);
+	for (auto&& resourceType : resourceTypeLoadingOrder | std::views::reverse) {
+		if (auto itr = _groups.find(resourceType); itr != _groups.end()) {
+			auto& manager = resourceProvider.getManager(resourceType);
+			itr->second->unload(manager);
+		}
 	}
 	_isLoaded = false;
 

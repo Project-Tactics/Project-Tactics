@@ -23,14 +23,13 @@ void CameraSystem::updateCameraMatrices(const ecs_view<Frustum, Transform, Camer
 	});
 }
 
-void CameraSystem::updateCameraAspectRatios(const ecs_view<Viewport, CurrentViewport>& view1, const ecs_view<Frustum, CurrentCamera>& view2) {
-	// TODO(Gerark) In theory we should go for a simple solution instead of iterating in a nested loop like that. This is working just cause
-	// we have only one viewport and one camera in the scene. We should just assign a camera to each active viewport.
-	view1.each([view2] (Viewport& viewport) {
-		view2.each([&viewport] (Frustum& frustum) {
-			frustum.aspectRatio = static_cast<float>(viewport.size.x) / viewport.size.y;
-		});
-	});
+void CameraSystem::updateCameraAspectRatios(const ecs_view<Viewport, CurrentViewport>& currentViewportView, const ecs_view<Frustum, CurrentCamera>& currentCameraView) {
+	// TODO(Gerark) We assume we always have one current viewport and current camera. We might change this in the future and this has to change accordingly.
+	auto&& [entityViewport, viewport] = *currentViewportView.each().begin();
+	auto&& [entityCamera, frustum] = *currentCameraView.each().begin();
+	(void)entityCamera;
+	(void)entityViewport;
+	frustum.aspectRatio = static_cast<float>(viewport.size.x) / viewport.size.y;
 }
 
 }

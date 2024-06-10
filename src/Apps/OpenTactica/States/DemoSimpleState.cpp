@@ -1,4 +1,4 @@
-#include "DemoState.h"
+#include "DemoSimpleState.h"
 
 #include "../Component/RotateItem.h"
 #include "../Component/RotateAroundPoint.h"
@@ -18,27 +18,17 @@
 
 namespace tactics {
 
-FsmAction DemoState::enter() {
+FsmAction DemoSimpleState::enter() {
 	_createPlane();
 	_createTeapot();
 	_createCrate();
 	_createQuads();
 	_createExtraRotatingQuads();
 	_createCustomQuadWithCustomResources();
-
-	auto& sceneSystem = getService<SceneSystem>();
-	auto cameraEntity = sceneSystem.getCurrentCamera();
-	cameraEntity.getComponent<component::Camera>().projectionType = component::ProjectionType::Perspective;
-	auto& rotateAroundPoint = cameraEntity.getComponent<component::RotateAroundPoint>();
-	rotateAroundPoint.distanceFromPoint = 100.f;
-	rotateAroundPoint.offset = Vector3::up * 20.f;
-	rotateAroundPoint.point = Vector3::zero;
-	rotateAroundPoint.speed = 0.005f;
-
 	return FsmAction::none();
 }
 
-void DemoState::exit() {
+void DemoSimpleState::exit() {
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.clearScene();
 
@@ -46,7 +36,7 @@ void DemoState::exit() {
 	resourceSystem.unloadPack("CustomPack");
 }
 
-FsmAction DemoState::update() {
+FsmAction DemoSimpleState::update() {
 	auto& ecs = getService<EntityComponentSystem>();
 	component::RotateItemSystem::update(ecs.sceneRegistry().view<component::Transform, component::RotateItem>());
 	component::RotateAroundPointSystem::update(ecs.sceneRegistry().view<component::Transform, component::RotateAroundPoint>());
@@ -54,7 +44,7 @@ FsmAction DemoState::update() {
 	return FsmAction::none();
 }
 
-FsmEventAction DemoState::onKeyPress(SDL_KeyboardEvent& event) {
+FsmEventAction DemoSimpleState::onKeyPress(SDL_KeyboardEvent& event) {
 	if (event.keysym.scancode == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
 		return FsmEventAction::transition("exit");
 	} else if (event.keysym.scancode == SDL_Scancode::SDL_SCANCODE_SPACE) {
@@ -64,7 +54,7 @@ FsmEventAction DemoState::onKeyPress(SDL_KeyboardEvent& event) {
 	return FsmEventAction::none();
 }
 
-void DemoState::_createCrate() {
+void DemoSimpleState::_createCrate() {
 	auto& sceneSystem = getService<SceneSystem>();
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 
@@ -75,7 +65,7 @@ void DemoState::_createCrate() {
 	});
 }
 
-void DemoState::_createTeapot() {
+void DemoSimpleState::_createTeapot() {
 	auto& sceneSystem = getService<SceneSystem>();
 
 	auto teapot = sceneSystem.createEntity({0.0f, 0.0f, 0.0f}, "teapot", {"coloredUnlit"});
@@ -87,12 +77,12 @@ void DemoState::_createTeapot() {
 	});
 }
 
-void DemoState::_createPlane() {
+void DemoSimpleState::_createPlane() {
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.createEntity("plane", "plane");
 }
 
-void DemoState::_createQuads() {
+void DemoSimpleState::_createQuads() {
 	auto& sceneSystem = getService<SceneSystem>();
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 
@@ -109,7 +99,7 @@ void DemoState::_createQuads() {
 	}
 }
 
-void DemoState::_createExtraRotatingQuads() {
+void DemoSimpleState::_createExtraRotatingQuads() {
 	auto& sceneSystem = getService<SceneSystem>();
 
 	const int width = 4;
@@ -145,7 +135,7 @@ void DemoState::_createExtraRotatingQuads() {
 	}
 }
 
-void DemoState::_createCustomQuadWithCustomResources() {
+void DemoSimpleState::_createCustomQuadWithCustomResources() {
 	auto& sceneSystem = getService<SceneSystem>();
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 
@@ -166,7 +156,7 @@ void DemoState::_createCustomQuadWithCustomResources() {
 
 	// We can also create a resource by simulating the usual pack loading
 	nlohmann::json descriptor = {
-		{"vertexShader", "shaders/default.vert"},
+		{"vertexShader", "common/shaders/default.vert"},
 		{"fragmentShader", R"(
 				#version 330 core
 				layout(location = 0) out vec4 color;

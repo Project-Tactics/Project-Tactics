@@ -8,7 +8,7 @@ namespace tactics::resource {
 class MeshLoader: public ResourceLoader {
 public:
 	using ResourceLoader::ResourceLoader;
-	std::shared_ptr<Mesh> load(const nlohmann::json& descriptor);
+	[[nodiscard]] std::shared_ptr<Mesh> load(const nlohmann::json& descriptor);
 
 private:
 	static std::vector<float> _parseVertices(const std::string& strVertices);

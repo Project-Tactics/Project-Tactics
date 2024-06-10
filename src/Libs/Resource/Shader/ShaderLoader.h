@@ -18,7 +18,7 @@ struct ShaderDescriptor {
 class ShaderLoader: public ResourceLoader {
 public:
 	using ResourceLoader::ResourceLoader;
-	std::shared_ptr<Shader> load(const ShaderDescriptor& descriptor);
+	[[nodiscard]] std::shared_ptr<Shader> load(const ShaderDescriptor& descriptor);
 
 private:
 	std::tuple<unsigned int, std::string, std::string> _loadProgram(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);

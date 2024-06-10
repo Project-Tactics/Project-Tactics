@@ -3,7 +3,6 @@
 #include <Libs/Ecs/Entity.h>
 #include <Libs/Resource/ResourceProvider.h>
 #include <Libs/Utility/Uniforms/UniformsDescriptor.h>
-#include <Libs/Utility/Reflection.h>
 
 namespace tactics::component {
 
@@ -22,11 +21,11 @@ struct MeshDescriptor {
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MeshDescriptor, mesh, materials);
 };
 
-void deserializeMesh(Mesh& mesh, const resource::ResourceProvider* resourceProvider, const nlohmann::ordered_json& jsonData) {
+void Mesh::deserialize(const resource::ResourceProvider* resourceProvider, const nlohmann::ordered_json& jsonData) {
 	MeshDescriptor descriptor = jsonData;
-	mesh.mesh = resourceProvider->getResource<resource::Mesh>(descriptor.mesh);
+	mesh = resourceProvider->getResource<resource::Mesh>(descriptor.mesh);
 
-	auto subMeshCount = mesh.mesh->subMeshes.size();
+	auto subMeshCount = mesh->subMeshes.size();
 	if (subMeshCount != descriptor.materials.size()) {
 		throw TACTICS_EXCEPTION("Number of materials does not match number of submeshes. SubMeshes: {} - Materials: {}",
 			subMeshCount, descriptor.materials.size());
@@ -36,7 +35,7 @@ void deserializeMesh(Mesh& mesh, const resource::ResourceProvider* resourceProvi
 		auto materialResource = resourceProvider->getResource<resource::Material>(material.material);
 		auto materialInstance = resource::Material::createInstance(materialResource);
 		UniformsDescriptor::fillUniformsInstance(material.uniforms, *materialInstance, *resourceProvider);
-		mesh.materials.push_back(materialInstance);
+		materials.push_back(materialInstance);
 	}
 }
 
@@ -50,8 +49,7 @@ Mesh Mesh::clone() {
 }
 
 void Mesh::defineReflection() {
-	componentReflection<Mesh>("mesh")
-		.func<&deserializeMesh>(hash("deserializer"));
+	componentReflection<Mesh>("mesh");
 }
 
 }

@@ -8,7 +8,7 @@ namespace tactics::resource {
 class Sprite: public Resource<Sprite> {
 public:
 	using Resource<Sprite>::Resource;
-	static const ResourceType type = ResourceType::Sprite;
+	static const ResourceType TYPE = ResourceType::Sprite;
 
 	std::shared_ptr<Texture> texture;
 };

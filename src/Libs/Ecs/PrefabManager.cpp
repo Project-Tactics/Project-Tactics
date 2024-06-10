@@ -64,8 +64,8 @@ void PrefabManager::_buildComponentRecursively(entt::meta_any& instance, const n
 	for (auto& [key, value] : jsonData.items()) {
 		auto id = hash(key);
 
-		if (auto customSerializer = type.func(hash(key))) {
-			type.func(id).invoke(instance, value);
+		if (auto customDeserializer = type.func(hash(key))) {
+			customDeserializer.invoke(instance, value);
 		} else {
 			auto data = type.data(id);
 			if (!data) {
@@ -80,6 +80,9 @@ void PrefabManager::_buildComponentRecursively(entt::meta_any& instance, const n
 				data.set(instance, value.get<float>());
 			} else if (memberType.is_enum()) {
 				data.set(instance, memberType.data(hash(value.get<std::string>())).get({}));
+			} else if (memberType.is_pointer() || memberType.is_pointer_like()) {
+				throw TACTICS_EXCEPTION("Pointer types are not automatically deserializable while loading prefabs. Field: [{}]. Consider to use a custom deserializer function instead",
+					key);
 			} else if (memberType.is_class()) {
 				auto memberInstance = data.get(instance);
 				_buildComponentRecursively(memberInstance, value, resourceProvider);

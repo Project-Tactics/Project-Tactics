@@ -6,10 +6,13 @@ namespace tactics {
 
 class UnloadState: public FsmStateWithServices {
 public:
-	using FsmStateWithServices::FsmStateWithServices;
+	UnloadState(ServiceLocator& services, const std::string& packageName);
 	FsmAction enter() override;
 	FsmAction update() override;
 	void exit() override;
+
+private:
+	std::string _packageName;
 };
 
 }

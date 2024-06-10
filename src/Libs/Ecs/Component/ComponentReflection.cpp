@@ -1,9 +1,11 @@
 #include "ComponentReflection.h"
 
-#include "TransformComponent.h"
-#include "MeshComponent.h"
 #include "CameraComponent.h"
 #include "FrustumComponent.h"
+#include "MeshComponent.h"
+#include "SpriteComponent.h"
+#include "TransformComponent.h"
+#include "BillboardComponent.h"
 #include "../EntityUtilities.h"
 
 #include <Libs/Utility/Json/MathJsonSerializer.h>
@@ -17,6 +19,12 @@ void serializeFromAngleAxis(glm::quat& quat, const nlohmann::ordered_json& jsonD
 	glm::vec3 axis = jsonData.at("axis");
 	float angle = jsonData.at("angle");
 	quat = glm::angleAxis(glm::radians(angle), axis);
+}
+
+void serializeFromLookAt(glm::quat& quat, const nlohmann::ordered_json& jsonData) {
+	glm::vec3 from = jsonData.at("from");
+	glm::vec3 to = jsonData.at("to");
+	quat = glm::quatLookAt(glm::normalize(to - from), Vector3::up);
 }
 
 void ComponentReflection::initializeBasicTypes() {
@@ -34,6 +42,7 @@ void ComponentReflection::initializeBasicTypes() {
 	entt::meta<glm::quat>()
 		.type(hash("quat"))
 		.func<&serializeFromAngleAxis>(hash("fromAngleAxis"))
+		.func<&serializeFromLookAt>(hash("fromLookAt"))
 		.data<&glm::quat::x>(hash("x"))
 		.data<&glm::quat::y>(hash("y"))
 		.data<&glm::quat::z>(hash("z"))
@@ -42,7 +51,15 @@ void ComponentReflection::initializeBasicTypes() {
 
 void ComponentReflection::initializeCommonComponents() {
 	using namespace component;
-	defineComponentsReflection<Transform, Mesh, Camera, Frustum, CurrentCamera>();
+	defineComponentsReflection<
+		Billboard,
+		Camera,
+		CurrentCamera,
+		Frustum,
+		Mesh,
+		Sprite,
+		SpriteAnimation,
+		Transform>();
 }
 
 }

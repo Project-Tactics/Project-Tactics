@@ -4,10 +4,15 @@
 
 namespace tactics {
 
+UnloadState::UnloadState(ServiceLocator& services, const std::string& packageName)
+	: FsmStateWithServices(services)
+	, _packageName(packageName) {
+}
+
 FsmAction UnloadState::enter() {
 	auto& resourceSystem = getService<resource::ResourceSystem>();
-	resourceSystem.unloadPack("mainPackage");
-	resourceSystem.unloadPack("mapTextures");
+	resourceSystem.unloadPack(_packageName);
+	resourceSystem.unloadPack("common");
 	return FsmAction::transition("proceed");
 }
 

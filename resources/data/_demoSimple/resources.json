@@ -1,0 +1,31 @@
+{
+    "demoSimple": {
+        "texture": {
+            "tacticsIcon": {
+                "path": "_demoSimple/tactics_icon.png"
+            },
+            "crate": {
+                "path": "_demoSimple/crate.jpg"
+            },
+            "floor": {
+                "path": "_demoSimple/floor.jpg"
+            }
+        },
+        "mesh": {
+            "teapot": {
+                "path": "_demoSimple/teapot.obj"
+            }
+        },
+        "prefab": {
+            "plane": {
+                "path": "_demoSimple/testPlane.prefab"
+            },
+            "simpleRotatingQuad": {
+                "path": "_demoSimple/simpleRotatingQuad.prefab"
+            },
+            "rotateAroundCamera": {
+                "path": "_demoSimple/rotateAroundCamera.prefab"
+            }
+        }
+    }
+}

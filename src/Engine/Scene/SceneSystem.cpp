@@ -5,6 +5,7 @@
 #include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/FrustumComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
+#include <Libs/Ecs/Component/SpriteComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/Component/ViewportComponent.h>
 #include <Libs/Ecs/System/CameraSystem.h>
@@ -42,22 +43,25 @@ const entt::registry& SceneSystem::getRegistry() const {
 }
 
 void SceneSystem::clearScene(bool clearCameras) {
-	_ecs.sceneRegistry().view<component::Mesh>().each([this] (auto entity, auto&) {
-		_ecs.sceneRegistry().destroy(entity);
-	});
+	auto& registry = _ecs.sceneRegistry();
+	auto meshView = registry.view<component::Mesh>();
+	registry.destroy(meshView.begin(), meshView.end());
+
+	auto spriteView = registry.view<component::Sprite>();
+	registry.destroy(spriteView.begin(), spriteView.end());
 
 	if (clearCameras) {
-		_ecs.sceneRegistry().view<component::Camera>().each([this] (auto entity, auto&) {
-			_ecs.sceneRegistry().destroy(entity);
-		});
+		auto cameraView = registry.view<component::Camera>();
+		registry.destroy(cameraView.begin(), cameraView.end());
 	}
 }
 
-Entity& SceneSystem::getCurrentCamera() {
-	if (!_currentCameraEntity) {
-		throw TACTICS_EXCEPTION("Trying to get the current camera but the current entity is not valid.");
+Entity SceneSystem::getCurrentCamera() {
+	auto view = _ecs.sceneRegistry().view<component::CurrentCamera>();
+	if (view.empty()) {
+		throw TACTICS_EXCEPTION("No current camera entity found");
 	}
-	return _currentCameraEntity;
+	return Entity::create(*view.begin(), &_ecs.sceneRegistry());
 }
 
 void SceneSystem::_onCurrentCameraConstructed(entt::registry&, entt::entity currentCameraEntity) {
@@ -67,8 +71,6 @@ void SceneSystem::_onCurrentCameraConstructed(entt::registry&, entt::entity curr
 			_ecs.sceneRegistry().remove<CurrentCamera>(entity);
 		}
 	});
-
-	_currentCameraEntity = Entity::create(currentCameraEntity, &_ecs.sceneRegistry());
 }
 
 void SceneSystem::_onCurrentViewportConstructed(entt::registry&, entt::entity currentViewportEntity) {

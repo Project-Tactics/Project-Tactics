@@ -1,0 +1,20 @@
+{
+    "demoSprites": {
+        "texture": {
+            "char": {
+                "path": "_demoSprites/char.png",
+                "filter": "nearest"
+            }
+        },
+        "sprite": {
+            "char00": {
+                "texture": "char"
+            }
+        },
+        "prefab": {
+            "character": {
+                "path": "_demoSprites/character.prefab"
+            }
+        }
+    }
+}

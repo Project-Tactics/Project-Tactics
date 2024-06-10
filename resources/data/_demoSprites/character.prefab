@@ -1,0 +1,21 @@
+{
+    "transform": {
+        "position": {
+            "x": -0.5,
+            "y": 1,
+            "z": -2
+        },
+        "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+        }
+    },
+    "billboard": {},
+    "sprite": {
+        "mesh": "quad",
+        "material": "texturedUnlitWithAlpha",
+        "sprite": "char00",
+        "spriteIndex": 0
+    }
+}
