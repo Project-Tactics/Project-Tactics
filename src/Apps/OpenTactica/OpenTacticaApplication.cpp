@@ -11,6 +11,8 @@
 #include "States/UnloadState.h"
 
 #include <Libs/Utility/Reflection.h>
+#include <Libs/Resource/ResourceSystem.h>
+#include <Libs/Resource/IniFile/IniFile.h>
 
 namespace tactics {
 
@@ -20,21 +22,14 @@ void OpenTacticaApplication::setupComponentReflections() {
 }
 
 std::string OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
-	enum class FsmToRun {
-		SpriteDemo,
-		MapDemo,
-		SimpleDemo
-	};
+	auto configFile = serviceLocator.getService<resource::ResourceSystem>().getResource<resource::IniFile>("devUserConfigFile");
+	auto state = configFile->getOrCreate("demo", "fsm", std::string("map"));
 
-	auto fsmToRun = FsmToRun::SpriteDemo;
-
-	switch (fsmToRun) {
-	case FsmToRun::SpriteDemo:
+	if (state == "sprite") {
 		return _initializeSpriteDemo(serviceLocator, fsmBuilder);
-	case FsmToRun::MapDemo:
+	} else if (state == "map") {
 		return _initializeMapDemo(serviceLocator, fsmBuilder);
-	case FsmToRun::SimpleDemo:
-	default:
+	} else {
 		return _initializeSimpleDemo(serviceLocator, fsmBuilder);
 	}
 }
