@@ -35,6 +35,10 @@ FsmBuilder& FsmBuilder::on(std::string_view transitionName) {
 	return *this;
 }
 
+FsmBuilder& FsmBuilder::onAppExitRequest() {
+	return on(FsmEventListener::appExitRequestTransition);
+}
+
 FsmBuilder& FsmBuilder::jumpTo(std::string_view targetState) {
 	return jumpTo(nullptr, targetState);
 }

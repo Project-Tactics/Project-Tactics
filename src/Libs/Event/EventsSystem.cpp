@@ -11,22 +11,14 @@
 
 namespace tactics {
 
-EventResult EventsSystem::update() {
+void EventsSystem::update() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		ImGui_ImplSDL2_ProcessEvent(&event);
-
-		switch (event.type) {
-		case SDL_QUIT:
-			return EventResult::QuitGame;
-		}
-
 		for (auto& listener : _eventsListeners) {
 			listener->onEvent(event);
 		}
 	}
-
-	return EventResult::None;
 }
 
 void EventsSystem::registerEventsListener(EventsListener* listener) {

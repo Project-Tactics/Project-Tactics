@@ -26,7 +26,6 @@ public:
 
 	void loadPack(std::string_view packName);
 	void unloadPack(std::string_view packName);
-	void unloadAllPacks();
 	Pack& createPack(std::string_view packName, bool manuallyCreated);
 
 	void loadExternalResource(std::string_view packName, std::shared_ptr<BaseResource> resource);

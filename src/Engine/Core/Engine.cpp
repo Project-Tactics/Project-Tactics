@@ -109,11 +109,7 @@ void Engine::_initialize(Application& application) {
 
 void Engine::_internalRun() {
 	while (!_fsm->hasReachedExitState()) {
-		auto eventResult = _eventsSystem->update();
-		if (eventResult == EventResult::QuitGame) {
-			return;
-		}
-
+		_eventsSystem->update();
 		_fsm->update();
 		_updateCommonComponentSystems();
 		_renderSystem->render();

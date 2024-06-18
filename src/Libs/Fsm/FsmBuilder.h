@@ -36,6 +36,12 @@ public:
 
 	FsmBuilder& state(std::string_view stateName, std::unique_ptr<FsmState> state);
 	FsmBuilder& on(std::string_view transitionName);
+	/*
+	* Special transition triggered when the app is requesting to exit.
+	* Most of the time as a result of clicking the X button on the window.
+	* This is just a more verbose way to define the manual transition on(_appExitRequestTransition)
+	*/
+	FsmBuilder& onAppExitRequest();
 
 	FsmBuilder& exitFsm();
 	FsmBuilder& jumpTo(std::string_view targetState);

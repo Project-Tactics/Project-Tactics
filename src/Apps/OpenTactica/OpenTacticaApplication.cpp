@@ -38,12 +38,15 @@ std::string OpenTacticaApplication::_initializeSpriteDemo(ServiceLocator& servic
 	fsmBuilder
 		.state<LoadState>("Load", serviceLocator, "_demoSprites/resources.json", "demoSprites", "simpleCamera")
 		.on("proceed").jumpTo("Sprites")
+		.onAppExitRequest().jumpTo("Unload")
 
 		.state<DemoSpriteState>("Sprites", serviceLocator)
 		.on("exit").jumpTo("Unload")
+		.onAppExitRequest().jumpTo("Unload")
 
 		.state<UnloadState>("Unload", serviceLocator, "demoSprites")
-		.on("proceed").exitFsm();
+		.on("proceed").exitFsm()
+		.onAppExitRequest().exitFsm();
 
 	return "Load";
 }
@@ -52,12 +55,15 @@ std::string OpenTacticaApplication::_initializeMapDemo(ServiceLocator& serviceLo
 	fsmBuilder
 		.state<LoadState>("Load", serviceLocator, "_demoMaps/resources.lua", "demoMaps", "mapCamera")
 		.on("proceed").jumpTo("Map")
+		.onAppExitRequest().jumpTo("Unload")
 
 		.state<DemoMapState>("Map", serviceLocator)
 		.on("exit").jumpTo("Unload")
+		.onAppExitRequest().jumpTo("Unload")
 
 		.state<UnloadState>("Unload", serviceLocator, "demoMaps")
-		.on("proceed").exitFsm();
+		.on("proceed").exitFsm()
+		.onAppExitRequest().exitFsm();
 
 	return "Load";
 }
@@ -70,12 +76,15 @@ std::string OpenTacticaApplication::_initializeSimpleDemo(ServiceLocator& servic
 		.state<DemoSimpleState>("DemoScene", serviceLocator)
 		.on("exit").jumpTo("Unload")
 		.on("empty").jumpTo("Empty")
+		.onAppExitRequest().jumpTo("Unload")
 
 		.state<EmptyState>("Empty")
 		.on("proceed").jumpTo("Unload")
+		.onAppExitRequest().jumpTo("Unload")
 
 		.state<UnloadState>("Unload", serviceLocator, "demoSimple")
-		.on("proceed").exitFsm();
+		.on("proceed").exitFsm()
+		.onAppExitRequest().exitFsm();
 
 	return "Load";
 }

@@ -87,8 +87,8 @@ void Fsm::_executeTransition(std::string_view transition) {
 		throw TACTICS_EXCEPTION("Cannot execute transition [{}] from state [{}]. No condition evaluated to true", transition, _currentState->name);
 	}
 
-	_hasReachedExitState = transitionTarget->stateName == exitState;
-	if (_hasReachedExitState) {
+	if (transitionTarget->stateName == exitState) {
+		_hasReachedExitState = true;
 		_currentState->state->exit();
 		return;
 	}

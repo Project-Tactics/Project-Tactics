@@ -2,6 +2,8 @@
 
 namespace tactics {
 
+std::string FsmEventListener::appExitRequestTransition = "_appExitRequest";
+
 FsmEventAction FsmEventListener::onEvent(SDL_Event& event) {
 	switch (event.type) {
 	case SDL_KEYDOWN: {
@@ -9,6 +11,9 @@ FsmEventAction FsmEventListener::onEvent(SDL_Event& event) {
 	}
 	case SDL_KEYUP: {
 		return onKeyRelease(event.key);
+	}
+	case SDL_QUIT: {
+		return FsmEventAction::transition(appExitRequestTransition);
 	}
 	}
 	return FsmEventAction::none();
