@@ -19,8 +19,8 @@ set(SOURCES
     ResourceSystem.cpp
     Shader/Shader.cpp
     Shader/ShaderLoader.cpp
-    Sprite/Sprite.cpp
-    Sprite/SpriteLoader.cpp
+    SpriteSheet/SpriteSheet.cpp
+    SpriteSheet/SpriteSheetLoader.cpp
     Texture/Texture.cpp
     Texture/TextureLoader.cpp)
     
@@ -41,8 +41,8 @@ set(HEADERS
     ResourcePack/ResourcePack.h
     ResourceProvider.h
     ResourceSystem.h
-    Sprite/Sprite.h
-    Sprite/SpriteLoader.h
+    SpriteSheet/SpriteSheet.h
+    SpriteSheet/SpriteSheetLoader.h
     Shader/Shader.h
     Shader/ShaderLoader.h
     Texture/Texture.h

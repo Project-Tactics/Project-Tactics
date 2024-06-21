@@ -1,19 +1,26 @@
 {
     "demoSprites": {
         "texture": {
-            "char": {
-                "path": "_demoSprites/char.png",
+            "spriteSheet00": {
+                "path": "_demoSprites/spriteSheet00.png",
                 "filter": "nearest"
             }
         },
-        "sprite": {
+        "spriteSheet": {
             "char00": {
-                "texture": "char"
+                "texture": "spriteSheet00",
+                "spriteSize": {
+                    "x": 32,
+                    "y": 48
+                }
             }
         },
         "prefab": {
             "character": {
                 "path": "_demoSprites/character.prefab"
+            },
+            "spriteCamera": {
+                "path": "_demoSprites/spriteCamera.prefab"
             }
         }
     }

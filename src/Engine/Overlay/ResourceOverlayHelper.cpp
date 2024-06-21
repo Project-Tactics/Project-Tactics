@@ -7,9 +7,14 @@
 #include <Libs/Resource/Material/Material.h>
 #include <Libs/Resource/ResourcePack/ResourcePack.h>
 #include <Libs/Resource/Shader/Shader.h>
+#include <Libs/Resource/SpriteSheet/SpriteSheet.h>
 #include <Libs/Resource/Texture/Texture.h>
 
+#include <Libs/Utility/ImGuiUtilities.h>
+
 namespace tactics {
+
+unsigned int ResourceOverlayHelper::_selectedSpriteForSpriteViewer = 0;
 
 void ResourceOverlayHelper::drawResource(const resource::ResourceInfo& resourceInfo, resource::ResourceType resourceType) {
 	using namespace resource;
@@ -23,24 +28,28 @@ void ResourceOverlayHelper::drawResource(const resource::ResourceInfo& resourceI
 		if (_beginTabItem("Info", resourceType)) {
 			auto& resource = *resourceInfo.getResource();
 			switch (resourceType) {
-			case ResourceType::Texture: {
-				drawTResource<Texture>(resource);
-				break;
-			}
-			case ResourceType::Mesh: {
-				drawTResource<Mesh>(resource);
+			case ResourceType::IniFile: {
+				drawTResource<IniFile>(resource);
 				break;
 			}
 			case ResourceType::Material: {
 				drawTResource<Material>(resource);
 				break;
 			}
+			case ResourceType::Mesh: {
+				drawTResource<Mesh>(resource);
+				break;
+			}
 			case ResourceType::Shader: {
 				drawTResource<Shader>(resource);
 				break;
 			}
-			case ResourceType::IniFile: {
-				drawTResource<IniFile>(resource);
+			case ResourceType::SpriteSheet: {
+				drawTResource<SpriteSheet>(resource);
+				break;
+			}
+			case ResourceType::Texture: {
+				drawTResource<Texture>(resource);
 				break;
 			}
 			}
@@ -72,8 +81,7 @@ void ResourceOverlayHelper::drawResource(const resource::Texture& texture) {
 	// It doesn't matter if the bool is always true as the popup is controlled by other means.
 	bool popupOpened = true;
 	if (ImGui::BeginPopupModal("Texture Viewer", &popupOpened, ImGuiWindowFlags_AlwaysAutoResize)) {
-		auto previewWidth = std::min(width, 512.f);
-		ImGui::Image((void*)(intptr_t)texture.rendererId, {previewWidth, previewWidth * ratio}, ImVec2(0, 1), ImVec2(1, 0), {1, 1, 1, 1});
+		_drawTexture(texture);
 		ImGui::EndPopup();
 	}
 }
@@ -138,7 +146,6 @@ void ResourceOverlayHelper::drawResource(const resource::Material& material) {
 		ImGui::Text("%.2f %.2f %.2f %.2f", value[1][0], value[1][1], value[1][2], value[1][3]);
 		ImGui::Text("%.2f %.2f %.2f %.2f", value[2][0], value[2][1], value[2][2], value[2][3]);
 		ImGui::Text("%.2f %.2f %.2f %.2f", value[3][0], value[3][1], value[3][2], value[3][3]);
-
 	}
 }
 
@@ -150,6 +157,97 @@ void ResourceOverlayHelper::drawResource(const resource::Shader& shader) {
 	ImGui::Separator();
 	ImGui::TextColored(toColor(ResourceType::Shader), "Fragment Shader");
 	ImGui::TextWrapped("%s", shader.fragmentSource.c_str());
+}
+
+void ResourceOverlayHelper::drawResource(const resource::SpriteSheet& spriteSheet) {
+	using namespace resource;
+	auto& textureInfo = spriteSheet.texture->info;
+	ImGui::Text("Sprite Sheet Size: %dx%d", textureInfo.width, textureInfo.height);
+	ImGui::Text("Sprite Size: %dx%d", static_cast<int>(spriteSheet.spriteSize.x), static_cast<int>(spriteSheet.spriteSize.y));
+
+	auto spriteCount = spriteSheet.getSpriteCount();
+	ImGui::Text("Sprites: %d", spriteCount);
+
+	auto uvSpriteSize = spriteSheet.getUVSpriteSize();
+	for (auto i = 0u; i < spriteCount; i++) {
+		auto uvCoordinates = spriteSheet.getUVCoordinates(i);
+		auto uvSize = spriteSheet.getUVSpriteSize();
+		auto imageButtonId = "Sprite" + std::to_string(i);
+		if (_drawSpriteButton(
+			imageButtonId.c_str(),
+			toImGuiTexture(*spriteSheet.texture),
+			toImVec2(spriteSheet.spriteSize),
+			toImVec2(uvCoordinates),
+			toImVec2(uvSize),
+			i < spriteCount - 1,
+			i)) {
+			_selectedSpriteForSpriteViewer = i;
+			ImGui::OpenPopup("Sprite Viewer");
+		}
+	}
+
+	_drawSpriteViewer(spriteSheet);
+}
+
+bool ResourceOverlayHelper::_drawSpriteButton(const char* id, void* texture, const ImVec2& buttonSize, const ImVec2& uv, const ImVec2& uvSize, bool isLast, unsigned int index) {
+	auto overlayPosition = ImGui::GetCursorPos();
+	overlayPosition.x += 2;
+	overlayPosition.y += 1;
+	bool pressed = ImGui::ImageButton(id, texture,
+		ImVec2(buttonSize.x, buttonSize.y),
+		ImVec2(uv.x, uv.y + uvSize.y),
+		ImVec2(uv.x + uvSize.x, uv.y));
+
+	if (isLast) {
+		ImGui::SameLine();
+	}
+
+	auto remainingSize = ImGui::GetContentRegionAvail();
+	if (remainingSize.x < buttonSize.x) {
+		ImGui::NewLine();
+	}
+
+	auto resetPositionAfterOverlay = ImGui::GetCursorPos();
+	ImGui::SetCursorPos(overlayPosition);
+	ImGui::Text("%d", index);
+	ImGui::SetCursorPos(resetPositionAfterOverlay);
+
+	return pressed;
+}
+
+void ResourceOverlayHelper::_drawSpriteViewer(const resource::SpriteSheet& spriteSheet) {
+	// In order to show the X button on the top right corner we have to pass a bool to the BeginPopupModal.
+	// It doesn't matter if the bool is always true as the popup is controlled by other means.
+	bool popupOpened = true;
+	if (ImGui::BeginPopupModal("Sprite Viewer", &popupOpened, ImGuiWindowFlags_AlwaysAutoResize)) {
+		auto& spriteSize = spriteSheet.spriteSize;
+		auto width = spriteSize.x;
+		auto ratio = spriteSize.y / width;
+		auto previewWidth = std::min(width, 512.f);
+		ImGui::Text("Sprite [%d]", _selectedSpriteForSpriteViewer);
+		auto uv = spriteSheet.getUVCoordinates(_selectedSpriteForSpriteViewer);
+		auto uvSpriteSize = spriteSheet.getUVSpriteSize();
+		ImGui::Image(
+			toImGuiTexture(*spriteSheet.texture),
+			{previewWidth, previewWidth * ratio},
+			ImVec2(uv.x, uv.y + uvSpriteSize.y),
+			ImVec2(uv.x + uvSpriteSize.x, uv.y),
+			{1, 1, 1, 1}
+		);
+
+		ImGui::Text("Sprite Sheet");
+		_drawTexture(*spriteSheet.texture);
+
+		ImGui::EndPopup();
+	}
+}
+
+void ResourceOverlayHelper::_drawTexture(const resource::Texture& texture, float maxWidth) {
+	auto width = static_cast<float>(texture.info.width);
+	auto height = static_cast<float>(texture.info.height);
+	auto ratio = height / width;
+	auto previewWidth = std::min(width, maxWidth);
+	ImGui::Image(toImGuiTexture(texture), {previewWidth, previewWidth * ratio}, ImVec2(0, 1), ImVec2(1, 0), {1, 1, 1, 1});
 }
 
 bool ResourceOverlayHelper::_beginTabItem(const char* name, resource::ResourceType resourceType) {

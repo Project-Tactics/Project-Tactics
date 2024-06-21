@@ -8,6 +8,7 @@ set(HEADERS
     Json/MathJsonSerializer.h
     Math.h
     Service/ServiceLocator.h
+    ImGuiUtilities.h
     Ini/IniMathConverter.h
     Reflection.h
     String.h
@@ -19,6 +20,7 @@ set(SOURCES
     Color.cpp
     Exception.cpp
     Math.cpp
+    ImGuiUtilities.cpp
     Ini/IniMathConverter.cpp
     Json/MathJsonSerializer.cpp
     String.cpp

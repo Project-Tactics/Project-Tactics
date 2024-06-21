@@ -29,6 +29,17 @@ public:
 
 	[[nodiscard]] static std::shared_ptr<Material::Instance> createInstance(std::shared_ptr<Material> parentMaterial);
 
+	template<typename TContainer, typename TShader>
+	static void updateUniforms(TShader&& shader, TContainer&& parentContainer, TContainer&& instanceContainer) {
+		for (auto&& [uniformName, value] : parentContainer) {
+			if (auto itr = instanceContainer.find(uniformName); itr != instanceContainer.end()) {
+				shader->setUniform(uniformName, itr->second);
+			} else {
+				shader->setUniform(uniformName, value);
+			}
+		}
+	}
+
 	bool hasAlphaBlend{};
 	std::shared_ptr<Shader> shader;
 };

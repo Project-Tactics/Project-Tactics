@@ -36,7 +36,7 @@ std::string OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, F
 
 std::string OpenTacticaApplication::_initializeSpriteDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 	fsmBuilder
-		.state<LoadState>("Load", serviceLocator, "_demoSprites/resources.json", "demoSprites", "simpleCamera")
+		.state<LoadState>("Load", serviceLocator, "_demoSprites/resources.json", "demoSprites", "spriteCamera")
 		.on("proceed").jumpTo("Sprites")
 		.onAppExitRequest().jumpTo("Unload")
 

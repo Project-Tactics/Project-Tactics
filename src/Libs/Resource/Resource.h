@@ -15,7 +15,7 @@ enum class ResourceType {
 	Mesh,
 	Prefab,
 	Shader,
-	Sprite,
+	SpriteSheet,
 	Texture,
 	Unkwown
 };
@@ -26,7 +26,7 @@ const std::array<ResourceType, 7> resourceTypeLoadingOrder = {
 	ResourceType::Texture,
 	ResourceType::Material,
 	ResourceType::Mesh,
-	ResourceType::Sprite,
+	ResourceType::SpriteSheet,
 	ResourceType::Prefab
 };
 

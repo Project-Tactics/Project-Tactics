@@ -1,9 +1,9 @@
 {
     "transform": {
         "position": {
-            "x": -0.5,
+            "x": 0,
             "y": 1,
-            "z": -2
+            "z": -5
         },
         "scale": {
             "x": 1,
@@ -11,11 +11,11 @@
             "z": 1
         }
     },
-    "billboard": {},
     "sprite": {
         "mesh": "quad",
-        "material": "texturedUnlitWithAlpha",
-        "sprite": "char00",
+        "material": "spriteMaterial",
+        "spriteSheet": "char00",
         "spriteIndex": 0
-    }
+    },
+    "spriteAnimation": {}
 }

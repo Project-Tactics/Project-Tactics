@@ -23,7 +23,7 @@ public:
 		static ImVec4 PrefabColor;
 		static ImVec4 ResourceColor;
 		static ImVec4 ShaderColor;
-		static ImVec4 SpriteColor;
+		static ImVec4 SpriteSheetColor;
 		static ImVec4 TextureColor;
 	};
 

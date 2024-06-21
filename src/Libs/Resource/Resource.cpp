@@ -34,8 +34,8 @@ std::string Str<resource::ResourceType>::to(resource::ResourceType resourceType)
 	case ResourceType::Shader: {
 		return "shader";
 	}
-	case ResourceType::Sprite: {
-		return "sprite";
+	case ResourceType::SpriteSheet: {
+		return "spriteSheet";
 	}
 	case ResourceType::Texture: {
 		return "texture";
@@ -58,8 +58,8 @@ resource::ResourceType Str<resource::ResourceType>::from(std::string_view string
 		return ResourceType::Prefab;
 	} else if (string == "shader") {
 		return ResourceType::Shader;
-	} else if (string == "sprite") {
-		return ResourceType::Sprite;
+	} else if (string == "spriteSheet") {
+		return ResourceType::SpriteSheet;
 	} else if (string == "texture") {
 		return ResourceType::Texture;
 	}

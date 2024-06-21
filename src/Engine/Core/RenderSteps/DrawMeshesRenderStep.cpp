@@ -73,6 +73,9 @@ void DrawMeshes::_drawSprite(const glm::mat4x4& viewProjection) {
 		subMesh.vertexAttributes->bind();
 
 		shader->bind();
+
+		material->set("u_SpriteUV", sprite.spriteSheet->getUVCoordinates(sprite.spriteIndex));
+		material->set("u_SpriteSize", sprite.spriteSheet->getUVSpriteSize());
 		material->updateShaderUniforms();
 
 		glm::mat4 mvp = viewProjection * transform.getMatrix();

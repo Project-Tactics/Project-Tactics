@@ -6,7 +6,7 @@
 #include <Libs/Resource/Prefab/PrefabLoader.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/Shader/ShaderLoader.h>
-#include <Libs/Resource/Sprite/SpriteLoader.h>
+#include <Libs/Resource/SpriteSheet/SpriteSheetLoader.h>
 #include <Libs/Resource/Texture/TextureLoader.h>
 
 namespace tactics {
@@ -25,7 +25,7 @@ std::unique_ptr<resource::ResourceSystem> ResourceSystemInitializer::initialize(
 	registerManager<Shader, ShaderLoader>(fileSystem, *resourceSystem);
 	registerManager<Mesh, MeshLoader>(fileSystem, *resourceSystem);
 	registerManager<Material, MaterialLoader>(fileSystem, *resourceSystem);
-	registerManager<Sprite, SpriteLoader>(fileSystem, *resourceSystem);
+	registerManager<SpriteSheet, SpriteSheetLoader>(fileSystem, *resourceSystem);
 	registerManager<Prefab, PrefabLoader>(fileSystem, *resourceSystem, ecs);
 
 	resourceSystem->loadPackDefinition("engine_data.json");

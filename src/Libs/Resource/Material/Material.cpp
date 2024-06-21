@@ -29,17 +29,6 @@ Material::Instance::Instance(std::shared_ptr<Material> parent): parent(parent) {
 	return instance;
 }
 
-template<typename TContainer, typename TShader>
-void _updateUniforms(TShader&& shader, TContainer&& parentContainer, TContainer&& instanceContainer) {
-	for (auto&& [uniformName, value] : parentContainer) {
-		if (auto itr = instanceContainer.find(uniformName); itr != instanceContainer.end()) {
-			shader->setUniform(uniformName, itr->second);
-		} else {
-			shader->setUniform(uniformName, value);
-		}
-	}
-}
-
 void Material::Instance::updateShaderUniforms() {
 	int textureIndex = 0;
 	for (auto&& [uniformName, texture] : parent->getTextures()) {
@@ -53,12 +42,12 @@ void Material::Instance::updateShaderUniforms() {
 		++textureIndex;
 	}
 
-	_updateUniforms(parent->shader, parent->getInts(), getInts());
-	_updateUniforms(parent->shader, parent->getFloats(), getFloats());
-	_updateUniforms(parent->shader, parent->getVectors2(), getVectors2());
-	_updateUniforms(parent->shader, parent->getVectors3(), getVectors3());
-	_updateUniforms(parent->shader, parent->getVectors4(), getVectors4());
-	_updateUniforms(parent->shader, parent->getMatrices(), getMatrices());
+	Material::updateUniforms(parent->shader, parent->getInts(), getInts());
+	Material::updateUniforms(parent->shader, parent->getFloats(), getFloats());
+	Material::updateUniforms(parent->shader, parent->getVectors2(), getVectors2());
+	Material::updateUniforms(parent->shader, parent->getVectors3(), getVectors3());
+	Material::updateUniforms(parent->shader, parent->getVectors4(), getVectors4());
+	Material::updateUniforms(parent->shader, parent->getMatrices(), getMatrices());
 }
 
 }
