@@ -1,6 +1,7 @@
 #include "SpriteComponent.h"
 
 #include <Libs/Resource/ResourceProvider.h>
+#include <Libs/Utility/Json/MathJsonSerializer.h>
 
 namespace tactics::component {
 
@@ -8,9 +9,10 @@ struct SpriteDescriptor {
 	std::string spriteSheet;
 	std::string mesh;
 	std::string material;
-	unsigned int spriteIndex;
+	unsigned int spriteIndex{0};
+	glm::vec2 uvFlip = Vector2::one;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteDescriptor, spriteSheet, mesh, material, spriteIndex);
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteDescriptor, spriteSheet, mesh, material, spriteIndex, uvFlip);
 };
 
 void Sprite::deserialize(const resource::ResourceProvider* resourceProvider, const nlohmann::ordered_json& jsonData) {
@@ -22,6 +24,7 @@ void Sprite::deserialize(const resource::ResourceProvider* resourceProvider, con
 	material = Material::createInstance(parentMaterial);
 	material->set("u_Texture", spriteSheet->texture);
 	spriteIndex = descriptor.spriteIndex;
+	uvFlip = descriptor.uvFlip;
 }
 
 void Sprite::defineReflection() {

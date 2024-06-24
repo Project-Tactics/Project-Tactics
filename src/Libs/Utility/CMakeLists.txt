@@ -6,6 +6,7 @@ set(HEADERS
     Color.h
     Exception.h
     Json/MathJsonSerializer.h
+    Json/JsonSerialization.h
     Math.h
     Service/ServiceLocator.h
     ImGuiUtilities.h

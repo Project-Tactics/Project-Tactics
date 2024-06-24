@@ -18,8 +18,6 @@ public:
 	const entt::registry& getRegistry() const;
 
 private:
-	void _buildComponentRecursively(entt::meta_any& instance, const nlohmann::ordered_json& jsonData, const resource::ResourceProvider& resourceProvider);
-
 	entt::registry _registry;
 };
 

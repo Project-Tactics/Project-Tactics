@@ -3,10 +3,11 @@
 namespace tactics::resource {
 
 glm::vec2 SpriteSheet::getUVCoordinates(uint32_t spriteIndex) const {
-	auto spritesPerRow = std::lround(texture->info.width / (int)spriteSize.x);
-	auto row = spriteIndex / spritesPerRow;
-	auto column = spriteIndex % spritesPerRow;
-	return glm::vec2((column * spriteSize.x) / texture->info.width, (row * spriteSize.y) / texture->info.height);
+	auto uvSpriteSize = getUVSpriteSize();
+	auto spritePerRow = static_cast<int>(1.0f / uvSpriteSize.x);
+	auto row = spriteIndex / spritePerRow;
+	auto column = spriteIndex % spritePerRow;
+	return glm::vec2(column * uvSpriteSize.x, row * spriteSize.y);
 }
 
 glm::vec2 SpriteSheet::getUVSpriteSize() const {

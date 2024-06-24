@@ -1,5 +1,7 @@
 #include "DemoMapState.h"
 
+#include "../Component/BattleCamera.h"
+#include "../Component/CharacterFacing.h"
 #include "../Component/RotateAroundPoint.h"
 #include "../Component/RotateItem.h"
 
@@ -15,13 +17,21 @@ FsmAction DemoMapState::enter() {
 	auto mapName = fmt::format("map{:02d}", _mapIndex);
 	sceneSystem.createEntity("map", mapName);
 
+	sceneSystem.createEntity("char", "character");
+
 	return FsmAction::none();
 }
 
 FsmAction DemoMapState::update() {
+	using namespace component;
 	auto& scene = getService<SceneSystem>();
-	component::RotateAroundPointSystem::update(scene.getRegistry().view<component::Transform, component::RotateAroundPoint>());
-	component::RotateItemSystem::update(scene.getRegistry().view<component::Transform, component::RotateItem>());
+	component::RotateAroundPointSystem::update(scene.getRegistry().view<Transform, RotateAroundPoint>());
+	component::RotateItemSystem::update(scene.getRegistry().view<Transform, RotateItem>());
+
+	auto cameraView = scene.getRegistry().view<Transform, Camera, CurrentCamera>();
+	component::CharacterFacingSystem::update(cameraView, scene.getRegistry().view<CharacterFacing, SpriteAnimation, Sprite>());
+
+	component::BattleCameraSystem::update(scene.getRegistry().view<BattleCamera, Transform>());
 
 	return FsmAction::none();
 }

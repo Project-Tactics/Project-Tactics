@@ -2,7 +2,8 @@
 
 namespace tactics::component {
 
-void SpriteAnimationSystem::update(const ecs_view<Sprite, SpriteAnimation>& view) {
+void SpriteAnimationSystem::update(const ecs_view<Sprite, SpriteAnimation>&) {
+	/*
 	view.each([] (auto& sprite, auto& spriteAnimation) {
 		spriteAnimation.i++;
 		if (spriteAnimation.i > 500) {
@@ -11,6 +12,7 @@ void SpriteAnimationSystem::update(const ecs_view<Sprite, SpriteAnimation>& view
 
 		sprite.spriteIndex = (int)spriteAnimation.i / 100;
 	});
+	*/
 }
 
 }

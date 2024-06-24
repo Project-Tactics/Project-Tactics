@@ -1,5 +1,7 @@
 #include "OpenTacticaApplication.h"
 
+#include "Component/BattleCamera.h"
+#include "Component/CharacterFacing.h"
 #include "Component/RotateItem.h"
 #include "Component/RotateAroundPoint.h"
 
@@ -18,7 +20,7 @@ namespace tactics {
 
 void OpenTacticaApplication::setupComponentReflections() {
 	using namespace component;
-	defineComponentsReflection<RotateItem, RotateAroundPoint>();
+	defineComponentsReflection<BattleCamera, CharacterFacing, RotateItem, RotateAroundPoint>();
 }
 
 std::string OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {

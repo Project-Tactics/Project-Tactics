@@ -3,7 +3,7 @@
 #include "../Resource.h"
 #include "../Texture/Texture.h"
 
-#include <glm/glm.hpp>
+#include <Libs/Utility/Math.h>
 
 namespace tactics::resource {
 

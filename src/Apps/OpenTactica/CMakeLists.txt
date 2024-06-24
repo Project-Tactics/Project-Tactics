@@ -10,6 +10,8 @@ set(SOURCES
     States/EmptyState.cpp
     States/LoadState.cpp
     States/UnloadState.cpp
+    Component/BattleCamera.cpp
+    Component/CharacterFacing.cpp
     Component/RotateAroundPoint.cpp
     Component/RotateItem.cpp)
     
@@ -21,6 +23,8 @@ set(HEADERS
     States/EmptyState.h
     States/LoadState.h
     States/UnloadState.h
+    Component/BattleCamera.h
+    Component/CharacterFacing.h
     Component/RotateAroundPoint.h
     Component/RotateItem.h)
 

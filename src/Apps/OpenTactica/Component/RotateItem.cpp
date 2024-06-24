@@ -1,7 +1,5 @@
 #include "RotateItem.h"
 
-#include <Libs/Utility/Reflection.h>
-
 namespace tactics::component {
 
 void RotateItem::defineReflection() {

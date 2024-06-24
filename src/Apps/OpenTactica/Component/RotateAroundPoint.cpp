@@ -1,7 +1,5 @@
 #include "RotateAroundPoint.h"
 
-#include <Libs/Utility/Reflection.h>
-
 namespace tactics::component {
 
 void RotateAroundPoint::defineReflection() {

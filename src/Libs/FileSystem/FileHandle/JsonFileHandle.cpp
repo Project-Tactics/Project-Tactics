@@ -56,7 +56,8 @@ void JsonFileHandle::_loadFromLua() {
 			sol::lib::base,
 			sol::lib::string,
 			sol::lib::table,
-			sol::lib::package
+			sol::lib::package,
+			sol::lib::math
 		);
 		sol::table packageTable = lua["package"];
 		packageTable["path"] = _pathHelper.makeAbsolutePath("?.lua");

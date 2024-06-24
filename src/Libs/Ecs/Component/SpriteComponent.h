@@ -14,6 +14,7 @@ struct Sprite {
 	std::shared_ptr<resource::Mesh> mesh;
 	std::shared_ptr<resource::Material::Instance> material;
 	unsigned int spriteIndex;
+	glm::vec2 uvFlip = Vector2::one;
 
 	void deserialize(const resource::ResourceProvider* resourceProvider, const nlohmann::ordered_json& jsonData);
 	static void defineReflection();
@@ -24,6 +25,7 @@ struct SpriteAnimation {
 	int i{};
 	std::vector<unsigned int> spriteIndices;
 
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteAnimation, duration, spriteIndices);
 	static void defineReflection();
 };
 

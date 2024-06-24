@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <Libs/Utility/Reflection.h>
 
 namespace tactics::component {
 
@@ -9,11 +10,17 @@ enum ProjectionType {
 	Orthographic
 };
 
+NLOHMANN_JSON_SERIALIZE_ENUM(ProjectionType, {
+	{ProjectionType::Perspective, "perspective"},
+	{ProjectionType::Orthographic, "orthographic"}
+});
+
 struct Camera {
 	ProjectionType projectionType = ProjectionType::Perspective;
 	glm::mat4 projection;
 	glm::mat4 view;
 
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Camera, projectionType, projection, view);
 	static void defineReflection();
 	Camera clone();
 };

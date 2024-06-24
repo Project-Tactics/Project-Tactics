@@ -27,18 +27,11 @@
         "far": 1000,
         "orthoSize": 3
     },
-    "rotateAroundPoint": {
-        "speed": 0.0035,
-        "distanceFromPoint": 10,
-        "point": {
-            "x": 0,
-            "y": 1,
-            "z": 0
-        },
-        "offset": {
-            "x": 0,
-            "y": 8,
-            "z": 0
-        }
+    "battleCamera": {
+        "rotationSteps": [
+            10,
+            20,
+            30
+        ]
     }
 }

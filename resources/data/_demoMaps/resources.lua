@@ -2,11 +2,28 @@ local json = require "common.scripts.json"
 
 local packs = {
     demoMaps = {
-        texture = {},
+        texture = {
+            spriteSheet00 = {
+                path = "_demoMaps/spriteSheet00.png",
+                filter = "nearest"
+            }
+        },
+        spriteSheet = {
+            char00 = {
+                texture = "spriteSheet00",
+                spriteSize = {
+                    x = 32,
+                    y = 48
+                }
+            }
+        },
         mesh = {},
         prefab = {
             mapCamera = {
                 path = "_demoMaps/mapCamera.prefab"
+            },
+            character = {
+                path = "_demoMaps/character.prefab"
             }
         }
     }

@@ -1,20 +1,11 @@
 #pragma once
 
 #include <Libs/Utility/Math.h>
+#include <Libs/Utility/Reflection.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
-
-template<class Archive>
-void serialize(Archive& archive, glm::vec3& vec) {
-	archive(vec.x, vec.y, vec.z);
-}
-
-template<class Archive>
-void serialize(Archive& archive, glm::quat& quat) {
-	archive(quat.x, quat.y, quat.z, quat.w);
-}
 
 namespace tactics::component {
 
@@ -40,11 +31,9 @@ public:
 	const glm::mat4x4& computeMatrix();
 	const glm::mat4x4& getMatrix() const;
 
-	template<class Archive>
-	void serialize(Archive& archive) {
-		archive(position, rotation, scale);
-	}
+	void operator=(const nlohmann::ordered_json& json);
 
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Transform, position, rotation, scale);
 	static void defineReflection();
 };
 }
