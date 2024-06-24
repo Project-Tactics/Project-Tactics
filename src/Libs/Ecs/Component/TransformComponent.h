@@ -23,6 +23,7 @@ public:
 	void setRotation(float eulerX, float eulerY, float eulerZ);
 	void setRotation(const glm::vec3& eulerAngles);
 	void setRotation(float radians, const glm::vec3& axis);
+	void translate(const glm::vec3& translation);
 	void lookAt(const glm::vec3& target, const glm::vec3& up);
 	void rotate(float radians, const glm::vec3& axis);
 	void setScale(const glm::vec3& newScale);

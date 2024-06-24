@@ -10,14 +10,25 @@
 namespace tactics::component {
 
 struct BattleCamera {
-	float currentRotation{};
+	float rotationTime{};
 	float rotationSpeed{};
+	float distanceFromOrigin{};
 	unsigned int nextStep{};
 	unsigned int currentStep{};
-	glm::vec3 startingPosition = Vector3::zero;
+	glm::vec3 offset{};
 	std::vector<float> rotationSteps;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(BattleCamera, currentRotation, rotationSpeed, nextStep, currentStep, startingPosition, rotationSteps);
+	float getCurrentRotationDegree() const;
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
+		BattleCamera,
+		rotationTime,
+		distanceFromOrigin,
+		rotationSpeed,
+		nextStep,
+		currentStep,
+		rotationSteps,
+		offset);
 	static void defineReflection();
 };
 

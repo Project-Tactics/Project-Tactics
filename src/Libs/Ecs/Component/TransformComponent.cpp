@@ -38,6 +38,11 @@ void Transform::setRotation(float radians, const glm::vec3& axis) {
 	_dirty = true;
 }
 
+void Transform::translate(const glm::vec3& translation) {
+	position += translation;
+	_dirty = true;
+}
+
 void Transform::lookAt(const glm::vec3& target, const glm::vec3& up) {
 	rotation = glm::quatLookAt(glm::normalize(target - position), up);
 	_dirty = true;

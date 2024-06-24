@@ -13,6 +13,8 @@ public:
 
 private:
 	FsmEventAction onKeyPress(SDL_KeyboardEvent& event) override;
+	void _createScene();
+
 	unsigned int _mapIndex{};
 };
 

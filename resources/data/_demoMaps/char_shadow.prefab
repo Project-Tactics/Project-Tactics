@@ -1,0 +1,37 @@
+{
+    "transform": {
+        "position": {
+            "x": -0.28,
+            "y": 0.5,
+            "z": -1.40
+        },
+        "rotation": {
+            "fromAngleAxis": {
+                "axis": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                },
+                "angle": 90
+            }
+        },
+        "scale": {
+            "x": 0.75,
+            "y": 0.75,
+            "z": 1
+        }
+    },
+    "mesh": {
+        "mesh": "quad",
+        "materials": [
+            {
+                "material": "texturedUnlitWithAlpha",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "charShadow"
+                    }
+                }
+            }
+        ]
+    }
+}

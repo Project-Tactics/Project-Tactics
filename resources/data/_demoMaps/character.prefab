@@ -2,7 +2,7 @@
     "transform": {
         "position": {
             "x": -0.28,
-            "y": 0.96,
+            "y": 0.86,
             "z": -1.40
         },
         "scale": {
@@ -20,6 +20,6 @@
     "billboard": {},
     "spriteAnimation": {},
     "characterFacing": {
-        "facing": "north"
+        "facing": "west"
     }
 }

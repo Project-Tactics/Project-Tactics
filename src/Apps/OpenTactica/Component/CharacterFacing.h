@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Libs/Ecs/EntityUtilities.h>
-#include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/SpriteComponent.h>
-#include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Utility/Reflection.h>
+
+#include "BattleCamera.h"
 
 namespace tactics::component {
 
@@ -31,7 +31,7 @@ struct CharacterFacing {
 
 class CharacterFacingSystem {
 public:
-	static void update(ecs_view<Transform, Camera, CurrentCamera>& currentCameraView, ecs_view<CharacterFacing, SpriteAnimation, Sprite> characterFacingView);
+	static void update(BattleCamera& battleCamera, ecs_view<CharacterFacing, SpriteAnimation, Sprite>& characterFacingView);
 };
 
 }

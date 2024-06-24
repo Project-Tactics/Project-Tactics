@@ -6,6 +6,9 @@ local packs = {
             spriteSheet00 = {
                 path = "_demoMaps/spriteSheet00.png",
                 filter = "nearest"
+            },
+            charShadow = {
+                path = "_demoMaps/char_shadow.png"
             }
         },
         spriteSheet = {
@@ -24,6 +27,9 @@ local packs = {
             },
             character = {
                 path = "_demoMaps/character.prefab"
+            },
+            charShadow = {
+                path = "_demoMaps/char_shadow.prefab"
             }
         }
     }
