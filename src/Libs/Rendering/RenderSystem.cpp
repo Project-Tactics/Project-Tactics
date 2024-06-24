@@ -30,6 +30,7 @@ RenderSystem::RenderSystem(std::shared_ptr<resource::IniFile> configFile): _conf
 	}
 
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 }
 
 RenderSystem::~RenderSystem() {

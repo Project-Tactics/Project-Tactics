@@ -25,10 +25,12 @@ SceneSystem::SceneSystem(
 	: _ecs(ecs)
 	, _resourceSystem(resourceSystem) {
 	using namespace component;
-	_ecs.sceneRegistry().on_construct<Mesh>().connect<&SceneSystem::_onMeshConstructed>(this);
-	_ecs.sceneRegistry().on_update<Mesh>().connect<&SceneSystem::_onMeshUpdated>(this);
-	_ecs.sceneRegistry().on_construct<CurrentCamera>().connect<&SceneSystem::_onCurrentCameraConstructed>(this);
-	_ecs.sceneRegistry().on_construct<CurrentViewport>().connect<&SceneSystem::_onCurrentViewportConstructed>(this);
+	auto& registry = _ecs.sceneRegistry();
+	// TODO(Gerark) I believe the following lines should be moved to the respective System classes
+	registry.on_construct<Mesh>().connect<&SceneSystem::_onMeshConstructed>(this);
+	registry.on_update<Mesh>().connect<&SceneSystem::_onMeshUpdated>(this);
+	registry.on_construct<CurrentCamera>().connect<&SceneSystem::_onCurrentCameraConstructed>(this);
+	registry.on_construct<CurrentViewport>().connect<&SceneSystem::_onCurrentViewportConstructed>(this);
 }
 
 SceneSystem::~SceneSystem() {

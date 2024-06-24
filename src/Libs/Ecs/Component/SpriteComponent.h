@@ -11,8 +11,6 @@ namespace tactics::component {
 
 struct Sprite {
 	std::shared_ptr<resource::SpriteSheet> spriteSheet;
-	std::shared_ptr<resource::Mesh> mesh;
-	std::shared_ptr<resource::Material::Instance> material;
 	unsigned int spriteIndex;
 	glm::vec2 uvFlip = Vector2::one;
 

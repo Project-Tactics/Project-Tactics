@@ -69,11 +69,14 @@ void DemoMapState::_createScene() {
 		glm::vec3 translate;
 		Facing facing;
 	};
+
 	auto positions = std::array{
-		CharLayout{{1.12f, 0, 0}, Facing::North},
-		CharLayout{{2.24f, 0, 2.24f}, Facing::East},
-		CharLayout{{-0.56f, 0, 2.80f}, Facing::West}
+		CharLayout{{-0.56f, 0, -0.56f}, Facing::West},
+		CharLayout{{-1.12f, 0, -0.56f}, Facing::West},
+		CharLayout{{-0.56f, 0, 2.80f}, Facing::South},
+		CharLayout{{-1.12f, 0, 2.80f}, Facing::North}
 	};
+
 	for (auto [pos, facing] : positions) {
 		auto character = sceneSystem.createEntity("char", "character");
 		auto& charTransform = character.getComponent<Transform>();

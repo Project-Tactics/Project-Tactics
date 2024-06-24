@@ -8,7 +8,7 @@ local packs = {
                 filter = "nearest"
             },
             charShadow = {
-                path = "_demoMaps/char_shadow.png"
+                path = "_demoMaps/charShadow.png"
             }
         },
         spriteSheet = {
@@ -29,7 +29,7 @@ local packs = {
                 path = "_demoMaps/character.prefab"
             },
             charShadow = {
-                path = "_demoMaps/char_shadow.prefab"
+                path = "_demoMaps/charShadow.prefab"
             }
         }
     }

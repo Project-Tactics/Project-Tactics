@@ -39,7 +39,6 @@ private:
 	void _drawGeometry(const resource::SubMesh& mesh);
 	void _drawOpaqueGeometry(const glm::mat4x4& viewProjection);
 	void _drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, component::Transform& cameraTransform);
-	void _drawSprite(const glm::mat4x4& viewProjection);
 
 	EntityComponentSystem& _ecs;
 	AlphaBlendedFlag _alphaBlendedFlag{};

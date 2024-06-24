@@ -55,6 +55,7 @@
             },
             "spriteMaterial": {
                 "shader": "spriteUnlit",
+                "alphaBlended": true,
                 "uniforms": {
                     "textures": {
                         "u_Texture": "none"

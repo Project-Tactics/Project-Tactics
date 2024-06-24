@@ -11,9 +11,15 @@
             "z": 1
         }
     },
-    "sprite": {
+    "mesh": {
         "mesh": "quad",
-        "material": "spriteMaterial",
+        "materials": [
+            {
+                "material": "spriteMaterial"
+            }
+        ]
+    },
+    "sprite": {
         "spriteSheet": "char00",
         "spriteIndex": 0
     },

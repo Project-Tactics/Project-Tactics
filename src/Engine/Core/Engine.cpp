@@ -186,6 +186,7 @@ void Engine::_updateCommonComponentSystems() {
 	auto& registry = _ecs->sceneRegistry();
 
 	SpriteAnimationSystem::update(registry.view<Sprite, SpriteAnimation>());
+	SpriteSystem::update(registry.view<Sprite, Mesh>());
 
 	CameraSystem::updateCameraAspectRatios(
 		registry.view<Viewport, CurrentViewport>(),

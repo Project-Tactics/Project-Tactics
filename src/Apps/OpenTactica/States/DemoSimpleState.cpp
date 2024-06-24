@@ -92,9 +92,7 @@ void DemoSimpleState::_createQuads() {
 		for (auto y = -height / 2; y < height / 2; ++y) {
 			auto quad = sceneSystem.createEntity({-50.0f + y * 20.f, 10.0f, x * 10.f}, "quad", {"texturedUnlitWithAlpha"});
 			quad.getComponent<component::Transform>().setScale({15, 15, 15});
-			quad.updateComponent<component::Mesh>([&resourceSystem] (auto& mesh) {
-				mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("tacticsIcon"));
-			});
+			quad.getComponent<component::Mesh>().materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("tacticsIcon"));
 		}
 	}
 }

@@ -4,7 +4,6 @@
 #include <Libs/Ecs/Component/AlphaBlendedComponent.h>
 #include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
-#include <Libs/Ecs/Component/SpriteComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Rendering/IndexBuffer.h>
 #include <Libs/Rendering/VertexBuffer.h>
@@ -37,7 +36,6 @@ void DrawMeshes::execute(RenderStepInfo&) {
 		registry.view<Camera, Transform, CurrentCamera>().each([this] (auto& camera, auto& transform) {
 			auto viewProjectionMatrix = camera.projection * camera.view;
 			_drawAlphaBlendedGeometry(viewProjectionMatrix, transform);
-			_drawSprite(viewProjectionMatrix);
 		});
 	}
 
@@ -48,40 +46,11 @@ void DrawMeshes::execute(RenderStepInfo&) {
 void DrawMeshes::_drawOpaqueGeometry(const glm::mat4x4& viewProjection) {
 	using namespace component;
 
-	glDisable(GL_BLEND);
 	glDepthMask(GL_TRUE);
 
 	auto view = _ecs.sceneRegistry().view<Transform, Mesh>(entt::exclude<FullyAlphaBlended>);
 	for (auto&& [entity, transform, mesh] : view.each()) {
 		_drawMesh(viewProjection, transform, mesh, false);
-	}
-}
-
-/*
-* TODO(Gerark) The way how Sprites are rendered is very inefficient. We're changing states for each of them
-* No batching is currently involved and that should be one of the first steps to follow once we're ready to scale this up
-*/
-void DrawMeshes::_drawSprite(const glm::mat4x4& viewProjection) {
-	using namespace component;
-
-	auto view = _ecs.sceneRegistry().view<Transform, Sprite>();
-	for (auto&& [entity, transform, sprite] : view.each()) {
-		auto& subMesh = sprite.mesh->subMeshes[0];
-		auto& material = sprite.material;
-		auto& shader = material->parent->shader;
-
-		subMesh.vertexAttributes->bind();
-
-		shader->bind();
-
-		material->set("u_SpriteUV", sprite.spriteSheet->getUVCoordinates(sprite.spriteIndex));
-		material->set("u_SpriteSize", sprite.spriteSheet->getUVSpriteSize());
-		material->set("u_FlipUV", sprite.uvFlip);
-		material->updateShaderUniforms();
-
-		glm::mat4 mvp = viewProjection * transform.getMatrix();
-		shader->setUniform("u_ModelViewProjection", mvp);
-		_drawGeometry(subMesh);
 	}
 }
 
@@ -91,6 +60,7 @@ void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, co
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBlendEquation(GL_FUNC_ADD);
+	glDepthMask(GL_FALSE);
 
 	auto& registry = _ecs.sceneRegistry();
 	registry.sort<AlphaBlended>([&registry, &cameraTransform] (const entt::entity lhs, const entt::entity rhs) {
@@ -98,10 +68,13 @@ void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, co
 		auto diff2 = registry.get<Transform>(rhs).getPosition() - cameraTransform.getPosition();
 		return glm::length2(diff1) > glm::length2(diff2);
 	});
-	auto view = registry.view<Transform, Mesh, AlphaBlended>();
+	auto view = registry.view<AlphaBlended, Transform, Mesh>();
 	for (auto&& [entity, transform, mesh] : view.each()) {
 		_drawMesh(viewProjection, transform, mesh, true);
 	}
+
+	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);
 }
 
 void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection, component::Transform& transform, const component::Mesh& inMesh, bool filterTransparent) {

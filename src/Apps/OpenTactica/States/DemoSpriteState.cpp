@@ -8,16 +8,23 @@
 namespace tactics {
 
 FsmAction DemoSpriteState::enter() {
+	_createCharacters({0, 0, 0}, 1);
+	_createCharacters({0, 0, -0.5}, 1);
+	_createCharacters({0, 0, 0.5}, 1);
+	return FsmAction::none();
+}
+
+void DemoSpriteState::_createCharacters(const glm::vec3& offset, int count) {
 	auto& sceneSystem = getService<SceneSystem>();
-	int edge = 2;
-	for (auto x = -edge / 2; x < edge / 2; x++) {
-		for (auto y = -edge / 2; y < edge / 2; y++) {
+	for (auto x = 0; x < count; x++) {
+		for (auto y = 0; y < count; y++) {
 			auto entity = sceneSystem.createEntity("char", "character");
 			auto& transform = entity.getComponent<component::Transform>();
-			transform.setPosition(glm::vec3(x * 1.0f, y * 1.0f, 0.0f));
+			auto position = glm::vec3(x * 1.0f, y * 1.0f, 0.0f);
+			position += offset;
+			transform.setPosition(position);
 		}
 	}
-	return FsmAction::none();
 }
 
 void DemoSpriteState::exit() {
@@ -33,6 +40,22 @@ FsmAction DemoSpriteState::update() {
 FsmEventAction DemoSpriteState::onKeyPress(SDL_KeyboardEvent& event) {
 	if (event.keysym.sym == SDLK_ESCAPE) {
 		return FsmEventAction::transition("exit");
+	} else if (event.keysym.sym == SDLK_1) {
+		auto& sceneSystem = getService<SceneSystem>();
+		sceneSystem.clearScene();
+		_createCharacters({}, 2);
+		_createCharacters({0.15, 0, -2}, 2);
+		_createCharacters({-1, 0, 2}, 2);
+	} else if (event.keysym.sym == SDLK_2) {
+		auto& sceneSystem = getService<SceneSystem>();
+		sceneSystem.clearScene();
+		_createCharacters({}, 2);
+		_createCharacters({-1, 0, 2}, 2);
+	} else if (event.keysym.sym == SDLK_3) {
+		auto& sceneSystem = getService<SceneSystem>();
+		sceneSystem.clearScene();
+		_createCharacters({0.15, 0, -2}, 2);
+		_createCharacters({-1, 0, 2}, 2);
 	}
 	return FsmEventAction::none();
 }
