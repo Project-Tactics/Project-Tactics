@@ -4,4 +4,4 @@ An open-source game development framework inspired by Final Fantasy Tactics, let
 Please checkout the [Design References](https://github.com/Project-Tactics/Project-Tactics/blob/main/DESIGNREFERENCE.md)!
 
 ## Wiki
-[Check the wiki](https://github.com/Project-Tactics/Project-Tactics/wiki/Open-Tactica)
+[Check the wiki](https://github.com/Project-Tactics/Project-Tactics/wiki/00-%E2%80%90-Open-Tactica)
