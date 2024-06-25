@@ -32,6 +32,9 @@ struct CharacterFacing {
 class CharacterFacingSystem {
 public:
 	static void update(BattleCamera& battleCamera, ecs_view<CharacterFacing, SpriteAnimation, Sprite>& characterFacingView);
+
+private:
+	static void _updateAnimation(SpriteAnimation& animation, Sprite& sprite, const hash_string& animationName, const glm::vec2& uvFlip);
 };
 
 }

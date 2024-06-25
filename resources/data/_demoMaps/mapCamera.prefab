@@ -22,7 +22,7 @@
         "projectionType": "orthographic"
     },
     "frustum": {
-        "fov": 60,
+        "fov": 160,
         "near": 1,
         "far": 1000,
         "orthoSize": 3
@@ -41,7 +41,7 @@
         "distanceFromOrigin": 10,
         "offset": {
             "x": 0,
-            "y": 5,
+            "y": 4.5,
             "z": 0
         }
     }

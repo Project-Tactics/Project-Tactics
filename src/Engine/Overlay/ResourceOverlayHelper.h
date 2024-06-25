@@ -2,6 +2,8 @@
 
 #include <Libs/Resource/Resource.h>
 
+#include <Libs/Utility/Math.h>
+
 #include <imgui/imgui.h>
 
 namespace tactics {
@@ -35,8 +37,7 @@ private:
 		const char* id,
 		void* texture,
 		const ImVec2& buttonSize,
-		const ImVec2& uv,
-		const ImVec2& uvSize,
+		const Rect& uvRect,
 		bool isLast,
 		unsigned int index
 	);

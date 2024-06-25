@@ -2,13 +2,13 @@
     "transform": {
         "position": {
             "x": -0.28,
-            "y": 0.86,
+            "y": 0.95,
             "z": -1.40
         },
         "scale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
+            "x": 0.9,
+            "y": 1.0,
+            "z": 0.9
         }
     },
     "mesh": {
@@ -24,7 +24,9 @@
         "spriteIndex": 0
     },
     "billboard": {},
-    "spriteAnimation": {},
+    "spriteAnimation": {
+        "currentAnimation": "idleNorth"
+    },
     "characterFacing": {
         "facing": "west"
     }

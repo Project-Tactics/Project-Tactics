@@ -15,9 +15,9 @@ void CharacterFacing::defineReflection() {
 
 const std::array<std::array<Facing, 4>, 4> facingTransforms = {{
 	{Facing::South, Facing::North, Facing::West, Facing::East},
-	{Facing::West, Facing::East, Facing::North, Facing::South},
-	{Facing::North, Facing::South, Facing::East, Facing::West},
 	{Facing::East, Facing::West, Facing::South, Facing::North},
+	{Facing::North, Facing::South, Facing::East, Facing::West},
+	{Facing::West, Facing::East, Facing::North, Facing::South},
 	}
 };
 
@@ -32,22 +32,29 @@ void CharacterFacingSystem::update(
 
 		switch (transformedFacing) {
 		case Facing::North:
-			sprite.spriteIndex = 3;
-			sprite.uvFlip = {-1, 1};
+			_updateAnimation(animation, sprite, "idleNorth", {-1, 1});
 			break;
 		case Facing::South:
-			sprite.spriteIndex = 1;
-			sprite.uvFlip = {1, 1};
+			_updateAnimation(animation, sprite, "idleSouth", {1, 1});
 			break;
 		case Facing::East:
-			sprite.spriteIndex = 3;
-			sprite.uvFlip = {1, 1};
+			_updateAnimation(animation, sprite, "idleSouth", {-1, 1});
 			break;
 		case Facing::West:
-			sprite.spriteIndex = 1;
-			sprite.uvFlip = {-1, 1};
+			_updateAnimation(animation, sprite, "idleNorth", {1, 1});
 			break;
 		}
+	}
+}
+
+void CharacterFacingSystem::_updateAnimation(
+	SpriteAnimation& animation,
+	Sprite& sprite,
+	const hash_string& animationName,
+	const glm::vec2& uvFlip) {
+	if (animation.currentAnimation != animationName || sprite.uvFlip != uvFlip) {
+		animation.startAnimation(animationName);
+		sprite.uvFlip = uvFlip;
 	}
 }
 

@@ -17,6 +17,16 @@ local packs = {
                 spriteSize = {
                     x = 32,
                     y = 48
+                },
+                animations = {
+                    idleSouth = {
+                        frames = { 8, 9, 10, 11, 12, 11, 10, 9 },
+                        duration = 1
+                    },
+                    idleNorth = {
+                        frames = { 16, 17, 18, 19, 20, 19, 18, 17 },
+                        duration = 1
+                    }
                 }
             }
         },

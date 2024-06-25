@@ -8,10 +8,10 @@ uniform vec2 u_SpriteSize;
 uniform vec2 u_FlipUV;
 void main()
 {
-    vec2 uvFlip = vec2(1,1);
-    vec2 flipFactor = (u_FlipUV + 1.0) * 0.5;
-    vec2 uvOffset = ((1 - flipFactor) * ( 1 - v_TexCoord ) + ( flipFactor * v_TexCoord )) * u_SpriteSize.xy;
+    vec2 uvFlip = vec2(u_FlipUV.x, -u_FlipUV.y);
+    vec2 flipFactor = (uvFlip + 1.0) * 0.5;
+    vec2 uvOffset = ((1 - flipFactor) * ( 1 - v_TexCoord ) + ( flipFactor * v_TexCoord )) * vec2(u_SpriteSize.x, -u_SpriteSize.y);
 
-    vec4 texColor = texture(u_Texture, u_SpriteUV.xy + uvOffset);
+    vec4 texColor = texture(u_Texture, u_SpriteUV.xy + uvOffset.xy);
     color = texColor * u_Color;
 }

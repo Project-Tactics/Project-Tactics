@@ -9,6 +9,7 @@ set(HEADERS
     Json/JsonSerialization.h
     Math.h
     Service/ServiceLocator.h
+    HashString.h
     ImGuiUtilities.h
     Ini/IniMathConverter.h
     Reflection.h
@@ -21,15 +22,17 @@ set(SOURCES
     Color.cpp
     Exception.cpp
     Math.cpp
+    HashString.cpp
     ImGuiUtilities.cpp
     Ini/IniMathConverter.cpp
+    Json/JsonSerialization.cpp
     Json/MathJsonSerializer.cpp
     String.cpp
     Uniforms/UniformsDescriptor.cpp
     UUID.cpp)
 
 add_library(libs_utility STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_utility PUBLIC glm fmt::fmt inicpp json_wrapper imgui)
+target_link_libraries(libs_utility PUBLIC glm fmt::fmt inicpp json_wrapper imgui entt)
 add_to_libs_folder(libs_utility)
 
 set(TEST_SOURCES Tests/Test_ServiceLocator.cpp)

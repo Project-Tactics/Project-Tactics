@@ -1,5 +1,15 @@
 #include <Libs/Resource/ResourceProvider.h>
 
+#include "../HashString.h"
+
+namespace nlohmann {
+template<>
+struct adl_serializer<tactics::hash_string> {
+	static void to_json(json& j, const tactics::hash_string& value);
+	static void from_json(const json& j, tactics::hash_string& value);
+};
+}
+
 namespace tactics {
 
 template<typename TComponent>

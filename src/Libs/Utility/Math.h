@@ -42,4 +42,17 @@ public:
 	static const glm::mat4x4 identity;
 };
 
+struct Rect {
+	union {
+		struct {
+			glm::vec2 position;
+			glm::vec2 size;
+		} rect;
+		struct {
+			glm::vec2 min;
+			glm::vec2 max;
+		} bounds;
+	};
+};
+
 }

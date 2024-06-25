@@ -19,11 +19,12 @@ struct Sprite {
 };
 
 struct SpriteAnimation {
-	float duration;
-	int i{};
-	std::vector<unsigned int> spriteIndices;
+	float currentTime = 0.0f;
+	hash_string currentAnimation = none_hash();
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteAnimation, duration, spriteIndices);
+	void startAnimation(const hash_string& animation);
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteAnimation, currentTime, currentAnimation);
 	static void defineReflection();
 };
 

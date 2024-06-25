@@ -11,8 +11,9 @@ namespace tactics::resource {
 struct SpriteSheetDescriptor {
 	std::string texture;
 	glm::vec2 spriteSize;
+	std::unordered_map<std::string, SpriteSheetAnimation> animations;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteSheetDescriptor, texture, spriteSize)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteSheetDescriptor, texture, spriteSize, animations)
 };
 
 class SpriteSheetLoader: public ResourceLoader {

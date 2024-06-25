@@ -12,17 +12,19 @@ void SpriteSystem::update(const ecs_view<Sprite, Mesh>& view) {
 	});
 }
 
-void SpriteAnimationSystem::update(const ecs_view<Sprite, SpriteAnimation>&) {
-	/*
+void SpriteAnimationSystem::update(const ecs_view<Sprite, SpriteAnimation>& view) {
 	view.each([] (auto& sprite, auto& spriteAnimation) {
-		spriteAnimation.i++;
-		if (spriteAnimation.i > 500) {
-			spriteAnimation.i = 0;
-		}
+		if (spriteAnimation.currentAnimation != none_hash()) {
+			auto& animation = sprite.spriteSheet->animations.at(spriteAnimation.currentAnimation);
 
-		sprite.spriteIndex = (int)spriteAnimation.i / 100;
+			spriteAnimation.currentTime += 1.0f / 60.0f;
+			if (spriteAnimation.currentTime >= animation.duration) {
+				spriteAnimation.currentTime = 0.0f;
+			}
+			auto frameIndex = static_cast<unsigned int>(spriteAnimation.currentTime / animation.duration * animation.frames.size());
+			sprite.spriteIndex = animation.frames[frameIndex];
+		}
 	});
-	*/
 }
 
 }

@@ -27,8 +27,12 @@ void Sprite::defineReflection() {
 
 void SpriteAnimation::defineReflection() {
 	componentReflection<SpriteAnimation>("spriteAnimation")
-		.data<&SpriteAnimation::duration>(hash("duration"))
-		.data<&SpriteAnimation::spriteIndices>(hash("spriteIndices"));
+		.data<&SpriteAnimation::currentTime>(hash("spriteIndices"));
+}
+
+void SpriteAnimation::startAnimation(const hash_string& animation) {
+	currentAnimation = animation;
+	currentTime = 0.0f;
 }
 
 }

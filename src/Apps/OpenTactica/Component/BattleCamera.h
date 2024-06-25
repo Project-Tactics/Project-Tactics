@@ -13,12 +13,15 @@ struct BattleCamera {
 	float rotationTime{};
 	float rotationSpeed{};
 	float distanceFromOrigin{};
+	float targetRotation{};
 	unsigned int nextStep{};
 	unsigned int currentStep{};
 	glm::vec3 offset{};
 	std::vector<float> rotationSteps;
 
 	float getCurrentRotationDegree() const;
+	void rotateToNextStep();
+	void rotateToPrevStep();
 
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
 		BattleCamera,

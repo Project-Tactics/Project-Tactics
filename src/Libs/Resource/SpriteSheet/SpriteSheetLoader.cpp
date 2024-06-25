@@ -6,6 +6,11 @@ std::shared_ptr<SpriteSheet> SpriteSheetLoader::load(const SpriteSheetDescriptor
 	auto spriteSheet = std::make_shared<SpriteSheet>();
 	spriteSheet->texture = _getResource<Texture>(descriptor.texture);
 	spriteSheet->spriteSize = descriptor.spriteSize;
+
+	for (auto& [name, animation] : descriptor.animations) {
+		spriteSheet->animations.insert({hash(name).value(), animation});
+	}
+
 	return spriteSheet;
 }
 

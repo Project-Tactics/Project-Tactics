@@ -170,15 +170,12 @@ void ResourceOverlayHelper::drawResource(const resource::SpriteSheet& spriteShee
 
 	auto uvSpriteSize = spriteSheet.getUVSpriteSize();
 	for (auto i = 0u; i < spriteCount; i++) {
-		auto uvCoordinates = spriteSheet.getUVCoordinates(i);
-		auto uvSize = spriteSheet.getUVSpriteSize();
 		auto imageButtonId = "Sprite" + std::to_string(i);
 		if (_drawSpriteButton(
 			imageButtonId.c_str(),
 			toImGuiTexture(*spriteSheet.texture),
 			toImVec2(spriteSheet.spriteSize),
-			toImVec2(uvCoordinates),
-			toImVec2(uvSize),
+			spriteSheet.getUVRect(i),
 			i < spriteCount - 1,
 			i)) {
 			_selectedSpriteForSpriteViewer = i;
@@ -189,14 +186,14 @@ void ResourceOverlayHelper::drawResource(const resource::SpriteSheet& spriteShee
 	_drawSpriteViewer(spriteSheet);
 }
 
-bool ResourceOverlayHelper::_drawSpriteButton(const char* id, void* texture, const ImVec2& buttonSize, const ImVec2& uv, const ImVec2& uvSize, bool isLast, unsigned int index) {
+bool ResourceOverlayHelper::_drawSpriteButton(const char* id, void* texture, const ImVec2& buttonSize, const Rect& uvRect, bool isLast, unsigned int index) {
 	auto overlayPosition = ImGui::GetCursorPos();
 	overlayPosition.x += 2;
 	overlayPosition.y += 1;
 	bool pressed = ImGui::ImageButton(id, texture,
 		ImVec2(buttonSize.x, buttonSize.y),
-		ImVec2(uv.x, uv.y + uvSize.y),
-		ImVec2(uv.x + uvSize.x, uv.y));
+		ImVec2(uvRect.bounds.min.x, uvRect.bounds.min.y),
+		ImVec2(uvRect.bounds.max.x, uvRect.bounds.max.y));
 
 	if (isLast) {
 		ImGui::SameLine();
@@ -225,13 +222,12 @@ void ResourceOverlayHelper::_drawSpriteViewer(const resource::SpriteSheet& sprit
 		auto ratio = spriteSize.y / width;
 		auto previewWidth = std::min(width, 512.f);
 		ImGui::Text("Sprite [%d]", _selectedSpriteForSpriteViewer);
-		auto uv = spriteSheet.getUVCoordinates(_selectedSpriteForSpriteViewer);
-		auto uvSpriteSize = spriteSheet.getUVSpriteSize();
+		auto uvRect = spriteSheet.getUVRect(_selectedSpriteForSpriteViewer);
 		ImGui::Image(
 			toImGuiTexture(*spriteSheet.texture),
 			{previewWidth, previewWidth * ratio},
-			ImVec2(uv.x, uv.y + uvSpriteSize.y),
-			ImVec2(uv.x + uvSpriteSize.x, uv.y),
+			toImVec2(uvRect.bounds.min),
+			toImVec2(uvRect.bounds.max),
 			{1, 1, 1, 1}
 		);
 

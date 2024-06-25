@@ -45,11 +45,11 @@ FsmEventAction DemoMapState::onKeyPress(SDL_KeyboardEvent& event) {
 	} else if (event.keysym.scancode == SDL_SCANCODE_LEFT) {
 		auto& sceneSystem = getService<SceneSystem>();
 		auto& battleCamera = sceneSystem.getCurrentCamera().getComponent<component::BattleCamera>();
-		battleCamera.nextStep = (battleCamera.nextStep + 1) % battleCamera.rotationSteps.size();
+		battleCamera.rotateToNextStep();
 	} else if (event.keysym.scancode == SDL_SCANCODE_RIGHT) {
 		auto& sceneSystem = getService<SceneSystem>();
 		auto& battleCamera = sceneSystem.getCurrentCamera().getComponent<component::BattleCamera>();
-		battleCamera.nextStep = (battleCamera.nextStep - 1) % battleCamera.rotationSteps.size();
+		battleCamera.rotateToPrevStep();
 	}
 
 	return FsmEventAction::none();
@@ -71,7 +71,7 @@ void DemoMapState::_createScene() {
 	};
 
 	auto positions = std::array{
-		CharLayout{{-0.56f, 0, -0.56f}, Facing::West},
+		CharLayout{{-0.56f, 0, -0.56f}, Facing::East},
 		CharLayout{{-1.12f, 0, -0.56f}, Facing::West},
 		CharLayout{{-0.56f, 0, 2.80f}, Facing::South},
 		CharLayout{{-1.12f, 0, 2.80f}, Facing::North}
