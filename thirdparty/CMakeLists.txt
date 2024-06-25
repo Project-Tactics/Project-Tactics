@@ -43,6 +43,13 @@ add_subdirectory(cereal)
 add_library(inicpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/inifile-cpp/include/inicpp.h)
 target_include_directories(inicpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/inifile-cpp/include)
 
+# Adding spdlog as a logging library
+# https://github.com/gabime/spdlog
+# Let's grab only the include folder and the header files
+file(GLOB_RECURSE SPDLOG_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include/spdlog/*.h")
+add_library(spdlog INTERFACE ${SPDLOG_HEADERS})
+target_include_directories(spdlog INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include)
+
 # Adding entt as an entity-component-system library
 # https://github.com/skypjack/entt
 # We're not really in need of going through their cmakelists.txt
@@ -50,6 +57,6 @@ add_library(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/single_include/entt/
 target_include_directories(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/single_include)
 
 # Let's keep things clean and tidy by moving all the thirdparty libs to a folder
-set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui imgui_node_editor fmt sol2 stb inicpp entt cereal PROPERTY FOLDER "thirdparty")
+set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui imgui_node_editor fmt sol2 stb inicpp entt cereal spdlog PROPERTY FOLDER "thirdparty")
 # sol2 is including these extra CI targets that we don't need. Let's move them to the same thirdparty folder but later we'll just get rid of them
 set_property(TARGET Continuous Experimental Nightly NightlyMemoryCheck PROPERTY FOLDER "thirdparty")
