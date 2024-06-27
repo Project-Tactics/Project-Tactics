@@ -3,6 +3,7 @@
 #include "FsmExternalController.h"
 
 #include <Libs/Utility/Exception.h>
+#include <Libs/Utility/Log/Log.h>
 
 #include <string>
 #include <memory>
@@ -16,7 +17,7 @@ Fsm::Fsm(FsmStateEntries states, std::string_view startStateName, FsmExternalCon
 	, _startStateName(startStateName)
 	, _externalController(externalController) {
 	if (!_states.contains(startStateName)) {
-		throw TACTICS_EXCEPTION("Cannot create Fsm with starting state [{}]. The state does not exist.", _startStateName);
+		LOG_ERROR(Log::Fsm, "Cannot create Fsm with starting state [{}]. The state does not exist.", _startStateName);
 	}
 }
 
@@ -51,14 +52,17 @@ bool Fsm::_performExternalUpdateTransition() {
 void Fsm::_goToState(std::string_view stateName) {
 	FsmStateEntry* nextState = _getStateByName(stateName);
 	if (!nextState) {
-		throw TACTICS_EXCEPTION("Cannot jump to state [{}]. The state does not exist.", stateName);
+		LOG_ERROR(Log::Fsm, "Cannot jump to state [{}]. The state does not exist.", stateName);
+		return;
 	}
 
 	if (_currentState) {
+		LOG_TRACE(Log::Fsm, "Exit state [{}]", _currentState->name);
 		_currentState->state->exit();
 	}
 	_currentState = nextState;
 	nextState = nullptr;
+	LOG_TRACE(Log::Fsm, "Enter state [{}]", _currentState->name);
 	auto action = _currentState->state->enter();
 	_performAction<FsmAction>(action);
 }
@@ -68,14 +72,15 @@ bool Fsm::hasReachedExitState() const {
 }
 
 void Fsm::_executeTransition(std::string_view transition) {
-	// Look for the correct transition
+	LOG_TRACE(Log::Fsm, "Executing [{}] transition from state [{}]", transition, _currentState->name);
 	FsmTransitions& transitions = _currentState->transitions;
 	auto itr = transitions.find(transition.data());
 	if (itr == transitions.end()) {
-		throw TACTICS_EXCEPTION("Cannot execute transition from state [{}]. Transition [{}] does not exist.", _currentState->name, transition);
+		LOG_ERROR(Log::Fsm, "Cannot execute transition from state [{}]. Transition [{}] does not exist.",
+			_currentState->name, transition);
+		return;
 	}
 
-	// Check if there's at least one transition condition that evaluates to true
 	FsmTransitionTarget* transitionTarget = nullptr;
 	for (auto& target : itr->second) {
 		if (!target.condition || target.condition()) {
@@ -84,11 +89,13 @@ void Fsm::_executeTransition(std::string_view transition) {
 		}
 	}
 	if (!transitionTarget) {
-		throw TACTICS_EXCEPTION("Cannot execute transition [{}] from state [{}]. No condition evaluated to true", transition, _currentState->name);
+		LOG_ERROR(Log::Fsm, "Cannot execute transition [{}] from state [{}]. No condition evaluated to true", transition, _currentState->name);
+		return;
 	}
 
 	if (transitionTarget->stateName == exitState) {
 		_hasReachedExitState = true;
+		LOG_TRACE(Log::Fsm, "Exit state [{}]", _currentState->name);
 		_currentState->state->exit();
 		return;
 	}

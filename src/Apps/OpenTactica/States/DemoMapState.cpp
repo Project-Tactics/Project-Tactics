@@ -65,6 +65,9 @@ void DemoMapState::_createScene() {
 	sceneSystem.createEntity("char", "character");
 	sceneSystem.createEntity("shadow", "charShadow");
 
+	auto entity = sceneSystem.getEntityByName("char");
+	entity.getComponent<component::Transform>().setPosition({0, 0, 0});
+
 	struct CharLayout {
 		glm::vec3 translate;
 		Facing facing;

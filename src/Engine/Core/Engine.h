@@ -35,7 +35,10 @@ private:
 	void _initializeSDL();
 	void _internalRun();
 	void _shutdown();
+	void _registerOverlays();
+	void _unregisterOverlays();
 	void _throwIfAnyResourceIsStillLoaded();
+	void _throwIfAnyImportantLogHappened();
 
 	void _setupServiceLocator();
 	void _setupFsm(Application& application);

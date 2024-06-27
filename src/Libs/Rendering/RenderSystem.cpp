@@ -34,7 +34,9 @@ RenderSystem::RenderSystem(std::shared_ptr<resource::IniFile> configFile): _conf
 RenderSystem::~RenderSystem() {
 	_shutdownImGui();
 	SDL_GL_DeleteContext(_oglContext);
+	LOG_TRACE(Log::Rendering, "OpenGL Context Destroyed");
 	SDL_DestroyWindow(_window);
+	LOG_TRACE(Log::Rendering, "Window Destroyed");
 }
 
 RenderQueue& RenderSystem::createRenderQueue() {
@@ -93,12 +95,13 @@ void RenderSystem::render() {
 void RenderSystem::_initializeImGui() {
 	ImGui_ImplSDL2_InitForOpenGL(_window, _oglContext);
 	ImGui_ImplOpenGL3_Init();
-	LOG_TRACE(Log::Rendering, "ImGui Renderer Initialized");
+	LOG_TRACE(Log::Rendering, "ImGui Backend Initialized");
 }
 
 void RenderSystem::_shutdownImGui() {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
+	LOG_TRACE(Log::Rendering, "ImGui Backend Shutdown");
 }
 
 void RenderSystem::_setupOglVersion() {

@@ -8,6 +8,10 @@
 
 namespace tactics {
 
+std::array<int, 6> Log::_logCountsByLevel = {};
+bool Log::_isLogEnabled = false;
+std::unique_ptr<LogInstance> Log::_logInstance = std::make_unique<LogInstance>();
+
 static fmt::text_style categoryTextStyle(uint32_t rgb) {
 	return fmt::bg(fmt::rgb(rgb)) | fmt::emphasis::bold | fmt::emphasis::italic;
 }
@@ -54,6 +58,24 @@ const std::string& LogCategory::getName() const {
 	return _name;
 }
 
+static const char* toString(LogLevel level) {
+	switch (level) {
+	case LogLevel::Trace:
+		return "Trace";
+	case LogLevel::Debug:
+		return "Debug";
+	case LogLevel::Info:
+		return "Info";
+	case LogLevel::Warning:
+		return "Warning";
+	case LogLevel::Error:
+		return "Error";
+	case LogLevel::Critical:
+		return "Critical";
+	}
+	return "Unknown";
+}
+
 static spdlog::level::level_enum convertLogLevelToSpdLog(LogLevel level) {
 	switch (level) {
 	case LogLevel::Trace:
@@ -72,17 +94,32 @@ static spdlog::level::level_enum convertLogLevelToSpdLog(LogLevel level) {
 	return spdlog::level::off;
 }
 
-void Log::init(LogLevel minimumLogLevel) {
+void Log::setLogInstance(std::unique_ptr<LogInstance> logInstance) {
+	_logInstance = std::move(logInstance);
+}
+
+void LogInstance::log(const LogCategory& category, LogLevel level, const std::string& message) {
+	spdlog::get(category.getName())->log(
+		convertLogLevelToSpdLog(level),
+		fmt::format("[{}] {}", fmt::styled(category.getName(), category.getStyle()), message));
+}
+
+void LogInstance::init(LogLevel minimumLogLevel) {
 	spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] %v");
 	spdlog::set_level(convertLogLevelToSpdLog(minimumLogLevel));
 }
 
+void Log::init(LogLevel minimumLogLevel) {
+	_isLogEnabled = true;
+	_logInstance->init(minimumLogLevel);
+}
+
 void Log::log(const LogCategory& category, LogLevel level, fmt::string_view fmt, fmt::format_args args) {
-	auto message = fmt::vformat(fmt, args);
-	message = fmt::format("[{}] {}", fmt::styled(category.getName(), category.getStyle()), message);
-	spdlog::get(category.getName())->log(
-		convertLogLevelToSpdLog(level),
-		message);
+	if (!_isLogEnabled) {
+		return;
+	}
+	_logInstance->log(category, level, fmt::vformat(fmt, args));
+	++_logCountsByLevel[static_cast<int>(level)];
 }
 
 void Log::exception(const std::exception& exception) {
@@ -106,6 +143,26 @@ void Log::exception(const Exception& exception) {
 	}
 
 	log(Log::Engine, LogLevel::Critical, message, {});
+}
+
+bool Log::hasBeenLoggedOverLevel(LogLevel minimumLogLevel) {
+	auto totalCount = 0;
+	for (auto logLevelIndex = 0; auto count : _logCountsByLevel) {
+		if (logLevelIndex >= static_cast<int>(minimumLogLevel)) {
+			totalCount += count;
+		}
+		++logLevelIndex;
+	}
+	return totalCount > 0;
+}
+
+std::string Log::getLogCountRecapMessage() {
+	std::string message;
+	for (auto logLevelIndex = 0; auto count : _logCountsByLevel) {
+		message += fmt::format("{}: {}\n", toString(static_cast<LogLevel>(logLevelIndex)), count);
+		++logLevelIndex;
+	}
+	return message;
 }
 
 }

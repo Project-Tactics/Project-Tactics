@@ -95,13 +95,7 @@ void Engine::_initialize(Application& application) {
 	application.setupComponentReflections();
 	_setupFsm(application);
 
-	if (devUserConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
-		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
-		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem, *_ecs);
-		_overlaySystem->addOverlay<ResourcesOverlay>("Resources", false, *_resourceSystem);
-		_overlaySystem->addOverlay<FsmOverlay>("Fsm", false, *_fsmExternalController, *_fsmInfo);
-		_overlaySystem->addOverlay<ExampleOverlay>("ImGui Demo", false);
-	}
+	_registerOverlays();
 }
 
 void Engine::_internalRun() {
@@ -114,26 +108,45 @@ void Engine::_internalRun() {
 }
 
 void Engine::_shutdown() {
-	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
-	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
-		_overlaySystem->removeOverlay("Main");
-		_overlaySystem->removeOverlay("Rendering");
-		_overlaySystem->removeOverlay("ImGui Demo");
-	}
-	debugConfigFile.reset();
-
+	_unregisterOverlays();
 	_eventsSystem->unregisterEventsListener(_fsm.get());
 	_renderSystem.reset();
 	_overlaySystem.reset();
 	_ecs->clearPrefabsRegistry();
+	LOG_TRACE(Log::Engine, "Unload Engine Resources");
 	_resourceSystem->unloadPack("initialization");
 	_resourceSystem->unloadPack("builtinMeshes");
 	_resourceSystem->unloadPack("_internalCustomPack");
 	_throwIfAnyResourceIsStillLoaded();
+	_throwIfAnyImportantLogHappened();
 	SDL_Quit();
+	LOG_TRACE(Log::Engine, "Quit SDL");
+}
+
+void Engine::_registerOverlays() {
+	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
+	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
+		LOG_TRACE(Log::Engine, "Register Engine Overlays");
+		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
+		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem, *_ecs);
+		_overlaySystem->addOverlay<ResourcesOverlay>("Resources", false, *_resourceSystem);
+		_overlaySystem->addOverlay<FsmOverlay>("Fsm", false, *_fsmExternalController, *_fsmInfo);
+		_overlaySystem->addOverlay<ExampleOverlay>("ImGui Demo", false);
+	}
+}
+
+void Engine::_unregisterOverlays() {
+	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
+	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
+		LOG_TRACE(Log::Engine, "Unregister Engine Overlays");
+		_overlaySystem->removeOverlay("Main");
+		_overlaySystem->removeOverlay("Rendering");
+		_overlaySystem->removeOverlay("ImGui Demo");
+	}
 }
 
 void Engine::_throwIfAnyResourceIsStillLoaded() {
+	LOG_TRACE(Log::Engine, "Check if any resource is still loaded");
 	_resourceSystem->forEachManager([] (auto& manager) {
 		manager.forEachResource([] (const auto& resource) {
 			throw TACTICS_EXCEPTION(
@@ -143,6 +156,13 @@ void Engine::_throwIfAnyResourceIsStillLoaded() {
 				toString(resource.type));
 		});
 	});
+}
+
+void Engine::_throwIfAnyImportantLogHappened() {
+	if (Log::hasBeenLoggedOverLevel(LogLevel::Warning)) {
+		throw TACTICS_EXCEPTION("Do not ignore logs over warning level.\nRecap:\n{}",
+			Log::getLogCountRecapMessage());
+	}
 }
 
 void Engine::_initializeSDL() {

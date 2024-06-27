@@ -2,6 +2,7 @@
 
 #include <Libs/Utility/Exception.h>
 #include <Libs/Utility/ClassId.h>
+#include <Libs/Utility/Log/Log.h>
 
 #include <unordered_map>
 #include <memory>
@@ -39,7 +40,8 @@ public:
 	void addService(TService* service) {
 		auto id = ClassId<TService>::ID();
 		if (_services.contains(id)) {
-			throw TACTICS_EXCEPTION("Service is already registered. Class ID: {}", id);
+			LOG_WARNING(Log::Engine, "Service is already registered. Class ID: {}", id);
+			return;
 		}
 		_services[id] = std::make_unique<WrappedService<TService>>(service);
 	}
@@ -50,7 +52,8 @@ public:
 		if (auto itr = _services.find(id); itr != _services.end()) {
 			_services.erase(itr);
 		} else {
-			throw TACTICS_EXCEPTION("Can't remove Service. Service not found. Class ID: {}", id);
+			LOG_WARNING(Log::Engine, "Can't remove Service. Service not found. Class ID: {}", id);
+			return;
 		}
 	}
 

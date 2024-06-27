@@ -36,7 +36,6 @@ private:
 	[[nodiscard]] bool onEvent(SDL_Event& event) override;
 
 	void _goToState(std::string_view stateName);
-	void _performAction(FsmAction& action);
 	void _executeTransition(std::string_view transition);
 	[[nodiscard]] FsmStateEntry* _getStateByName(std::string_view stateName);
 	bool _performExternalUpdateTransition();
