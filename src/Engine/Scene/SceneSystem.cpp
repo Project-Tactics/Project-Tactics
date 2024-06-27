@@ -5,6 +5,7 @@
 #include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/FrustumComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
+#include <Libs/Ecs/Component/NameComponent.h>
 #include <Libs/Ecs/Component/SpriteComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/Component/ViewportComponent.h>
@@ -173,6 +174,17 @@ Entity SceneSystem::createEntity(
 	auto prefab = _resourceSystem.getResource<resource::Prefab>(prefabName);
 	auto entity = _ecs.createEntityFromPrefab(std::string(name), prefab->entity);
 	return entity;
+}
+
+Entity SceneSystem::getEntityByName(const hash_string& name) {
+	auto view = _ecs.sceneRegistry().view<component::Name>();
+	for (auto [entity, nameComp] : view.each()) {
+		if (nameComp.name == name) {
+			return Entity::create(entity, &_ecs.sceneRegistry());
+		}
+	}
+
+	throw TACTICS_EXCEPTION("Entity with name {} not found", name.data());
 }
 
 }

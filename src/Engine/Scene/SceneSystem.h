@@ -24,8 +24,8 @@ public:
 
 	void clearScene(bool clearCameras = false);
 
-	const entt::registry& getRegistry() const;
-	entt::registry& getRegistry();
+	[[nodiscard]] const entt::registry& getRegistry() const;
+	[[nodiscard]] entt::registry& getRegistry();
 
 	Entity createViewport(
 		const glm::vec2& topLeft,
@@ -54,7 +54,8 @@ public:
 		std::string_view prefabName
 	);
 
-	Entity getCurrentCamera();
+	[[nodiscard]] Entity getEntityByName(const hash_string& name);
+	[[nodiscard]] Entity getCurrentCamera();
 
 private:
 	void _onMeshConstructed(entt::registry& registry, entt::entity entity);
