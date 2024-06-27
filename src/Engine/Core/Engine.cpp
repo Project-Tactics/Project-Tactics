@@ -26,72 +26,68 @@
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/Texture/Texture.h>
-#include <Libs/Utility/Service/ServiceLocator.h>
 #include <Libs/Utility/Exception.h>
+#include <Libs/Utility/Log/Log.h>
 #include <Libs/Utility/Math.h>
+#include <Libs/Utility/Service/ServiceLocator.h>
 
 #include <imgui/imgui.h>
 #include <SDL.h>
-#include <fmt/format.h>
-#include <source_location>
 
 namespace tactics {
 
-void _printCallstack(const std::stacktrace& callstack) {
-	auto currentStackTrace = std::stacktrace::current();
-	std::filesystem::path rootPath((*currentStackTrace.begin()).source_file());
-	// TODO(Gerark) Very hacky to retrieve the src base folder
-	rootPath = rootPath.parent_path().parent_path().parent_path().parent_path();
-	for (auto&& entry : callstack) {
-		std::filesystem::path entryPath(entry.source_file());
-		std::filesystem::path relativePath = entryPath.lexically_relative(rootPath);
-		auto stackEntryStr = fmt::format("---\n.\\{}:{}\n{}\n", relativePath.string(), entry.source_line(), entry.description());
-		printf("%s", stackEntryStr.c_str());
-	}
-}
-
 void Engine::_run(Application& application) {
 	try {
+		Log::init(LogLevel::Trace);
+		LOG_TRACE(Log::Engine, "Engine Initialization Started");
 		auto engine = Engine();
 		engine._initialize(application);
+		LOG_INFO(Log::Engine, "Engine Initialized");
 		engine._internalRun();
+		LOG_TRACE(Log::Engine, "Engine Shutdown Started");
 		engine._shutdown();
+		LOG_TRACE(Log::Engine, "Engine Shutdown Ended");
 	}
 	catch (Exception& exception) {
-		// TODO(Gerark) Add a logger
-		printf("%s\nCallstack:\n", exception.what());
-		_printCallstack(exception.stackTrace());
+		LOG_EXCEPTION(exception);
 	}
 	catch (std::exception& exception) {
-		printf("%s", exception.what());
+		LOG_EXCEPTION(exception);
 	}
 }
 
 void Engine::_initialize(Application& application) {
 	_initializeSDL();
 
+	LOG_TRACE(Log::Engine, "FileSystem Initialization");
 	auto pathHelper = std::make_unique<PathHelper>("data");
 	auto fileLoader = std::make_unique<DefaultFileLoader>(*pathHelper.get());
 	_fileSystem = std::make_unique<FileSystem>(std::move(fileLoader), std::move(pathHelper));
 
+	LOG_TRACE(Log::Engine, "EntityComponentSystem Initialization");
 	_ecs = std::make_unique<EntityComponentSystem>();
 
+	LOG_TRACE(Log::Engine, "ResourceSystem Initialization");
 	_resourceSystem = ResourceSystemInitializer::initialize(*_fileSystem, *_ecs);
 
+	LOG_TRACE(Log::Engine, "OverlaySystem Initialization");
 	auto devUserConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
 	auto imguiSettings = _resourceSystem->getResource<resource::IniFile>("imguiSettings");
 	_overlaySystem = std::make_unique<OverlaySystem>(devUserConfigFile, *imguiSettings, *_fileSystem);
 	_overlaySystem->setEnabled(true);
 	CustomOverlayColors::initialize(*imguiSettings);
 
+	LOG_TRACE(Log::Engine, "Load Engine Resources");
 	auto configFile = _resourceSystem->getResource<resource::IniFile>("configFile");
 	_renderSystem = std::make_unique<RenderSystem>(configFile);
 	_resourceSystem->loadPack("builtinMeshes");
 	_resourceSystem->createManualPack("_internalCustomPack");
 	_resourceSystem->loadExternalResource("_internalCustomPack", resource::Texture::createNullTexture());
 
+	LOG_TRACE(Log::Engine, "EventSystem Initialization");
 	_eventsSystem = std::make_unique<EventsSystem>();
 
+	LOG_TRACE(Log::Engine, "EventSystem SceneSystem");
 	_sceneSystem = std::make_unique<SceneSystem>(*_ecs, *_resourceSystem);
 
 	_setupServiceLocator();
@@ -150,12 +146,15 @@ void Engine::_throwIfAnyResourceIsStillLoaded() {
 }
 
 void Engine::_initializeSDL() {
+	LOG_TRACE(Log::Engine, "SDL Initialization Started");
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		throw TACTICS_EXCEPTION("SDL could not initialize! SDL_Error: {}\n", SDL_GetError());
 	}
+	LOG_TRACE(Log::Engine, "SDL Initialization Ended");
 }
 
 void Engine::_setupFsm(Application& application) {
+	LOG_TRACE(Log::Engine, "Building Game FSM");
 	auto builder = FsmBuilder();
 	auto fsmStartingStateName = application.initialize(*_serviceLocator, builder);
 	if (fsmStartingStateName.empty()) {
@@ -176,8 +175,6 @@ void Engine::_setupServiceLocator() {
 	_serviceLocator->addService(_ecs.get());
 	_serviceLocator->addService(_sceneSystem.get());
 	_serviceLocator->addService(_fileSystem.get());
-
-	_ecs->sceneRegistry().ctx().emplace<ServiceLocator*>(_serviceLocator.get());
 }
 
 void Engine::_updateCommonComponentSystems() {

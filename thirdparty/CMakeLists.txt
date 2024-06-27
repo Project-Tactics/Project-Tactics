@@ -45,10 +45,9 @@ target_include_directories(inicpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/inifile-
 
 # Adding spdlog as a logging library
 # https://github.com/gabime/spdlog
-# Let's grab only the include folder and the header files
-file(GLOB_RECURSE SPDLOG_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include/spdlog/*.h")
-add_library(spdlog INTERFACE ${SPDLOG_HEADERS})
-target_include_directories(spdlog INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include)
+set(SPDLOG_FMT_EXTERNAL ON)
+set(SPDLOG_WCHAR_SUPPORT ON)
+add_subdirectory(spdlog)
 
 # Adding entt as an entity-component-system library
 # https://github.com/skypjack/entt

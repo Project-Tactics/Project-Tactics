@@ -3,6 +3,7 @@
 #include "../ResourceManager.h"
 
 #include <Libs/Utility/Exception.h>
+#include <Libs/Utility/Log/Log.h>
 
 #include <ranges>
 
@@ -66,6 +67,7 @@ void PackGroup::addResource(const std::string& name, const nlohmann::ordered_jso
 }
 
 void PackGroup::load(BaseResourceManager& manager) {
+	LOG_TRACE(Log::Resource, "Loading resources of type [{}]...", toString(_type));
 	for (auto&& resourceInfo : _resources) {
 		resourceInfo->load(manager);
 	}
@@ -129,6 +131,7 @@ PackGroup& Pack::getOrCreatePackGroup(ResourceType type) {
 }
 
 void Pack::load(const ResourceProvider& resourceProvider) {
+	LOG_TRACE(Log::Resource, "Loading Pack [{}] - Started", _name);
 	if (_isManuallyCreated) {
 		throw TACTICS_EXCEPTION("Can't load pack [{}]. A manually created pack is considered loaded by default and can't be reloaded again.", _name);
 	}
@@ -143,6 +146,8 @@ void Pack::load(const ResourceProvider& resourceProvider) {
 		}
 	}
 	_isLoaded = true;
+	LOG_TRACE(Log::Resource, "Loading Pack [{}] - Ended", _name);
+	LOG_INFO(Log::Resource, "Pack [{}] Loaded", _name);
 }
 
 void Pack::unload(const ResourceProvider& resourceProvider) {

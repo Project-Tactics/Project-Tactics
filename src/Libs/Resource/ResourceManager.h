@@ -4,6 +4,7 @@
 #include "ResourceLoader.h"
 
 #include <Libs/Utility/Exception.h>
+#include <Libs/Utility/Log/Log.h>
 
 #include <unordered_map>
 #include <memory>
@@ -70,6 +71,7 @@ public:
 
 	std::shared_ptr<BaseResource> load(const std::string& name, const nlohmann::json& data) override final {
 		std::shared_ptr<TResource> resource;
+		LOG_TRACE(Log::Resource, "Loading [{}]", name);
 		if constexpr (has_method<TResourceLoader, std::shared_ptr<TResource>, const nlohmann::json&>) {
 			resource = _loader->load(data);
 			resource->name = name;

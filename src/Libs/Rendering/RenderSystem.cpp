@@ -6,12 +6,10 @@
 
 #include <Libs/Utility/Exception.h>
 #include <Libs/Utility/Ini/IniMathConverter.h>
+#include <Libs/Utility/Log/Log.h>
 
 #include <glad/gl.h>
 #include <SDL.h>
-#include <iostream>
-#include <format>
-#include <filesystem>
 
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_sdl2.h>
@@ -64,6 +62,7 @@ void RenderSystem::_createWindow() {
 		windowSize.y,
 		SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0)
 	);
+	LOG_TRACE(Log::Rendering, "Window Created {}x{}", windowSize.x, windowSize.y);
 	if (_window == nullptr) {
 		throw TACTICS_EXCEPTION("Failed to open window: %s\n", SDL_GetError());
 	}
@@ -79,8 +78,7 @@ void RenderSystem::_initializeGlContext() {
 		throw TACTICS_EXCEPTION("Failed to initialize OpenGL context\n");
 	}
 
-	// TODO(Gerark) Move this printf once we have a proper Log System ( don't forget of removing the useless headers after that )
-	printf(std::format("Loaded OpenGL {}.{}\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version)).c_str());
+	LOG_TRACE(Log::Rendering, "Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 }
 
 void RenderSystem::render() {
@@ -95,6 +93,7 @@ void RenderSystem::render() {
 void RenderSystem::_initializeImGui() {
 	ImGui_ImplSDL2_InitForOpenGL(_window, _oglContext);
 	ImGui_ImplOpenGL3_Init();
+	LOG_TRACE(Log::Rendering, "ImGui Renderer Initialized");
 }
 
 void RenderSystem::_shutdownImGui() {

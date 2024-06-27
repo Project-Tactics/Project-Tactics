@@ -12,6 +12,7 @@ set(HEADERS
     HashString.h
     ImGuiUtilities.h
     Ini/IniMathConverter.h
+    Log/Log.h
     Reflection.h
     String.h
     TransparentTypes.h
@@ -27,12 +28,13 @@ set(SOURCES
     Ini/IniMathConverter.cpp
     Json/JsonSerialization.cpp
     Json/MathJsonSerializer.cpp
+    Log/Log.cpp
     String.cpp
     Uniforms/UniformsDescriptor.cpp
     UUID.cpp)
 
 add_library(libs_utility STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_utility PUBLIC glm fmt::fmt inicpp json_wrapper imgui entt)
+target_link_libraries(libs_utility PUBLIC glm fmt::fmt inicpp json_wrapper imgui entt PRIVATE spdlog)
 add_to_libs_folder(libs_utility)
 
 set(TEST_SOURCES Tests/Test_ServiceLocator.cpp)
