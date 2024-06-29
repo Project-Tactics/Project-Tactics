@@ -123,7 +123,7 @@ Entity SceneSystem::createViewport(const glm::vec2& topLeft, const glm::vec2& si
 }
 
 Entity SceneSystem::createCamera(
-	std::string_view name,
+	const hash_string& name,
 	const glm::vec3& position,
 	const glm::vec3& direction,
 	const glm::vec3& up,
@@ -144,8 +144,8 @@ Entity SceneSystem::createCamera(
 
 Entity SceneSystem::createEntity(
 	const glm::vec3& position,
-	std::string_view meshName,
-	std::vector<std::string> materials,
+	const hash_string& meshName,
+	const std::vector<hash_string>& materials,
 	const glm::quat& rotation,
 	const glm::vec3& scale
 ) {
@@ -159,7 +159,7 @@ Entity SceneSystem::createEntity(
 	Mesh meshComp;
 	meshComp.mesh = _resourceSystem.getResource<resource::Mesh>(meshName);
 	for (auto i = 0; i < meshComp.mesh->subMeshes.size(); ++i) {
-		const std::string& materialName = i < materials.size() ? materials[i] : materials.back();
+		auto& materialName = i < materials.size() ? materials[i] : materials.back();
 		auto material = _resourceSystem.getResource<resource::Material>(materialName);
 		meshComp.materials.push_back(resource::Material::createInstance(material));
 	}
@@ -168,11 +168,11 @@ Entity SceneSystem::createEntity(
 }
 
 Entity SceneSystem::createEntity(
-	std::string_view name,
-	std::string_view prefabName
+	const hash_string& name,
+	const hash_string& prefabName
 ) {
 	auto prefab = _resourceSystem.getResource<resource::Prefab>(prefabName);
-	auto entity = _ecs.createEntityFromPrefab(std::string(name), prefab->entity);
+	auto entity = _ecs.createEntityFromPrefab(name, prefab->entity);
 	return entity;
 }
 

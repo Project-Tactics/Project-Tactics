@@ -16,7 +16,7 @@ struct SpriteDescriptor {
 void Sprite::deserialize(const resource::ResourceProvider* resourceProvider, const nlohmann::ordered_json& jsonData) {
 	using namespace resource;
 	SpriteDescriptor descriptor = jsonData;
-	spriteSheet = resourceProvider->getResource<resource::SpriteSheet>(descriptor.spriteSheet);
+	spriteSheet = resourceProvider->getResource<resource::SpriteSheet>(hash(descriptor.spriteSheet));
 	spriteIndex = descriptor.spriteIndex;
 	uvFlip = descriptor.uvFlip;
 }

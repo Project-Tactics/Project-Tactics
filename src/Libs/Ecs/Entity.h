@@ -10,12 +10,12 @@ class EntityComponentSystem;
 
 class Entity {
 private:
-	Entity(std::string_view name, entt::registry* registry);
+	Entity(const hash_string& name, entt::registry* registry);
 
 public:
 	Entity();
 
-	static Entity create(std::string_view name, entt::registry* registry);
+	static Entity create(const hash_string& name, entt::registry* registry);
 	static Entity create(entt::entity entity, entt::registry* registry);
 	void destroy();
 

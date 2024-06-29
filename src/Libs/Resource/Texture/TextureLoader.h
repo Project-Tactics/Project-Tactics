@@ -16,10 +16,10 @@ struct TextureDescriptor {
 class TextureLoader: public ResourceLoader {
 public:
 	using ResourceLoader::ResourceLoader;
-	[[nodiscard]] std::shared_ptr<Texture> load(const std::string& name, const TextureDescriptor& descriptor);
+	[[nodiscard]] std::shared_ptr<Texture> load(const hash_string& name, const TextureDescriptor& descriptor);
 
 private:
-	std::shared_ptr<Texture> _loadTexture(const std::string& name, const std::string& filename, const TextureDescriptor& descriptor);
+	std::shared_ptr<Texture> _loadTexture(const hash_string& name, const std::string& filename, const TextureDescriptor& descriptor);
 };
 
 }

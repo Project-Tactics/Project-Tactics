@@ -6,7 +6,6 @@
 #include "ResourcePack/ResourcePack.h"
 
 #include <memory>
-#include <string_view>
 #include <unordered_map>
 
 namespace tactics {
@@ -29,19 +28,19 @@ public:
 	~ResourceSystem();
 
 	void loadPackDefinition(const std::filesystem::path& definitionPath);
-	void loadPack(std::string_view packName);
-	void unloadPack(std::string_view packName);
-	void createManualPack(std::string_view packName);
+	void loadPack(const hash_string& packName);
+	void unloadPack(const hash_string& packName);
+	void createManualPack(const hash_string& packName);
 
-	void loadExternalResource(std::string_view packName, std::shared_ptr<BaseResource> resource);
+	void loadExternalResource(const hash_string& packName, std::shared_ptr<BaseResource> resource);
 
 	template<typename TResource>
-	void loadExternalResource(std::string_view packName, std::string_view resourceName, const nlohmann::json& data) {
+	void loadExternalResource(const hash_string& packName, const hash_string& resourceName, const nlohmann::json& data) {
 		_loadExternalResource(packName, resourceName, TResource::TYPE, data);
 	}
 
 	template<typename TResource>
-	[[nodiscard]] std::shared_ptr<TResource> getResource(std::string_view name) {
+	[[nodiscard]] std::shared_ptr<TResource> getResource(const hash_string& name) {
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(name));
 	}
 
@@ -50,8 +49,7 @@ public:
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(id));
 	}
 
-
-	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType, std::string_view name) const override;
+	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType, const hash_string& name) const override;
 	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType, ResourceId id) const override;
 	[[nodiscard]] BaseResourceManager& getManager(ResourceType resourceType) const override;
 	[[nodiscard]] BaseResourceManager& getManager(ResourceType resourceType) override;
@@ -70,7 +68,7 @@ public:
 
 private:
 	void _unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager);
-	void _loadExternalResource(std::string_view packName, std::string_view resourceName, ResourceType resourceType, const nlohmann::json& data);
+	void _loadExternalResource(const hash_string& packName, const hash_string& resourceName, ResourceType resourceType, const nlohmann::json& data);
 
 	template<typename TResource>
 	BaseResourceManager* _getManager() {

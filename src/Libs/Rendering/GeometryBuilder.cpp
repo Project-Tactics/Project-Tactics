@@ -36,12 +36,12 @@ void GeometryBuilder::addIndices(std::vector<unsigned int> indices) {
 	_currentSubMesh->indices.insert(_currentSubMesh->indices.end(), indices.begin(), indices.end());
 }
 
-std::shared_ptr<resource::Mesh> GeometryBuilder::build(std::string_view name) {
+std::shared_ptr<resource::Mesh> GeometryBuilder::build(const hash_string& name) {
 	if (_currentSubMesh) {
 		throw TACTICS_EXCEPTION("GeometryBuilder: Can't build mesh. SubMesh is still active. Remember to call endSubMesh.");
 	}
 
-	auto mesh = std::make_shared<resource::Mesh>(std::string(name));
+	auto mesh = std::make_shared<resource::Mesh>(name);
 
 	for (auto& subMesh : _subMeshes) {
 		if (subMesh.vertices.empty()) {

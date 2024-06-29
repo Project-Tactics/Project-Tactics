@@ -11,10 +11,10 @@ namespace tactics::resource {
 
 /// ResourceInfo
 
-ResourceInfo::ResourceInfo(std::string_view name, const nlohmann::ordered_json& data): _name(name), _data(data) {
+ResourceInfo::ResourceInfo(hash_string name, const nlohmann::ordered_json& data): _name(name), _data(data) {
 }
 
-ResourceInfo::ResourceInfo(std::string_view name): _name(name) {
+ResourceInfo::ResourceInfo(hash_string name): _name(name) {
 }
 
 ResourceInfo::ResourceInfo(BaseResourceManager& manager, std::shared_ptr<BaseResource> resource): _name(resource->name), _resource(resource) {
@@ -23,21 +23,21 @@ ResourceInfo::ResourceInfo(BaseResourceManager& manager, std::shared_ptr<BaseRes
 
 void ResourceInfo::load(BaseResourceManager& manager) {
 	if (isLoaded()) {
-		throw TACTICS_EXCEPTION("Resource [{}] is already loaded. Can't load again.", _name);
+		throw TACTICS_EXCEPTION("Resource [{}] is already loaded. Can't load again.", toString(_name));
 	}
 	_resource = manager.load(_name, _data);
 }
 
 void ResourceInfo::unload(BaseResourceManager& manager) {
 	if (!isLoaded()) {
-		throw TACTICS_EXCEPTION("Can't unload Resource [{}] because it is not loaded.", _name);
+		throw TACTICS_EXCEPTION("Can't unload Resource [{}] because it is not loaded.", toString(_name));
 	}
 	auto id = _resource->id;
 	_resource = nullptr;
 	manager.unload(id);
 }
 
-[[nodiscard]] const std::string& ResourceInfo::getName() const {
+[[nodiscard]] const hash_string& ResourceInfo::getName() const {
 	return _name;
 }
 
@@ -58,7 +58,7 @@ void ResourceInfo::unload(BaseResourceManager& manager) {
 PackGroup::PackGroup(ResourceType type): _type(type) {
 }
 
-void PackGroup::addResource(const std::string& name, const nlohmann::ordered_json& data) {
+void PackGroup::addResource(const hash_string& name, const nlohmann::ordered_json& data) {
 	_resources.push_back(std::make_unique<ResourceInfo>(name, data));
 }
 
@@ -85,7 +85,7 @@ void PackGroup::loadExternalResource(BaseResourceManager& manager, std::shared_p
 	_resources.push_back(std::make_unique<ResourceInfo>(manager, resource));
 }
 
-void PackGroup::loadExternalResource(BaseResourceManager& manager, std::string_view name, const nlohmann::json& data) {
+void PackGroup::loadExternalResource(BaseResourceManager& manager, const hash_string& name, const nlohmann::json& data) {
 	_resources.push_back(std::make_unique<ResourceInfo>(name, data));
 	_resources.back()->load(manager);
 }
@@ -102,13 +102,13 @@ unsigned int PackGroup::getResourceCount() const {
 
 /// Pack
 
-Pack::Pack(std::string_view name, bool manuallyCreated): _name(name), _isManuallyCreated(manuallyCreated) {
+Pack::Pack(hash_string name, bool manuallyCreated): _name(name), _isManuallyCreated(manuallyCreated) {
 	// A manually created pack is always considered loaded since there's no certainty of what resources it will contain
 	// TODO(Gerark) I'm sure there's a better way to deal with this use case. Should be refactored.
 	_isLoaded = _isManuallyCreated;
 }
 
-const std::string& Pack::getName() const {
+const hash_string& Pack::getName() const {
 	return _name;
 }
 
@@ -182,10 +182,10 @@ void Pack::loadExternalResource(const ResourceProvider& resourceProvider, std::s
 	group.loadExternalResource(manager, resource);
 }
 
-void Pack::loadExternalResource(const ResourceProvider& resourceProvider, std::string_view name, ResourceType type, const nlohmann::json& data) {
+void Pack::loadExternalResource(const ResourceProvider& resourceProvider, const hash_string& name, ResourceType type, const nlohmann::json& data) {
 	if (!isManuallyCreated()) {
 		throw TACTICS_EXCEPTION("Can't load resource [{}] of type [{}] to pack [{}]. The pack has not been created manually. Descriptor: {}",
-			name, toString(type), _name, data.dump());
+			name, toString(type), toString(_name), data.dump());
 	}
 	auto& group = getOrCreatePackGroup(type);
 	auto& manager = resourceProvider.getManager(type);

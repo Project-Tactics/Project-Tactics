@@ -61,7 +61,7 @@ void DemoMapState::_createScene() {
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.clearScene();
 	auto mapName = fmt::format("map{:02d}", _mapIndex);
-	sceneSystem.createEntity("map", mapName);
+	sceneSystem.createEntity("map", hash(mapName));
 	sceneSystem.createEntity("char", "character");
 	sceneSystem.createEntity("shadow", "charShadow");
 

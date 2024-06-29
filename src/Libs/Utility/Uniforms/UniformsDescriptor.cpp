@@ -10,7 +10,7 @@ void UniformsDescriptor::fillUniformsInstance(const UniformsDescriptor& descript
 	fillUniformsInstanceWithBasicTypes(descriptor, uniforms);
 
 	for (const auto& [name, value] : descriptor.textures) {
-		auto texture = resourceProvider.getResource<resource::Texture>(value);
+		auto texture = resourceProvider.getResource<resource::Texture>(hash(value));
 		uniforms.set(name, texture);
 	}
 }

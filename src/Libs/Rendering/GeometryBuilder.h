@@ -5,9 +5,9 @@
 #include "IndexBuffer.h"
 
 #include "Libs/Utility/Exception.h"
+#include "Libs/Utility/HashString.h"
 
 #include <memory>
-#include <string_view>
 #include <vector>
 
 namespace tactics {
@@ -33,7 +33,7 @@ public:
 	void addIndices(std::vector<unsigned int> indices);
 	void endSubMesh();
 
-	std::shared_ptr<resource::Mesh> build(std::string_view name);
+	std::shared_ptr<resource::Mesh> build(const hash_string& name);
 
 private:
 	std::vector<Attributef> _attributes;

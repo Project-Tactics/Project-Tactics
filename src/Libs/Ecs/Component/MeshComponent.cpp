@@ -23,7 +23,7 @@ struct MeshDescriptor {
 
 void Mesh::deserialize(const resource::ResourceProvider* resourceProvider, const nlohmann::ordered_json& jsonData) {
 	MeshDescriptor descriptor = jsonData;
-	mesh = resourceProvider->getResource<resource::Mesh>(descriptor.mesh);
+	mesh = resourceProvider->getResource<resource::Mesh>(hash(descriptor.mesh));
 
 	auto subMeshCount = mesh->subMeshes.size();
 	if (subMeshCount != descriptor.materials.size()) {
@@ -32,7 +32,7 @@ void Mesh::deserialize(const resource::ResourceProvider* resourceProvider, const
 	}
 
 	for (auto& material : descriptor.materials) {
-		auto materialResource = resourceProvider->getResource<resource::Material>(material.material);
+		auto materialResource = resourceProvider->getResource<resource::Material>(hash(material.material));
 		auto materialInstance = resource::Material::createInstance(materialResource);
 		UniformsDescriptor::fillUniformsInstance(material.uniforms, *materialInstance, *resourceProvider);
 		materials.push_back(materialInstance);

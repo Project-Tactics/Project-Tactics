@@ -4,7 +4,7 @@
 
 namespace tactics {
 
-UnloadState::UnloadState(ServiceLocator& services, const std::string& packageName)
+UnloadState::UnloadState(ServiceLocator& services, const hash_string& packageName)
 	: FsmStateWithServices(services)
 	, _packageName(packageName) {
 }

@@ -22,8 +22,8 @@ private:
 	void _drawByTypeTabItem();
 	void _drawByPackTabItem();
 	bool _drawResourcePackCollapsingHeader(const resource::Pack& pack, float colorMultiplier);
-	bool _drawResourceTypeCollapsingHeader(const std::string& id, resource::ResourceType resourceType, unsigned int count, float colorMultiplier);
-	bool _drawResourceCollapsingHeader(bool isLoaded, const std::string& name, resource::ResourceType resourceType, const resource::BaseResource* resource, float colorMultiplier);
+	bool _drawResourceTypeCollapsingHeader(const hash_string& id, resource::ResourceType resourceType, unsigned int count, float colorMultiplier);
+	bool _drawResourceCollapsingHeader(bool isLoaded, const hash_string& name, resource::ResourceType resourceType, const resource::BaseResource* resource, float colorMultiplier);
 	void _drawHeaderTypeLegend(const resource::Pack& pack);
 
 	struct uiPackGroup {
@@ -39,7 +39,7 @@ private:
 	std::tuple<unsigned int, unsigned int> _fillInfo();
 	void _drawHeaderWithNumber(const std::string& text, size_t number);
 	void _drawPacks(const std::vector<uiPack>& packs, float colorMultiplier);
-	void _drawGroups(const std::string& id, const std::vector<uiPackGroup>& groups, float colorMultiplier);
+	void _drawGroups(const hash_string& id, const std::vector<uiPackGroup>& groups, float colorMultiplier);
 	uiPackGroup& _getOrCreateGroup(std::vector<uiPackGroup>& groups, resource::ResourceType type);
 
 	std::vector<uiPack> _loadedPacks;

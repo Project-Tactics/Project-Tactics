@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Libs/Utility/String.h>
+#include <Libs/Utility/HashString.h>
 
 #include <nlohmann/json.hpp>
 
@@ -34,21 +35,21 @@ using ResourceId = uint64_t;
 
 class BaseResource {
 public:
-	BaseResource(const std::string& name, ResourceType type);
+	BaseResource(hash_string name, ResourceType type);
 	BaseResource(BaseResource&&) = delete;
 	BaseResource(BaseResource&) = delete;
 	BaseResource& operator=(BaseResource&&) = delete;
 	virtual ~BaseResource() = default;
 
 	ResourceId id;
-	std::string name;
+	hash_string name;
 	ResourceType type;
 };
 
 template<typename TResource>
 class Resource: public BaseResource {
 public:
-	explicit Resource(const std::string& name): BaseResource(name, TResource::TYPE) {}
+	explicit Resource(hash_string name): BaseResource(name, TResource::TYPE) {}
 	Resource(): BaseResource("", TResource::TYPE) {}
 };
 
@@ -72,8 +73,14 @@ public:
 	static resource::ResourceType from(std::string_view string);
 };
 
-namespace resource {
-using ResourceTypeStr = Str<resource::ResourceType>;
 }
 
-}
+template <>
+struct fmt::formatter<tactics::resource::ResourceType > {
+public:
+	constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
+	template <typename Context>
+	constexpr auto format(tactics::resource::ResourceType const& obj, Context& ctx) const {
+		return fmt::format_to(ctx.out(), "{}", tactics::Str<tactics::resource::ResourceType>::to(obj));
+	}
+};

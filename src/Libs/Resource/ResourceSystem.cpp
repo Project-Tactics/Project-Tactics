@@ -3,10 +3,7 @@
 #include "ResourcePack/ResourcePackManager.h"
 
 #include <Libs/Utility/Exception.h>
-
-#include <fmt/format.h>
-#include <algorithm>
-#include <ranges>
+#include <Libs/Utility/Log/Log.h>
 
 namespace tactics::resource {
 
@@ -21,15 +18,15 @@ void ResourceSystem::loadPackDefinition(const std::filesystem::path& definitionP
 	_resourcePackManager->loadPackDefinition(definitionPath);
 }
 
-void ResourceSystem::loadPack(std::string_view packName) {
+void ResourceSystem::loadPack(const hash_string& packName) {
 	_resourcePackManager->loadPack(packName);
 }
 
-void ResourceSystem::unloadPack(std::string_view packName) {
+void ResourceSystem::unloadPack(const hash_string& packName) {
 	_resourcePackManager->unloadPack(packName);
 }
 
-void ResourceSystem::createManualPack(std::string_view packName) {
+void ResourceSystem::createManualPack(const hash_string& packName) {
 	_resourcePackManager->createPack(packName, true);
 }
 
@@ -52,7 +49,7 @@ void ResourceSystem::forEachPack(const std::function<void(const Pack&)>& callbac
 void ResourceSystem::registerManager(std::unique_ptr<BaseResourceManager> resourceManager) {
 	auto type = resourceManager->getType();
 	if (_resourceManagers.contains(type)) {
-		throw TACTICS_EXCEPTION("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.", toString(type));
+		LOG_ERROR(Log::Resource, "Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.", type);
 	}
 
 	_resourceManagers.insert({type, std::move(resourceManager)});
@@ -61,8 +58,8 @@ void ResourceSystem::registerManager(std::unique_ptr<BaseResourceManager> resour
 void ResourceSystem::_unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager) {
 	auto itr = _resourceManagers.find(resourceManager->getType());
 	if (itr == _resourceManagers.end()) {
-		throw TACTICS_EXCEPTION("Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.",
-			toString(resourceManager->getType()));
+		LOG_ERROR(Log::Resource, "Can't unregister a Resource Type Manager for resource of type {}. No manager is registered.", resourceManager->getType());
+		return;
 	}
 
 	_resourceManagers.erase(itr);
@@ -73,14 +70,14 @@ BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) const
 		return *itr->second;
 	}
 
-	throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", toString(resourceType));
+	throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", resourceType);
 }
 
 BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) {
 	return const_cast<ResourceSystem*>(this)->getManager(resourceType);
 }
 
-std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceType, std::string_view name) const {
+std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceType, const hash_string& name) const {
 	return _getManager(resourceType)->getResource(name);
 }
 
@@ -88,11 +85,11 @@ std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceT
 	return _getManager(resourceType)->getResource(id);
 }
 
-void ResourceSystem::loadExternalResource(std::string_view packName, std::shared_ptr<BaseResource> resource) {
+void ResourceSystem::loadExternalResource(const hash_string& packName, std::shared_ptr<BaseResource> resource) {
 	_resourcePackManager->loadExternalResource(packName, resource);
 }
 
-void ResourceSystem::_loadExternalResource(std::string_view packName, std::string_view resourceName, ResourceType resourceType, const nlohmann::json& data) {
+void ResourceSystem::_loadExternalResource(const hash_string& packName, const hash_string& resourceName, ResourceType resourceType, const nlohmann::json& data) {
 	_resourcePackManager->loadExternalResource(packName, resourceName, resourceType, data);
 }
 

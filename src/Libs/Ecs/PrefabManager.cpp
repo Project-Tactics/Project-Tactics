@@ -6,7 +6,7 @@
 
 namespace tactics {
 
-Entity PrefabManager::clonePrefabToRegistry(const std::string& name, const Entity& prefabEntity, entt::registry& destRegistry) {
+Entity PrefabManager::clonePrefabToRegistry(const hash_string& name, const Entity& prefabEntity, entt::registry& destRegistry) {
 	auto entity = Entity::create(name, &destRegistry);
 
 	auto& prefabComponent = prefabEntity.getComponent<component::Prefab>();
@@ -28,7 +28,7 @@ Entity PrefabManager::clonePrefabToRegistry(const std::string& name, const Entit
 	return entity;
 }
 
-Entity PrefabManager::createPrefab(const std::string& name, const nlohmann::ordered_json& json, const resource::ResourceProvider& resourceProvider) {
+Entity PrefabManager::createPrefab(const hash_string& name, const nlohmann::ordered_json& json, const resource::ResourceProvider& resourceProvider) {
 	auto entity = Entity::create(name, &_registry);
 	auto& prefab = entity.addComponent<component::Prefab>();
 

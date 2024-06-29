@@ -61,7 +61,7 @@ void DemoSimpleState::_createCrate() {
 	auto crate = sceneSystem.createEntity({40.0f, 5.0f, 0.0f}, "cube", {"texturedUnlit"});
 	crate.getComponent<component::Transform>().setScale({10, 10, 10});
 	crate.updateComponent<component::Mesh>([&resourceSystem] (auto& mesh) {
-		mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("crate"));
+		mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>(hash("crate")));
 	});
 }
 
@@ -92,7 +92,8 @@ void DemoSimpleState::_createQuads() {
 		for (auto y = -height / 2; y < height / 2; ++y) {
 			auto quad = sceneSystem.createEntity({-50.0f + y * 20.f, 10.0f, x * 10.f}, "quad", {"texturedUnlitWithAlpha"});
 			quad.getComponent<component::Transform>().setScale({15, 15, 15});
-			quad.getComponent<component::Mesh>().materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("tacticsIcon"));
+			quad.getComponent<component::Mesh>().materials[0]->set("u_Texture",
+				resourceSystem.getResource<resource::Texture>(hash("tacticsIcon")));
 		}
 	}
 }
@@ -169,7 +170,7 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 	resourceSystem.loadExternalResource<resource::Shader>("CustomPack", "CustomShader", descriptor);
 
 	auto material = std::make_shared<resource::Material>("colorOnly");
-	material->shader = resourceSystem.getResource<resource::Shader>("CustomShader");
+	material->shader = resourceSystem.getResource<resource::Shader>(hash("CustomShader"));
 	material->set("u_Color", {0.204f, 0.608f, 0.922f, 1.0f});
 	resourceSystem.loadExternalResource("CustomPack", material);
 

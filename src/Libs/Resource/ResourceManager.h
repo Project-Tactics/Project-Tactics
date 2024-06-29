@@ -23,10 +23,10 @@ public:
 
 	virtual ResourceType getType() const = 0;
 	virtual void unload(ResourceId resourceId) = 0;
-	virtual std::shared_ptr<BaseResource> load(const std::string& name, const nlohmann::json& data) = 0;
-	virtual std::shared_ptr<BaseResource> getResource(std::string_view name) = 0;
+	virtual std::shared_ptr<BaseResource> load(hash_string name, const nlohmann::json& data) = 0;
+	virtual std::shared_ptr<BaseResource> getResource(hash_string name) = 0;
 	virtual std::shared_ptr<BaseResource> getResource(ResourceId id) = 0;
-	virtual std::shared_ptr<BaseResource> getResource(std::string_view name) const = 0;
+	virtual std::shared_ptr<BaseResource> getResource(hash_string name) const = 0;
 	virtual std::shared_ptr<BaseResource> getResource(ResourceId id) const = 0;
 	virtual void forEachResource(const std::function<void(const BaseResource&)>& callback) const = 0;
 	virtual void registerResource(std::shared_ptr<BaseResource> resource) = 0;
@@ -49,7 +49,7 @@ public:
 	ResourceManager(std::unique_ptr<TResourceLoader> loader): _loader(std::move(loader)) {
 	}
 
-	std::shared_ptr<BaseResource> getResource(std::string_view name) override final {
+	std::shared_ptr<BaseResource> getResource(hash_string name) override final {
 		return _getTResource(name);
 	}
 
@@ -57,7 +57,7 @@ public:
 		return _getTResource(id);
 	}
 
-	std::shared_ptr<BaseResource> getResource(std::string_view name) const final {
+	std::shared_ptr<BaseResource> getResource(hash_string name) const final {
 		return _getTResource(name);
 	}
 
@@ -69,7 +69,7 @@ public:
 		return TResource::TYPE;
 	}
 
-	std::shared_ptr<BaseResource> load(const std::string& name, const nlohmann::json& data) override final {
+	std::shared_ptr<BaseResource> load(hash_string name, const nlohmann::json& data) override final {
 		std::shared_ptr<TResource> resource;
 		LOG_TRACE(Log::Resource, "Loading [{}]", name);
 		if constexpr (has_method<TResourceLoader, std::shared_ptr<TResource>, const nlohmann::json&>) {
@@ -113,7 +113,7 @@ private:
 		return const_cast<std::shared_ptr<TResource>&>(const_cast<const ResourceManager*>(this)->_getTResource(id));
 	}
 
-	std::shared_ptr<TResource>& _getTResource(std::string_view name) {
+	std::shared_ptr<TResource>& _getTResource(hash_string name) {
 		return const_cast<std::shared_ptr<TResource>&>(const_cast<const ResourceManager*>(this)->_getTResource(name));
 	}
 
@@ -125,7 +125,7 @@ private:
 		return _resources.at(id);
 	}
 
-	const std::shared_ptr<TResource>& _getTResource(std::string_view name) const {
+	const std::shared_ptr<TResource>& _getTResource(hash_string name) const {
 		auto itr = std::ranges::find_if(_resources, [name] (const auto& pair) {
 			return pair.second->name == name;
 		});

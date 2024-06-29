@@ -14,7 +14,7 @@ namespace resource {
 class PrefabLoader: public ResourceLoader {
 public:
 	PrefabLoader(FileSystem& fileSystem, const ResourceProvider& resourceProvider, EntityComponentSystem& ecs);
-	[[nodiscard]] std::shared_ptr<Prefab> load(const std::string& name, const FileDescriptor& descriptor);
+	[[nodiscard]] std::shared_ptr<Prefab> load(hash_string name, const FileDescriptor& descriptor);
 private:
 	EntityComponentSystem& _ecs;
 };

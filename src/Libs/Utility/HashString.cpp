@@ -1,6 +1,6 @@
 #include "HashString.h"
 
-#include "Exception.h"
+#include "Libs/Utility/Log/Log.h"
 
 #include <unordered_map>
 
@@ -15,7 +15,7 @@ hash_string hash(const char* str) {
 	auto hash = entt::hashed_string(str);
 	if (auto itr = hashToStringMap.find(hash.value()); itr != hashToStringMap.end()) {
 		if (itr->second != str) {
-			throw TACTICS_EXCEPTION("Hash collision detected for string '{}'. There's another string with the same hash: {}", str, itr->second);
+			LOG_CRITICAL(Log::Engine, "Hash collision detected for string '{}'. There's another string with the same hash: {}", str, itr->second);
 		}
 	}
 	hashToStringMap[hash.value()] = str;
@@ -34,9 +34,8 @@ const char* toString(const hash_string& hash) {
 	if (auto itr = hashToStringMap.find(hash.value()); itr != hashToStringMap.end()) {
 		return itr->second.c_str();
 	}
-	// TODO(Gerark) Throwing an exception just for a bad usage of the library is not ideal. Once we have a proper log library we can demote this to a warning.
-	// This thing should be treated as an exception but it might hide other exceptions which are just trying to access a string that doesn't exist.
-	throw TACTICS_EXCEPTION("Trying to get the string for hash {} but it doesn't exist. Be sure to create all hashed string through the tactics::hash method", hash.value());
+	LOG_ERROR(Log::Engine, "Trying to get the string for hash {} but it doesn't exist. Be sure to create all hashed string through the tactics::hash method", hash.value());
+	return "";
 }
 
 hash_string none_hash() {

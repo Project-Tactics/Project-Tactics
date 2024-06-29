@@ -13,7 +13,7 @@
 
 namespace tactics {
 
-LoadState::LoadState(ServiceLocator& services, const std::string& resourceDefinitionPath, const std::string& resourcePackName, const std::string& cameraPrefab)
+LoadState::LoadState(ServiceLocator& services, const std::string& resourceDefinitionPath, const hash_string& resourcePackName, const hash_string& cameraPrefab)
 	: FsmStateWithServices(services)
 	, _resourceDefinitionPath(resourceDefinitionPath)
 	, _resourcePackName(resourcePackName)

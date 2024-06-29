@@ -4,9 +4,9 @@
 
 namespace tactics {
 
-Entity::Entity(std::string_view name, entt::registry* registry): _registry(registry) {
+Entity::Entity(const hash_string& name, entt::registry* registry): _registry(registry) {
 	_entity = registry->create();
-	_registry->emplace<component::Name>(_entity, hash(name));
+	_registry->emplace<component::Name>(_entity, name);
 }
 
 Entity::Entity() {
@@ -31,7 +31,7 @@ const hash_string& Entity::getName() const {
 	return getComponent<component::Name>().name;
 }
 
-Entity Entity::create(std::string_view name, entt::registry* registry) {
+Entity Entity::create(const hash_string& name, entt::registry* registry) {
 	return Entity(name, registry);
 }
 

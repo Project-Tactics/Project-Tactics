@@ -25,7 +25,7 @@ TEST_F(ResourceTest, LoadValidPack) {
 
 	auto loader = std::make_unique<MockShaderLoader>(*_fileSystem, *_resourceSystem);
 	EXPECT_CALL(*loader, load(_, _))
-		.WillRepeatedly([] (const std::string& name, const nlohmann::ordered_json&) {
+		.WillRepeatedly([] (const hash_string& name, const nlohmann::ordered_json&) {
 		return std::make_shared<MockShaderResource>(name);
 	});
 	auto manager = std::make_unique<MockShaderManager>(std::move(loader));
@@ -40,7 +40,7 @@ TEST_F(ResourceTest, LoadValidPackAndGetResources) {
 
 	auto loader = std::make_unique<MockShaderLoader>(*_fileSystem, *_resourceSystem);
 	EXPECT_CALL(*loader, load(_, _))
-		.WillRepeatedly([] (const std::string& name, const nlohmann::ordered_json&) {
+		.WillRepeatedly([] (const hash_string& name, const nlohmann::ordered_json&) {
 		return std::make_shared<MockShaderResource>(name);
 	});
 	auto manager = std::make_unique<MockShaderManager>(std::move(loader));
@@ -59,7 +59,7 @@ TEST_F(ResourceTest, LoadValidPackAndGetResourceWithWrongName) {
 
 	auto loader = std::make_unique<MockShaderLoader>(*_fileSystem, *_resourceSystem);
 	EXPECT_CALL(*loader, load(_, _))
-		.WillRepeatedly([] (const std::string& name, const nlohmann::ordered_json&) {
+		.WillRepeatedly([] (const hash_string& name, const nlohmann::ordered_json&) {
 		return std::make_shared<MockShaderResource>(name);
 	});
 	auto manager = std::make_unique<MockShaderManager>(std::move(loader));

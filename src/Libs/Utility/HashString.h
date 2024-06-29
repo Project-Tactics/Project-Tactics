@@ -2,6 +2,7 @@
 
 #include <entt/entt.hpp>
 
+#include <fmt/format.h>
 #include <string>
 #include <string_view>
 
@@ -18,3 +19,13 @@ using hash_string = entt::hashed_string;
 [[nodiscard]] hash_string none_hash();
 
 }
+
+template <>
+struct fmt::formatter<tactics::hash_string> {
+public:
+	constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
+	template <typename Context>
+	constexpr auto format(tactics::hash_string const& obj, Context& ctx) const {
+		return format_to(ctx.out(), "{}", tactics::toString(obj));
+	}
+};

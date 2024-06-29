@@ -33,7 +33,7 @@ public:
 		const glm::vec4& clearColor = Color::black);
 
 	Entity createCamera(
-		std::string_view name,
+		const hash_string& name,
 		const glm::vec3& position,
 		const glm::vec3& direction,
 		const glm::vec3& up,
@@ -44,14 +44,14 @@ public:
 
 	Entity createEntity(
 		const glm::vec3& position,
-		std::string_view meshName,
-		std::vector<std::string> materials,
+		const hash_string& meshName,
+		const std::vector<hash_string>& materials,
 		const glm::quat& rotation = Quaternion::identity,
 		const glm::vec3& scale = Vector3::one);
 
 	Entity createEntity(
-		std::string_view name,
-		std::string_view prefabName
+		const hash_string& name,
+		const hash_string& prefabName
 	);
 
 	[[nodiscard]] Entity getEntityByName(const hash_string& name);

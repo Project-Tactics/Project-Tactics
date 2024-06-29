@@ -9,11 +9,11 @@ EntityComponentSystem::EntityComponentSystem() {
 	ComponentReflection::initializeCommonComponents();
 }
 
-Entity EntityComponentSystem::createPrefab(const std::string& name, const nlohmann::ordered_json& json, const resource::ResourceProvider& resourceProvider) {
+Entity EntityComponentSystem::createPrefab(const hash_string& name, const nlohmann::ordered_json& json, const resource::ResourceProvider& resourceProvider) {
 	return _prefabManager.createPrefab(name, json, resourceProvider);
 }
 
-Entity EntityComponentSystem::createEntityFromPrefab(const std::string& name, const Entity& prefabEntity) {
+Entity EntityComponentSystem::createEntityFromPrefab(const hash_string& name, const Entity& prefabEntity) {
 	return _prefabManager.clonePrefabToRegistry(name, prefabEntity, _sceneRegistry);
 }
 

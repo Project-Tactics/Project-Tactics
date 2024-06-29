@@ -77,14 +77,14 @@ void Engine::_initialize(Application& application) {
 	_resourceSystem = ResourceSystemInitializer::initialize(*_fileSystem, *_ecs);
 
 	LOG_TRACE(Log::Engine, "OverlaySystem Initialization");
-	auto devUserConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
-	auto imguiSettings = _resourceSystem->getResource<resource::IniFile>("imguiSettings");
+	auto devUserConfigFile = _resourceSystem->getResource<resource::IniFile>(hash("devUserConfigFile"));
+	auto imguiSettings = _resourceSystem->getResource<resource::IniFile>(hash("imguiSettings"));
 	_overlaySystem = std::make_unique<OverlaySystem>(devUserConfigFile, *imguiSettings, *_fileSystem);
 	_overlaySystem->setEnabled(true);
 	CustomOverlayColors::initialize(*imguiSettings);
 
 	LOG_TRACE(Log::Engine, "Load Engine Resources");
-	auto configFile = _resourceSystem->getResource<resource::IniFile>("configFile");
+	auto configFile = _resourceSystem->getResource<resource::IniFile>(hash("configFile"));
 	_renderSystem = std::make_unique<RenderSystem>(configFile);
 	_resourceSystem->loadPack("builtinMeshes");
 	_resourceSystem->createManualPack("_internalCustomPack");
@@ -136,7 +136,7 @@ void Engine::_shutdown() {
 }
 
 void Engine::_registerOverlays() {
-	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
+	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>(hash("devUserConfigFile"));
 	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
 		LOG_TRACE(Log::Engine, "Register Engine Overlays");
 		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
@@ -149,7 +149,7 @@ void Engine::_registerOverlays() {
 }
 
 void Engine::_unregisterOverlays() {
-	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
+	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>(hash("devUserConfigFile"));
 	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
 		LOG_TRACE(Log::Engine, "Unregister Engine Overlays");
 		_overlaySystem->removeOverlay("ImGui Demo");

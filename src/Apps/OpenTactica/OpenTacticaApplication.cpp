@@ -24,7 +24,7 @@ void OpenTacticaApplication::setupComponentReflections() {
 }
 
 std::string OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
-	auto configFile = serviceLocator.getService<resource::ResourceSystem>().getResource<resource::IniFile>("devUserConfigFile");
+	auto configFile = serviceLocator.getService<resource::ResourceSystem>().getResource<resource::IniFile>(hash("devUserConfigFile"));
 	auto state = configFile->getOrCreate("demo", "fsm", std::string("map"));
 
 	if (state == "sprite") {
