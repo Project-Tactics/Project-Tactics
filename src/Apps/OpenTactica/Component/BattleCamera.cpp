@@ -1,5 +1,7 @@
 #include "BattleCamera.h"
 
+#include <Libs/Utility/Time/EngineTime.h>
+
 #include <iostream>
 
 namespace tactics::component {
@@ -18,7 +20,7 @@ void BattleCameraSystem::update(ecs_view<BattleCamera, Transform> view) {
 		if (camera.currentStep != camera.nextStep) {
 
 			auto rotation = 0.f;
-			camera.rotationTime += camera.rotationSpeed;
+			camera.rotationTime += camera.rotationSpeed * EngineTime::fixedDeltaTime<float>();
 			if (camera.rotationTime >= 1.0f) {
 				camera.rotationTime = 0.0f;
 				camera.currentStep = camera.nextStep;

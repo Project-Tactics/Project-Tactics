@@ -175,7 +175,7 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 
 	// Now I can use the quad mesh by applying the custom material with a specialized fragment shader
 	auto customQuad = sceneSystem.createEntity({0.0f, 40.0f, 0.0f}, "customQuadMesh", {"colorOnly"});
-	customQuad.addComponent<component::RotateItem>(0.05f, Vector3::forward);
+	customQuad.addComponent<component::RotateItem>(5.f, Vector3::forward);
 }
 
 }

@@ -34,7 +34,7 @@
             225,
             315
         ],
-        "rotationSpeed": 0.025,
+        "rotationSpeed": 2,
         "rotationTime": 0,
         "currentStep": 0,
         "nextStep": 1,

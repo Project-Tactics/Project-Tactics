@@ -27,7 +27,7 @@
         "far": 1000
     },
     "rotateAroundPoint": {
-        "speed": 0.005,
+        "speed": 0.25,
         "distanceFromPoint": 100,
         "currentAngle": 0,
         "point": {

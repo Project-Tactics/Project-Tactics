@@ -1,5 +1,7 @@
 #include "RotateAroundPoint.h"
 
+#include <Libs/Utility/Time/EngineTime.h>
+
 namespace tactics::component {
 
 void RotateAroundPoint::defineReflection() {
@@ -15,7 +17,7 @@ void RotateAroundPoint::defineReflection() {
 
 void RotateAroundPointSystem::update(ecs_view<Transform, RotateAroundPoint> view) {
 	view.each([] (Transform& transform, RotateAroundPoint& rotate) {
-		rotate.currentAngle += rotate.speed;
+		rotate.currentAngle += rotate.speed * EngineTime::fixedDeltaTime<float>();
 		if (rotate.currentAngle > 2 * Math::PI) {
 			rotate.currentAngle = 0;
 		}

@@ -23,5 +23,7 @@
         "spriteSheet": "char00",
         "spriteIndex": 0
     },
-    "spriteAnimation": {}
+    "spriteAnimation": {
+        "currentAnimation": "idleSouth"
+    }
 }
