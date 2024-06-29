@@ -1,5 +1,7 @@
 #include "SpriteSystem.h"
 
+#include <Libs/Utility/Time/EngineTime.h>
+
 namespace tactics::component {
 
 void SpriteSystem::update(const ecs_view<Sprite, Mesh>& view) {
@@ -17,7 +19,7 @@ void SpriteAnimationSystem::update(const ecs_view<Sprite, SpriteAnimation>& view
 		if (spriteAnimation.currentAnimation != none_hash()) {
 			auto& animation = sprite.spriteSheet->animations.at(spriteAnimation.currentAnimation);
 
-			spriteAnimation.currentTime += 1.0f / 60.0f;
+			spriteAnimation.currentTime += EngineTime::fixedDeltaTime<float>();
 			if (spriteAnimation.currentTime >= animation.duration) {
 				spriteAnimation.currentTime = 0.0f;
 			}

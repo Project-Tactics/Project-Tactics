@@ -132,7 +132,8 @@ void Log::exception(const Exception& exception) {
 	auto currentStackTrace = std::stacktrace::current();
 
 	// TODO(Gerark) Very hacky way to retrieve the src root folder,
-	// can be improved by defining a constant in CMake
+	// Most probably we'll need to change this entire function in the future and just rely on
+	// a thirdparty library like backtrace-cpp or similar.
 	std::filesystem::path currentSourceFilePath((*currentStackTrace.begin()).source_file());
 	auto rootPath = currentSourceFilePath.parent_path().parent_path().parent_path().parent_path();
 

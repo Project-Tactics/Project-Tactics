@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
     CustomOverlayColors.cpp
+    EngineCoreOverlay.cpp
     FsmOverlay.cpp
     RenderingOverlay.cpp
     ResourceOverlayHelper.cpp
@@ -10,6 +11,7 @@ set(SOURCES
     
 set(HEADERS
     CustomOverlayColors.h
+    EngineCoreOverlay.h
     FsmOverlay.h
     RenderingOverlay.h
     ResourceOverlayHelper.h

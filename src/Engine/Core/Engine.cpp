@@ -4,6 +4,7 @@
 #include "DefaultFsmExternalController.h"
 #include "ResourceSystemInitializer.h"
 
+#include <Engine/Overlay/EngineCoreOverlay.h>
 #include <Engine/Overlay/FsmOverlay.h>
 #include <Engine/Overlay/RenderingOverlay.h>
 #include <Engine/Overlay/ResourcesOverlay.h>
@@ -30,6 +31,8 @@
 #include <Libs/Utility/Log/Log.h>
 #include <Libs/Utility/Math.h>
 #include <Libs/Utility/Service/ServiceLocator.h>
+#include <Libs/Utility/Time/EngineTime.h>
+#include <Libs/Utility/Time/TimeUtility.h>
 
 #include <imgui/imgui.h>
 #include <SDL.h>
@@ -58,6 +61,9 @@ void Engine::_run(Application& application) {
 
 void Engine::_initialize(Application& application) {
 	_initializeSDL();
+
+	_timer.setFixedDeltaTime(1.0 / 60.0);
+	EngineTime::setFrameTime(&_timer);
 
 	LOG_TRACE(Log::Engine, "FileSystem Initialization");
 	auto pathHelper = std::make_unique<PathHelper>("data");
@@ -99,10 +105,16 @@ void Engine::_initialize(Application& application) {
 }
 
 void Engine::_internalRun() {
+	_timer.reset(TimeUtility::nowInSeconds());
 	while (!_fsm->hasReachedExitState()) {
-		_eventsSystem->update();
-		_fsm->update();
-		_updateCommonComponentSystems();
+		_timer.update(TimeUtility::nowInSeconds());
+		while (_timer.hasConsumedAllTicks()) {
+			_eventsSystem->update();
+			_fsm->update();
+			_updateCommonComponentSystems();
+			_timer.consumeTick();
+		}
+
 		_renderSystem->render();
 	}
 }
@@ -128,6 +140,7 @@ void Engine::_registerOverlays() {
 	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
 		LOG_TRACE(Log::Engine, "Register Engine Overlays");
 		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
+		_overlaySystem->addOverlay<EngineCoreOverlay>("Engine", false);
 		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem, *_ecs);
 		_overlaySystem->addOverlay<ResourcesOverlay>("Resources", false, *_resourceSystem);
 		_overlaySystem->addOverlay<FsmOverlay>("Fsm", false, *_fsmExternalController, *_fsmInfo);
@@ -139,9 +152,12 @@ void Engine::_unregisterOverlays() {
 	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile");
 	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
 		LOG_TRACE(Log::Engine, "Unregister Engine Overlays");
-		_overlaySystem->removeOverlay("Main");
-		_overlaySystem->removeOverlay("Rendering");
 		_overlaySystem->removeOverlay("ImGui Demo");
+		_overlaySystem->removeOverlay("Fsm");
+		_overlaySystem->removeOverlay("Resources");
+		_overlaySystem->removeOverlay("Rendering");
+		_overlaySystem->removeOverlay("Engine");
+		_overlaySystem->removeOverlay("Main");
 	}
 }
 

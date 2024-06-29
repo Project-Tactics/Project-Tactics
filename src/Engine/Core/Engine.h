@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <Libs/Utility/Time/FrameTimer.h>
+
 struct SDL_Window;
 
 namespace tactics {
@@ -45,6 +47,7 @@ private:
 
 	void _updateCommonComponentSystems();
 
+	FrameTimer _timer;
 	std::unique_ptr<FileSystem> _fileSystem;
 	std::unique_ptr<resource::ResourceSystem> _resourceSystem;
 	std::unique_ptr<OverlaySystem> _overlaySystem;
