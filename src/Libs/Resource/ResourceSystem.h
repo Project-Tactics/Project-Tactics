@@ -28,19 +28,19 @@ public:
 	~ResourceSystem();
 
 	void loadPackDefinition(const std::filesystem::path& definitionPath);
-	void loadPack(const hash_string& packName);
-	void unloadPack(const hash_string& packName);
-	void createManualPack(const hash_string& packName);
+	void loadPack(const HashId& packName);
+	void unloadPack(const HashId& packName);
+	void createManualPack(const HashId& packName);
 
-	void loadExternalResource(const hash_string& packName, std::shared_ptr<BaseResource> resource);
+	void loadExternalResource(const HashId& packName, std::shared_ptr<BaseResource> resource);
 
 	template<typename TResource>
-	void loadExternalResource(const hash_string& packName, const hash_string& resourceName, const nlohmann::json& data) {
+	void loadExternalResource(const HashId& packName, const HashId& resourceName, const nlohmann::json& data) {
 		_loadExternalResource(packName, resourceName, TResource::TYPE, data);
 	}
 
 	template<typename TResource>
-	[[nodiscard]] std::shared_ptr<TResource> getResource(const hash_string& name) {
+	[[nodiscard]] std::shared_ptr<TResource> getResource(const HashId& name) {
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(name));
 	}
 
@@ -49,7 +49,7 @@ public:
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(id));
 	}
 
-	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType, const hash_string& name) const override;
+	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType, const HashId& name) const override;
 	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType, ResourceId id) const override;
 	[[nodiscard]] BaseResourceManager& getManager(ResourceType resourceType) const override;
 	[[nodiscard]] BaseResourceManager& getManager(ResourceType resourceType) override;
@@ -68,7 +68,7 @@ public:
 
 private:
 	void _unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager);
-	void _loadExternalResource(const hash_string& packName, const hash_string& resourceName, ResourceType resourceType, const nlohmann::json& data);
+	void _loadExternalResource(const HashId& packName, const HashId& resourceName, ResourceType resourceType, const nlohmann::json& data);
 
 	template<typename TResource>
 	BaseResourceManager* _getManager() {

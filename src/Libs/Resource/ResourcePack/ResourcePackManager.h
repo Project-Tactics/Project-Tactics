@@ -24,22 +24,22 @@ public:
 	ResourcePackManager(FileSystem& pathHelper, const ResourceProvider& resourceProvider);
 	void loadPackDefinition(const std::filesystem::path& packDefinitionPath);
 
-	void loadPack(const hash_string& packName);
-	void unloadPack(const hash_string& packName);
-	Pack& createPack(const hash_string& packName, bool manuallyCreated);
+	void loadPack(const HashId& packName);
+	void unloadPack(const HashId& packName);
+	Pack& createPack(const HashId& packName, bool manuallyCreated);
 
-	void loadExternalResource(const hash_string& packName, std::shared_ptr<BaseResource> resource);
-	void loadExternalResource(const hash_string& packName, const hash_string& resourceName, ResourceType type, const nlohmann::json& data);
+	void loadExternalResource(const HashId& packName, std::shared_ptr<BaseResource> resource);
+	void loadExternalResource(const HashId& packName, const HashId& resourceName, ResourceType type, const nlohmann::json& data);
 
 	void forEachPack(const std::function<void(const Pack&)>& callback);
 
 private:
-	[[nodiscard]] Pack& _getResourcePack(const hash_string& packName);
+	[[nodiscard]] Pack& _getResourcePack(const HashId& packName);
 	[[nodiscard]] std::unique_ptr<FileHandle<nlohmann::ordered_json>> _loadPackDefinition(const std::filesystem::path& packDefinitionPath);
 
 	FileSystem& _fileSystem;
 	const ResourceProvider& _resourceProvider;
-	std::unordered_map<hash_string::hash_type, std::unique_ptr<Pack>> _packs;
+	std::unordered_map<HashId, std::unique_ptr<Pack>> _packs;
 };
 
 }

@@ -10,9 +10,9 @@
 
 namespace tactics {
 
-const std::string_view Fsm::exitState = "_Exit";
+const HashId Fsm::exitState = "_Exit"_id;
 
-Fsm::Fsm(FsmStateEntries states, std::string_view startStateName, FsmExternalController* externalController)
+Fsm::Fsm(FsmStateEntries states, const HashId& startStateName, FsmExternalController* externalController)
 	: _states(std::move(states))
 	, _startStateName(startStateName)
 	, _externalController(externalController) {
@@ -49,7 +49,7 @@ bool Fsm::_performExternalUpdateTransition() {
 	return false;
 }
 
-void Fsm::_goToState(std::string_view stateName) {
+void Fsm::_goToState(const HashId& stateName) {
 	FsmStateEntry* nextState = _getStateByName(stateName);
 	if (!nextState) {
 		LOG_ERROR(Log::Fsm, "Cannot jump to state [{}]. The state does not exist.", stateName);
@@ -71,10 +71,10 @@ bool Fsm::hasReachedExitState() const {
 	return _hasReachedExitState;
 }
 
-void Fsm::_executeTransition(std::string_view transition) {
+void Fsm::_executeTransition(const HashId& transition) {
 	LOG_TRACE(Log::Fsm, "Executing [{}] transition from state [{}]", transition, _currentState->name);
 	FsmTransitions& transitions = _currentState->transitions;
-	auto itr = transitions.find(transition.data());
+	auto itr = transitions.find(transition);
 	if (itr == transitions.end()) {
 		LOG_ERROR(Log::Fsm, "Cannot execute transition from state [{}]. Transition [{}] does not exist.",
 			_currentState->name, transition);
@@ -103,7 +103,7 @@ void Fsm::_executeTransition(std::string_view transition) {
 	_goToState(transitionTarget->stateName);
 }
 
-FsmStateEntry* Fsm::_getStateByName(std::string_view stateName) {
+FsmStateEntry* Fsm::_getStateByName(const HashId& stateName) {
 	if (auto itr = _states.find(stateName); itr != _states.end()) {
 		return itr->second.get();
 	}

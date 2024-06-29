@@ -20,7 +20,7 @@ void Texture::unbind() const {
 }
 
 std::shared_ptr<Texture> Texture::createNullTexture() {
-	auto texture = std::make_shared<Texture>("_nullTexture");
+	auto texture = std::make_shared<Texture>("_nullTexture"_id);
 	texture->rendererId = 0;
 	return texture;
 }

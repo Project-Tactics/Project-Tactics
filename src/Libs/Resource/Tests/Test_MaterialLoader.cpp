@@ -12,7 +12,7 @@ TEST_F(ResourceTest, CreateMaterialLoader) {
 
 TEST_F(ResourceTest, LoadEmptyMaterialDescriptor) {
 	MockResourceProvider mockProvider;
-	EXPECT_CALL(mockProvider, getResource(ResourceType::Shader, hash("")))
+	EXPECT_CALL(mockProvider, getResource(ResourceType::Shader, ""_id))
 		.Times(0);
 
 	MaterialLoader loader(*_fileSystem, mockProvider);
@@ -23,8 +23,8 @@ TEST_F(ResourceTest, LoadEmptyMaterialDescriptor) {
 
 TEST_F(ResourceTest, LoadMaterialWithValidShader) {
 	MockResourceProvider mockProvider;
-	EXPECT_CALL(mockProvider, getResource(ResourceType::Shader, hash("testShader")))
-		.WillOnce(Return(std::make_shared<Shader>("testShader")));
+	EXPECT_CALL(mockProvider, getResource(ResourceType::Shader, "testShader"_id))
+		.WillOnce(Return(std::make_shared<Shader>("testShader"_id)));
 
 	[[maybe_unused]] MaterialLoader loader(*_fileSystem, mockProvider);
 
@@ -43,8 +43,8 @@ TEST_F(ResourceTest, LoadMaterialWithValidShader) {
 
 TEST_F(ResourceTest, LoadMaterialWithAlphaBlend) {
 	MockResourceProvider mockProvider;
-	EXPECT_CALL(mockProvider, getResource(ResourceType::Shader, hash("testShader")))
-		.WillOnce(Return(std::make_shared<Shader>("testShader")));
+	EXPECT_CALL(mockProvider, getResource(ResourceType::Shader, "testShader"_id))
+		.WillOnce(Return(std::make_shared<Shader>("testShader"_id)));
 
 	[[maybe_unused]] MaterialLoader loader(*_fileSystem, mockProvider);
 
@@ -58,8 +58,8 @@ TEST_F(ResourceTest, LoadMaterialWithAlphaBlend) {
 
 TEST_F(ResourceTest, LoadMaterialWithCustomBuiltinUniforms) {
 	MockResourceProvider mockProvider;
-	EXPECT_CALL(mockProvider, getResource(ResourceType::Shader, hash("testShader")))
-		.WillOnce(Return(std::make_shared<Shader>("testShader")));
+	EXPECT_CALL(mockProvider, getResource(ResourceType::Shader, "testShader"_id))
+		.WillOnce(Return(std::make_shared<Shader>("testShader"_id)));
 
 	[[maybe_unused]] MaterialLoader loader(*_fileSystem, mockProvider);
 
@@ -84,13 +84,13 @@ TEST_F(ResourceTest, LoadMaterialWithCustomBuiltinUniforms) {
 
 TEST_F(ResourceTest, LoadMaterialWithTextureUniforms) {
 	MockResourceProvider mockProvider;
-	EXPECT_CALL(mockProvider, getResource(ResourceType::Shader, hash("testShader")))
+	EXPECT_CALL(mockProvider, getResource(ResourceType::Shader, "testShader"_id))
 		.Times(Exactly(1))
-		.WillOnce(Return(std::make_shared<Shader>("testShader")));
+		.WillOnce(Return(std::make_shared<Shader>("testShader"_id)));
 
-	EXPECT_CALL(mockProvider, getResource(ResourceType::Texture, hash("myTexture")))
+	EXPECT_CALL(mockProvider, getResource(ResourceType::Texture, "myTexture"_id))
 		.Times(Exactly(2))
-		.WillRepeatedly(Return(std::make_shared<Texture>("myTexture")));
+		.WillRepeatedly(Return(std::make_shared<Texture>("myTexture"_id)));
 
 	[[maybe_unused]] MaterialLoader loader(*_fileSystem, mockProvider);
 

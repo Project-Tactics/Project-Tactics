@@ -33,7 +33,7 @@ void DemoSimpleState::exit() {
 	sceneSystem.clearScene();
 
 	auto& resourceSystem = getService<resource::ResourceSystem>();
-	resourceSystem.unloadPack("CustomPack");
+	resourceSystem.unloadPack("CustomPack"_id);
 }
 
 FsmAction DemoSimpleState::update() {
@@ -46,9 +46,9 @@ FsmAction DemoSimpleState::update() {
 
 FsmEventAction DemoSimpleState::onKeyPress(SDL_KeyboardEvent& event) {
 	if (event.keysym.scancode == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
-		return FsmEventAction::transition("exit");
+		return FsmEventAction::transition("exit"_id);
 	} else if (event.keysym.scancode == SDL_Scancode::SDL_SCANCODE_SPACE) {
-		return FsmEventAction::transition("empty");
+		return FsmEventAction::transition("empty"_id);
 	}
 
 	return FsmEventAction::none();
@@ -58,17 +58,17 @@ void DemoSimpleState::_createCrate() {
 	auto& sceneSystem = getService<SceneSystem>();
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 
-	auto crate = sceneSystem.createEntity({40.0f, 5.0f, 0.0f}, "cube", {"texturedUnlit"});
+	auto crate = sceneSystem.createEntity({40.0f, 5.0f, 0.0f}, "cube"_id, {"texturedUnlit"_id});
 	crate.getComponent<component::Transform>().setScale({10, 10, 10});
 	crate.updateComponent<component::Mesh>([&resourceSystem] (auto& mesh) {
-		mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>(hash("crate")));
+		mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("crate"_id));
 	});
 }
 
 void DemoSimpleState::_createTeapot() {
 	auto& sceneSystem = getService<SceneSystem>();
 
-	auto teapot = sceneSystem.createEntity({0.0f, 0.0f, 0.0f}, "teapot", {"coloredUnlit"});
+	auto teapot = sceneSystem.createEntity({0.0f, 0.0f, 0.0f}, "teapot"_id, {"coloredUnlit"_id});
 	auto& transform = teapot.getComponent<component::Transform>();
 	transform.setRotation(glm::radians(90.0f), Vector3::up);
 	transform.setScale({5, 5, 5});
@@ -79,7 +79,7 @@ void DemoSimpleState::_createTeapot() {
 
 void DemoSimpleState::_createPlane() {
 	auto& sceneSystem = getService<SceneSystem>();
-	sceneSystem.createEntity("plane", "plane");
+	sceneSystem.createEntity("plane"_id, "plane"_id);
 }
 
 void DemoSimpleState::_createQuads() {
@@ -90,10 +90,10 @@ void DemoSimpleState::_createQuads() {
 	const int height = 4;
 	for (auto x = -width / 2; x < width / 2; ++x) {
 		for (auto y = -height / 2; y < height / 2; ++y) {
-			auto quad = sceneSystem.createEntity({-50.0f + y * 20.f, 10.0f, x * 10.f}, "quad", {"texturedUnlitWithAlpha"});
+			auto quad = sceneSystem.createEntity({-50.0f + y * 20.f, 10.0f, x * 10.f}, "quad"_id, {"texturedUnlitWithAlpha"_id});
 			quad.getComponent<component::Transform>().setScale({15, 15, 15});
 			quad.getComponent<component::Mesh>().materials[0]->set("u_Texture",
-				resourceSystem.getResource<resource::Texture>(hash("tacticsIcon")));
+				resourceSystem.getResource<resource::Texture>("tacticsIcon"_id));
 		}
 	}
 }
@@ -107,7 +107,7 @@ void DemoSimpleState::_createExtraRotatingQuads() {
 	glm::vec3 offset = {40, 25, 0};
 	for (auto x = -width / 2; x < width / 2; ++x) {
 		for (auto y = -height / 2; y < height / 2; ++y) {
-			auto quad = sceneSystem.createEntity("rotatingQuad", "simpleRotatingQuad");
+			auto quad = sceneSystem.createEntity("rotatingQuad"_id, "simpleRotatingQuad"_id);
 			auto position = glm::vec3{x * distance, y * distance, 0.0f};
 			quad.getComponent<component::Transform>().setPosition(offset + position);
 		}
@@ -116,7 +116,7 @@ void DemoSimpleState::_createExtraRotatingQuads() {
 	offset = {52, 25, 0};
 	for (auto x = -width / 2; x < width / 2; ++x) {
 		for (auto y = -height / 2; y < height / 2; ++y) {
-			auto quad = sceneSystem.createEntity("rotatingQuad", "simpleRotatingQuad");
+			auto quad = sceneSystem.createEntity("rotatingQuad"_id, "simpleRotatingQuad"_id);
 			auto position = glm::vec3{x * distance, y * distance, 0.0f};
 			quad.getComponent<component::Transform>().setPosition(offset + position);
 			quad.getComponent<component::RotateItem>().axis = Vector3::up;
@@ -126,7 +126,7 @@ void DemoSimpleState::_createExtraRotatingQuads() {
 	offset = {28, 25, 0};
 	for (auto x = -width / 2; x < width / 2; ++x) {
 		for (auto y = -height / 2; y < height / 2; ++y) {
-			auto quad = sceneSystem.createEntity("rotatingQuad", "simpleRotatingQuad");
+			auto quad = sceneSystem.createEntity("rotatingQuad"_id, "simpleRotatingQuad"_id);
 			auto position = glm::vec3{x * distance, y * distance, 0.0f};
 			quad.getComponent<component::Transform>().setPosition(offset + position);
 			quad.getComponent<component::RotateItem>().axis = Vector3::forward;
@@ -140,7 +140,7 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 
 	// Example of how to create a custom resource programmatically ( in this case a mesh )
 	// with a custom material/shader and add it to the resource system
-	resourceSystem.createManualPack("CustomPack");
+	resourceSystem.createManualPack("CustomPack"_id);
 	auto geometryBuilder = GeometryBuilder({{3}, {2}});
 	geometryBuilder.beginSubMesh();
 	geometryBuilder.addVertex({-10.f, -10.f, 0.0f, 0, 0});
@@ -150,8 +150,8 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 	geometryBuilder.addIndices({0, 1, 2});
 	geometryBuilder.addIndices({2, 3, 0});
 	geometryBuilder.endSubMesh();
-	auto triangleMesh = geometryBuilder.build("customQuadMesh");
-	resourceSystem.loadExternalResource("CustomPack", triangleMesh);
+	auto triangleMesh = geometryBuilder.build("customQuadMesh"_id);
+	resourceSystem.loadExternalResource("CustomPack"_id, triangleMesh);
 
 	// We can also create a resource by simulating the usual pack loading
 	nlohmann::json descriptor = {
@@ -167,15 +167,15 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 			)"
 	}
 	};
-	resourceSystem.loadExternalResource<resource::Shader>("CustomPack", "CustomShader", descriptor);
+	resourceSystem.loadExternalResource<resource::Shader>("CustomPack"_id, "CustomShader"_id, descriptor);
 
-	auto material = std::make_shared<resource::Material>("colorOnly");
-	material->shader = resourceSystem.getResource<resource::Shader>(hash("CustomShader"));
+	auto material = std::make_shared<resource::Material>("colorOnly"_id);
+	material->shader = resourceSystem.getResource<resource::Shader>("CustomShader"_id);
 	material->set("u_Color", {0.204f, 0.608f, 0.922f, 1.0f});
-	resourceSystem.loadExternalResource("CustomPack", material);
+	resourceSystem.loadExternalResource("CustomPack"_id, material);
 
 	// Now I can use the quad mesh by applying the custom material with a specialized fragment shader
-	auto customQuad = sceneSystem.createEntity({0.0f, 40.0f, 0.0f}, "customQuadMesh", {"colorOnly"});
+	auto customQuad = sceneSystem.createEntity({0.0f, 40.0f, 0.0f}, "customQuadMesh"_id, {"colorOnly"_id});
 	customQuad.addComponent<component::RotateItem>(5.f, Vector3::forward);
 }
 

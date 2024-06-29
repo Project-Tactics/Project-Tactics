@@ -5,7 +5,7 @@
 
 namespace tactics::resource {
 
-BaseResource::BaseResource(hash_string name, ResourceType type) {
+BaseResource::BaseResource(HashId name, ResourceType type) {
 	this->id = generateUUID();
 	this->name = name;
 	this->type = type;

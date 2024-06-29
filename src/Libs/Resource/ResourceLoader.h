@@ -17,7 +17,7 @@ protected:
 	const ResourceProvider& _getResourceProvider() const;
 
 	template<typename TResource>
-	std::shared_ptr<TResource> _getResource(const hash_string& name) {
+	std::shared_ptr<TResource> _getResource(const HashId& name) {
 		return _resourceProvider.getResource<TResource>(name);
 	}
 

@@ -29,24 +29,24 @@ void serializeFromLookAt(glm::quat& quat, const nlohmann::ordered_json& jsonData
 
 void ComponentReflection::initializeBasicTypes() {
 	entt::meta<glm::vec2>()
-		.type(hash("vec2"))
-		.data<&glm::vec2::x>(hash("x"))
-		.data<&glm::vec2::y>(hash("y"));
+		.type("vec2"_id)
+		.data<&glm::vec2::x>("x"_id)
+		.data<&glm::vec2::y>("y"_id);
 
 	entt::meta<glm::vec3>()
-		.type(hash("vec3"))
-		.data<&glm::vec3::x>(hash("x"))
-		.data<&glm::vec3::y>(hash("y"))
-		.data<&glm::vec3::z>(hash("z"));
+		.type("vec3"_id)
+		.data<&glm::vec3::x>("x"_id)
+		.data<&glm::vec3::y>("y"_id)
+		.data<&glm::vec3::z>("z"_id);
 
 	entt::meta<glm::quat>()
-		.type(hash("quat"))
-		.func<&serializeFromAngleAxis>(hash("fromAngleAxis"))
-		.func<&serializeFromLookAt>(hash("fromLookAt"))
-		.data<&glm::quat::x>(hash("x"))
-		.data<&glm::quat::y>(hash("y"))
-		.data<&glm::quat::z>(hash("z"))
-		.data<&glm::quat::w>(hash("w"));
+		.type("quat"_id)
+		.func<&serializeFromAngleAxis>("fromAngleAxis"_id)
+		.func<&serializeFromLookAt>("fromLookAt"_id)
+		.data<&glm::quat::x>("x"_id)
+		.data<&glm::quat::y>("y"_id)
+		.data<&glm::quat::z>("z"_id)
+		.data<&glm::quat::w>("w"_id);
 }
 
 void ComponentReflection::initializeCommonComponents() {

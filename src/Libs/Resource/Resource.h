@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Libs/Utility/String.h>
-#include <Libs/Utility/HashString.h>
+#include <Libs/Utility/HashId.h>
 
 #include <nlohmann/json.hpp>
 
@@ -35,22 +35,22 @@ using ResourceId = uint64_t;
 
 class BaseResource {
 public:
-	BaseResource(hash_string name, ResourceType type);
+	BaseResource(HashId name, ResourceType type);
 	BaseResource(BaseResource&&) = delete;
 	BaseResource(BaseResource&) = delete;
 	BaseResource& operator=(BaseResource&&) = delete;
 	virtual ~BaseResource() = default;
 
 	ResourceId id;
-	hash_string name;
+	HashId name;
 	ResourceType type;
 };
 
 template<typename TResource>
 class Resource: public BaseResource {
 public:
-	explicit Resource(hash_string name): BaseResource(name, TResource::TYPE) {}
-	Resource(): BaseResource("", TResource::TYPE) {}
+	explicit Resource(HashId name): BaseResource(name, TResource::TYPE) {}
+	Resource(): BaseResource(""_id, TResource::TYPE) {}
 };
 
 /*

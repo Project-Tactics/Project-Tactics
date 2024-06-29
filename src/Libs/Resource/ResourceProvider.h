@@ -12,13 +12,13 @@ class ResourceProvider {
 public:
 	virtual ~ResourceProvider() = default;
 
-	virtual std::shared_ptr<BaseResource> getResource(ResourceType resourceType, const hash_string& name) const = 0;
+	virtual std::shared_ptr<BaseResource> getResource(ResourceType resourceType, const HashId& name) const = 0;
 	virtual std::shared_ptr<BaseResource> getResource(ResourceType resourceType, ResourceId id) const = 0;
 	virtual BaseResourceManager& getManager(ResourceType resourceType) const = 0;
 	virtual BaseResourceManager& getManager(ResourceType resourceType) = 0;
 
 	template<typename TResource>
-	std::shared_ptr<TResource> getResource(const hash_string& name) const {
+	std::shared_ptr<TResource> getResource(const HashId& name) const {
 		return std::dynamic_pointer_cast<TResource>(getResource(TResource::TYPE, name));
 	}
 

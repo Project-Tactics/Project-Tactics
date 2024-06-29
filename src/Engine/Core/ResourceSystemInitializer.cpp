@@ -29,7 +29,7 @@ std::unique_ptr<resource::ResourceSystem> ResourceSystemInitializer::initialize(
 	registerManager<Prefab, PrefabLoader>(fileSystem, *resourceSystem, ecs);
 
 	resourceSystem->loadPackDefinition("engine_data.json");
-	resourceSystem->loadPack("initialization");
+	resourceSystem->loadPack("initialization"_id);
 
 	return resourceSystem;
 }

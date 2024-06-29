@@ -21,7 +21,7 @@ void ResourceOverlayHelper::drawResource(const resource::ResourceInfo& resourceI
 
 	ImGui::PushStyleColor(ImGuiCol_TabActive, toColor(resourceType, 0.4f));
 	ImGui::PushStyleColor(ImGuiCol_TabUnfocusedActive, toColor(resourceType, 0.4f));
-	ImGui::BeginTabBar(toString(resourceInfo.getName()));
+	ImGui::BeginTabBar(resourceInfo.getName().str());
 	ImGui::PopStyleColor(2);
 
 	if (resourceInfo.isLoaded()) {
@@ -109,7 +109,7 @@ void ResourceOverlayHelper::drawResource(const resource::Material& material) {
 	auto color = toColor(ResourceType::Material);
 	ImGui::TextColored(color, "Shader:");
 	ImGui::SameLine();
-	ImGui::Text("%s", toString(material.shader->name));
+	ImGui::Text("%s", material.shader->name.str());
 	for (auto&& [key, value] : material.getInts()) {
 		ImGui::TextColored(color, "%s", key.c_str());
 		ImGui::SameLine();
@@ -138,7 +138,7 @@ void ResourceOverlayHelper::drawResource(const resource::Material& material) {
 	for (auto&& [key, value] : material.getTextures()) {
 		ImGui::TextColored(color, "%s", key.c_str());
 		ImGui::SameLine();
-		ImGui::Text("%s", toString(value->name));
+		ImGui::Text("%s", value->name.str());
 	}
 	for (auto&& [key, value] : material.getMatrices()) {
 		ImGui::TextColored(color, "%s", key.c_str());

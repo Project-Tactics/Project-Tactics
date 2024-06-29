@@ -39,7 +39,7 @@ void FsmOverlay::update() {
 }
 
 void FsmOverlay::_buildModel() {
-	hash_string highlightedOutputPinId;
+	HashId highlightedOutputPinId;
 	if (_model.isAnyHovered) {
 		auto itr = std::ranges::find_if(_model.outputPins, [] (auto& pin) {
 			return pin.highlighted;
@@ -56,26 +56,30 @@ void FsmOverlay::_buildModel() {
 
 	auto& currentState = _getStateInfo(_externalController.getCurrentStateName());
 	_model.currentStateName = currentState.name;
-	_model.currentStateId = hash(currentState.name);
+	_model.currentStateId = currentState.name;
 	for (auto& [transition, targets] : currentState.transitions) {
-		auto outputPinId = hash(transition);
+		auto outputPinId = transition;
 		_model.outputPins.emplace_back(outputPinId, transition, outputPinId == highlightedOutputPinId);
 		for (auto& target : targets) {
-			auto inputPinId = hash(target.stateName + "enter");
+			auto inputPinId = HashId(std::string(target.stateName.str()) + "enter");
 			auto highlighted = outputPinId == highlightedOutputPinId;
+			auto linkHash = std::string(
+				toString(currentState.name)) +
+				toString(transition) +
+				toString(target.stateName);
 			_model.links.emplace_back(
-				hash(currentState.name + transition + target.stateName),
+				HashId(linkHash),
 				outputPinId,
 				inputPinId,
 				highlighted
 			);
 
-			auto targetId = hash(target.stateName);
+			auto targetId = target.stateName;
 			auto alreadyExists = std::ranges::any_of(_model.targets, [&targetId] (const auto& target) {
 				return target.id == targetId;
 			});
 			if (!alreadyExists) {
-				_model.targets.emplace_back(targetId, target.stateName, Pin{inputPinId, "enter", highlighted});
+				_model.targets.emplace_back(targetId, target.stateName, Pin{inputPinId, "enter"_id, highlighted});
 			}
 		}
 	}
@@ -89,7 +93,7 @@ void FsmOverlay::_drawSidePanel() {
 	ImGui::TextColored(colors.TitleTextColor, "STATES");
 	ImGui::Separator();
 	for (auto& state : _fsmInfo.states) {
-		ImGui::Text("%s", state.name.c_str());
+		ImGui::Text("%s", state.name.str());
 		if (state.name == _fsmInfo.startState) {
 			ImGui::SameLine();
 			ImGui::TextColored({0.4f, 0.4f, 0.95f, 1.f}, "[START]");
@@ -124,7 +128,7 @@ void FsmOverlay::_drawNodeGraph() {
 	ax::NodeEditor::SetCurrentEditor(nullptr);
 }
 
-FsmStateInfo& FsmOverlay::_getStateInfo(const std::string& stateName) {
+FsmStateInfo& FsmOverlay::_getStateInfo(const HashId& stateName) {
 	auto itr = std::ranges::find_if(_fsmInfo.states, [&stateName] (const FsmStateInfo& stateInfo) {
 		return stateInfo.name == stateName;
 	});
@@ -137,10 +141,10 @@ FsmStateInfo& FsmOverlay::_getStateInfo(const std::string& stateName) {
 }
 
 void FsmOverlay::_drawMainState() {
-	auto id = _model.currentStateId.value();
+	auto id = _model.currentStateId.id();
 	ax::NodeEditor::SetNodePosition(id, currentStatePosition);
 	ax::NodeEditor::BeginNode(id);
-	ImGui::Text("%s", _model.currentStateName.c_str());
+	ImGui::Text("%s", _model.currentStateName.str());
 	_drawMainStatePorts();
 	ax::NodeEditor::EndNode();
 	ax::NodeEditor::SelectNode(id);
@@ -150,7 +154,7 @@ void FsmOverlay::_drawMainStatePorts() {
 	ImGui::BeginGroup();
 
 	for (auto& pin : _model.outputPins) {
-		ax::NodeEditor::BeginPin(pin.id.value(), ax::NodeEditor::PinKind::Output);
+		ax::NodeEditor::BeginPin(pin.id.id(), ax::NodeEditor::PinKind::Output);
 		_drawTransitionButton(pin, {100, 0});
 		ImGui::SameLine();
 		auto radius = 4.0f;
@@ -182,15 +186,15 @@ void FsmOverlay::_drawTargetStates() {
 
 	for (auto&& target : _model.targets) {
 		_drawTargetState(target, position);
-		ax::NodeEditor::SelectNode(target.id.value(), true);
+		ax::NodeEditor::SelectNode(target.id.id(), true);
 		position.y += 100;
 	}
 }
 
 void FsmOverlay::_drawTargetState(Target& target, const ImVec2& position) {
-	ax::NodeEditor::SetNodePosition(target.id.value(), position);
-	ax::NodeEditor::BeginNode(target.id.value());
-	ImGui::Text("%s", target.name.c_str());
+	ax::NodeEditor::SetNodePosition(target.id.id(), position);
+	ax::NodeEditor::BeginNode(target.id.id());
+	ImGui::Text("%s", target.name.str());
 	_drawTargetStatePorts(target);
 	ax::NodeEditor::EndNode();
 }
@@ -199,7 +203,7 @@ void FsmOverlay::_drawTargetStatePorts(Target& target) {
 	ImGui::BeginGroup();
 
 	auto id = target.inputPin.id;
-	ax::NodeEditor::BeginPin(id.value(), ax::NodeEditor::PinKind::Input);
+	ax::NodeEditor::BeginPin(id.id(), ax::NodeEditor::PinKind::Input);
 	auto drawList = ImGui::GetWindowDrawList();
 
 	auto radius = 4.0f;
@@ -226,9 +230,9 @@ void FsmOverlay::_drawLinks() {
 	auto& colors = CustomOverlayColors::getColors();
 
 	for (auto& link : _model.links) {
-		auto linkId = link.id.value();
-		auto outputPinId = link.outputPinId.value();
-		auto inputPinId = link.inputPinId.value();
+		auto linkId = link.id.id();
+		auto outputPinId = link.outputPinId.id();
+		auto inputPinId = link.inputPinId.id();
 
 		ax::NodeEditor::Link(
 			linkId,
@@ -249,7 +253,7 @@ void FsmOverlay::_drawTransitionButton(Pin& pin, const ImVec2& position) {
 		ImGui::PushStyleColor(ImGuiCol_Button, colors.SelectedButtonColor);
 	}
 
-	if (ImGui::Button(pin.name.c_str(), position)) {
+	if (ImGui::Button(pin.name.str(), position)) {
 		_externalController.setNextTransition(pin.name);
 	}
 

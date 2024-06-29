@@ -2,6 +2,7 @@
 
 #include <Libs/Fsm/FsmBuilder.h>
 #include <Libs/Utility/Service/ServiceLocator.h>
+#include <Libs/Utility/HashId.h>
 
 #include <memory>
 
@@ -20,7 +21,7 @@ public:
 	 * @param fsmBuilder A builder for constructing the finite state machine.
 	 * @return The name of the initial state.
 	 */
-	virtual std::string initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) = 0;
+	virtual HashId initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) = 0;
 
 	/*
 	* Just a function of convenience to setup the reflection for each custom component which are external to the engine

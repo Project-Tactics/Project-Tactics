@@ -21,15 +21,15 @@ void defineComponentsReflection() {
 template<typename TComponent, bool DefaultDeserialization = true>
 entt::meta_factory<TComponent> componentReflection(const char* name) {
 	auto metaFactory = entt::meta<TComponent>()
-		.type(hash(name))
-		.func<&emplaceComponent<TComponent>>(hash("emplace"))
-		.func<&cloneComponent<TComponent>>(hash("clone"));
+		.type(HashId(name))
+		.func<&emplaceComponent<TComponent>>("emplace"_id)
+		.func<&cloneComponent<TComponent>>("clone"_id);
 
 
 	if constexpr (HasDeserialize<TComponent>) {
-		metaFactory.func<&TComponent::deserialize>(hash("deserialize"));
+		metaFactory.func<&TComponent::deserialize>("deserialize"_id);
 	} else if constexpr (DefaultDeserialization) {
-		metaFactory.func<&defaultJsonDeserializer<TComponent>>(hash("deserialize"));
+		metaFactory.func<&defaultJsonDeserializer<TComponent>>("deserialize"_id);
 	}
 	return metaFactory;
 }

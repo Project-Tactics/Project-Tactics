@@ -19,7 +19,7 @@ PrefabLoader::PrefabLoader(FileSystem& fileSystem, const ResourceProvider& resou
 	, _ecs(ecs) {
 }
 
-std::shared_ptr<Prefab> PrefabLoader::load(hash_string name, const FileDescriptor& descriptor) {
+std::shared_ptr<Prefab> PrefabLoader::load(HashId name, const FileDescriptor& descriptor) {
 	auto prefab = std::make_shared<Prefab>(name);
 
 	auto& fileSystem = _getFileSystem();

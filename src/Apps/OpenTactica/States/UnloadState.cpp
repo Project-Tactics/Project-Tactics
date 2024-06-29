@@ -4,7 +4,7 @@
 
 namespace tactics {
 
-UnloadState::UnloadState(ServiceLocator& services, const hash_string& packageName)
+UnloadState::UnloadState(ServiceLocator& services, const HashId& packageName)
 	: FsmStateWithServices(services)
 	, _packageName(packageName) {
 }
@@ -12,8 +12,8 @@ UnloadState::UnloadState(ServiceLocator& services, const hash_string& packageNam
 FsmAction UnloadState::enter() {
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 	resourceSystem.unloadPack(_packageName);
-	resourceSystem.unloadPack("common");
-	return FsmAction::transition("proceed");
+	resourceSystem.unloadPack("common"_id);
+	return FsmAction::transition("proceed"_id);
 }
 
 FsmAction UnloadState::update() {

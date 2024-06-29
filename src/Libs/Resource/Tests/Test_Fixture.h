@@ -30,7 +30,7 @@ public:
 class MockShaderLoader: public ResourceLoader {
 public:
 	using ResourceLoader::ResourceLoader;
-	MOCK_METHOD(std::shared_ptr<MockShaderResource>, load, (const hash_string&, const nlohmann::ordered_json&));
+	MOCK_METHOD(std::shared_ptr<MockShaderResource>, load, (const HashId&, const nlohmann::ordered_json&));
 };
 
 class MockTextureLoader: public ResourceLoader {
@@ -63,7 +63,7 @@ public:
 
 class MockResourceProvider: public ResourceProvider {
 public:
-	MOCK_METHOD(std::shared_ptr<BaseResource>, getResource, (ResourceType, const hash_string&), (const override));
+	MOCK_METHOD(std::shared_ptr<BaseResource>, getResource, (ResourceType, const HashId&), (const override));
 	MOCK_METHOD(std::shared_ptr<BaseResource>, getResource, (ResourceType, ResourceId), (const override));
 	MOCK_METHOD(BaseResourceManager&, getManager, (ResourceType), (const override));
 	MOCK_METHOD(BaseResourceManager&, getManager, (ResourceType), (override));
@@ -126,7 +126,7 @@ public:
 	void givenValidManagerRegistered() {
 		auto loader = std::make_unique<MockShaderLoader>(*_fileSystem, *_resourceSystem);
 		EXPECT_CALL(*loader, load(_, _))
-			.WillRepeatedly([] (const hash_string& name, const nlohmann::ordered_json&) {
+			.WillRepeatedly([] (const HashId& name, const nlohmann::ordered_json&) {
 			auto res = std::make_shared<MockShaderResource>(name);
 			return res;
 		});

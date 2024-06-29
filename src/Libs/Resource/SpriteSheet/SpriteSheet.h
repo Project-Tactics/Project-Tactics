@@ -4,7 +4,7 @@
 #include "../Texture/Texture.h"
 
 #include <Libs/Utility/Math.h>
-#include <Libs/Utility/HashString.h>
+#include <Libs/Utility/HashId.h>
 
 #include <unordered_map>
 
@@ -29,7 +29,7 @@ public:
 
 	std::shared_ptr<Texture> texture;
 	glm::vec2 spriteSize;
-	std::unordered_map<hash_string::hash_type, SpriteSheetAnimation> animations;
+	std::unordered_map<HashId, SpriteSheetAnimation> animations;
 };
 
 }

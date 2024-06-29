@@ -2,19 +2,19 @@
 
 #include <Libs/Fsm/FsmStateWithServices.h>
 
-#include <Libs/Utility/HashString.h>
+#include <Libs/Utility/HashId.h>
 
 namespace tactics {
 
 class UnloadState: public FsmStateWithServices {
 public:
-	UnloadState(ServiceLocator& services, const hash_string& packageName);
+	UnloadState(ServiceLocator& services, const HashId& packageName);
 	FsmAction enter() override;
 	FsmAction update() override;
 	void exit() override;
 
 private:
-	hash_string _packageName;
+	HashId _packageName;
 };
 
 }

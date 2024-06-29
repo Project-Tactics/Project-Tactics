@@ -6,20 +6,25 @@
 namespace tactics {
 
 FsmBuilder& FsmBuilder::state(std::string_view stateName, std::unique_ptr<FsmState> state) {
-	if (_states.contains(stateName)) {
+	auto hashedStateName = HashId(stateName);
+	if (_states.contains(hashedStateName)) {
 		throw TACTICS_EXCEPTION("Can't add state with name [{}]. State already exists", stateName);
 	}
-	_latestOnTransition.clear();
+	_latestOnTransition = HashId::none;
 	auto entry = std::make_unique<FsmStateEntry>();
-	entry->name = stateName;
+	entry->name = hashedStateName;
 	entry->state = std::move(state);
 	_latestState = entry.get();
-	_states.insert({stateName, std::move(entry)});
+	_states.insert({hashedStateName, std::move(entry)});
 	return *this;
 }
 
 FsmBuilder& FsmBuilder::on(std::string_view transitionName) {
-	_latestOnTransition.clear();
+	return _on(HashId(transitionName));
+}
+
+FsmBuilder& FsmBuilder::_on(const HashId& transitionName) {
+	_latestOnTransition = HashId::none;
 	if (!_latestState) {
 		throw TACTICS_EXCEPTION("Can't create a transition with name [{}]. No state has been setup in the FsmBuilder",
 			transitionName);
@@ -36,7 +41,7 @@ FsmBuilder& FsmBuilder::on(std::string_view transitionName) {
 }
 
 FsmBuilder& FsmBuilder::onAppExitRequest() {
-	return on(FsmEventListener::appExitRequestTransition);
+	return _on(FsmEventListener::appExitRequestTransition);
 }
 
 FsmBuilder& FsmBuilder::jumpTo(std::string_view targetState) {
@@ -44,25 +49,29 @@ FsmBuilder& FsmBuilder::jumpTo(std::string_view targetState) {
 }
 
 FsmBuilder& FsmBuilder::exitFsm() {
-	return jumpTo(nullptr, Fsm::exitState);
+	return _jumpTo(nullptr, Fsm::exitState);
 }
 
-FsmBuilder& FsmBuilder::jumpTo(std::function<bool()> condition, std::string_view targetState) {
+FsmBuilder& FsmBuilder::_jumpTo(std::function<bool()> condition, const HashId& targetState) {
 	if (!_latestState) {
 		throw TACTICS_EXCEPTION("Can't add a target state to jumpTo. No state has been setup in the FsmBuilder. TargetState [{}]",
 			targetState);
 	}
 
-	if (_latestOnTransition.empty()) {
+	if (_latestOnTransition.isEmpty()) {
 		throw TACTICS_EXCEPTION("Can't add a target state to jumpTo. No 'on' event has been defined yet. State [{}], TargetState [{}]",
 			_latestState->name, targetState);
 	}
 
-	_latestState->transitions[_latestOnTransition].push_back(FsmTransitionTarget{std::string(targetState), condition});
+	_latestState->transitions[_latestOnTransition].push_back(FsmTransitionTarget{targetState, condition});
 	return *this;
 }
 
-std::tuple<std::unique_ptr<Fsm>, std::unique_ptr<FsmInfo>> FsmBuilder::build(std::string_view startStateName, FsmExternalController* externalController) {
+FsmBuilder& FsmBuilder::jumpTo(std::function<bool()> condition, std::string_view targetState) {
+	return _jumpTo(condition, HashId(targetState));
+}
+
+std::tuple<std::unique_ptr<Fsm>, std::unique_ptr<FsmInfo>> FsmBuilder::build(const HashId& startStateName, FsmExternalController* externalController) {
 	if (!_states.contains(startStateName)) {
 		throw TACTICS_EXCEPTION("Can't build FSM. Start state [{}] is not valid", startStateName);
 	} else if (_states.empty()) {
@@ -72,12 +81,12 @@ std::tuple<std::unique_ptr<Fsm>, std::unique_ptr<FsmInfo>> FsmBuilder::build(std
 	auto fsmInfo = std::make_unique<FsmInfo>();
 	fsmInfo->startState = startStateName;
 	for (auto& [name, state] : _states) {
-		fsmInfo->states.emplace_back(name, state->transitions);
+		fsmInfo->states.emplace_back(state->name, state->transitions);
 	}
 
 	auto fsm = std::make_unique<Fsm>(std::move(_states), startStateName, externalController);
 	_states.clear();
-	_latestOnTransition.clear();
+	_latestOnTransition = HashId::none;
 
 	return {std::move(fsm), std::move(fsmInfo)};
 }

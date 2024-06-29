@@ -10,18 +10,18 @@ FsmAction FsmAction::none() {
 	return {};
 }
 
-FsmAction FsmAction::transition(std::string_view transitionName) {
+FsmAction FsmAction::transition(const HashId& transitionName) {
 	FsmAction result;
 	result._transitionName = transitionName;
 	return result;
 }
 
 bool FsmAction::hasTransition() const {
-	return !_transitionName.empty();
+	return !_transitionName.isEmpty();
 }
 
-const std::string& FsmAction::transitionName() const {
-	if (_transitionName.empty()) {
+const HashId& FsmAction::transitionName() const {
+	if (_transitionName.isEmpty()) {
 		throw TACTICS_EXCEPTION("FsmAction does not have a transition name");
 	}
 	return _transitionName;
@@ -39,15 +39,15 @@ FsmEventAction FsmEventAction::capture() {
 	return result;
 }
 
-FsmEventAction FsmEventAction::transition(std::string_view transitionName) {
+FsmEventAction FsmEventAction::transition(const HashId& transitionName) {
 	FsmEventAction result;
 	result._captureInput = true;
 	result._transitionName = transitionName;
 	return result;
 }
 
-const std::string& FsmEventAction::transitionName() const {
-	if (_transitionName.empty()) {
+const HashId& FsmEventAction::transitionName() const {
+	if (_transitionName.isEmpty()) {
 		throw TACTICS_EXCEPTION("FsmEventAction does not have a transition name");
 	}
 	return _transitionName;
@@ -58,7 +58,7 @@ bool FsmEventAction::wantsToCaptureInput() const {
 }
 
 bool FsmEventAction::hasTransition() const {
-	return !_transitionName.empty();
+	return !_transitionName.isEmpty();
 }
 
 }

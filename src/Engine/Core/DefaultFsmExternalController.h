@@ -6,13 +6,13 @@ namespace tactics {
 
 class DefaultFsmExternalController: public FsmExternalController {
 public:
-	FsmAction update(std::string_view currentStateName) override;
-	void setNextTransition(std::string nextTransition);
-	const std::string& getCurrentStateName() const;
+	FsmAction update(const HashId& currentStateName) override;
+	void setNextTransition(const HashId& nextTransition);
+	const HashId& getCurrentStateName() const;
 
 private:
 	FsmAction _nextTransition;
-	std::string _currentStateName;
+	HashId _currentStateName;
 };
 
 }

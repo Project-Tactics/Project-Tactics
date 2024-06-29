@@ -8,11 +8,11 @@ void RotateAroundPoint::defineReflection() {
 	using namespace entt::literals;
 
 	componentReflection<RotateAroundPoint>("rotateAroundPoint")
-		.data<&RotateAroundPoint::point>(hash("point"))
-		.data<&RotateAroundPoint::offset>(hash("offset"))
-		.data<&RotateAroundPoint::distanceFromPoint>(hash("distanceFromPoint"))
-		.data<&RotateAroundPoint::speed>(hash("speed"))
-		.data<&RotateAroundPoint::currentAngle>(hash("currentAngle"));
+		.data<&RotateAroundPoint::point>("point"_id)
+		.data<&RotateAroundPoint::offset>("offset"_id)
+		.data<&RotateAroundPoint::distanceFromPoint>("distanceFromPoint"_id)
+		.data<&RotateAroundPoint::speed>("speed"_id)
+		.data<&RotateAroundPoint::currentAngle>("currentAngle"_id);
 }
 
 void RotateAroundPointSystem::update(ecs_view<Transform, RotateAroundPoint> view) {

@@ -5,7 +5,7 @@ set(HEADERS
     ClassId.h
     Color.h
     Exception.h
-    HashString.h
+    HashId.h
     ImGuiUtilities.h
     Ini/IniMathConverter.h
     Json/MathJsonSerializer.h
@@ -25,7 +25,7 @@ set(HEADERS
 set(SOURCES
     Color.cpp
     Exception.cpp
-    HashString.cpp
+    HashId.cpp
     ImGuiUtilities.cpp
     Ini/IniMathConverter.cpp
     Json/JsonSerialization.cpp

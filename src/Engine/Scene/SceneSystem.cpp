@@ -117,13 +117,13 @@ void SceneSystem::_updateAlphaBlendFlags(entt::registry& registry, entt::entity 
 }
 
 Entity SceneSystem::createViewport(const glm::vec2& topLeft, const glm::vec2& size, const glm::vec4& clearColor) {
-	auto entity = Entity::create("viewport", &_ecs.sceneRegistry());
+	auto entity = Entity::create("viewport"_id, &_ecs.sceneRegistry());
 	entity.addComponent<component::Viewport>(topLeft, size, clearColor);
 	return entity;
 }
 
 Entity SceneSystem::createCamera(
-	const hash_string& name,
+	const HashId& name,
 	const glm::vec3& position,
 	const glm::vec3& direction,
 	const glm::vec3& up,
@@ -144,13 +144,13 @@ Entity SceneSystem::createCamera(
 
 Entity SceneSystem::createEntity(
 	const glm::vec3& position,
-	const hash_string& meshName,
-	const std::vector<hash_string>& materials,
+	const HashId& meshName,
+	const std::vector<HashId>& materials,
 	const glm::quat& rotation,
 	const glm::vec3& scale
 ) {
 	using namespace component;
-	auto entity = Entity::create("", &_ecs.sceneRegistry());
+	auto entity = Entity::create(""_id, &_ecs.sceneRegistry());
 	auto& transform = entity.addComponent<Transform>();
 	transform.setPosition(position);
 	transform.setRotation(rotation);
@@ -168,15 +168,15 @@ Entity SceneSystem::createEntity(
 }
 
 Entity SceneSystem::createEntity(
-	const hash_string& name,
-	const hash_string& prefabName
+	const HashId& name,
+	const HashId& prefabName
 ) {
 	auto prefab = _resourceSystem.getResource<resource::Prefab>(prefabName);
 	auto entity = _ecs.createEntityFromPrefab(name, prefab->entity);
 	return entity;
 }
 
-Entity SceneSystem::getEntityByName(const hash_string& name) {
+Entity SceneSystem::getEntityByName(const HashId& name) {
 	auto view = _ecs.sceneRegistry().view<component::Name>();
 	for (auto [entity, nameComp] : view.each()) {
 		if (nameComp.name == name) {
@@ -184,7 +184,7 @@ Entity SceneSystem::getEntityByName(const hash_string& name) {
 		}
 	}
 
-	throw TACTICS_EXCEPTION("Entity with name {} not found", name.data());
+	throw TACTICS_EXCEPTION("Entity with name {} not found", name.str());
 }
 
 }

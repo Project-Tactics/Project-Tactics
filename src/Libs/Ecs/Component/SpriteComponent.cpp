@@ -16,7 +16,7 @@ struct SpriteDescriptor {
 void Sprite::deserialize(const resource::ResourceProvider* resourceProvider, const nlohmann::ordered_json& jsonData) {
 	using namespace resource;
 	SpriteDescriptor descriptor = jsonData;
-	spriteSheet = resourceProvider->getResource<resource::SpriteSheet>(hash(descriptor.spriteSheet));
+	spriteSheet = resourceProvider->getResource<resource::SpriteSheet>(HashId(descriptor.spriteSheet));
 	spriteIndex = descriptor.spriteIndex;
 	uvFlip = descriptor.uvFlip;
 }
@@ -27,10 +27,10 @@ void Sprite::defineReflection() {
 
 void SpriteAnimation::defineReflection() {
 	componentReflection<SpriteAnimation>("spriteAnimation")
-		.data<&SpriteAnimation::currentTime>(hash("spriteIndices"));
+		.data<&SpriteAnimation::currentTime>("spriteIndices"_id);
 }
 
-void SpriteAnimation::startAnimation(const hash_string& animation) {
+void SpriteAnimation::startAnimation(const HashId& animation) {
 	currentAnimation = animation;
 	currentTime = 0.0f;
 }

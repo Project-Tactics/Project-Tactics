@@ -11,7 +11,7 @@ std::shared_ptr<Material> MaterialLoader::load(const MaterialDescriptor& descrip
 		throw TACTICS_EXCEPTION("MaterialDescriptor must have a valid shader.");
 	}
 
-	auto shader = _getResource<Shader>(hash(descriptor.shader));
+	auto shader = _getResource<Shader>(HashId(descriptor.shader));
 	material->shader = shader;
 	material->hasAlphaBlend = descriptor.alphaBlended;
 

@@ -16,7 +16,7 @@ void SpriteSystem::update(const ecs_view<Sprite, Mesh>& view) {
 
 void SpriteAnimationSystem::update(const ecs_view<Sprite, SpriteAnimation>& view) {
 	view.each([] (auto& sprite, auto& spriteAnimation) {
-		if (spriteAnimation.currentAnimation != none_hash()) {
+		if (!spriteAnimation.currentAnimation.isEmpty()) {
 			auto& animation = sprite.spriteSheet->animations.at(spriteAnimation.currentAnimation);
 
 			spriteAnimation.currentTime += EngineTime::fixedDeltaTime<float>();

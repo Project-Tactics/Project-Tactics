@@ -20,9 +20,9 @@ struct Sprite {
 
 struct SpriteAnimation {
 	float currentTime = 0.0f;
-	hash_string currentAnimation = none_hash();
+	HashId currentAnimation = HashId::none;
 
-	void startAnimation(const hash_string& animation);
+	void startAnimation(const HashId& animation);
 
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteAnimation, currentTime, currentAnimation);
 	static void defineReflection();

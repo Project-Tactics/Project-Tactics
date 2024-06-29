@@ -9,7 +9,7 @@ class FsmEventListener {
 public:
 	FsmEventAction onEvent(SDL_Event& event);
 
-	static std::string appExitRequestTransition;
+	const static HashId appExitRequestTransition;
 protected:
 	virtual FsmEventAction onKeyPress(SDL_KeyboardEvent& event);
 	virtual FsmEventAction onKeyRelease(SDL_KeyboardEvent& event);

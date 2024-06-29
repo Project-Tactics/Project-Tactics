@@ -8,11 +8,11 @@ void Frustum::defineReflection() {
 	using namespace entt::literals;
 
 	componentReflection<Frustum>("frustum")
-		.data<&Frustum::fov>(hash("fov"))
-		.data<&Frustum::near>(hash("near"))
-		.data<&Frustum::far>(hash("far"))
-		.data<&Frustum::aspectRatio>(hash("aspectRatio"))
-		.data<&Frustum::orthoSize>(hash("orthoSize"));
+		.data<&Frustum::fov>("fov"_id)
+		.data<&Frustum::near>("near"_id)
+		.data<&Frustum::far>("far"_id)
+		.data<&Frustum::aspectRatio>("aspectRatio"_id)
+		.data<&Frustum::orthoSize>("orthoSize"_id);
 }
 
 }

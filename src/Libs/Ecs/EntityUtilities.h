@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Libs/Utility/Service/ServiceLocator.h>
-#include <Libs/Utility/HashString.h>
+#include <Libs/Utility/HashId.h>
 
 #include <entt/entt.hpp>
 

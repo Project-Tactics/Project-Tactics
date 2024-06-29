@@ -38,7 +38,7 @@ void DemoMapState::exit() {
 
 FsmEventAction DemoMapState::onKeyPress(SDL_KeyboardEvent& event) {
 	if (event.keysym.scancode == SDL_SCANCODE_ESCAPE) {
-		return FsmEventAction::transition("exit");
+		return FsmEventAction::transition("exit"_id);
 	} else if (event.keysym.scancode == SDL_SCANCODE_RETURN) {
 		_mapIndex = (_mapIndex + 1) % 5;
 		_createScene();
@@ -61,9 +61,9 @@ void DemoMapState::_createScene() {
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.clearScene();
 	auto mapName = fmt::format("map{:02d}", _mapIndex);
-	sceneSystem.createEntity("map", hash(mapName));
-	sceneSystem.createEntity("char", "character");
-	sceneSystem.createEntity("shadow", "charShadow");
+	sceneSystem.createEntity("map"_id, HashId(mapName));
+	sceneSystem.createEntity("char"_id, "character"_id);
+	sceneSystem.createEntity("shadow"_id, "charShadow"_id);
 
 	struct CharLayout {
 		glm::vec3 translate;
@@ -78,11 +78,11 @@ void DemoMapState::_createScene() {
 	};
 
 	for (auto [pos, facing] : positions) {
-		auto character = sceneSystem.createEntity("char", "character");
+		auto character = sceneSystem.createEntity("char"_id, "character"_id);
 		auto& charTransform = character.getComponent<Transform>();
 		charTransform.translate(pos);
 		character.getComponent<CharacterFacing>().facing = facing;
-		auto shadow = sceneSystem.createEntity("shadow", "charShadow");
+		auto shadow = sceneSystem.createEntity("shadow"_id, "charShadow"_id);
 		auto& shadowTransform = shadow.getComponent<Transform>();
 		shadowTransform.translate(pos);
 	}

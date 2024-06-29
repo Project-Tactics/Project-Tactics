@@ -8,11 +8,11 @@ namespace tactics::component {
 
 void Camera::defineReflection() {
 	entt::meta<ProjectionType>()
-		.data<ProjectionType::Perspective>(hash("perspective"))
-		.data<ProjectionType::Orthographic>(hash("orthographic"));
+		.data<ProjectionType::Perspective>("perspective"_id)
+		.data<ProjectionType::Orthographic>("orthographic"_id);
 
 	componentReflection<Camera>("camera")
-		.data<&Camera::projectionType>(hash("projectionType"));
+		.data<&Camera::projectionType>("projectionType"_id);
 }
 
 Camera Camera::clone() {

@@ -4,13 +4,13 @@ namespace tactics::component {
 
 void CharacterFacing::defineReflection() {
 	entt::meta<Facing>()
-		.data<Facing::North>(hash("north"))
-		.data<Facing::South>(hash("south"))
-		.data<Facing::East>(hash("east"))
-		.data<Facing::West>(hash("west"));
+		.data<Facing::North>("north"_id)
+		.data<Facing::South>("south"_id)
+		.data<Facing::East>("east"_id)
+		.data<Facing::West>("west"_id);
 
 	componentReflection<CharacterFacing>("characterFacing")
-		.data<&CharacterFacing::facing>(hash("facing"));
+		.data<&CharacterFacing::facing>("facing"_id);
 }
 
 const std::array<std::array<Facing, 4>, 4> facingTransforms = {{
@@ -32,16 +32,16 @@ void CharacterFacingSystem::update(
 
 		switch (transformedFacing) {
 		case Facing::North:
-			_updateAnimation(animation, sprite, "idleNorth", {-1, 1});
+			_updateAnimation(animation, sprite, "idleNorth"_id, {-1, 1});
 			break;
 		case Facing::South:
-			_updateAnimation(animation, sprite, "idleSouth", {1, 1});
+			_updateAnimation(animation, sprite, "idleSouth"_id, {1, 1});
 			break;
 		case Facing::East:
-			_updateAnimation(animation, sprite, "idleSouth", {-1, 1});
+			_updateAnimation(animation, sprite, "idleSouth"_id, {-1, 1});
 			break;
 		case Facing::West:
-			_updateAnimation(animation, sprite, "idleNorth", {1, 1});
+			_updateAnimation(animation, sprite, "idleNorth"_id, {1, 1});
 			break;
 		}
 	}
@@ -50,7 +50,7 @@ void CharacterFacingSystem::update(
 void CharacterFacingSystem::_updateAnimation(
 	SpriteAnimation& animation,
 	Sprite& sprite,
-	const hash_string& animationName,
+	const HashId& animationName,
 	const glm::vec2& uvFlip) {
 	if (animation.currentAnimation != animationName || sprite.uvFlip != uvFlip) {
 		animation.startAnimation(animationName);

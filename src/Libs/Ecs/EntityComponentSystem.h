@@ -12,8 +12,8 @@ class EntityComponentSystem {
 public:
 	EntityComponentSystem();
 
-	Entity createPrefab(const hash_string& name, const nlohmann::ordered_json& jsonData, const resource::ResourceProvider& resourceProvider);
-	Entity createEntityFromPrefab(const hash_string& name, const Entity& prefabEntity);
+	Entity createPrefab(const HashId& name, const nlohmann::ordered_json& jsonData, const resource::ResourceProvider& resourceProvider);
+	Entity createEntityFromPrefab(const HashId& name, const Entity& prefabEntity);
 	void clearPrefabsRegistry();
 
 	entt::registry& sceneRegistry();

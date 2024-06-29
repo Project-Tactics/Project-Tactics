@@ -62,7 +62,7 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& strVertices, cons
 	auto vertexAttributes = _createDefaultVertexAttributes();
 	meshVertices->unbind();
 
-	auto mesh = std::make_shared<Mesh>("");
+	auto mesh = std::make_shared<Mesh>(""_id);
 	mesh->subMeshes.emplace_back(
 		0,
 		std::move(meshVertices),
@@ -82,7 +82,7 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 		throw TACTICS_EXCEPTION("Failed to load mesh: {}", importer.GetErrorString());
 	}
 
-	auto meshResource = std::make_shared<Mesh>("");
+	auto meshResource = std::make_shared<Mesh>();
 
 	// TODO(Gerark) This is a very simple loader, it only loads the first UV channel and the vertices and indices of each mesh
 	// It should be improved to load more data from the mesh like normals, tangents, bitangents, etc.

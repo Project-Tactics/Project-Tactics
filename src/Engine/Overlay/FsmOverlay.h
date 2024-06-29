@@ -27,33 +27,33 @@ private:
 	void _drawSidePanel();
 	void _drawNodeGraph();
 
-	[[nodiscard]] FsmStateInfo& _getStateInfo(const std::string& stateName);
+	[[nodiscard]] FsmStateInfo& _getStateInfo(const HashId& stateName);
 
 	DefaultFsmExternalController& _externalController;
 	FsmInfo& _fsmInfo;
 
 	struct Link {
-		hash_string id;
-		hash_string outputPinId;
-		hash_string inputPinId;
+		HashId id;
+		HashId outputPinId;
+		HashId inputPinId;
 		bool highlighted{};
 	};
 
 	struct Pin {
-		hash_string id;
-		std::string name;
+		HashId id;
+		HashId name;
 		bool highlighted{};
 	};
 
 	struct Target {
-		hash_string id;
-		std::string name;
+		HashId id;
+		HashId name;
 		Pin inputPin;
 	};
 
 	struct Model {
-		std::string currentStateName;
-		hash_string currentStateId;
+		HashId currentStateName;
+		HashId currentStateId;
 		std::vector<Pin> outputPins;
 		std::vector<Link> links;
 		std::vector<Target> targets;

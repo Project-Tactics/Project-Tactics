@@ -6,7 +6,7 @@
 
 namespace tactics {
 
-Entity PrefabManager::clonePrefabToRegistry(const hash_string& name, const Entity& prefabEntity, entt::registry& destRegistry) {
+Entity PrefabManager::clonePrefabToRegistry(const HashId& name, const Entity& prefabEntity, entt::registry& destRegistry) {
 	auto entity = Entity::create(name, &destRegistry);
 
 	auto& prefabComponent = prefabEntity.getComponent<component::Prefab>();
@@ -17,7 +17,7 @@ Entity PrefabManager::clonePrefabToRegistry(const hash_string& name, const Entit
 				name, toString(componentType), toString(prefabEntity.getName()));
 		}
 
-		if (auto cloneFunction = type.func(hash("clone"))) {
+		if (auto cloneFunction = type.func("clone"_id)) {
 			cloneFunction.invoke({}, prefabEntity, entity);
 		} else {
 			throw TACTICS_EXCEPTION("Can't create entity [{}]. Missing [clone] function for Component. A component reflection must provide it. Component: [{}]",
@@ -28,12 +28,12 @@ Entity PrefabManager::clonePrefabToRegistry(const hash_string& name, const Entit
 	return entity;
 }
 
-Entity PrefabManager::createPrefab(const hash_string& name, const nlohmann::ordered_json& json, const resource::ResourceProvider& resourceProvider) {
+Entity PrefabManager::createPrefab(const HashId& name, const nlohmann::ordered_json& json, const resource::ResourceProvider& resourceProvider) {
 	auto entity = Entity::create(name, &_registry);
 	auto& prefab = entity.addComponent<component::Prefab>();
 
 	for (auto& [key, jsonValue] : json.items()) {
-		auto id = hash(key);
+		auto id = HashId(key);
 		auto type = entt::resolve(id);
 
 		if (!type) {
@@ -43,13 +43,13 @@ Entity PrefabManager::createPrefab(const hash_string& name, const nlohmann::orde
 		prefab.componentTypes.push_back(id);
 		auto componentInstance = type.construct();
 
-		if (auto deserializer = type.func(hash("deserialize"))) {
+		if (auto deserializer = type.func("deserialize"_id)) {
 			deserializer.invoke(componentInstance, &resourceProvider, jsonValue);
 		} else {
 			throw TACTICS_EXCEPTION("Missing [deserialize] function for Component. A component reflection must provide it. Component: [{}]", key);
 		}
 
-		if (auto func = type.func(hash("emplace"))) {
+		if (auto func = type.func("emplace"_id)) {
 			func.invoke(componentInstance, entity);
 		} else {
 			throw TACTICS_EXCEPTION("Missing [emplace] function for Component. A component reflection must provide it. Component: [{}]", key);

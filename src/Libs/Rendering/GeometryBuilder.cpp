@@ -36,7 +36,7 @@ void GeometryBuilder::addIndices(std::vector<unsigned int> indices) {
 	_currentSubMesh->indices.insert(_currentSubMesh->indices.end(), indices.begin(), indices.end());
 }
 
-std::shared_ptr<resource::Mesh> GeometryBuilder::build(const hash_string& name) {
+std::shared_ptr<resource::Mesh> GeometryBuilder::build(const HashId& name) {
 	if (_currentSubMesh) {
 		throw TACTICS_EXCEPTION("GeometryBuilder: Can't build mesh. SubMesh is still active. Remember to call endSubMesh.");
 	}

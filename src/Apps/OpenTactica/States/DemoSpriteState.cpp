@@ -18,7 +18,7 @@ void DemoSpriteState::_createCharacters(const glm::vec3& offset, int count) {
 	auto& sceneSystem = getService<SceneSystem>();
 	for (auto x = 0; x < count; x++) {
 		for (auto y = 0; y < count; y++) {
-			auto entity = sceneSystem.createEntity("char", "character");
+			auto entity = sceneSystem.createEntity("char"_id, "character"_id);
 			auto& transform = entity.getComponent<component::Transform>();
 			auto position = glm::vec3(x * 1.0f, y * 1.0f, 0.0f);
 			position += offset;
@@ -39,7 +39,7 @@ FsmAction DemoSpriteState::update() {
 
 FsmEventAction DemoSpriteState::onKeyPress(SDL_KeyboardEvent& event) {
 	if (event.keysym.sym == SDLK_ESCAPE) {
-		return FsmEventAction::transition("exit");
+		return FsmEventAction::transition("exit"_id);
 	} else if (event.keysym.sym == SDLK_1) {
 		auto& sceneSystem = getService<SceneSystem>();
 		sceneSystem.clearScene();

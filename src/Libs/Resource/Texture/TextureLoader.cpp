@@ -9,7 +9,7 @@
 
 namespace tactics::resource {
 
-std::shared_ptr<Texture> TextureLoader::load(const hash_string& name, const TextureDescriptor& descriptor) {
+std::shared_ptr<Texture> TextureLoader::load(const HashId& name, const TextureDescriptor& descriptor) {
 	auto texture = _loadTexture(
 		name,
 		// TODO(Gerark) FileSystem: We should have more control on how we load the textures through filesystem and not relying on stb to do the dirty job
@@ -18,7 +18,7 @@ std::shared_ptr<Texture> TextureLoader::load(const hash_string& name, const Text
 	return texture;
 }
 
-std::shared_ptr<Texture> TextureLoader::_loadTexture(const hash_string& name, const std::string& filename, const TextureDescriptor& descriptor) {
+std::shared_ptr<Texture> TextureLoader::_loadTexture(const HashId& name, const std::string& filename, const TextureDescriptor& descriptor) {
 	if (filename.empty()) {
 		throw TACTICS_EXCEPTION("Can't load texture. Filename is empty while trying to load texture [{}]", name);
 	}

@@ -8,9 +8,9 @@ namespace tactics::component {
 
 void Transform::defineReflection() {
 	componentReflection<Transform>("transform")
-		.data<&Transform::position>(hash("position"))
-		.data<&Transform::rotation>(hash("rotation"))
-		.data<&Transform::scale>(hash("scale"));
+		.data<&Transform::position>("position"_id)
+		.data<&Transform::rotation>("rotation"_id)
+		.data<&Transform::scale>("scale"_id);
 }
 
 void Transform::setPosition(const glm::vec3& newPosition) {

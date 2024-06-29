@@ -15,7 +15,7 @@ FsmAction EmptyState::update() {
 }
 
 FsmEventAction EmptyState::onKeyPress(SDL_KeyboardEvent& /*event*/) {
-	return FsmEventAction::transition("proceed");
+	return FsmEventAction::transition("proceed"_id);
 }
 
 }

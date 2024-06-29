@@ -10,16 +10,16 @@ class EntityComponentSystem;
 
 class Entity {
 private:
-	Entity(const hash_string& name, entt::registry* registry);
+	Entity(const HashId& name, entt::registry* registry);
 
 public:
 	Entity();
 
-	static Entity create(const hash_string& name, entt::registry* registry);
+	static Entity create(const HashId& name, entt::registry* registry);
 	static Entity create(entt::entity entity, entt::registry* registry);
 	void destroy();
 
-	const hash_string& getName() const;
+	const HashId& getName() const;
 
 	template<typename Type>
 	decltype(auto) getComponent();

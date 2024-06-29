@@ -77,18 +77,18 @@ void Engine::_initialize(Application& application) {
 	_resourceSystem = ResourceSystemInitializer::initialize(*_fileSystem, *_ecs);
 
 	LOG_TRACE(Log::Engine, "OverlaySystem Initialization");
-	auto devUserConfigFile = _resourceSystem->getResource<resource::IniFile>(hash("devUserConfigFile"));
-	auto imguiSettings = _resourceSystem->getResource<resource::IniFile>(hash("imguiSettings"));
+	auto devUserConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile"_id);
+	auto imguiSettings = _resourceSystem->getResource<resource::IniFile>("imguiSettings"_id);
 	_overlaySystem = std::make_unique<OverlaySystem>(devUserConfigFile, *imguiSettings, *_fileSystem);
 	_overlaySystem->setEnabled(true);
 	CustomOverlayColors::initialize(*imguiSettings);
 
 	LOG_TRACE(Log::Engine, "Load Engine Resources");
-	auto configFile = _resourceSystem->getResource<resource::IniFile>(hash("configFile"));
+	auto configFile = _resourceSystem->getResource<resource::IniFile>("configFile"_id);
 	_renderSystem = std::make_unique<RenderSystem>(configFile);
-	_resourceSystem->loadPack("builtinMeshes");
-	_resourceSystem->createManualPack("_internalCustomPack");
-	_resourceSystem->loadExternalResource("_internalCustomPack", resource::Texture::createNullTexture());
+	_resourceSystem->loadPack("builtinMeshes"_id);
+	_resourceSystem->createManualPack("_internalCustomPack"_id);
+	_resourceSystem->loadExternalResource("_internalCustomPack"_id, resource::Texture::createNullTexture());
 
 	LOG_TRACE(Log::Engine, "EventSystem Initialization");
 	_eventsSystem = std::make_unique<EventsSystem>();
@@ -126,9 +126,9 @@ void Engine::_shutdown() {
 	_overlaySystem.reset();
 	_ecs->clearPrefabsRegistry();
 	LOG_TRACE(Log::Engine, "Unload Engine Resources");
-	_resourceSystem->unloadPack("initialization");
-	_resourceSystem->unloadPack("builtinMeshes");
-	_resourceSystem->unloadPack("_internalCustomPack");
+	_resourceSystem->unloadPack("initialization"_id);
+	_resourceSystem->unloadPack("builtinMeshes"_id);
+	_resourceSystem->unloadPack("_internalCustomPack"_id);
 	_throwIfAnyResourceIsStillLoaded();
 	_throwIfAnyImportantLogHappened();
 	SDL_Quit();
@@ -136,7 +136,7 @@ void Engine::_shutdown() {
 }
 
 void Engine::_registerOverlays() {
-	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>(hash("devUserConfigFile"));
+	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile"_id);
 	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
 		LOG_TRACE(Log::Engine, "Register Engine Overlays");
 		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
@@ -149,7 +149,7 @@ void Engine::_registerOverlays() {
 }
 
 void Engine::_unregisterOverlays() {
-	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>(hash("devUserConfigFile"));
+	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile"_id);
 	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
 		LOG_TRACE(Log::Engine, "Unregister Engine Overlays");
 		_overlaySystem->removeOverlay("ImGui Demo");
@@ -193,7 +193,7 @@ void Engine::_setupFsm(Application& application) {
 	LOG_TRACE(Log::Engine, "Building Game FSM");
 	auto builder = FsmBuilder();
 	auto fsmStartingStateName = application.initialize(*_serviceLocator, builder);
-	if (fsmStartingStateName.empty()) {
+	if (fsmStartingStateName.isEmpty()) {
 		throw TACTICS_EXCEPTION("Application did not return a valid name for the starting state for the FSM. The name is empty");
 	}
 

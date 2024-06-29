@@ -2,13 +2,13 @@
 
 #include <Libs/Fsm/FsmStateWithServices.h>
 
-#include <Libs/Utility/HashString.h>
+#include <Libs/Utility/HashId.h>
 
 namespace tactics {
 
 class LoadState: public FsmStateWithServices {
 public:
-	LoadState(ServiceLocator& services, const std::string& resourceDefinitionPath, const hash_string& resourcePackName, const hash_string& cameraPrefab);
+	LoadState(ServiceLocator& services, const std::string& resourceDefinitionPath, const HashId& resourcePackName, const HashId& cameraPrefab);
 	FsmAction enter() override;
 	FsmAction update() override;
 	void exit() override;
@@ -20,8 +20,8 @@ private:
 	void _setupRenderSteps();
 
 	std::string _resourceDefinitionPath;
-	hash_string _resourcePackName;
-	hash_string _cameraPrefab;
+	HashId _resourcePackName;
+	HashId _cameraPrefab;
 };
 
 }

@@ -1,35 +1,33 @@
 #pragma once
 
-#include <string_view>
-#include <string>
-#include <cassert>
+#include <Libs/Utility/HashId.h>
 
 namespace tactics {
 
 class FsmAction {
 public:
 	static FsmAction none();
-	static FsmAction transition(std::string_view transitionName);
+	static FsmAction transition(const HashId& transitionName);
 
-	const std::string& transitionName() const;
+	const HashId& transitionName() const;
 	bool hasTransition() const;
 
 private:
-	std::string _transitionName;
+	HashId _transitionName;
 };
 
 class FsmEventAction {
 public:
 	static FsmEventAction none();
 	static FsmEventAction capture();
-	static FsmEventAction transition(std::string_view transitionName);
+	static FsmEventAction transition(const HashId& transitionName);
 
-	const std::string& transitionName() const;
+	const HashId& transitionName() const;
 	bool wantsToCaptureInput() const;
 	bool hasTransition() const;
 
 private:
-	std::string _transitionName;
+	HashId _transitionName;
 	bool _captureInput{};
 };
 

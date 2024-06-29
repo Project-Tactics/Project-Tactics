@@ -18,15 +18,15 @@ void ResourceSystem::loadPackDefinition(const std::filesystem::path& definitionP
 	_resourcePackManager->loadPackDefinition(definitionPath);
 }
 
-void ResourceSystem::loadPack(const hash_string& packName) {
+void ResourceSystem::loadPack(const HashId& packName) {
 	_resourcePackManager->loadPack(packName);
 }
 
-void ResourceSystem::unloadPack(const hash_string& packName) {
+void ResourceSystem::unloadPack(const HashId& packName) {
 	_resourcePackManager->unloadPack(packName);
 }
 
-void ResourceSystem::createManualPack(const hash_string& packName) {
+void ResourceSystem::createManualPack(const HashId& packName) {
 	_resourcePackManager->createPack(packName, true);
 }
 
@@ -77,7 +77,7 @@ BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) {
 	return const_cast<ResourceSystem*>(this)->getManager(resourceType);
 }
 
-std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceType, const hash_string& name) const {
+std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceType, const HashId& name) const {
 	return _getManager(resourceType)->getResource(name);
 }
 
@@ -85,11 +85,11 @@ std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceT
 	return _getManager(resourceType)->getResource(id);
 }
 
-void ResourceSystem::loadExternalResource(const hash_string& packName, std::shared_ptr<BaseResource> resource) {
+void ResourceSystem::loadExternalResource(const HashId& packName, std::shared_ptr<BaseResource> resource) {
 	_resourcePackManager->loadExternalResource(packName, resource);
 }
 
-void ResourceSystem::_loadExternalResource(const hash_string& packName, const hash_string& resourceName, ResourceType resourceType, const nlohmann::json& data) {
+void ResourceSystem::_loadExternalResource(const HashId& packName, const HashId& resourceName, ResourceType resourceType, const nlohmann::json& data) {
 	_resourcePackManager->loadExternalResource(packName, resourceName, resourceType, data);
 }
 

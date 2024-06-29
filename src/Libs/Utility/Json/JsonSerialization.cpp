@@ -2,12 +2,12 @@
 
 namespace nlohmann {
 
-void adl_serializer<tactics::hash_string>::to_json(json& j, const tactics::hash_string& value) {
-	j = value.data();
+void adl_serializer<tactics::HashId>::to_json(json& j, const tactics::HashId& value) {
+	j = value.str();
 }
 
-void adl_serializer<tactics::hash_string>::from_json(const json& j, tactics::hash_string& value) {
-	value = tactics::hash_string(j.get<std::string>().c_str());
+void adl_serializer<tactics::HashId>::from_json(const json& j, tactics::HashId& value) {
+	value = tactics::HashId(j.get<std::string>().c_str());
 }
 
 }

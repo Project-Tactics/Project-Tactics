@@ -34,7 +34,7 @@ public:
 	static void update(BattleCamera& battleCamera, ecs_view<CharacterFacing, SpriteAnimation, Sprite>& characterFacingView);
 
 private:
-	static void _updateAnimation(SpriteAnimation& animation, Sprite& sprite, const hash_string& animationName, const glm::vec2& uvFlip);
+	static void _updateAnimation(SpriteAnimation& animation, Sprite& sprite, const HashId& animationName, const glm::vec2& uvFlip);
 };
 
 }

@@ -17,28 +17,28 @@ void ResourcePackManager::loadPackDefinition(const std::filesystem::path& packDe
 	auto fileHandle = _loadPackDefinition(packDefinitionPath);
 
 	for (auto&& [packName, packData] : fileHandle->getContent().items()) {
-		auto& pack = createPack(hash(packName), false);
+		auto& pack = createPack(HashId(packName), false);
 
 		for (auto&& [resourceType, value] : packData.items()) {
 			auto& packGroup = pack.getOrCreatePackGroup(fromString<ResourceType>(resourceType));
 			for (auto&& [resourceName, data] : value.items()) {
-				packGroup.addResource(hash(resourceName), data);
+				packGroup.addResource(HashId(resourceName), data);
 			}
 		}
 	}
 }
 
-void ResourcePackManager::loadPack(const hash_string& packName) {
+void ResourcePackManager::loadPack(const HashId& packName) {
 	auto& pack = _getResourcePack(packName);
 	pack.load(_resourceProvider);
 }
 
-void ResourcePackManager::unloadPack(const hash_string& packName) {
+void ResourcePackManager::unloadPack(const HashId& packName) {
 	auto& pack = _getResourcePack(packName);
 	pack.unload(_resourceProvider);
 }
 
-Pack& ResourcePackManager::createPack(const hash_string& packName, bool isManuallyCreated) {
+Pack& ResourcePackManager::createPack(const HashId& packName, bool isManuallyCreated) {
 	if (_packs.contains(packName)) {
 		throw TACTICS_EXCEPTION("Can't create custom pack [{}]. A pack with the same name already exists.", packName);
 	}
@@ -47,7 +47,7 @@ Pack& ResourcePackManager::createPack(const hash_string& packName, bool isManual
 	return *_packs.insert({packName, std::move(pack)}).first->second;
 }
 
-Pack& ResourcePackManager::_getResourcePack(const hash_string& packName) {
+Pack& ResourcePackManager::_getResourcePack(const HashId& packName) {
 	if (!_packs.contains(packName)) {
 		throw TACTICS_EXCEPTION("Can't find resource pack with name [{}]. The Resource Pack does not exists", packName);
 	}
@@ -55,12 +55,12 @@ Pack& ResourcePackManager::_getResourcePack(const hash_string& packName) {
 	return *_packs[packName];
 }
 
-void ResourcePackManager::loadExternalResource(const hash_string& packName, std::shared_ptr<BaseResource> resource) {
+void ResourcePackManager::loadExternalResource(const HashId& packName, std::shared_ptr<BaseResource> resource) {
 	auto& pack = _getResourcePack(packName);
 	pack.loadExternalResource(_resourceProvider, resource);
 }
 
-void ResourcePackManager::loadExternalResource(const hash_string& packName, const hash_string& resourceName, ResourceType type, const nlohmann::json& data) {
+void ResourcePackManager::loadExternalResource(const HashId& packName, const HashId& resourceName, ResourceType type, const nlohmann::json& data) {
 	auto& pack = _getResourcePack(packName);
 	pack.loadExternalResource(_resourceProvider, resourceName, type, data);
 }

@@ -13,7 +13,7 @@ class FsmExternalController;
 
 class Fsm: public EventsListener {
 public:
-	Fsm(FsmStateEntries states, std::string_view startStateName, FsmExternalController* externalController);
+	Fsm(FsmStateEntries states, const HashId& startStateName, FsmExternalController* externalController);
 
 	/**
 	 * @brief Updates the current state of the Fsm and executes any transition.
@@ -29,15 +29,15 @@ public:
 	 * Global string whish specify the state used to exit from the Fsm.
 	 * When the Fsm jumps to this state, Fsm::hasReachedExitState() will return true.
 	 */
-	static const std::string_view exitState;
+	static const HashId exitState;
 
 private:
 	// FsmEventHandler implementation
 	[[nodiscard]] bool onEvent(SDL_Event& event) override;
 
-	void _goToState(std::string_view stateName);
-	void _executeTransition(std::string_view transition);
-	[[nodiscard]] FsmStateEntry* _getStateByName(std::string_view stateName);
+	void _goToState(const HashId& stateName);
+	void _executeTransition(const HashId& transition);
+	[[nodiscard]] FsmStateEntry* _getStateByName(const HashId& stateName);
 	bool _performExternalUpdateTransition();
 
 	template<typename TAction>
@@ -58,7 +58,7 @@ private:
 	FsmExternalController* _externalController{};
 
 	bool _hasReachedExitState{};
-	std::string _startStateName;
+	HashId _startStateName;
 };
 
 }

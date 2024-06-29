@@ -5,7 +5,7 @@
 #include "IndexBuffer.h"
 
 #include "Libs/Utility/Exception.h"
-#include "Libs/Utility/HashString.h"
+#include "Libs/Utility/HashId.h"
 
 #include <memory>
 #include <vector>
@@ -33,7 +33,7 @@ public:
 	void addIndices(std::vector<unsigned int> indices);
 	void endSubMesh();
 
-	std::shared_ptr<resource::Mesh> build(const hash_string& name);
+	std::shared_ptr<resource::Mesh> build(const HashId& name);
 
 private:
 	std::vector<Attributef> _attributes;

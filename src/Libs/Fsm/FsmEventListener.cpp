@@ -2,7 +2,7 @@
 
 namespace tactics {
 
-std::string FsmEventListener::appExitRequestTransition = "_appExitRequest";
+const HashId FsmEventListener::appExitRequestTransition = "_appExitRequest"_id;
 
 FsmEventAction FsmEventListener::onEvent(SDL_Event& event) {
 	switch (event.type) {

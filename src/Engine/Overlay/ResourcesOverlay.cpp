@@ -42,12 +42,12 @@ void ResourcesOverlay::_drawByTypeTabItem() {
 
 	if (!_loadedGroups.empty()) {
 		_drawHeaderWithNumber("Loaded", loadedCount);
-		_drawGroups("loaded", _loadedGroups, 1.0f);
+		_drawGroups("loaded"_id, _loadedGroups, 1.0f);
 	}
 
 	if (!_unloadedGroups.empty()) {
 		_drawHeaderWithNumber("Unloaded", unloadedCount);
-		_drawGroups("unloaded", _unloadedGroups, 0.5f);
+		_drawGroups("unloaded"_id, _unloadedGroups, 0.5f);
 	}
 }
 
@@ -84,7 +84,7 @@ void ResourcesOverlay::_drawPacks(const std::vector<uiPack>& packs, float colorM
 	}
 }
 
-void ResourcesOverlay::_drawGroups(const hash_string& id, const std::vector<uiPackGroup>& groups, float colorMultiplier) {
+void ResourcesOverlay::_drawGroups(const HashId& id, const std::vector<uiPackGroup>& groups, float colorMultiplier) {
 	for (auto& group : groups) {
 		if (_drawResourceTypeCollapsingHeader(id, group.type, static_cast<unsigned int>(group.resources.size()), colorMultiplier)) {
 			ImGui::Indent();
@@ -107,7 +107,7 @@ void ResourcesOverlay::_drawGroups(const hash_string& id, const std::vector<uiPa
 
 bool ResourcesOverlay::_drawResourceCollapsingHeader(
 	bool isLoaded,
-	const hash_string& name,
+	const HashId& name,
 	resource::ResourceType resourceType,
 	const resource::BaseResource* resource,
 	float colorMultiplier) {
@@ -122,7 +122,7 @@ bool ResourcesOverlay::_drawResourceCollapsingHeader(
 	return collapsed;
 }
 
-bool ResourcesOverlay::_drawResourceTypeCollapsingHeader(const hash_string& id, resource::ResourceType resourceType, unsigned int count, float colorMultiplier) {
+bool ResourcesOverlay::_drawResourceTypeCollapsingHeader(const HashId& id, resource::ResourceType resourceType, unsigned int count, float colorMultiplier) {
 	auto resourceTypeString = toString(resourceType);
 	std::transform(resourceTypeString.begin(), resourceTypeString.end(), resourceTypeString.begin(), tactics::toupper);
 	auto groupHeader = fmt::format("{} [{}]##{}", resourceTypeString, count, id);

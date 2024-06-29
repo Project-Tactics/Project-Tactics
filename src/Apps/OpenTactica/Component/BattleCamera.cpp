@@ -8,11 +8,11 @@ namespace tactics::component {
 
 void BattleCamera::defineReflection() {
 	componentReflection<BattleCamera>("battleCamera")
-		.data<&BattleCamera::rotationSteps>(hash("rotationSteps"))
-		.data<&BattleCamera::rotationTime>(hash("rotationTime"))
-		.data<&BattleCamera::rotationSpeed>(hash("rotationSpeed"))
-		.data<&BattleCamera::nextStep>(hash("nextStep"))
-		.data<&BattleCamera::currentStep>(hash("currentStep"));
+		.data<&BattleCamera::rotationSteps>("rotationSteps"_id)
+		.data<&BattleCamera::rotationTime>("rotationTime"_id)
+		.data<&BattleCamera::rotationSpeed>("rotationSpeed"_id)
+		.data<&BattleCamera::nextStep>("nextStep"_id)
+		.data<&BattleCamera::currentStep>("currentStep"_id);
 }
 
 void BattleCameraSystem::update(ecs_view<BattleCamera, Transform> view) {

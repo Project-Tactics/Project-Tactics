@@ -5,7 +5,7 @@
 namespace tactics::component {
 
 struct Name {
-	hash_string name;
+	HashId name;
 };
 
 }
