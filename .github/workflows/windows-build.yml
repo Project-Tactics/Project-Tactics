@@ -52,4 +52,4 @@ jobs:
         path:  ${{github.workspace}}/build/${{ matrix.configuration }}/src/Apps/ProjectTactics_UnitTests/
 
     - name: Run unit tests
-      run: ctest --output-on-failure --test-dir ${{ matrix.configuration }}/build/${{ matrix.configuration }}/src/Apps/ProjectTactics_UnitTests/
+      run: ctest --output-on-failure --test-dir ${{github.workspace}}/build/${{ matrix.configuration }}/src/Apps/ProjectTactics_UnitTests/
