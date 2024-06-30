@@ -68,7 +68,7 @@ BraceWrapping:
 BreakAfterAttributes: Never
 # BreakAfterReturnType: Automatic v18
 BreakArrays: false
-BreakBeforeConceptDeclarations: Always
+BreakBeforeConceptDeclarations: true
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeComma
 # BreakFunctionDefinitionParameters: false v19
