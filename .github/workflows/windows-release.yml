@@ -8,6 +8,6 @@ on:
 
 jobs:
   build-windows:
-    uses: ./.github/workflows/common/windows-build.yml
+    uses: ./.github/reusable-workflows/windows-build.yml
     with:
       configuration: release
