@@ -11,8 +11,6 @@ void DefaultFsmExternalController::setNextTransition(const HashId& nextTransitio
 	_nextTransition = FsmAction::transition(nextTransition);
 }
 
-const HashId& DefaultFsmExternalController::getCurrentStateName() const {
-	return _currentStateName;
-}
+const HashId& DefaultFsmExternalController::getCurrentStateName() const { return _currentStateName; }
 
-}
+} // namespace tactics

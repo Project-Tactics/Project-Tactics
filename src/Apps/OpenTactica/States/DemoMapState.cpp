@@ -7,8 +7,8 @@
 
 #include <Engine/Scene/SceneSystem.h>
 
-#include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/Component/FrustumComponent.h>
+#include <Libs/Ecs/Component/TransformComponent.h>
 
 namespace tactics {
 
@@ -24,7 +24,8 @@ FsmAction DemoMapState::update() {
 	component::RotateItemSystem::update(scene.getRegistry().view<Transform, RotateItem>());
 
 	auto [battleCameraEntity, battleCamera] = *scene.getRegistry().view<BattleCamera>().each().begin();
-	component::CharacterFacingSystem::update(battleCamera, scene.getRegistry().view<CharacterFacing, SpriteAnimation, Sprite>());
+	component::CharacterFacingSystem::update(battleCamera,
+											 scene.getRegistry().view<CharacterFacing, SpriteAnimation, Sprite>());
 
 	component::BattleCameraSystem::update(scene.getRegistry().view<BattleCamera, Transform>());
 
@@ -70,12 +71,10 @@ void DemoMapState::_createScene() {
 		Facing facing;
 	};
 
-	auto positions = std::array{
-		CharLayout{{-0.56f, 0, -0.56f}, Facing::East},
-		CharLayout{{-1.12f, 0, -0.56f}, Facing::West},
-		CharLayout{{-0.56f, 0, 2.80f}, Facing::South},
-		CharLayout{{-1.12f, 0, 2.80f}, Facing::North}
-	};
+	auto positions = std::array{CharLayout{{-0.56f, 0, -0.56f}, Facing::East},
+								CharLayout{{-1.12f, 0, -0.56f}, Facing::West},
+								CharLayout{{-0.56f, 0, 2.80f}, Facing::South},
+								CharLayout{{-1.12f, 0, 2.80f}, Facing::North}};
 
 	for (auto [pos, facing] : positions) {
 		auto character = sceneSystem.createEntity("char"_id, "character"_id);
@@ -88,4 +87,4 @@ void DemoMapState::_createScene() {
 	}
 }
 
-}
+} // namespace tactics

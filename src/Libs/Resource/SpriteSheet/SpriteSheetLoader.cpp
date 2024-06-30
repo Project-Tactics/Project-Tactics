@@ -7,11 +7,9 @@ std::shared_ptr<SpriteSheet> SpriteSheetLoader::load(const SpriteSheetDescriptor
 	spriteSheet->texture = _getResource<Texture>(HashId(descriptor.texture));
 	spriteSheet->spriteSize = descriptor.spriteSize;
 
-	for (auto& [name, animation] : descriptor.animations) {
-		spriteSheet->animations.insert({HashId(name), animation});
-	}
+	for (auto& [name, animation] : descriptor.animations) { spriteSheet->animations.insert({HashId(name), animation}); }
 
 	return spriteSheet;
 }
 
-}
+} // namespace tactics::resource

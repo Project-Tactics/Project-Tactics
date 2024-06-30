@@ -1,9 +1,8 @@
 #include "Test_Fixture.h"
+
 #include <Libs/Utility/Exception.h>
 
-TEST_F(ResourceTest, LoadInvalidPack) {
-	EXPECT_THROW(_resourceSystem->loadPack("InvalidPack"_id), Exception);
-}
+TEST_F(ResourceTest, LoadInvalidPack) { EXPECT_THROW(_resourceSystem->loadPack("InvalidPack"_id), Exception); }
 
 TEST_F(ResourceTest, LoadValidPackWithMissingManager) {
 	givenValidPackDefinitionLoaded();
@@ -24,8 +23,7 @@ TEST_F(ResourceTest, LoadValidPack) {
 	givenValidPackDefinitionLoaded();
 
 	auto loader = std::make_unique<MockShaderLoader>(*_fileSystem, *_resourceSystem);
-	EXPECT_CALL(*loader, load(_, _))
-		.WillRepeatedly([] (const HashId& name, const nlohmann::ordered_json&) {
+	EXPECT_CALL(*loader, load(_, _)).WillRepeatedly([](const HashId& name, const nlohmann::ordered_json&) {
 		return std::make_shared<MockShaderResource>(name);
 	});
 	auto manager = std::make_unique<MockShaderManager>(std::move(loader));
@@ -39,8 +37,7 @@ TEST_F(ResourceTest, LoadValidPackAndGetResources) {
 	givenValidPackDefinitionLoaded();
 
 	auto loader = std::make_unique<MockShaderLoader>(*_fileSystem, *_resourceSystem);
-	EXPECT_CALL(*loader, load(_, _))
-		.WillRepeatedly([] (const HashId& name, const nlohmann::ordered_json&) {
+	EXPECT_CALL(*loader, load(_, _)).WillRepeatedly([](const HashId& name, const nlohmann::ordered_json&) {
 		return std::make_shared<MockShaderResource>(name);
 	});
 	auto manager = std::make_unique<MockShaderManager>(std::move(loader));
@@ -58,8 +55,7 @@ TEST_F(ResourceTest, LoadValidPackAndGetResourceWithWrongName) {
 	givenValidPackDefinitionLoaded();
 
 	auto loader = std::make_unique<MockShaderLoader>(*_fileSystem, *_resourceSystem);
-	EXPECT_CALL(*loader, load(_, _))
-		.WillRepeatedly([] (const HashId& name, const nlohmann::ordered_json&) {
+	EXPECT_CALL(*loader, load(_, _)).WillRepeatedly([](const HashId& name, const nlohmann::ordered_json&) {
 		return std::make_shared<MockShaderResource>(name);
 	});
 	auto manager = std::make_unique<MockShaderManager>(std::move(loader));
@@ -68,7 +64,8 @@ TEST_F(ResourceTest, LoadValidPackAndGetResourceWithWrongName) {
 
 	_resourceSystem->loadPack("mainPackage"_id);
 
-	EXPECT_THROW([[maybe_unused]] auto res = _resourceSystem->getResource<MockShaderResource>("MyResource"_id), Exception);
+	EXPECT_THROW([[maybe_unused]] auto res = _resourceSystem->getResource<MockShaderResource>("MyResource"_id),
+				 Exception);
 }
 
 TEST_F(ResourceTest, LoadPackTwice) {
@@ -176,7 +173,8 @@ TEST_F(ResourceTest, RegisterExternalResource) {
 	givenValidManagerRegistered();
 
 	_resourceSystem->createManualPack("customPackage"_id);
-	_resourceSystem->loadExternalResource("customPackage"_id, std::make_shared<MockShaderResource>("MyResourceName1"_id));
+	_resourceSystem->loadExternalResource("customPackage"_id,
+										  std::make_shared<MockShaderResource>("MyResourceName1"_id));
 
 	EXPECT_EQ(getNumberOfLoadedResources(), 1);
 }
@@ -186,9 +184,7 @@ TEST_F(ResourceTest, RegisterExternalResourceWithJson) {
 	givenValidManagerRegistered();
 
 	_resourceSystem->createManualPack("customPackage"_id);
-	nlohmann::ordered_json json = {
-		{"testResource", "testResourceData"}
-	};
+	nlohmann::ordered_json json = {{"testResource", "testResourceData"}};
 	_resourceSystem->loadExternalResource<MockShaderResource>("customPackage"_id, "MyResourceName1"_id, json);
 
 	EXPECT_EQ(getNumberOfLoadedResources(), 1);
@@ -201,11 +197,11 @@ TEST_F(ResourceTest, RegisterExternalResourceWithSameName) {
 
 	_resourceSystem->createManualPack("customPackage"_id);
 	_resourceSystem->createManualPack("anotherPackage"_id);
-	nlohmann::ordered_json json = {
-		{"testResource", "testResourceData"}
-	};
+	nlohmann::ordered_json json = {{"testResource", "testResourceData"}};
 	_resourceSystem->loadExternalResource<MockShaderResource>("customPackage"_id, "MyResourceName1"_id, json);
-	EXPECT_THROW(_resourceSystem->loadExternalResource<MockShaderResource>("anotherPackage"_id, "MyResourceName1"_id, json), Exception);
+	EXPECT_THROW(
+		_resourceSystem->loadExternalResource<MockShaderResource>("anotherPackage"_id, "MyResourceName1"_id, json),
+		Exception);
 }
 
 TEST_F(ResourceTest, RegisterExternalResourceCleanPackAndRegisterAgain) {
@@ -213,9 +209,7 @@ TEST_F(ResourceTest, RegisterExternalResourceCleanPackAndRegisterAgain) {
 	givenValidManagerRegistered();
 
 	_resourceSystem->createManualPack("customPackage"_id);
-	nlohmann::ordered_json json = {
-		{"testResource", "testResourceData"}
-	};
+	nlohmann::ordered_json json = {{"testResource", "testResourceData"}};
 	_resourceSystem->loadExternalResource<MockShaderResource>("customPackage"_id, "MyResourceName1"_id, json);
 	_resourceSystem->unloadPack("customPackage"_id);
 	_resourceSystem->loadExternalResource<MockShaderResource>("customPackage"_id, "MyResourceName1"_id, json);
@@ -226,9 +220,7 @@ TEST_F(ResourceTest, CountResourcesAndLoadedResources) {
 	givenValidManagerRegistered();
 
 	_resourceSystem->createManualPack("customPackage"_id);
-	nlohmann::ordered_json json = {
-		{"testResource", "testResourceData"}
-	};
+	nlohmann::ordered_json json = {{"testResource", "testResourceData"}};
 	_resourceSystem->loadExternalResource<MockShaderResource>("customPackage"_id, "MyResourceName1"_id, json);
 
 	EXPECT_EQ(getNumberOfResources(), 4);

@@ -15,4 +15,4 @@ struct Frustum {
 	static void defineReflection();
 };
 
-}
+} // namespace tactics::component

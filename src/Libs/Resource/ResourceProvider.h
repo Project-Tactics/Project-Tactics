@@ -17,15 +17,13 @@ public:
 	virtual BaseResourceManager& getManager(ResourceType resourceType) const = 0;
 	virtual BaseResourceManager& getManager(ResourceType resourceType) = 0;
 
-	template<typename TResource>
-	std::shared_ptr<TResource> getResource(const HashId& name) const {
+	template<typename TResource> std::shared_ptr<TResource> getResource(const HashId& name) const {
 		return std::dynamic_pointer_cast<TResource>(getResource(TResource::TYPE, name));
 	}
 
-	template<typename TResource>
-	std::shared_ptr<TResource> getResource(ResourceId id) const {
+	template<typename TResource> std::shared_ptr<TResource> getResource(ResourceId id) const {
 		return std::dynamic_pointer_cast<TResource>(getResource(TResource::TYPE, id));
 	}
 };
 
-}
+} // namespace tactics::resource

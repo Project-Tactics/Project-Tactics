@@ -6,10 +6,7 @@ namespace tactics {
 
 class EngineTime {
 public:
-	template<typename T>
-	static [[nodiscard]] T fixedDeltaTime() noexcept {
-		return static_cast<T>(_fixedDeltaTime());
-	}
+	template<typename T> static [[nodiscard]] T fixedDeltaTime() noexcept { return static_cast<T>(_fixedDeltaTime()); }
 
 	static void setFrameTime(FrameTimer* frameTimer) noexcept;
 
@@ -18,4 +15,4 @@ private:
 	static FrameTimer* _frameTimer;
 };
 
-}
+} // namespace tactics

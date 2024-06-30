@@ -1,12 +1,12 @@
 #include "ComponentReflection.h"
 
+#include "../EntityUtilities.h"
+#include "BillboardComponent.h"
 #include "CameraComponent.h"
 #include "FrustumComponent.h"
 #include "MeshComponent.h"
 #include "SpriteComponent.h"
 #include "TransformComponent.h"
-#include "BillboardComponent.h"
-#include "../EntityUtilities.h"
 
 #include <Libs/Utility/Json/MathJsonSerializer.h>
 #include <Libs/Utility/Reflection.h>
@@ -28,16 +28,10 @@ void serializeFromLookAt(glm::quat& quat, const nlohmann::ordered_json& jsonData
 }
 
 void ComponentReflection::initializeBasicTypes() {
-	entt::meta<glm::vec2>()
-		.type("vec2"_id)
-		.data<&glm::vec2::x>("x"_id)
-		.data<&glm::vec2::y>("y"_id);
+	entt::meta<glm::vec2>().type("vec2"_id).data<&glm::vec2::x>("x"_id).data<&glm::vec2::y>("y"_id);
 
-	entt::meta<glm::vec3>()
-		.type("vec3"_id)
-		.data<&glm::vec3::x>("x"_id)
-		.data<&glm::vec3::y>("y"_id)
-		.data<&glm::vec3::z>("z"_id);
+	entt::meta<glm::vec3>().type("vec3"_id).data<&glm::vec3::x>("x"_id).data<&glm::vec3::y>("y"_id).data<&glm::vec3::z>(
+		"z"_id);
 
 	entt::meta<glm::quat>()
 		.type("quat"_id)
@@ -51,15 +45,7 @@ void ComponentReflection::initializeBasicTypes() {
 
 void ComponentReflection::initializeCommonComponents() {
 	using namespace component;
-	defineComponentsReflection<
-		Billboard,
-		Camera,
-		CurrentCamera,
-		Frustum,
-		Mesh,
-		Sprite,
-		SpriteAnimation,
-		Transform>();
+	defineComponentsReflection<Billboard, Camera, CurrentCamera, Frustum, Mesh, Sprite, SpriteAnimation, Transform>();
 }
 
-}
+} // namespace tactics

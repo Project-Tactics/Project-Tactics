@@ -21,26 +21,19 @@ public:
 
 	const HashId& getName() const;
 
-	template<typename Type>
-	decltype(auto) getComponent();
+	template<typename Type> decltype(auto) getComponent();
 
-	template<typename Type>
-	decltype(auto) getComponent() const;
+	template<typename Type> decltype(auto) getComponent() const;
 
-	template<typename Type, typename... Func>
-	decltype(auto) updateComponent(Func &&...func);
+	template<typename Type, typename... Func> decltype(auto) updateComponent(Func&&... func);
 
-	template<typename Type>
-	bool hasComponent() const;
+	template<typename Type> bool hasComponent() const;
 
-	template<typename Type, typename ...TArgs>
-	decltype(auto) addComponent(TArgs&&... args);
+	template<typename Type, typename... TArgs> decltype(auto) addComponent(TArgs&&... args);
 
-	template<typename Type>
-	decltype(auto) addComponent(Type& component);
+	template<typename Type> decltype(auto) addComponent(Type& component);
 
-	template<typename Type>
-	decltype(auto) removeComponent();
+	template<typename Type> decltype(auto) removeComponent();
 
 	bool operator==(entt::entity entity) const;
 	explicit operator bool() const;
@@ -50,6 +43,6 @@ private:
 	entt::registry* _registry{};
 };
 
-}
+} // namespace tactics
 
 #include "Entity.inl"

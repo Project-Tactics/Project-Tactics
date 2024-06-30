@@ -15,4 +15,4 @@ public:
 	static std::unique_ptr<resource::ResourceSystem> initialize(FileSystem& fileSystem, EntityComponentSystem& ecs);
 };
 
-}
+} // namespace tactics

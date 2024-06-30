@@ -1,4 +1,5 @@
 #include "Test_Fixture.h"
+
 #include <Libs/Utility/Exception.h>
 
 TEST_F(ResourceTest, LoadInvalidPackDefinition) {
@@ -26,9 +27,7 @@ TEST_F(ResourceTest, LoadValidPackDefinition) {
 	_resourceSystem->loadPackDefinition("TestPackDefinition.json");
 
 	auto numberOfPacks = 0;
-	_resourceSystem->forEachPack([&numberOfPacks] (auto&) {
-		++numberOfPacks;
-	});
+	_resourceSystem->forEachPack([&numberOfPacks](auto&) { ++numberOfPacks; });
 
 	EXPECT_EQ(numberOfPacks, 1);
 }

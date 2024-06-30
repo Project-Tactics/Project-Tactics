@@ -22,4 +22,4 @@ const vec4 Color::darkGray = vec4(0.25f, 0.25f, 0.25f, 1.0f);
 const vec4 Color::clear = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 const vec4 Color::transparent = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
-}
+} // namespace tactics

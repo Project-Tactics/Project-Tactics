@@ -4,7 +4,7 @@
 
 namespace tactics {
 
-class DefaultFsmExternalController: public FsmExternalController {
+class DefaultFsmExternalController : public FsmExternalController {
 public:
 	FsmAction update(const HashId& currentStateName) override;
 	void setNextTransition(const HashId& nextTransition);
@@ -15,4 +15,4 @@ private:
 	HashId _currentStateName;
 };
 
-}
+} // namespace tactics

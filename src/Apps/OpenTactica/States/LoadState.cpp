@@ -7,18 +7,20 @@
 
 #include <Libs/Ecs/Component/ViewportComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
-#include <Libs/Resource/ResourceSystem.h>
-#include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Rendering/RenderQueue.h>
+#include <Libs/Rendering/RenderSystem.h>
+#include <Libs/Resource/ResourceSystem.h>
 
 namespace tactics {
 
-LoadState::LoadState(ServiceLocator& services, const std::string& resourceDefinitionPath, const HashId& resourcePackName, const HashId& cameraPrefab)
+LoadState::LoadState(ServiceLocator& services,
+					 const std::string& resourceDefinitionPath,
+					 const HashId& resourcePackName,
+					 const HashId& cameraPrefab)
 	: FsmStateWithServices(services)
 	, _resourceDefinitionPath(resourceDefinitionPath)
 	, _resourcePackName(resourcePackName)
-	, _cameraPrefab(cameraPrefab) {
-}
+	, _cameraPrefab(cameraPrefab) {}
 
 FsmAction LoadState::enter() {
 	_loadResources();
@@ -28,12 +30,9 @@ FsmAction LoadState::enter() {
 	return FsmAction::transition("proceed"_id);
 }
 
-void LoadState::exit() {
-}
+void LoadState::exit() {}
 
-FsmAction LoadState::update() {
-	return FsmAction::none();
-}
+FsmAction LoadState::update() { return FsmAction::none(); }
 
 void LoadState::_loadResources() {
 	auto& resourceSystem = getService<resource::ResourceSystem>();
@@ -66,4 +65,4 @@ void LoadState::_setupRenderSteps() {
 	mainRenderQueue.addStep<ImGuiRender>(getService<OverlaySystem>());
 }
 
-}
+} // namespace tactics

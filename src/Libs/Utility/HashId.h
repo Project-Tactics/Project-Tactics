@@ -1,9 +1,9 @@
 #pragma once
 
+#include <cstdint>
 #include <fmt/format.h>
 #include <string>
 #include <string_view>
-#include <cstdint>
 
 namespace tactics {
 
@@ -28,20 +28,17 @@ private:
 };
 
 [[nodiscard]] HashId operator"" _id(const char* value, size_t);
-}
+} // namespace tactics
 
-template <>
-struct fmt::formatter<tactics::HashId> {
+template<> struct fmt::formatter<tactics::HashId> {
 public:
 	constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
-	template <typename Context>
-	constexpr auto format(tactics::HashId const& obj, Context& ctx) const {
+
+	template<typename Context> constexpr auto format(tactics::HashId const& obj, Context& ctx) const {
 		return format_to(ctx.out(), "{}", obj.str());
 	}
 };
 
-template <> struct std::hash<tactics::HashId> {
-	std::size_t operator()(const tactics::HashId& obj) const noexcept {
-		return obj.id();
-	}
+template<> struct std::hash<tactics::HashId> {
+	std::size_t operator()(const tactics::HashId& obj) const noexcept { return obj.id(); }
 };

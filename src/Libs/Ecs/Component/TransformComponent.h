@@ -37,4 +37,4 @@ public:
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Transform, position, rotation, scale);
 	static void defineReflection();
 };
-}
+} // namespace tactics::component

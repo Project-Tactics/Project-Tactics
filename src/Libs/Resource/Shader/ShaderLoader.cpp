@@ -3,22 +3,24 @@
 #include <Libs/FileSystem/FileSystem.h>
 #include <Libs/Utility/Exception.h>
 
-#include <glad/gl.h>
-#include <fstream>
 #include <filesystem>
+#include <fstream>
+#include <glad/gl.h>
 
 namespace tactics::resource {
 
 std::shared_ptr<Shader> ShaderLoader::load(const ShaderDescriptor& descriptor) {
 	auto shader = std::make_shared<Shader>();
-	auto [shaderProgramId, vertexSource, fragmentSource] = _loadProgram(descriptor.vertexShader, descriptor.fragmentShader);
+	auto [shaderProgramId, vertexSource, fragmentSource] =
+		_loadProgram(descriptor.vertexShader, descriptor.fragmentShader);
 	shader->rendererId = shaderProgramId;
 	shader->vertexSource = vertexSource;
 	shader->fragmentSource = fragmentSource;
 	return shader;
 }
 
-std::tuple<unsigned int, std::string, std::string> ShaderLoader::_loadProgram(const std::string& vertexShader, const std::string& fragmentShader) {
+std::tuple<unsigned int, std::string, std::string> ShaderLoader::_loadProgram(const std::string& vertexShader,
+																			  const std::string& fragmentShader) {
 	auto programId = glCreateProgram();
 
 	auto [vertexShaderId, vertexSource] = _loadShader(GL_VERTEX_SHADER, vertexShader);
@@ -36,7 +38,8 @@ std::tuple<unsigned int, std::string, std::string> ShaderLoader::_loadProgram(co
 	return {programId, vertexSource, fragmentSource};
 }
 
-std::tuple<unsigned int, std::string> ShaderLoader::_loadShader(unsigned int shaderType, const std::string& shaderContent) {
+std::tuple<unsigned int, std::string> ShaderLoader::_loadShader(unsigned int shaderType,
+																const std::string& shaderContent) {
 	std::filesystem::path shaderPath = shaderContent;
 	std::string shaderCode = shaderContent;
 	if (shaderPath.extension() == ".vert" || shaderPath.extension() == ".frag") {
@@ -65,4 +68,4 @@ std::tuple<unsigned int, std::string> ShaderLoader::_loadShader(unsigned int sha
 	return {shaderId, shaderCode};
 }
 
-}
+} // namespace tactics::resource

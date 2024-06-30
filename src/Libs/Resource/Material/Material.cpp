@@ -11,7 +11,7 @@ std::shared_ptr<Material::Instance> Material::createInstance(std::shared_ptr<Mat
 	return instance;
 }
 
-Material::Instance::Instance(std::shared_ptr<Material> parent): parent(parent) {
+Material::Instance::Instance(std::shared_ptr<Material> parent) : parent(parent) {
 	if (!parent) {
 		throw TACTICS_EXCEPTION("Cannot create a Material Instance. The provided parent material is null.");
 	}
@@ -50,4 +50,4 @@ void Material::Instance::updateShaderUniforms() {
 	Material::updateUniforms(parent->shader, parent->getMatrices(), getMatrices());
 }
 
-}
+} // namespace tactics::resource

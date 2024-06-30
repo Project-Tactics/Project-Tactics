@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Component/SpriteComponent.h"
 #include "../Component/MeshComponent.h"
+#include "../Component/SpriteComponent.h"
 
 namespace tactics::component {
 
@@ -15,4 +15,4 @@ public:
 	static void update(const ecs_view<Sprite, SpriteAnimation>& view);
 };
 
-}
+} // namespace tactics::component

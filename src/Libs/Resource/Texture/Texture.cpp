@@ -4,9 +4,7 @@
 
 namespace tactics::resource {
 
-Texture::~Texture() {
-	render::pipeline::deleteTextures(1, &rendererId);
-}
+Texture::~Texture() { render::pipeline::deleteTextures(1, &rendererId); }
 
 void Texture::bind(unsigned int slot) const {
 	using namespace render::pipeline;
@@ -25,4 +23,4 @@ std::shared_ptr<Texture> Texture::createNullTexture() {
 	return texture;
 }
 
-}
+} // namespace tactics::resource

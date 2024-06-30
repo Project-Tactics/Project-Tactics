@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
-
 #include <Libs/Utility/Time/FrameTimer.h>
+
+#include <memory>
 
 struct SDL_Window;
 
@@ -25,8 +25,7 @@ struct FsmInfo;
 
 class Engine {
 public:
-	template<typename TApplication>
-	static void run() {
+	template<typename TApplication> static void run() {
 		TApplication application;
 		_run(application);
 	}
@@ -61,4 +60,4 @@ private:
 	std::unique_ptr<DefaultFsmExternalController> _fsmExternalController;
 };
 
-}
+} // namespace tactics

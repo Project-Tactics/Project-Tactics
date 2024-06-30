@@ -48,6 +48,7 @@ struct Rect {
 			glm::vec2 position;
 			glm::vec2 size;
 		} rect;
+
 		struct {
 			glm::vec2 min;
 			glm::vec2 max;
@@ -55,4 +56,4 @@ struct Rect {
 	};
 };
 
-}
+} // namespace tactics

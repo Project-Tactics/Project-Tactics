@@ -6,7 +6,7 @@
 
 namespace tactics {
 
-class DemoSpriteState: public FsmStateWithServices {
+class DemoSpriteState : public FsmStateWithServices {
 public:
 	using FsmStateWithServices::FsmStateWithServices;
 	FsmAction update() override;
@@ -18,4 +18,4 @@ private:
 	void _createCharacters(const glm::vec3& offset, int count);
 };
 
-}
+} // namespace tactics

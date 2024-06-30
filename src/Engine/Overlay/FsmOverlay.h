@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Libs/Overlay/Overlay.h>
 #include <Libs/Ecs/EntityUtilities.h>
+#include <Libs/Overlay/Overlay.h>
 
-#include <string>
 #include <optional>
+#include <string>
 
 namespace ax::NodeEditor {
 struct EditorContext;
@@ -17,7 +17,7 @@ struct FsmInfo;
 struct FsmStateInfo;
 struct FsmTransitionTarget;
 
-class FsmOverlay: public Overlay {
+class FsmOverlay : public Overlay {
 public:
 	FsmOverlay(DefaultFsmExternalController& externalController, FsmInfo& fsmInfo);
 	void update() override;
@@ -73,4 +73,4 @@ private:
 	ax::NodeEditor::EditorContext* _nodeGraphContext;
 };
 
-}
+} // namespace tactics

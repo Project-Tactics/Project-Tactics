@@ -31,50 +31,89 @@ enum class PrimitiveType {
 };
 
 template<BufferType bufferType> class BufferTypeValue {};
+
 template<> class BufferTypeValue<BufferType::VertexBuffer> {
-public: static const unsigned int value; static const BufferType type = BufferType::VertexBuffer;
+public:
+	static const unsigned int value;
+	static const BufferType type = BufferType::VertexBuffer;
 };
+
 template<> class BufferTypeValue<BufferType::IndexBuffer> {
-public: static const unsigned int value; static const BufferType type = BufferType::IndexBuffer;
+public:
+	static const unsigned int value;
+	static const BufferType type = BufferType::IndexBuffer;
 };
 
 template<BufferUsage bufferUsage> class BufferUsageValue {};
+
 template<> class BufferUsageValue<BufferUsage::StaticDraw> {
-public: static const unsigned int value; static const BufferUsage type = BufferUsage::StaticDraw;
+public:
+	static const unsigned int value;
+	static const BufferUsage type = BufferUsage::StaticDraw;
 };
+
 template<> class BufferUsageValue<BufferUsage::DynamicDraw> {
-public: static const unsigned int value; static const BufferUsage type = BufferUsage::DynamicDraw;
+public:
+	static const unsigned int value;
+	static const BufferUsage type = BufferUsage::DynamicDraw;
 };
+
 template<> class BufferUsageValue<BufferUsage::StreamDraw> {
-public: static const unsigned int value; static const BufferUsage type = BufferUsage::StreamDraw;
+public:
+	static const unsigned int value;
+	static const BufferUsage type = BufferUsage::StreamDraw;
 };
 
 template<TextureType textureType> class TextureTypeValue {};
+
 template<> class TextureTypeValue<TextureType::Texture2D> {
-public: static const unsigned int value; static const TextureType type = TextureType::Texture2D;
+public:
+	static const unsigned int value;
+	static const TextureType type = TextureType::Texture2D;
 };
 
 template<PrimitiveType primitiveType> class PrimitiveTypeValue {};
+
 template<> class PrimitiveTypeValue<PrimitiveType::Triangles> {
-public: static const unsigned int value; static const PrimitiveType type = PrimitiveType::Triangles;
+public:
+	static const unsigned int value;
+	static const PrimitiveType type = PrimitiveType::Triangles;
 };
+
 template<> class PrimitiveTypeValue<PrimitiveType::TriangleStrip> {
-public: static const unsigned int value; static const PrimitiveType type = PrimitiveType::TriangleStrip;
+public:
+	static const unsigned int value;
+	static const PrimitiveType type = PrimitiveType::TriangleStrip;
 };
+
 template<> class PrimitiveTypeValue<PrimitiveType::TriangleFan> {
-public: static const unsigned int value; static const PrimitiveType type = PrimitiveType::TriangleFan;
+public:
+	static const unsigned int value;
+	static const PrimitiveType type = PrimitiveType::TriangleFan;
 };
+
 template<> class PrimitiveTypeValue<PrimitiveType::Lines> {
-public: static const unsigned int value; static const PrimitiveType type = PrimitiveType::Lines;
+public:
+	static const unsigned int value;
+	static const PrimitiveType type = PrimitiveType::Lines;
 };
+
 template<> class PrimitiveTypeValue<PrimitiveType::LineStrip> {
-public: static const unsigned int value; static const PrimitiveType type = PrimitiveType::LineStrip;
+public:
+	static const unsigned int value;
+	static const PrimitiveType type = PrimitiveType::LineStrip;
 };
+
 template<> class PrimitiveTypeValue<PrimitiveType::LineLoop> {
-public: static const unsigned int value; static const PrimitiveType type = PrimitiveType::LineLoop;
+public:
+	static const unsigned int value;
+	static const PrimitiveType type = PrimitiveType::LineLoop;
 };
+
 template<> class PrimitiveTypeValue<PrimitiveType::Points> {
-public: static const unsigned int value; static const PrimitiveType type = PrimitiveType::Points;
+public:
+	static const unsigned int value;
+	static const PrimitiveType type = PrimitiveType::Points;
 };
 
 using VertexBuffer = BufferTypeValue<BufferType::VertexBuffer>;
@@ -95,8 +134,8 @@ using LineLoop = PrimitiveTypeValue<PrimitiveType::LineLoop>;
 using Points = PrimitiveTypeValue<PrimitiveType::Points>;
 
 /*
-* SHADERS
-*/
+ * SHADERS
+ */
 unsigned int createShaderProgram();
 void unbindShaderProgram();
 void deleteShaderProgram(unsigned int id);
@@ -110,8 +149,8 @@ void setShaderVar(int location, const glm::vec4& value);
 void setShaderVar(int location, const glm::mat4& value);
 
 /*
-* BUFFERS
-*/
+ * BUFFERS
+ */
 
 void generateBuffers(unsigned int count, unsigned int* buffers);
 void deleteBuffers(unsigned int count, unsigned int* buffers);
@@ -119,49 +158,40 @@ void bindBuffer(unsigned int target, unsigned int buffer);
 void unbindBuffer(unsigned int target);
 void bufferData(unsigned int target, unsigned int size, const void* data, unsigned int usage);
 
-template<BufferType bufferType>
-void bindBuffer(unsigned int buffer) {
+template<BufferType bufferType> void bindBuffer(unsigned int buffer) {
 	bindBuffer(BufferTypeValue<bufferType>::value, buffer);
 }
 
-template<BufferType bufferType>
-void unbindBuffer() {
-	unbindBuffer(BufferTypeValue<bufferType>::value);
-}
+template<BufferType bufferType> void unbindBuffer() { unbindBuffer(BufferTypeValue<bufferType>::value); }
 
-template<BufferType bufferType, BufferUsage usage>
-void bufferData(unsigned int size, const void* data) {
+template<BufferType bufferType, BufferUsage usage> void bufferData(unsigned int size, const void* data) {
 	bufferData(BufferTypeValue<bufferType>::value, size, data, BufferUsageValue<usage>::value);
 }
 
 /*
-* DRAWING
-*/
+ * DRAWING
+ */
 
 void drawArrays(unsigned int mode, int first, int count);
 void drawElements(unsigned int mode, int count, unsigned int type, const void* indices);
 
 /*
-* TEXTURES
-*/
+ * TEXTURES
+ */
 void generateTextures(unsigned int count, unsigned int* textures);
 void activeTexture(unsigned int slot);
 void deleteTextures(unsigned int count, unsigned int* textures);
 void bindTexture(unsigned int target, unsigned int texture);
 void unbindTexture(unsigned int target);
 
-template<TextureType textureType>
-void bindTexture(unsigned int texture) {
+template<TextureType textureType> void bindTexture(unsigned int texture) {
 	bindTexture(TextureTypeValue<textureType>::value, texture);
 }
 
-template<TextureType textureType>
-void unbindTexture() {
-	unbindTexture(TextureTypeValue<textureType>::value);
-}
+template<TextureType textureType> void unbindTexture() { unbindTexture(TextureTypeValue<textureType>::value); }
 
-}
+} // namespace render::pipeline
 
 namespace rp = render::pipeline;
 
-}
+} // namespace tactics

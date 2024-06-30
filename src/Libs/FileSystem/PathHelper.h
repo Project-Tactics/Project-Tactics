@@ -17,4 +17,4 @@ private:
 	std::filesystem::path _dataAbsolutePath;
 };
 
-}
+} // namespace tactics

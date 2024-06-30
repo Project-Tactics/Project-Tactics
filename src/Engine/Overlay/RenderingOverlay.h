@@ -10,7 +10,7 @@ namespace tactics {
 class EntityComponentSystem;
 class RenderSystem;
 
-class RenderingOverlay: public Overlay {
+class RenderingOverlay : public Overlay {
 public:
 	RenderingOverlay(RenderSystem& renderSystem, EntityComponentSystem& ecs);
 	void update() override;
@@ -33,4 +33,4 @@ private:
 	ImVec4 _zComponentColor;
 };
 
-}
+} // namespace tactics

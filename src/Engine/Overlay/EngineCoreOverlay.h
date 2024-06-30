@@ -4,11 +4,11 @@
 
 namespace tactics {
 
-class EngineCoreOverlay: public Overlay {
+class EngineCoreOverlay : public Overlay {
 public:
 	EngineCoreOverlay();
 	void update() override;
 	OverlayConfig getConfig() override;
 };
 
-}
+} // namespace tactics

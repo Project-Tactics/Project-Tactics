@@ -4,8 +4,8 @@
 
 namespace tactics {
 
-class VertexBuffer: public BaseBuffer<float, render::pipeline::VertexBuffer::type> {
+class VertexBuffer : public BaseBuffer<float, render::pipeline::VertexBuffer::type> {
 public:
 	using BaseBuffer<float, render::pipeline::VertexBuffer::type>::BaseBuffer;
 };
-}
+} // namespace tactics

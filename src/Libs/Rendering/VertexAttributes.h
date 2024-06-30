@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vector>
-#include <memory>
 #include <functional>
+#include <memory>
+#include <vector>
 
 namespace tactics {
 class VertexBuffer;
@@ -13,6 +13,7 @@ public:
 	public:
 		void attributef(int count);
 		std::unique_ptr<VertexAttributes> create();
+
 	private:
 		void _defineAttributes(VertexAttributes& vertexAttribute);
 
@@ -38,4 +39,4 @@ private:
 	unsigned int _componentPerVertex{};
 };
 
-}
+} // namespace tactics

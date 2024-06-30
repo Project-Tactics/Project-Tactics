@@ -3,14 +3,13 @@
 #include "FileHandle.h"
 
 #include <nlohmann/json.hpp>
-
 #include <variant>
 
 namespace tactics {
 
 class PathHelper;
 
-class JsonFileHandle: public FileHandle<nlohmann::ordered_json> {
+class JsonFileHandle : public FileHandle<nlohmann::ordered_json> {
 public:
 	JsonFileHandle(const std::filesystem::path& path, PathHelper& pathHelper);
 	bool exists() const override;
@@ -26,4 +25,4 @@ private:
 	PathHelper& _pathHelper;
 };
 
-}
+} // namespace tactics

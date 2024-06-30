@@ -8,7 +8,7 @@ class EntityComponentSystem;
 
 namespace tactics::renderstep {
 
-class PrepareViewport: public RenderStep {
+class PrepareViewport : public RenderStep {
 public:
 	PrepareViewport(EntityComponentSystem& ecs);
 	void execute(RenderStepInfo& renderInfo) override;
@@ -17,4 +17,4 @@ private:
 	EntityComponentSystem& _ecs;
 };
 
-}
+} // namespace tactics::renderstep

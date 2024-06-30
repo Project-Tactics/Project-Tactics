@@ -1,12 +1,14 @@
 #include "UniformsDescriptor.h"
 
 #include <Libs/Resource/Material/Uniforms.h>
-#include <Libs/Resource/Texture/Texture.h>
 #include <Libs/Resource/ResourceProvider.h>
+#include <Libs/Resource/Texture/Texture.h>
 
 namespace tactics {
 
-void UniformsDescriptor::fillUniformsInstance(const UniformsDescriptor& descriptor, resource::Uniforms& uniforms, const resource::ResourceProvider& resourceProvider) {
+void UniformsDescriptor::fillUniformsInstance(const UniformsDescriptor& descriptor,
+											  resource::Uniforms& uniforms,
+											  const resource::ResourceProvider& resourceProvider) {
 	fillUniformsInstanceWithBasicTypes(descriptor, uniforms);
 
 	for (const auto& [name, value] : descriptor.textures) {
@@ -15,7 +17,8 @@ void UniformsDescriptor::fillUniformsInstance(const UniformsDescriptor& descript
 	}
 }
 
-void UniformsDescriptor::fillUniformsInstanceWithBasicTypes(const UniformsDescriptor& descriptor, resource::Uniforms& uniforms) {
+void UniformsDescriptor::fillUniformsInstanceWithBasicTypes(const UniformsDescriptor& descriptor,
+															resource::Uniforms& uniforms) {
 	uniforms.set(descriptor.ints);
 	uniforms.set(descriptor.floats);
 	uniforms.set(descriptor.vectors2);
@@ -24,4 +27,4 @@ void UniformsDescriptor::fillUniformsInstanceWithBasicTypes(const UniformsDescri
 	uniforms.set(descriptor.matrices);
 }
 
-}
+} // namespace tactics

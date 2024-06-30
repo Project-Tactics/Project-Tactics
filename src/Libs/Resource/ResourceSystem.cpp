@@ -8,38 +8,27 @@
 namespace tactics::resource {
 
 ResourceSystem::ResourceSystem(FileSystem& fileSystem)
-	: _resourcePackManager(std::make_unique<ResourcePackManager>(fileSystem, *this)) {
-}
+	: _resourcePackManager(std::make_unique<ResourcePackManager>(fileSystem, *this)) {}
 
-ResourceSystem::~ResourceSystem() {
-}
+ResourceSystem::~ResourceSystem() {}
 
 void ResourceSystem::loadPackDefinition(const std::filesystem::path& definitionPath) {
 	_resourcePackManager->loadPackDefinition(definitionPath);
 }
 
-void ResourceSystem::loadPack(const HashId& packName) {
-	_resourcePackManager->loadPack(packName);
-}
+void ResourceSystem::loadPack(const HashId& packName) { _resourcePackManager->loadPack(packName); }
 
-void ResourceSystem::unloadPack(const HashId& packName) {
-	_resourcePackManager->unloadPack(packName);
-}
+void ResourceSystem::unloadPack(const HashId& packName) { _resourcePackManager->unloadPack(packName); }
 
-void ResourceSystem::createManualPack(const HashId& packName) {
-	_resourcePackManager->createPack(packName, true);
-}
+void ResourceSystem::createManualPack(const HashId& packName) { _resourcePackManager->createPack(packName, true); }
 
 void ResourceSystem::forEachManager(const std::function<void(const BaseResourceManager&)>& callback) {
-	for (auto&& [type, manager] : _resourceManagers) {
-		callback(*manager);
-	}
+	for (auto&& [type, manager] : _resourceManagers) { callback(*manager); }
 }
 
-void ResourceSystem::forEachResource(const std::function<void(const Pack&, const PackGroup&, const ResourceInfo&)>& callback) {
-	_resourcePackManager->forEachPack([&] (const Pack& pack) {
-		pack.forEachResource(callback);
-	});
+void ResourceSystem::forEachResource(
+	const std::function<void(const Pack&, const PackGroup&, const ResourceInfo&)>& callback) {
+	_resourcePackManager->forEachPack([&](const Pack& pack) { pack.forEachResource(callback); });
 }
 
 void ResourceSystem::forEachPack(const std::function<void(const Pack&)>& callback) {
@@ -49,7 +38,10 @@ void ResourceSystem::forEachPack(const std::function<void(const Pack&)>& callbac
 void ResourceSystem::registerManager(std::unique_ptr<BaseResourceManager> resourceManager) {
 	auto type = resourceManager->getType();
 	if (_resourceManagers.contains(type)) {
-		LOG_ERROR(Log::Resource, "Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.", type);
+		LOG_ERROR(
+			Log::Resource,
+			"Can't register a new Resource Type Manager for resource of type {}. A manager is already registered.",
+			type);
 	}
 
 	_resourceManagers.insert({type, std::move(resourceManager)});
@@ -58,7 +50,9 @@ void ResourceSystem::registerManager(std::unique_ptr<BaseResourceManager> resour
 void ResourceSystem::_unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager) {
 	auto itr = _resourceManagers.find(resourceManager->getType());
 	if (itr == _resourceManagers.end()) {
-		LOG_ERROR(Log::Resource, "Can't unregister a Resource Type Manager for resource of type {}. No manager is registered.", resourceManager->getType());
+		LOG_ERROR(Log::Resource,
+				  "Can't unregister a Resource Type Manager for resource of type {}. No manager is registered.",
+				  resourceManager->getType());
 		return;
 	}
 
@@ -66,9 +60,7 @@ void ResourceSystem::_unregisterManager(std::unique_ptr<BaseResourceManager> res
 }
 
 BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) const {
-	if (auto itr = _resourceManagers.find(resourceType); itr != _resourceManagers.end()) {
-		return *itr->second;
-	}
+	if (auto itr = _resourceManagers.find(resourceType); itr != _resourceManagers.end()) { return *itr->second; }
 
 	throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", resourceType);
 }
@@ -89,8 +81,11 @@ void ResourceSystem::loadExternalResource(const HashId& packName, std::shared_pt
 	_resourcePackManager->loadExternalResource(packName, resource);
 }
 
-void ResourceSystem::_loadExternalResource(const HashId& packName, const HashId& resourceName, ResourceType resourceType, const nlohmann::json& data) {
+void ResourceSystem::_loadExternalResource(const HashId& packName,
+										   const HashId& resourceName,
+										   ResourceType resourceType,
+										   const nlohmann::json& data) {
 	_resourcePackManager->loadExternalResource(packName, resourceName, resourceType, data);
 }
 
-}
+} // namespace tactics::resource

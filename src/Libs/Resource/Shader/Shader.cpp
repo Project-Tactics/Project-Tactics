@@ -1,17 +1,13 @@
 #include "Shader.h"
 
-#include <Libs/Utility/Exception.h>
 #include <Libs/Rendering/RenderCalls/RenderCalls.h>
+#include <Libs/Utility/Exception.h>
 
 namespace tactics::resource {
 
-Shader::~Shader() {
-	render::pipeline::deleteShaderProgram(rendererId);
-}
+Shader::~Shader() { render::pipeline::deleteShaderProgram(rendererId); }
 
-void Shader::bind() const {
-	render::pipeline::activateShaderProgram(rendererId);
-}
+void Shader::bind() const { render::pipeline::activateShaderProgram(rendererId); }
 
 void Shader::setUniform(std::string_view uniformName, int value) {
 	int uniformLocation = _getAndCacheUniform(uniformName);
@@ -44,16 +40,12 @@ void Shader::setUniform(std::string_view uniformName, const glm::mat4& value) {
 }
 
 int Shader::_getAndCacheUniform(std::string_view uniformName) {
-	if (auto itr = _uniformsMapping.find(uniformName); itr != _uniformsMapping.end()) {
-		return itr->second;
-	}
+	if (auto itr = _uniformsMapping.find(uniformName); itr != _uniformsMapping.end()) { return itr->second; }
 
 	auto location = render::pipeline::getShaderVarLocation(rendererId, uniformName.data());
-	if (location == -1) {
-		throw TACTICS_EXCEPTION("Uniform '{}' not found in shader program.", uniformName);
-	}
+	if (location == -1) { throw TACTICS_EXCEPTION("Uniform '{}' not found in shader program.", uniformName); }
 	_uniformsMapping[uniformName] = location;
 	return location;
 }
 
-}
+} // namespace tactics::resource

@@ -31,4 +31,4 @@ private:
 	bool _captureInput{};
 };
 
-}
+} // namespace tactics

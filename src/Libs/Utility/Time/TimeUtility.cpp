@@ -11,4 +11,4 @@ double TimeUtility::nowInSeconds() {
 	return milliseconds / 1000.0;
 }
 
-}
+} // namespace tactics

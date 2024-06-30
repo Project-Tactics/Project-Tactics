@@ -7,4 +7,4 @@ public:
 	static double nowInSeconds();
 };
 
-}
+} // namespace tactics

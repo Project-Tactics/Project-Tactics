@@ -6,7 +6,7 @@ namespace tactics {
 
 class OverlaySystem;
 
-class MainOverlay: public Overlay {
+class MainOverlay : public Overlay {
 public:
 	MainOverlay(OverlaySystem& overlaySystem);
 	~MainOverlay();
@@ -19,4 +19,4 @@ private:
 	OverlaySystem& _overlaySystem;
 };
 
-}
+} // namespace tactics

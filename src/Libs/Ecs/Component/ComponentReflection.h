@@ -10,4 +10,4 @@ public:
 	static void initializeCommonComponents();
 };
 
-}
+} // namespace tactics

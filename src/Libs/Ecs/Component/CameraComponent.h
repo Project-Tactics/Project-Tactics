@@ -1,7 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
 #include <Libs/Utility/Reflection.h>
+
+#include <glm/glm.hpp>
 
 namespace tactics::component {
 
@@ -10,10 +11,9 @@ enum ProjectionType {
 	Orthographic
 };
 
-NLOHMANN_JSON_SERIALIZE_ENUM(ProjectionType, {
-	{ProjectionType::Perspective, "perspective"},
-	{ProjectionType::Orthographic, "orthographic"}
-});
+NLOHMANN_JSON_SERIALIZE_ENUM(ProjectionType,
+							 {{ProjectionType::Perspective, "perspective"},
+							  {ProjectionType::Orthographic, "orthographic"}});
 
 struct Camera {
 	ProjectionType projectionType = ProjectionType::Perspective;
@@ -29,4 +29,4 @@ struct CurrentCamera {
 	static void defineReflection();
 };
 
-}
+} // namespace tactics::component

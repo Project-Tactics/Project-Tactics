@@ -1,12 +1,11 @@
 #pragma once
 
 #include <Libs/Fsm/FsmStateWithServices.h>
-
 #include <Libs/Utility/HashId.h>
 
 namespace tactics {
 
-class UnloadState: public FsmStateWithServices {
+class UnloadState : public FsmStateWithServices {
 public:
 	UnloadState(ServiceLocator& services, const HashId& packageName);
 	FsmAction enter() override;
@@ -17,4 +16,4 @@ private:
 	HashId _packageName;
 };
 
-}
+} // namespace tactics

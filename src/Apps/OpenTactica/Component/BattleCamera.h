@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Libs/Ecs/EntityUtilities.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
+#include <Libs/Ecs/EntityUtilities.h>
 #include <Libs/Utility/Math.h>
-
 #include <Libs/Utility/Reflection.h>
+
 #include <array>
 
 namespace tactics::component {
@@ -23,15 +23,14 @@ struct BattleCamera {
 	void rotateToNextStep();
 	void rotateToPrevStep();
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(
-		BattleCamera,
-		rotationTime,
-		distanceFromOrigin,
-		rotationSpeed,
-		nextStep,
-		currentStep,
-		rotationSteps,
-		offset);
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(BattleCamera,
+												rotationTime,
+												distanceFromOrigin,
+												rotationSpeed,
+												nextStep,
+												currentStep,
+												rotationSteps,
+												offset);
 	static void defineReflection();
 };
 
@@ -40,4 +39,4 @@ public:
 	static void update(ecs_view<BattleCamera, Transform> view);
 };
 
-}
+} // namespace tactics::component

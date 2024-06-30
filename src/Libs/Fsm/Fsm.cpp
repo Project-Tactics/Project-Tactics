@@ -5,8 +5,8 @@
 #include <Libs/Utility/Exception.h>
 #include <Libs/Utility/Log/Log.h>
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace tactics {
 
@@ -22,17 +22,11 @@ Fsm::Fsm(FsmStateEntries states, const HashId& startStateName, FsmExternalContro
 }
 
 void Fsm::update() {
-	if (!_currentState) {
-		_goToState(_startStateName);
-	}
+	if (!_currentState) { _goToState(_startStateName); }
 
-	if (_hasReachedExitState) {
-		return;
-	}
+	if (_hasReachedExitState) { return; }
 
-	if (_performExternalUpdateTransition()) {
-		return;
-	}
+	if (_performExternalUpdateTransition()) { return; }
 
 	FsmAction action = _currentState->state->update();
 	_performAction<FsmAction>(action);
@@ -67,17 +61,17 @@ void Fsm::_goToState(const HashId& stateName) {
 	_performAction<FsmAction>(action);
 }
 
-bool Fsm::hasReachedExitState() const {
-	return _hasReachedExitState;
-}
+bool Fsm::hasReachedExitState() const { return _hasReachedExitState; }
 
 void Fsm::_executeTransition(const HashId& transition) {
 	LOG_TRACE(Log::Fsm, "Executing [{}] transition from state [{}]", transition, _currentState->name);
 	FsmTransitions& transitions = _currentState->transitions;
 	auto itr = transitions.find(transition);
 	if (itr == transitions.end()) {
-		LOG_ERROR(Log::Fsm, "Cannot execute transition from state [{}]. Transition [{}] does not exist.",
-			_currentState->name, transition);
+		LOG_ERROR(Log::Fsm,
+				  "Cannot execute transition from state [{}]. Transition [{}] does not exist.",
+				  _currentState->name,
+				  transition);
 		return;
 	}
 
@@ -89,7 +83,10 @@ void Fsm::_executeTransition(const HashId& transition) {
 		}
 	}
 	if (!transitionTarget) {
-		LOG_ERROR(Log::Fsm, "Cannot execute transition [{}] from state [{}]. No condition evaluated to true", transition, _currentState->name);
+		LOG_ERROR(Log::Fsm,
+				  "Cannot execute transition [{}] from state [{}]. No condition evaluated to true",
+				  transition,
+				  _currentState->name);
 		return;
 	}
 
@@ -104,9 +101,7 @@ void Fsm::_executeTransition(const HashId& transition) {
 }
 
 FsmStateEntry* Fsm::_getStateByName(const HashId& stateName) {
-	if (auto itr = _states.find(stateName); itr != _states.end()) {
-		return itr->second.get();
-	}
+	if (auto itr = _states.find(stateName); itr != _states.end()) { return itr->second.get(); }
 	return nullptr;
 }
 
@@ -119,4 +114,4 @@ bool Fsm::onEvent(SDL_Event& event) {
 	return false;
 }
 
-}
+} // namespace tactics

@@ -4,7 +4,7 @@
 
 namespace tactics {
 
-class EmptyState: public FsmState {
+class EmptyState : public FsmState {
 public:
 	FsmAction enter() override;
 	FsmAction update() override;
@@ -14,4 +14,4 @@ private:
 	FsmEventAction onKeyPress(SDL_KeyboardEvent& event) override;
 };
 
-}
+} // namespace tactics

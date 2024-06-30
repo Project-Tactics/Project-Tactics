@@ -28,7 +28,8 @@ void Mesh::deserialize(const resource::ResourceProvider* resourceProvider, const
 	auto subMeshCount = mesh->subMeshes.size();
 	if (subMeshCount != descriptor.materials.size()) {
 		throw TACTICS_EXCEPTION("Number of materials does not match number of submeshes. SubMeshes: {} - Materials: {}",
-			subMeshCount, descriptor.materials.size());
+								subMeshCount,
+								descriptor.materials.size());
 	}
 
 	for (auto& material : descriptor.materials) {
@@ -42,14 +43,10 @@ void Mesh::deserialize(const resource::ResourceProvider* resourceProvider, const
 Mesh Mesh::clone() {
 	Mesh clone;
 	clone.mesh = mesh;
-	for (auto& materialInstance : materials) {
-		clone.materials.push_back(materialInstance->clone());
-	}
+	for (auto& materialInstance : materials) { clone.materials.push_back(materialInstance->clone()); }
 	return clone;
 }
 
-void Mesh::defineReflection() {
-	componentReflection<Mesh>("mesh");
-}
+void Mesh::defineReflection() { componentReflection<Mesh>("mesh"); }
 
-}
+} // namespace tactics::component

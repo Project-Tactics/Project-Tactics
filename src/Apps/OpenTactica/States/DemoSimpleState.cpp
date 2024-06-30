@@ -1,14 +1,14 @@
 #include "DemoSimpleState.h"
 
-#include "../Component/RotateItem.h"
 #include "../Component/RotateAroundPoint.h"
+#include "../Component/RotateItem.h"
 
 #include <Engine/Scene/SceneSystem.h>
 
-#include <Libs/Ecs/EntityComponentSystem.h>
-#include <Libs/Ecs/Component/TransformComponent.h>
-#include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/CameraComponent.h>
+#include <Libs/Ecs/Component/MeshComponent.h>
+#include <Libs/Ecs/Component/TransformComponent.h>
+#include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Rendering/GeometryBuilder.h>
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/ResourceSystem.h>
@@ -39,7 +39,8 @@ void DemoSimpleState::exit() {
 FsmAction DemoSimpleState::update() {
 	auto& ecs = getService<EntityComponentSystem>();
 	component::RotateItemSystem::update(ecs.sceneRegistry().view<component::Transform, component::RotateItem>());
-	component::RotateAroundPointSystem::update(ecs.sceneRegistry().view<component::Transform, component::RotateAroundPoint>());
+	component::RotateAroundPointSystem::update(
+		ecs.sceneRegistry().view<component::Transform, component::RotateAroundPoint>());
 
 	return FsmAction::none();
 }
@@ -60,7 +61,7 @@ void DemoSimpleState::_createCrate() {
 
 	auto crate = sceneSystem.createEntity({40.0f, 5.0f, 0.0f}, "cube"_id, {"texturedUnlit"_id});
 	crate.getComponent<component::Transform>().setScale({10, 10, 10});
-	crate.updateComponent<component::Mesh>([&resourceSystem] (auto& mesh) {
+	crate.updateComponent<component::Mesh>([&resourceSystem](auto& mesh) {
 		mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("crate"_id));
 	});
 }
@@ -72,9 +73,7 @@ void DemoSimpleState::_createTeapot() {
 	auto& transform = teapot.getComponent<component::Transform>();
 	transform.setRotation(glm::radians(90.0f), Vector3::up);
 	transform.setScale({5, 5, 5});
-	teapot.updateComponent<component::Mesh>([] (auto& mesh) {
-		mesh.materials[0]->set("u_Color", Color::gray);
-	});
+	teapot.updateComponent<component::Mesh>([](auto& mesh) { mesh.materials[0]->set("u_Color", Color::gray); });
 }
 
 void DemoSimpleState::_createPlane() {
@@ -90,9 +89,12 @@ void DemoSimpleState::_createQuads() {
 	const int height = 4;
 	for (auto x = -width / 2; x < width / 2; ++x) {
 		for (auto y = -height / 2; y < height / 2; ++y) {
-			auto quad = sceneSystem.createEntity({-50.0f + y * 20.f, 10.0f, x * 10.f}, "quad"_id, {"texturedUnlitWithAlpha"_id});
+			auto quad = sceneSystem.createEntity({-50.0f + y * 20.f, 10.0f, x * 10.f},
+												 "quad"_id,
+												 {"texturedUnlitWithAlpha"_id});
 			quad.getComponent<component::Transform>().setScale({15, 15, 15});
-			quad.getComponent<component::Mesh>().materials[0]->set("u_Texture",
+			quad.getComponent<component::Mesh>().materials[0]->set(
+				"u_Texture",
 				resourceSystem.getResource<resource::Texture>("tacticsIcon"_id));
 		}
 	}
@@ -154,9 +156,7 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 	resourceSystem.loadExternalResource("CustomPack"_id, triangleMesh);
 
 	// We can also create a resource by simulating the usual pack loading
-	nlohmann::json descriptor = {
-		{"vertexShader", "common/shaders/default.vert"},
-		{"fragmentShader", R"(
+	nlohmann::json descriptor = {{"vertexShader", "common/shaders/default.vert"}, {"fragmentShader", R"(
 				#version 330 core
 				layout(location = 0) out vec4 color;
 				uniform vec4 u_Color;
@@ -164,9 +164,7 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 				{
 					color = u_Color;
 				}
-			)"
-	}
-	};
+			)"}};
 	resourceSystem.loadExternalResource<resource::Shader>("CustomPack"_id, "CustomShader"_id, descriptor);
 
 	auto material = std::make_shared<resource::Material>("colorOnly"_id);
@@ -179,4 +177,4 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 	customQuad.addComponent<component::RotateItem>(5.f, Vector3::forward);
 }
 
-}
+} // namespace tactics

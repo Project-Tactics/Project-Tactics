@@ -9,10 +9,11 @@ enum class TextureFilter {
 	Nearest
 };
 
-NLOHMANN_JSON_SERIALIZE_ENUM(TextureFilter, {
-	{TextureFilter::Linear, "linear"},
-	{TextureFilter::Nearest, "nearest"},
-})
+NLOHMANN_JSON_SERIALIZE_ENUM(TextureFilter,
+							 {
+								 {TextureFilter::Linear, "linear"},
+								 {TextureFilter::Nearest, "nearest"},
+							 })
 
 struct TextureInfo {
 	int width;
@@ -22,7 +23,7 @@ struct TextureInfo {
 	TextureFilter filter;
 };
 
-class Texture: public Resource<Texture> {
+class Texture : public Resource<Texture> {
 public:
 	static const ResourceType TYPE = ResourceType::Texture;
 	using Resource<Texture>::Resource;
@@ -36,4 +37,4 @@ public:
 	unsigned int rendererId;
 };
 
-}
+} // namespace tactics::resource

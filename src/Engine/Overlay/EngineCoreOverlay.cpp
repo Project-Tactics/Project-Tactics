@@ -8,9 +8,7 @@
 
 namespace tactics {
 
-EngineCoreOverlay::EngineCoreOverlay() {
-
-}
+EngineCoreOverlay::EngineCoreOverlay() {}
 
 void EngineCoreOverlay::update() {
 	ImGui::TextColored(CustomOverlayColors::Colors::TitleTextColor, "%s", "Time");
@@ -25,4 +23,4 @@ OverlayConfig EngineCoreOverlay::getConfig() {
 	return config;
 }
 
-}
+} // namespace tactics

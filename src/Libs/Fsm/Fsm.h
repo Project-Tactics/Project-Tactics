@@ -1,17 +1,17 @@
 #pragma once
 
-#include <Libs/Event/EventsListener.h>
-
 #include "FsmTypes.h"
 
-#include <string>
+#include <Libs/Event/EventsListener.h>
+
 #include <memory>
+#include <string>
 
 namespace tactics {
 
 class FsmExternalController;
 
-class Fsm: public EventsListener {
+class Fsm : public EventsListener {
 public:
 	Fsm(FsmStateEntries states, const HashId& startStateName, FsmExternalController* externalController);
 
@@ -21,8 +21,8 @@ public:
 	void update();
 
 	/*
-	* @brief Check if the Fsm has reached its internal Fsm::exitState.
-	*/
+	 * @brief Check if the Fsm has reached its internal Fsm::exitState.
+	 */
 	[[nodiscard]] bool hasReachedExitState() const;
 
 	/**
@@ -40,20 +40,17 @@ private:
 	[[nodiscard]] FsmStateEntry* _getStateByName(const HashId& stateName);
 	bool _performExternalUpdateTransition();
 
-	template<typename TAction>
-	void _performAction(const TAction& action) {
-		if (action.hasTransition()) {
-			_executeTransition(action.transitionName());
-		}
+	template<typename TAction> void _performAction(const TAction& action) {
+		if (action.hasTransition()) { _executeTransition(action.transitionName()); }
 	}
 
 	FsmStateEntries _states;
 	FsmStateEntry* _currentState{};
 
 	/**
-	 * The External Controller is mostly meant to control the transition of the fsm by requesting them during the update() method
-	 * Its main purpose is to allow debug or external control of the Fsm in dev mode.
-	 * It doesn't replace the Fsm/FsmState logic and shouldn't be used for domain logic reason.
+	 * The External Controller is mostly meant to control the transition of the fsm by requesting them during the
+	 * update() method Its main purpose is to allow debug or external control of the Fsm in dev mode. It doesn't replace
+	 * the Fsm/FsmState logic and shouldn't be used for domain logic reason.
 	 */
 	FsmExternalController* _externalController{};
 
@@ -61,4 +58,4 @@ private:
 	HashId _startStateName;
 };
 
-}
+} // namespace tactics

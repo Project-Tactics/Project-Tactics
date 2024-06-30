@@ -6,9 +6,7 @@
 
 namespace tactics {
 
-FsmAction FsmAction::none() {
-	return {};
-}
+FsmAction FsmAction::none() { return {}; }
 
 FsmAction FsmAction::transition(const HashId& transitionName) {
 	FsmAction result;
@@ -16,14 +14,10 @@ FsmAction FsmAction::transition(const HashId& transitionName) {
 	return result;
 }
 
-bool FsmAction::hasTransition() const {
-	return !_transitionName.isEmpty();
-}
+bool FsmAction::hasTransition() const { return !_transitionName.isEmpty(); }
 
 const HashId& FsmAction::transitionName() const {
-	if (_transitionName.isEmpty()) {
-		throw TACTICS_EXCEPTION("FsmAction does not have a transition name");
-	}
+	if (_transitionName.isEmpty()) { throw TACTICS_EXCEPTION("FsmAction does not have a transition name"); }
 	return _transitionName;
 }
 
@@ -47,18 +41,12 @@ FsmEventAction FsmEventAction::transition(const HashId& transitionName) {
 }
 
 const HashId& FsmEventAction::transitionName() const {
-	if (_transitionName.isEmpty()) {
-		throw TACTICS_EXCEPTION("FsmEventAction does not have a transition name");
-	}
+	if (_transitionName.isEmpty()) { throw TACTICS_EXCEPTION("FsmEventAction does not have a transition name"); }
 	return _transitionName;
 }
 
-bool FsmEventAction::wantsToCaptureInput() const {
-	return _captureInput;
-}
+bool FsmEventAction::wantsToCaptureInput() const { return _captureInput; }
 
-bool FsmEventAction::hasTransition() const {
-	return !_transitionName.isEmpty();
-}
+bool FsmEventAction::hasTransition() const { return !_transitionName.isEmpty(); }
 
-}
+} // namespace tactics

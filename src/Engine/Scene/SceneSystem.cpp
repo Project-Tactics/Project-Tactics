@@ -1,6 +1,5 @@
 #include "SceneSystem.h"
 
-#include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/Component/AlphaBlendedComponent.h>
 #include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/FrustumComponent.h>
@@ -9,6 +8,7 @@
 #include <Libs/Ecs/Component/SpriteComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/Component/ViewportComponent.h>
+#include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/System/CameraSystem.h>
 #include <Libs/Resource/Material/Material.h>
 #include <Libs/Resource/Mesh/Mesh.h>
@@ -20,9 +20,7 @@
 
 namespace tactics {
 
-SceneSystem::SceneSystem(
-	EntityComponentSystem& ecs,
-	resource::ResourceSystem& resourceSystem)
+SceneSystem::SceneSystem(EntityComponentSystem& ecs, resource::ResourceSystem& resourceSystem)
 	: _ecs(ecs)
 	, _resourceSystem(resourceSystem) {
 	using namespace component;
@@ -34,16 +32,11 @@ SceneSystem::SceneSystem(
 	registry.on_construct<CurrentViewport>().connect<&SceneSystem::_onCurrentViewportConstructed>(this);
 }
 
-SceneSystem::~SceneSystem() {
-}
+SceneSystem::~SceneSystem() {}
 
-entt::registry& SceneSystem::getRegistry() {
-	return _ecs.sceneRegistry();
-}
+entt::registry& SceneSystem::getRegistry() { return _ecs.sceneRegistry(); }
 
-const entt::registry& SceneSystem::getRegistry() const {
-	return _ecs.sceneRegistry();
-}
+const entt::registry& SceneSystem::getRegistry() const { return _ecs.sceneRegistry(); }
 
 void SceneSystem::clearScene(bool clearCameras) {
 	auto& registry = _ecs.sceneRegistry();
@@ -61,27 +54,21 @@ void SceneSystem::clearScene(bool clearCameras) {
 
 Entity SceneSystem::getCurrentCamera() {
 	auto view = _ecs.sceneRegistry().view<component::CurrentCamera>();
-	if (view.empty()) {
-		throw TACTICS_EXCEPTION("No current camera entity found");
-	}
+	if (view.empty()) { throw TACTICS_EXCEPTION("No current camera entity found"); }
 	return Entity::create(*view.begin(), &_ecs.sceneRegistry());
 }
 
 void SceneSystem::_onCurrentCameraConstructed(entt::registry&, entt::entity currentCameraEntity) {
 	using namespace component;
-	_ecs.sceneRegistry().view<CurrentCamera>().each([this, currentCameraEntity] (auto entity) {
-		if (currentCameraEntity != entity) {
-			_ecs.sceneRegistry().remove<CurrentCamera>(entity);
-		}
+	_ecs.sceneRegistry().view<CurrentCamera>().each([this, currentCameraEntity](auto entity) {
+		if (currentCameraEntity != entity) { _ecs.sceneRegistry().remove<CurrentCamera>(entity); }
 	});
 }
 
 void SceneSystem::_onCurrentViewportConstructed(entt::registry&, entt::entity currentViewportEntity) {
 	using namespace component;
-	_ecs.sceneRegistry().view<CurrentViewport>().each([this, currentViewportEntity] (auto entity) {
-		if (currentViewportEntity != entity) {
-			_ecs.sceneRegistry().remove<CurrentViewport>(entity);
-		}
+	_ecs.sceneRegistry().view<CurrentViewport>().each([this, currentViewportEntity](auto entity) {
+		if (currentViewportEntity != entity) { _ecs.sceneRegistry().remove<CurrentViewport>(entity); }
 	});
 }
 
@@ -122,15 +109,13 @@ Entity SceneSystem::createViewport(const glm::vec2& topLeft, const glm::vec2& si
 	return entity;
 }
 
-Entity SceneSystem::createCamera(
-	const HashId& name,
-	const glm::vec3& position,
-	const glm::vec3& direction,
-	const glm::vec3& up,
-	float fov,
-	float near,
-	float far
-) {
+Entity SceneSystem::createCamera(const HashId& name,
+								 const glm::vec3& position,
+								 const glm::vec3& direction,
+								 const glm::vec3& up,
+								 float fov,
+								 float near,
+								 float far) {
 	using namespace component;
 	auto entity = Entity::create(name, &_ecs.sceneRegistry());
 	auto& transform = entity.addComponent<Transform>();
@@ -142,13 +127,11 @@ Entity SceneSystem::createCamera(
 	return entity;
 }
 
-Entity SceneSystem::createEntity(
-	const glm::vec3& position,
-	const HashId& meshName,
-	const std::vector<HashId>& materials,
-	const glm::quat& rotation,
-	const glm::vec3& scale
-) {
+Entity SceneSystem::createEntity(const glm::vec3& position,
+								 const HashId& meshName,
+								 const std::vector<HashId>& materials,
+								 const glm::quat& rotation,
+								 const glm::vec3& scale) {
 	using namespace component;
 	auto entity = Entity::create(""_id, &_ecs.sceneRegistry());
 	auto& transform = entity.addComponent<Transform>();
@@ -167,10 +150,7 @@ Entity SceneSystem::createEntity(
 	return entity;
 }
 
-Entity SceneSystem::createEntity(
-	const HashId& name,
-	const HashId& prefabName
-) {
+Entity SceneSystem::createEntity(const HashId& name, const HashId& prefabName) {
 	auto prefab = _resourceSystem.getResource<resource::Prefab>(prefabName);
 	auto entity = _ecs.createEntityFromPrefab(name, prefab->entity);
 	return entity;
@@ -179,12 +159,10 @@ Entity SceneSystem::createEntity(
 Entity SceneSystem::getEntityByName(const HashId& name) {
 	auto view = _ecs.sceneRegistry().view<component::Name>();
 	for (auto [entity, nameComp] : view.each()) {
-		if (nameComp.name == name) {
-			return Entity::create(entity, &_ecs.sceneRegistry());
-		}
+		if (nameComp.name == name) { return Entity::create(entity, &_ecs.sceneRegistry()); }
 	}
 
 	throw TACTICS_EXCEPTION("Entity with name {} not found", name.str());
 }
 
-}
+} // namespace tactics

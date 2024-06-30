@@ -7,7 +7,7 @@
 
 namespace tactics::resource {
 
-class Shader: public Resource<Shader> {
+class Shader : public Resource<Shader> {
 public:
 	static const ResourceType TYPE = ResourceType::Shader;
 	using Resource<Shader>::Resource;
@@ -25,11 +25,11 @@ public:
 	std::string vertexSource;
 
 private:
-	// TODO(Gerark) Instead of trying to get or lazily create the uniform location, we should cache the uniform location when the shader is created by
-	// inspecting the shader source code and storing the uniform locations in a map. This way we can avoid the overhead of calling this function every time
-	// we want to set a uniform.
+	// TODO(Gerark) Instead of trying to get or lazily create the uniform location, we should cache the uniform location
+	// when the shader is created by inspecting the shader source code and storing the uniform locations in a map. This
+	// way we can avoid the overhead of calling this function every time we want to set a uniform.
 	int _getAndCacheUniform(std::string_view uniformName);
 	UnorderedStringMap<int> _uniformsMapping;
 };
 
-}
+} // namespace tactics::resource

@@ -8,4 +8,4 @@ struct Name {
 	HashId name;
 };
 
-}
+} // namespace tactics::component

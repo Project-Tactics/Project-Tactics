@@ -6,4 +6,4 @@ struct Billboard {
 	static void defineReflection();
 };
 
-}
+} // namespace tactics::component
