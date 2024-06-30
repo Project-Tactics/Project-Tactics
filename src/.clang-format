@@ -114,7 +114,7 @@ PackConstructorInitializers: CurrentLine
 PointerAlignment: Left
 ReflowComments: true
 # RemoveParentheses: true v17
-RequiresClausePosition: OwnLine
+# RequiresClausePosition: OwnLine v15
 RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Always
 SortUsingDeclarations: true
