@@ -4,25 +4,25 @@
 #include "DefaultFsmExternalController.h"
 #include "ResourceSystemInitializer.h"
 
+#include <Engine/Overlay/CustomOverlayColors.h>
 #include <Engine/Overlay/EngineCoreOverlay.h>
 #include <Engine/Overlay/FsmOverlay.h>
 #include <Engine/Overlay/RenderingOverlay.h>
 #include <Engine/Overlay/ResourcesOverlay.h>
-#include <Engine/Overlay/CustomOverlayColors.h>
 #include <Engine/Scene/SceneSystem.h>
 
 #include <Libs/Ecs/EntityComponentSystem.h>
-#include <Libs/Ecs/System/CameraSystem.h>
-#include <Libs/Ecs/System/TransformSystem.h>
 #include <Libs/Ecs/System/BillboardSystem.h>
+#include <Libs/Ecs/System/CameraSystem.h>
 #include <Libs/Ecs/System/SpriteSystem.h>
+#include <Libs/Ecs/System/TransformSystem.h>
 #include <Libs/Event/EventsSystem.h>
-#include <Libs/FileSystem/FileSystem.h>
 #include <Libs/FileSystem/FileLoader.h>
+#include <Libs/FileSystem/FileSystem.h>
 #include <Libs/Fsm/FsmBuilder.h>
-#include <Libs/Overlay/OverlaySystem.h>
-#include <Libs/Overlay/MainOverlay.h>
 #include <Libs/Overlay/ExampleOverlay.h>
+#include <Libs/Overlay/MainOverlay.h>
+#include <Libs/Overlay/OverlaySystem.h>
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/ResourceSystem.h>
@@ -34,8 +34,8 @@
 #include <Libs/Utility/Time/EngineTime.h>
 #include <Libs/Utility/Time/TimeUtility.h>
 
-#include <imgui/imgui.h>
 #include <SDL.h>
+#include <imgui/imgui.h>
 
 namespace tactics {
 
@@ -50,11 +50,7 @@ void Engine::_run(Application& application) {
 		LOG_TRACE(Log::Engine, "Engine Shutdown Started");
 		engine._shutdown();
 		LOG_TRACE(Log::Engine, "Engine Shutdown Ended");
-	}
-	catch (Exception& exception) {
-		LOG_EXCEPTION(exception);
-	}
-	catch (std::exception& exception) {
+	} catch (Exception& exception) { LOG_EXCEPTION(exception); } catch (std::exception& exception) {
 		LOG_EXCEPTION(exception);
 	}
 }
@@ -163,21 +159,19 @@ void Engine::_unregisterOverlays() {
 
 void Engine::_throwIfAnyResourceIsStillLoaded() {
 	LOG_TRACE(Log::Engine, "Check if any resource is still loaded");
-	_resourceSystem->forEachManager([] (auto& manager) {
-		manager.forEachResource([] (const auto& resource) {
-			throw TACTICS_EXCEPTION(
-				"Resource [{}]:[{}] of type [{}] was not unloaded.",
-				resource.name,
-				resource.id,
-				toString(resource.type));
+	_resourceSystem->forEachManager([](auto& manager) {
+		manager.forEachResource([](const auto& resource) {
+			throw TACTICS_EXCEPTION("Resource [{}]:[{}] of type [{}] was not unloaded.",
+									resource.name,
+									resource.id,
+									toString(resource.type));
 		});
 	});
 }
 
 void Engine::_throwIfAnyImportantLogHappened() {
 	if (Log::hasBeenLoggedOverLevel(LogLevel::Warning)) {
-		throw TACTICS_EXCEPTION("Do not ignore logs over warning level.\nRecap:\n{}",
-			Log::getLogCountRecapMessage());
+		throw TACTICS_EXCEPTION("Do not ignore logs over warning level.\nRecap:\n{}", Log::getLogCountRecapMessage());
 	}
 }
 
@@ -194,7 +188,8 @@ void Engine::_setupFsm(Application& application) {
 	auto builder = FsmBuilder();
 	auto fsmStartingStateName = application.initialize(*_serviceLocator, builder);
 	if (fsmStartingStateName.isEmpty()) {
-		throw TACTICS_EXCEPTION("Application did not return a valid name for the starting state for the FSM. The name is empty");
+		throw TACTICS_EXCEPTION(
+			"Application did not return a valid name for the starting state for the FSM. The name is empty");
 	}
 
 	_fsmExternalController = std::make_unique<DefaultFsmExternalController>();
@@ -221,17 +216,14 @@ void Engine::_updateCommonComponentSystems() {
 	SpriteAnimationSystem::update(registry.view<Sprite, SpriteAnimation>());
 	SpriteSystem::update(registry.view<Sprite, Mesh>());
 
-	CameraSystem::updateCameraAspectRatios(
-		registry.view<Viewport, CurrentViewport>(),
-		registry.view<Frustum, CurrentCamera>());
+	CameraSystem::updateCameraAspectRatios(registry.view<Viewport, CurrentViewport>(),
+										   registry.view<Frustum, CurrentCamera>());
 
 	CameraSystem::updateCameraMatrices(registry.view<Frustum, Transform, Camera>());
 
-	BillboardSystem::update(
-		registry.view<Transform, Camera, CurrentCamera>(),
-		registry.view<Transform, Billboard>());
+	BillboardSystem::update(registry.view<Transform, Camera, CurrentCamera>(), registry.view<Transform, Billboard>());
 
 	TransformSystem::updateTransformMatrices(registry.view<Transform>());
 }
 
-}
+} // namespace tactics

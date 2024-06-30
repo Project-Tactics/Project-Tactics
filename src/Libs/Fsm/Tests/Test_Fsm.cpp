@@ -1,35 +1,33 @@
-#include <utility>
-#include <memory>
-#include <string>
-
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
-
 #include <Libs/Fsm/FsmBuilder.h>
 #include <Libs/Utility/Exception.h>
 #include <Libs/Utility/Log/Log.h>
 
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+#include <memory>
+#include <string>
+#include <utility>
+
 using namespace tactics;
 
+using ::testing::_;
+using ::testing::AnyNumber;
 using ::testing::AtLeast;
 using ::testing::Exactly;
-using ::testing::Return;
 using ::testing::Invoke;
-using ::testing::AnyNumber;
-using ::testing::_;
+using ::testing::Return;
 
-class MockLogger: public LogInstance {
+class MockLogger : public LogInstance {
 public:
 	MOCK_METHOD(void, log, (const LogCategory& category, LogLevel level, const std::string& message), (override));
 	MOCK_METHOD(void, init, (LogLevel minimumLevel), (override));
 };
 
-class FsmTest: public testing::Test {
+class FsmTest : public testing::Test {
 protected:
 	FsmTest() {
 		EXPECT_CALL(*_loggerPtr, init(_));
-		EXPECT_CALL(*_loggerPtr, log(Log::Fsm, LogLevel::Trace, _))
-			.Times(AnyNumber());
+		EXPECT_CALL(*_loggerPtr, log(Log::Fsm, LogLevel::Trace, _)).Times(AnyNumber());
 		Log::setLogInstance(std::move(_logger));
 		Log::init();
 	}
@@ -51,7 +49,7 @@ protected:
 	MockLogger* _loggerPtr = _logger.get();
 };
 
-class MockFsmState: public FsmState {
+class MockFsmState : public FsmState {
 public:
 	MOCK_METHOD(FsmAction, enter, (), (override));
 	MOCK_METHOD(FsmAction, update, (), (override));
@@ -59,14 +57,12 @@ public:
 };
 
 TEST_F(FsmTest, WrongStartingStateWithEmptyFsm) {
-	EXPECT_CALL(*_loggerPtr, log(Log::Fsm, LogLevel::Error, _))
-		.Times(Exactly(1));
+	EXPECT_CALL(*_loggerPtr, log(Log::Fsm, LogLevel::Error, _)).Times(Exactly(1));
 	_createFsm("InvalidState");
 }
 
 TEST_F(FsmTest, WrongStartingState) {
-	EXPECT_CALL(*_loggerPtr, log(Log::Fsm, LogLevel::Error, _))
-		.Times(Exactly(1));
+	EXPECT_CALL(*_loggerPtr, log(Log::Fsm, LogLevel::Error, _)).Times(Exactly(1));
 	_addState("FirstState", std::make_unique<MockFsmState>());
 	_addState("SecondState", std::make_unique<MockFsmState>());
 	_addState("ThirdState", std::make_unique<MockFsmState>());
@@ -75,10 +71,8 @@ TEST_F(FsmTest, WrongStartingState) {
 
 TEST_F(FsmTest, CallEnterOnStartingState) {
 	auto state = std::make_unique<MockFsmState>();
-	EXPECT_CALL(*state.get(), enter())
-		.Times(Exactly(1));
-	EXPECT_CALL(*state.get(), update())
-		.Times(Exactly(1));
+	EXPECT_CALL(*state.get(), enter()).Times(Exactly(1));
+	EXPECT_CALL(*state.get(), update()).Times(Exactly(1));
 
 	_addState("TestState", std::move(state));
 
@@ -91,31 +85,19 @@ TEST_F(FsmTest, PassThroughTest) {
 	auto state2 = std::make_unique<MockFsmState>();
 	auto state3 = std::make_unique<MockFsmState>();
 
-	EXPECT_CALL(*state1.get(), enter())
-		.Times(Exactly(1))
-		.WillRepeatedly(Return(FsmAction::transition("next"_id)));
+	EXPECT_CALL(*state1.get(), enter()).Times(Exactly(1)).WillRepeatedly(Return(FsmAction::transition("next"_id)));
 
-	EXPECT_CALL(*state2.get(), enter())
-		.Times(Exactly(1))
-		.WillRepeatedly(Return(FsmAction::transition("next"_id)));
+	EXPECT_CALL(*state2.get(), enter()).Times(Exactly(1)).WillRepeatedly(Return(FsmAction::transition("next"_id)));
 
-	EXPECT_CALL(*state3.get(), enter())
-		.Times(Exactly(1))
-		.WillRepeatedly(Return(FsmAction::transition("next"_id)));
+	EXPECT_CALL(*state3.get(), enter()).Times(Exactly(1)).WillRepeatedly(Return(FsmAction::transition("next"_id)));
 
 	EXPECT_CALL(*state1.get(), exit()).Times(Exactly(1));
 	EXPECT_CALL(*state2.get(), exit()).Times(Exactly(1));
 	EXPECT_CALL(*state3.get(), exit()).Times(Exactly(1));
 
-	_addState("FirstState", std::move(state1), {
-		{"next"_id, {{"SecondState"_id}}}
-	});
-	_addState("SecondState", std::move(state2), {
-		{"next"_id, {{"ThirdState"_id}}}
-	});
-	_addState("ThirdState", std::move(state3), {
-		{"next"_id, {{Fsm::exitState}}}
-	});
+	_addState("FirstState", std::move(state1), {{"next"_id, {{"SecondState"_id}}}});
+	_addState("SecondState", std::move(state2), {{"next"_id, {{"ThirdState"_id}}}});
+	_addState("ThirdState", std::move(state3), {{"next"_id, {{Fsm::exitState}}}});
 
 	auto fsm = _createFsm("FirstState");
 	fsm->update();
@@ -130,26 +112,17 @@ TEST_F(FsmTest, TransitionAfterTwoUpdateCalls) {
 
 	EXPECT_CALL(*state1.get(), enter()).Times(Exactly(1));
 	EXPECT_CALL(*state1.get(), exit()).Times(Exactly(1));
-	EXPECT_CALL(*state1.get(), update())
-		.Times(Exactly(2))
-		.WillRepeatedly([&count] {
+	EXPECT_CALL(*state1.get(), update()).Times(Exactly(2)).WillRepeatedly([&count] {
 		++count;
 		return count <= 1 ? FsmAction::none() : FsmAction::transition("next"_id);
-	}
-	);
+	});
 
-	EXPECT_CALL(*state2.get(), enter())
-		.Times(Exactly(1))
-		.WillRepeatedly(Return(FsmAction::transition("next"_id)));
+	EXPECT_CALL(*state2.get(), enter()).Times(Exactly(1)).WillRepeatedly(Return(FsmAction::transition("next"_id)));
 	EXPECT_CALL(*state2.get(), exit()).Times(Exactly(1));
 	EXPECT_CALL(*state2.get(), update()).Times(0);
 
-	_addState("FirstState", std::move(state1), {
-		{"next"_id, {{"SecondState"_id}}}
-		});
-	_addState("SecondState", std::move(state2), {
-		{"next"_id, {{Fsm::exitState}}}
-		});
+	_addState("FirstState", std::move(state1), {{"next"_id, {{"SecondState"_id}}}});
+	_addState("SecondState", std::move(state2), {{"next"_id, {{Fsm::exitState}}}});
 
 	auto fsm = _createFsm("FirstState");
 	EXPECT_FALSE(fsm->hasReachedExitState());
@@ -160,40 +133,32 @@ TEST_F(FsmTest, TransitionAfterTwoUpdateCalls) {
 }
 
 TEST_F(FsmTest, WrongTransitionName) {
-	EXPECT_CALL(*_loggerPtr, log(Log::Fsm, LogLevel::Error, _))
-		.Times(Exactly(1));
+	EXPECT_CALL(*_loggerPtr, log(Log::Fsm, LogLevel::Error, _)).Times(Exactly(1));
 
 	auto state1 = std::make_unique<MockFsmState>();
 
 	EXPECT_CALL(*state1.get(), enter());
-	EXPECT_CALL(*state1.get(), update())
-		.Times(Exactly(1))
-		.WillRepeatedly([] { return FsmAction::transition("wrongTransition"_id); }
-	);
-
-	_addState("FirstState", std::move(state1), {
-		{"next"_id, {{Fsm::exitState}}}
+	EXPECT_CALL(*state1.get(), update()).Times(Exactly(1)).WillRepeatedly([] {
+		return FsmAction::transition("wrongTransition"_id);
 	});
+
+	_addState("FirstState", std::move(state1), {{"next"_id, {{Fsm::exitState}}}});
 
 	auto fsm = _createFsm("FirstState");
 	fsm->update();
 }
 
 TEST_F(FsmTest, WrongTargetStateTransition) {
-	EXPECT_CALL(*_loggerPtr, log(Log::Fsm, LogLevel::Error, _))
-		.Times(Exactly(1));
+	EXPECT_CALL(*_loggerPtr, log(Log::Fsm, LogLevel::Error, _)).Times(Exactly(1));
 
 	auto state1 = std::make_unique<MockFsmState>();
 
 	EXPECT_CALL(*state1.get(), enter());
-	EXPECT_CALL(*state1.get(), update())
-		.Times(Exactly(1))
-		.WillRepeatedly([] { return FsmAction::transition("next"_id); }
-	);
-
-	_addState("FirstState", std::move(state1), {
-		{"next"_id, {{"WrongState"_id}}}
+	EXPECT_CALL(*state1.get(), update()).Times(Exactly(1)).WillRepeatedly([] {
+		return FsmAction::transition("next"_id);
 	});
+
+	_addState("FirstState", std::move(state1), {{"next"_id, {{"WrongState"_id}}}});
 
 	auto fsm = _createFsm("FirstState");
 	fsm->update();

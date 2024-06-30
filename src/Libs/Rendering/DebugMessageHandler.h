@@ -13,7 +13,13 @@ public:
 
 private:
 	// Callback function for OpenGL debug messages
-	static void GLAD_API_PTR _onGlDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
+	static void GLAD_API_PTR _onGlDebugMessage(GLenum source,
+		GLenum type,
+		GLuint id,
+		GLenum severity,
+		GLsizei length,
+		const GLchar* message,
+		const void* userParam);
 
 	// Instance method to handle the debug message
 	void _handleMessage(GLenum source, GLenum type, GLuint id, GLenum severity, const GLchar* message) const;
@@ -24,4 +30,4 @@ private:
 	const char* _getStringForSeverity(GLenum severity) const;
 };
 
-}
+} // namespace tactics

@@ -2,11 +2,11 @@
 
 #include "../Exception.h"
 
-#include <fmt/core.h>
-#include <fmt/color.h>
-#include <string_view>
 #include <array>
+#include <fmt/color.h>
+#include <fmt/core.h>
 #include <memory>
+#include <string_view>
 
 namespace tactics {
 
@@ -20,20 +20,20 @@ enum LogLevel {
 };
 
 #ifdef COMPILING_TESTS
-#define LOG_TRACE(...) (void)0
-#define LOG_DEBUG(...) (void)0
-#define LOG_INFO(...) (void)0
-#define LOG_WARNING(...) (void)0
-#define LOG_ERROR(...) (void)0
-#define LOG_CRITICAL(...) (void)0
+#define LOG_TRACE(...)			 (void)0
+#define LOG_DEBUG(...)			 (void)0
+#define LOG_INFO(...)			 (void)0
+#define LOG_WARNING(...)		 (void)0
+#define LOG_ERROR(...)			 (void)0
+#define LOG_CRITICAL(...)		 (void)0
 #define LOG_EXCEPTION(exception) (void)0
 #else
-#define LOG_TRACE(...) Log::trace(__VA_ARGS__)
-#define LOG_DEBUG(...) Log::debug(__VA_ARGS__)
-#define LOG_INFO(...) Log::info(__VA_ARGS__)
-#define LOG_WARNING(...) Log::warning(__VA_ARGS__)
-#define LOG_ERROR(...) Log::error(__VA_ARGS__)
-#define LOG_CRITICAL(...) Log::critical(__VA_ARGS__)
+#define LOG_TRACE(...)			 Log::trace(__VA_ARGS__)
+#define LOG_DEBUG(...)			 Log::debug(__VA_ARGS__)
+#define LOG_INFO(...)			 Log::info(__VA_ARGS__)
+#define LOG_WARNING(...)		 Log::warning(__VA_ARGS__)
+#define LOG_ERROR(...)			 Log::error(__VA_ARGS__)
+#define LOG_CRITICAL(...)		 Log::critical(__VA_ARGS__)
 #define LOG_EXCEPTION(exception) Log::exception(exception)
 #endif
 
@@ -43,9 +43,8 @@ public:
 	LogCategory(std::string_view name, uint32_t rgb);
 	const std::string& getName() const;
 	const fmt::text_style& getStyle() const;
-	bool operator==(const LogCategory& other) const {
-		return _name == other._name;
-	}
+
+	bool operator==(const LogCategory& other) const { return _name == other._name; }
 
 private:
 	std::string _name;
@@ -74,32 +73,32 @@ public:
 	static void setLogInstance(std::unique_ptr<LogInstance> logInstance);
 
 	template<typename... Args>
-	static void trace(const LogCategory& category, fmt::format_string<Args...> fmt, Args &&... args) {
+	static void trace(const LogCategory& category, fmt::format_string<Args...> fmt, Args&&... args) {
 		log(category, LogLevel::Trace, fmt, fmt::make_format_args(args...));
 	}
 
 	template<typename... Args>
-	static void debug(const LogCategory& category, fmt::format_string<Args...> fmt, Args &&... args) {
+	static void debug(const LogCategory& category, fmt::format_string<Args...> fmt, Args&&... args) {
 		log(category, LogLevel::Debug, fmt, fmt::make_format_args(args...));
 	}
 
 	template<typename... Args>
-	static void info(const LogCategory& category, fmt::format_string<Args...> fmt, Args &&... args) {
+	static void info(const LogCategory& category, fmt::format_string<Args...> fmt, Args&&... args) {
 		log(category, LogLevel::Info, fmt, fmt::make_format_args(args...));
 	}
 
 	template<typename... Args>
-	static void warning(const LogCategory& category, fmt::format_string<Args...> fmt, Args &&... args) {
+	static void warning(const LogCategory& category, fmt::format_string<Args...> fmt, Args&&... args) {
 		log(category, LogLevel::Warning, fmt, fmt::make_format_args(args...));
 	}
 
 	template<typename... Args>
-	static void error(const LogCategory& category, fmt::format_string<Args...> fmt, Args &&... args) {
+	static void error(const LogCategory& category, fmt::format_string<Args...> fmt, Args&&... args) {
 		log(category, LogLevel::Error, fmt, fmt::make_format_args(args...));
 	}
 
 	template<typename... Args>
-	static void critical(const LogCategory& category, fmt::format_string<Args...> fmt, Args &&... args) {
+	static void critical(const LogCategory& category, fmt::format_string<Args...> fmt, Args&&... args) {
 		log(category, LogLevel::Critical, fmt, fmt::make_format_args(args...));
 	}
 
@@ -117,4 +116,4 @@ private:
 	static std::unique_ptr<LogInstance> _logInstance;
 };
 
-}
+} // namespace tactics
