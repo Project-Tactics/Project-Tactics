@@ -1,0 +1,48 @@
+name: Windows - Debug Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Configure Debug build
+      run: cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Debug -S ./ -B ./build/debug
+
+    - name: Build Debug target
+      run: cmake --build ./build/debug --config Debug
+
+    - name: Upload Debug build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ matrix.os }}
+        path: ${{github.workspace}}/build/debug
+        if-no-files-found: error
+        retention-days: 1
+
+  unit-tests:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Download Debug build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-${{ matrix.os }}
+        path:  ${{github.workspace}}/build/debug
+
+    - name: Run unit tests
+      run: ctest --output-on-failure --test-dir ${{github.workspace}}/build/debug/src/Apps/ProjectTactics_UnitTests/
