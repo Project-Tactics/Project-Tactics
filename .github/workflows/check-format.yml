@@ -17,7 +17,9 @@ jobs:
       - name: Set up clang-format
         run: |
             sudo apt update
-            sudo apt install clang-15
+            sudo apt install clang-19
+            clang-19 --version
+            clang-format --version
 
       - name: Check formatting
         run: |
