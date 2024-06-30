@@ -15,11 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up clang-format
-        run: |
-            sudo apt update
-            sudo apt install clang-19
-            clang-19 --version
-            clang-format --version
+        run: sudo apt install clang-format
 
       - name: Check formatting
         run: |
