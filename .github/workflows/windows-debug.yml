@@ -39,7 +39,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: unit-test-build-windows
-        path:  ${{github.workspace}}/unit-test/
+        path:  ${{github.workspace}}/build/debug/src/Apps/ProjectTactics_UnitTests/
 
     - name: Run unit tests
-      run: ctest --output-on-failure --test-dir ${{github.workspace}}/unit-test/
+      run: ctest --output-on-failure --test-dir ${{github.workspace}}/build/debug/src/Apps/ProjectTactics_UnitTests/
