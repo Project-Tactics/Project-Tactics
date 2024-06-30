@@ -1,0 +1,46 @@
+name: Windows Build
+
+on:
+  workflow_call:
+    inputs:
+      configuration:
+        required: true
+        type: string
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Configure [${{ inputs.configuration }}] build
+      run: cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=${{ inputs.configuration }} -S ./ -B ./build/${{ inputs.configuration }}
+
+    - name: Build [${{ inputs.configuration }}] target
+      run: cmake --build ./build/${{ inputs.configuration }} --config ${{ inputs.configuration }}
+
+    - name: Upload Unit Test build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: unit-test-build-windows
+        path: ${{github.workspace}}/build/${{ inputs.configuration }}/src/Apps/ProjectTactics_UnitTests/
+        if-no-files-found: error
+        retention-days: 1
+
+  unit-tests-windows:
+    runs-on: windows-latest
+    needs: build-windows
+
+    steps:
+    - name: Download [${{ inputs.configuration }}] build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: unit-test-build-windows
+        path:  ${{github.workspace}}/build/${{ inputs.configuration }}/src/Apps/ProjectTactics_UnitTests/
+
+    - name: Run unit tests
+      run: ctest --output-on-failure --test-dir ${{github.workspace}}/build/${{ inputs.configuration }}/src/Apps/ProjectTactics_UnitTests/

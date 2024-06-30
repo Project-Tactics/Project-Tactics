@@ -10,4 +10,4 @@ jobs:
   build-windows:
     uses: ./.github/workflows/common/windows-build.yml
     with:
-      configuration: debug
+      configuration: release
