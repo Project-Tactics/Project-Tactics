@@ -1,8 +1,6 @@
 # Ensure the minimum required version of CMake is available, otherwise, throw an error
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
-enable_testing()
-
 set(SOURCES
         UnitTestMain.cpp)
 
@@ -16,4 +14,5 @@ add_to_apps_folder(${TARGET_NAME})
 
 unset(SOURCES)
 
-#gtest_discover_tests(${TARGET_NAME})
+include(GoogleTest)
+gtest_discover_tests(${TARGET_NAME})
