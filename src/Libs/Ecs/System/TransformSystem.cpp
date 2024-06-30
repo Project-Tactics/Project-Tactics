@@ -3,9 +3,7 @@
 namespace tactics::component {
 
 void TransformSystem::updateTransformMatrices(ecs_view<Transform>& view) {
-	view.each([] (Transform& transform) {
-		transform.computeMatrix();
-	});
+	view.each([](Transform& transform) { transform.computeMatrix(); });
 }
 
-}
+} // namespace tactics::component

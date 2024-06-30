@@ -1,30 +1,28 @@
-#include <utility>
+#include <Libs/Utility/Exception.h>
+#include <Libs/Utility/Service/ServiceLocator.h>
+
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 #include <memory>
 #include <string>
-
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
-
-#include <Libs/Utility/Service/ServiceLocator.h>
-#include <Libs/Utility/Exception.h>
+#include <utility>
 
 using namespace tactics;
 
-class ServiceLocatorTest: public testing::Test {
+class ServiceLocatorTest : public testing::Test {
 protected:
 	ServiceLocator _serviceLocator;
 };
 
 using ::testing::AtLeast;
 using ::testing::Exactly;
-using ::testing::Return;
 using ::testing::Invoke;
+using ::testing::Return;
 
 class ExampleService {
 public:
-	void foo() {
-		_value = 1;
-	}
+	void foo() { _value = 1; }
+
 private:
 	int _value;
 };
@@ -49,9 +47,7 @@ TEST_F(ServiceLocatorTest, RetrieveService) {
 TEST_F(ServiceLocatorTest, RemoveService) {
 	_serviceLocator.addService(new int());
 	_serviceLocator.removeService(new int());
-	EXPECT_THROW([[maybe_unused]] auto & service = _serviceLocator.getService<int>(), Exception);
+	EXPECT_THROW([[maybe_unused]] auto& service = _serviceLocator.getService<int>(), Exception);
 }
 
-TEST_F(ServiceLocatorTest, RemoveServiceWhichIsNotRegistered) {
-	_serviceLocator.removeService(new int());
-}
+TEST_F(ServiceLocatorTest, RemoveServiceWhichIsNotRegistered) { _serviceLocator.removeService(new int()); }
