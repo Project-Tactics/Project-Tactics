@@ -1,10 +1,10 @@
 name: Windows Build
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["Checking Style"]
+    types:
+      - completed
 
 jobs:
   build:

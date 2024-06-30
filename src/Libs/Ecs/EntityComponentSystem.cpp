@@ -9,7 +9,9 @@ EntityComponentSystem::EntityComponentSystem() {
 	ComponentReflection::initializeCommonComponents();
 }
 
-Entity EntityComponentSystem::createPrefab(const HashId& name, const nlohmann::ordered_json& json, const resource::ResourceProvider& resourceProvider) {
+Entity EntityComponentSystem::createPrefab(const HashId& name,
+										   const nlohmann::ordered_json& json,
+										   const resource::ResourceProvider& resourceProvider) {
 	return _prefabManager.createPrefab(name, json, resourceProvider);
 }
 
@@ -17,24 +19,14 @@ Entity EntityComponentSystem::createEntityFromPrefab(const HashId& name, const E
 	return _prefabManager.clonePrefabToRegistry(name, prefabEntity, _sceneRegistry);
 }
 
-void EntityComponentSystem::clearPrefabsRegistry() {
-	_prefabManager.getRegistry().clear();
-}
+void EntityComponentSystem::clearPrefabsRegistry() { _prefabManager.getRegistry().clear(); }
 
-entt::registry& EntityComponentSystem::sceneRegistry() {
-	return _sceneRegistry;
-}
+entt::registry& EntityComponentSystem::sceneRegistry() { return _sceneRegistry; }
 
-entt::registry& EntityComponentSystem::prefabRegistry() {
-	return _prefabManager.getRegistry();
-}
+entt::registry& EntityComponentSystem::prefabRegistry() { return _prefabManager.getRegistry(); }
 
-const entt::registry& EntityComponentSystem::sceneRegistry() const {
-	return _sceneRegistry;
-}
+const entt::registry& EntityComponentSystem::sceneRegistry() const { return _sceneRegistry; }
 
-const entt::registry& EntityComponentSystem::prefabRegistry() const {
-	return _prefabManager.getRegistry();
-}
+const entt::registry& EntityComponentSystem::prefabRegistry() const { return _prefabManager.getRegistry(); }
 
-}
+} // namespace tactics

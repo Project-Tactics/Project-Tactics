@@ -12,7 +12,9 @@ class EntityComponentSystem {
 public:
 	EntityComponentSystem();
 
-	Entity createPrefab(const HashId& name, const nlohmann::ordered_json& jsonData, const resource::ResourceProvider& resourceProvider);
+	Entity createPrefab(const HashId& name,
+						const nlohmann::ordered_json& jsonData,
+						const resource::ResourceProvider& resourceProvider);
 	Entity createEntityFromPrefab(const HashId& name, const Entity& prefabEntity);
 	void clearPrefabsRegistry();
 
@@ -26,4 +28,4 @@ private:
 	PrefabManager _prefabManager;
 };
 
-}
+} // namespace tactics
