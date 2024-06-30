@@ -158,7 +158,7 @@ Entity SceneSystem::createEntity(
 
 	Mesh meshComp;
 	meshComp.mesh = _resourceSystem.getResource<resource::Mesh>(meshName);
-	for (auto i = 0; i < meshComp.mesh->subMeshes.size(); ++i) {
+	for (auto i = 0u; i < meshComp.mesh->subMeshes.size(); ++i) {
 		auto& materialName = i < materials.size() ? materials[i] : materials.back();
 		auto material = _resourceSystem.getResource<resource::Material>(materialName);
 		meshComp.materials.push_back(resource::Material::createInstance(material));

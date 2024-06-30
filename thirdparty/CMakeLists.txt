@@ -43,6 +43,7 @@ target_include_directories(inicpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/inifile-
 set(SPDLOG_FMT_EXTERNAL ON)
 set(SPDLOG_WCHAR_SUPPORT ON)
 add_subdirectory(spdlog)
+target_compile_options(spdlog PRIVATE /wd4389)
 
 # Adding entt as an entity-component-system library
 # https://github.com/skypjack/entt
