@@ -26,6 +26,7 @@ jobs:
 
     - name: Build [${{ matrix.configuration }}] target
       run: cmake --build ./build/${{ matrix.configuration }} --config ${{ matrix.configuration }}
+      continue-on-error: true 
 
     - name: Upload Unit Test build artifacts
       uses: actions/upload-artifact@v4

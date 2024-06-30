@@ -52,7 +52,7 @@ void DebugMessageHandler::checkGlErrors(const char* context) const {
 	}
 }
 
-void DebugMessageHandler::_onGlDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei /*length*/, const GLchar* message, const void* userParam) {
+void GLAD_API_PTR DebugMessageHandler::_onGlDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei /*length*/, const GLchar* message, const void* userParam) {
 	const DebugMessageHandler* handler = static_cast<const DebugMessageHandler*>(userParam);
 	handler->_handleMessage(source, type, id, severity, message);
 }
