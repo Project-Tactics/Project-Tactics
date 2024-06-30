@@ -29,8 +29,7 @@ AlignConsecutiveShortCaseStatements:
     AlignCaseColons: true
 AlignEscapedNewlines: Left
 AlignOperands: Align
-AlignTrailingComments: 
-  Kind: Always
+AlignTrailingComments: true
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Always
