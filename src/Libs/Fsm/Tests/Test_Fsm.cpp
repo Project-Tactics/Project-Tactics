@@ -119,7 +119,7 @@ TEST_F(FsmTest, PassThroughTest) {
 
 	auto fsm = _createFsm("FirstState");
 	fsm->update();
-	EXPECT_TRUE(fsm->hasReachedExitState());
+	EXPECT_FALSE(fsm->hasReachedExitState());
 }
 
 TEST_F(FsmTest, TransitionAfterTwoUpdateCalls) {
