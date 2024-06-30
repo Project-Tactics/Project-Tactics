@@ -26,7 +26,6 @@ jobs:
 
     - name: Build [${{ matrix.configuration }}] target
       run: cmake --build ./build/${{ matrix.configuration }} --config ${{ matrix.configuration }}
-      continue-on-error: true
 
     - name: Upload Unit Test build artifacts
       uses: actions/upload-artifact@v4
@@ -35,4 +34,22 @@ jobs:
         path: ${{github.workspace}}/build/${{ matrix.configuration }}/src/Apps/ProjectTactics_UnitTests/
         if-no-files-found: error
         retention-days: 1
-      continue-on-error: true
+
+  unit-tests:
+    runs-on: windows-latest
+    needs: build
+
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+        architecture: [x64, Win32]
+
+    steps:
+    - name: Download [${{ matrix.configuration }} ${{ matrix.architecture }}] build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: unit-test-build-windows-${{ matrix.configuration }}-${{ matrix.architecture }}
+        path:  ${{github.workspace}}/build/${{ matrix.configuration }}/src/Apps/ProjectTactics_UnitTests/
+
+    - name: Run unit tests
+      run: ctest --output-on-failure --test-dir ${{ matrix.configuration }}/build/${{ matrix.configuration }}/src/Apps/ProjectTactics_UnitTests/
