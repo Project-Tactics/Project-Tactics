@@ -1,11 +1,6 @@
 # Ensure the minimum required version of CMake is available, otherwise, throw an error
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
-# Adding googletest as a dependency without installing it
-# https://github.com/google/googletest
-set(INSTALL_GTEST OFF)
-add_subdirectory(googletest)
-
 # Adding glad as Loader-Generator for opengl
 # https://github.com/Dav1dde/glad
 add_subdirectory(glad)
@@ -56,6 +51,6 @@ add_library(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/single_include/entt/
 target_include_directories(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/single_include)
 
 # Let's keep things clean and tidy by moving all the thirdparty libs to a folder
-set_property(TARGET gtest gtest_main gmock gmock_main glad glm imgui imgui_node_editor fmt sol2 stb inicpp entt cereal spdlog PROPERTY FOLDER "thirdparty")
+set_property(TARGET glad glm imgui imgui_node_editor fmt sol2 stb inicpp entt cereal spdlog PROPERTY FOLDER "thirdparty")
 # sol2 is including these extra CI targets that we don't need. Let's move them to the same thirdparty folder but later we'll just get rid of them
 set_property(TARGET Continuous Experimental Nightly NightlyMemoryCheck PROPERTY FOLDER "thirdparty")

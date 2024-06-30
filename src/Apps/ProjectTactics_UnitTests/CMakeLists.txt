@@ -13,3 +13,6 @@ target_compile_definitions(${TARGET_NAME} PUBLIC COMPILING_TESTS)
 add_to_apps_folder(${TARGET_NAME})
 
 unset(SOURCES)
+
+include(GoogleTest)
+gtest_discover_tests(${TARGET_NAME})

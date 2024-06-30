@@ -47,7 +47,7 @@ public:
 	}
 
 	template<typename TService>
-	void removeService(TService* service) {
+	void removeService(TService*) {
 		auto id = ClassId<TService>::ID();
 		if (auto itr = _services.find(id); itr != _services.end()) {
 			_services.erase(itr);

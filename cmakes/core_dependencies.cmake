@@ -32,4 +32,10 @@ macro(core_dependencies)
     FetchContent_MakeAvailable(json)
     add_library(json_wrapper INTERFACE)
     target_link_libraries(json_wrapper INTERFACE nlohmann_json::nlohmann_json)
+
+    FetchContent_Declare(googletest 
+        URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip)
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+    set_property(TARGET gmock gmock_main gtest gtest_main PROPERTY FOLDER "thirdparty")
 endmacro()
