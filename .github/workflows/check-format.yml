@@ -7,26 +7,15 @@ on:
     branches: [ main ]
 
 jobs:
-  check:
+  formatting-check:
+    name: Formatting Check
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Set up clang-format
-        run: |
-            sudo apt update
-            sudo apt install clang-format
-            clang-format --version
-
-      - name: Check formatting
-        run: |
-          clang-format --version
-          clang-format --verbose --style=file:${{github.workspace}}/src/.clang-format -output-replacements-xml | grep "<replacement " || true
-          FORMAT_DIFF=$(find ${{github.workspace}}/src -name '*.cpp' -o -name '*.h' | xargs clang-format --style=file:${{github.workspace}}/src/.clang-format -output-replacements-xml | grep "<replacement " || true)
-          echo "$FORMAT_DIFF"
-          if [[ ! -z "$FORMAT_DIFF" ]]; then
-            echo "Code is not formatted properly."
-            exit 1
-          fi
+    - name: Run clang-format
+      uses: jidicula/clang-format-action@v4.13.0
+      with:
+        clang-format-version: '17'
+        check-path: '${{github.workspace}}/src'
