@@ -20,8 +20,8 @@ jobs:
       - name: Check formatting
         run: |
           clang-format --version
-          clang-format --version --style=file:${{github.workspace}}/src/.clang-format -output-replacements-xml | grep "<replacement " || true
-          FORMAT_DIFF=$(find ${{github.workspace}}/src -name '*.cpp' -o -name '*.h' | xargs clang-format --version --style=file:${{github.workspace}}/src/.clang-format -output-replacements-xml | grep "<replacement " || true)
+          clang-format --style=file:${{github.workspace}}/src/.clang-format -output-replacements-xml | grep "<replacement " || true
+          FORMAT_DIFF=$(find ${{github.workspace}}/src -name '*.cpp' -o -name '*.h' | xargs clang-format --style=file:${{github.workspace}}/src/.clang-format -output-replacements-xml | grep "<replacement " || true)
           if [[ ! -z "$FORMAT_DIFF" ]]; then
             echo "Code is not formatted properly."
             exit 1
