@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
-        architecture: [x64, x86]
+        architecture: [x64, Win32]
 
     steps:
     - name: Download [${{ matrix.configuration }} ${{ matrix.architecture }}] build artifacts
