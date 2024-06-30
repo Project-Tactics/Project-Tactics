@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up clang-format
+        run: sudo apt-get install clang-format
+
+      - name: Check formatting
+        run: |
+          clang-format --version
+          FORMAT_DIFF=$(find ${{github.workspace}}/src -name '*.cpp' -o -name '*.h' | xargs clang-format --version --style=file:${{github.workspace}}/src/.clang-format -output-replacements-xml | grep "<replacement " || true)
+          if [[ ! -z "$FORMAT_DIFF" ]]; then
+            echo "Code is not formatted properly."
+            exit 1
+          fi
