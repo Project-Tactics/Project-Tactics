@@ -1,13 +1,12 @@
 #include "EventsSystem.h"
+
 #include "EventsListener.h"
 
 #include <SDL.h>
-
-#include <ranges>
 #include <exception>
 #include <format>
-
 #include <imgui/backends/imgui_impl_sdl2.h>
+#include <ranges>
 
 namespace tactics {
 
@@ -15,9 +14,7 @@ void EventsSystem::update() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		ImGui_ImplSDL2_ProcessEvent(&event);
-		for (auto& listener : _eventsListeners) {
-			listener->onEvent(event);
-		}
+		for (auto& listener : _eventsListeners) { listener->onEvent(event); }
 	}
 }
 
@@ -37,4 +34,4 @@ void EventsSystem::unregisterEventsListener(EventsListener* listener) {
 	}
 }
 
-}
+} // namespace tactics

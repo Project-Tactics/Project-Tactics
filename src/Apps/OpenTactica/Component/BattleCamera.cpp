@@ -18,7 +18,6 @@ void BattleCamera::defineReflection() {
 void BattleCameraSystem::update(ecs_view<BattleCamera, Transform> view) {
 	for (auto [entity, camera, transform] : view.each()) {
 		if (camera.currentStep != camera.nextStep) {
-
 			auto rotation = 0.f;
 			camera.rotationTime += camera.rotationSpeed * EngineTime::fixedDeltaTime<float>();
 			if (camera.rotationTime >= 1.0f) {
@@ -27,7 +26,8 @@ void BattleCameraSystem::update(ecs_view<BattleCamera, Transform> view) {
 				rotation = glm::radians(camera.rotationSteps[camera.currentStep]);
 			} else {
 				auto startTargetRotation = camera.rotationSteps[camera.currentStep];
-				rotation = glm::radians(startTargetRotation + (camera.targetRotation - startTargetRotation) * camera.rotationTime);
+				rotation = glm::radians(startTargetRotation +
+										(camera.targetRotation - startTargetRotation) * camera.rotationTime);
 			}
 
 			float distance = camera.distanceFromOrigin;
@@ -39,9 +39,7 @@ void BattleCameraSystem::update(ecs_view<BattleCamera, Transform> view) {
 }
 
 float BattleCamera::getCurrentRotationDegree() const {
-	if (currentStep == nextStep) {
-		return rotationSteps[currentStep];
-	}
+	if (currentStep == nextStep) { return rotationSteps[currentStep]; }
 
 	auto startTargetRotation = rotationSteps[currentStep];
 	return startTargetRotation + (targetRotation - startTargetRotation) * rotationTime;
@@ -61,4 +59,4 @@ void BattleCamera::rotateToPrevStep() {
 	}
 }
 
-}
+} // namespace tactics::component

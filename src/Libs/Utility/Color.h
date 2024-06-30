@@ -25,4 +25,4 @@ public:
 	static const glm::vec4 transparent;
 };
 
-}
+} // namespace tactics

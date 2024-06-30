@@ -11,13 +11,15 @@
 
 namespace tactics {
 
-template<typename TResource, typename TResourceLoader, typename ...TArgs>
+template<typename TResource, typename TResourceLoader, typename... TArgs>
 void registerManager(FileSystem& fileSystem, resource::ResourceSystem& resourceSystem, TArgs&&... args) {
 	auto loader = std::make_unique<TResourceLoader>(fileSystem, resourceSystem, std::forward<TArgs>(args)...);
-	resourceSystem.registerManager(std::make_unique<resource::ResourceManager<TResource, TResourceLoader>>(std::move(loader)));
+	resourceSystem.registerManager(
+		std::make_unique<resource::ResourceManager<TResource, TResourceLoader>>(std::move(loader)));
 }
 
-std::unique_ptr<resource::ResourceSystem> ResourceSystemInitializer::initialize(FileSystem& fileSystem, EntityComponentSystem& ecs) {
+std::unique_ptr<resource::ResourceSystem> ResourceSystemInitializer::initialize(FileSystem& fileSystem,
+																				EntityComponentSystem& ecs) {
 	using namespace resource;
 	auto resourceSystem = std::make_unique<resource::ResourceSystem>(fileSystem);
 	registerManager<IniFile, IniFileLoader>(fileSystem, *resourceSystem);
@@ -34,4 +36,4 @@ std::unique_ptr<resource::ResourceSystem> ResourceSystemInitializer::initialize(
 	return resourceSystem;
 }
 
-}
+} // namespace tactics

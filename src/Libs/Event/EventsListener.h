@@ -21,12 +21,12 @@ public:
 	 * the event type from SDL.
 	 *
 	 * @param event The SDL event to be processed.
-	 * @return Returns true to indicate that the event has been processed, so the system does not need to handle it further.
+	 * @return Returns true to indicate that the event has been processed, so the system does not need to handle it
+	 * further.
 	 */
 	virtual bool onEvent(SDL_Event& event);
 
 protected:
-
 	/**
 	 * @brief Handles keyboard press events.
 	 *
@@ -50,4 +50,4 @@ protected:
 	virtual bool onKeyRelease(SDL_KeyboardEvent& event);
 };
 
-}
+} // namespace tactics

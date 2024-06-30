@@ -3,8 +3,8 @@
 #include "../Resource.h"
 #include "../Texture/Texture.h"
 
-#include <Libs/Utility/Math.h>
 #include <Libs/Utility/HashId.h>
+#include <Libs/Utility/Math.h>
 
 #include <unordered_map>
 
@@ -17,7 +17,7 @@ struct SpriteSheetAnimation {
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteSheetAnimation, frames, duration)
 };
 
-class SpriteSheet: public Resource<SpriteSheet> {
+class SpriteSheet : public Resource<SpriteSheet> {
 public:
 	using Resource<SpriteSheet>::Resource;
 	static const ResourceType TYPE = ResourceType::SpriteSheet;
@@ -32,4 +32,4 @@ public:
 	std::unordered_map<HashId, SpriteSheetAnimation> animations;
 };
 
-}
+} // namespace tactics::resource

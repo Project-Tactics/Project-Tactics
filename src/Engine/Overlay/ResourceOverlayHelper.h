@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Libs/Resource/Resource.h>
-
 #include <Libs/Utility/Math.h>
 
 #include <imgui/imgui.h>
@@ -16,7 +15,7 @@ class ResourceInfo;
 class Shader;
 class SpriteSheet;
 class Texture;
-}
+} // namespace resource
 
 class ResourceOverlayHelper {
 public:
@@ -33,17 +32,14 @@ private:
 	static bool _beginTabItem(const char* name, resource::ResourceType resourceType);
 	static void _drawSpriteViewer(const resource::SpriteSheet& spriteSheet);
 	static void _drawTexture(const resource::Texture& texture, float maxWidth = 512.f);
-	static bool _drawSpriteButton(
-		const char* id,
-		void* texture,
-		const ImVec2& buttonSize,
-		const Rect& uvRect,
-		bool isLast,
-		unsigned int index
-	);
+	static bool _drawSpriteButton(const char* id,
+								  void* texture,
+								  const ImVec2& buttonSize,
+								  const Rect& uvRect,
+								  bool isLast,
+								  unsigned int index);
 
-	template<typename TResource>
-	static void drawTResource(const resource::BaseResource& resource) {
+	template<typename TResource> static void drawTResource(const resource::BaseResource& resource) {
 		auto& tResource = static_cast<const TResource&>(resource);
 		drawResource(tResource);
 	}
@@ -51,4 +47,4 @@ private:
 	static unsigned int _selectedSpriteForSpriteViewer;
 };
 
-}
+} // namespace tactics

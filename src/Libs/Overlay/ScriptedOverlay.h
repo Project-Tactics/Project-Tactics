@@ -1,14 +1,13 @@
 #pragma once
 
-#include <string>
-
 #include "Overlay.h"
 
 #include <sol/sol.hpp>
+#include <string>
 
 namespace tactics {
 
-class ScriptedOverlay: public Overlay {
+class ScriptedOverlay : public Overlay {
 public:
 	ScriptedOverlay(std::string_view name, sol::state_view& solState, sol::table luaOverlay);
 	virtual ~ScriptedOverlay() override;
@@ -26,4 +25,4 @@ private:
 	sol::reference _closeFunctionReference;
 };
 
-}
+} // namespace tactics

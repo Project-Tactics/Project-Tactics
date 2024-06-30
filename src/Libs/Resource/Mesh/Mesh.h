@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Libs/Resource/Resource.h>
-#include <Libs/Rendering/VertexBuffer.h>
 #include <Libs/Rendering/IndexBuffer.h>
 #include <Libs/Rendering/VertexAttributes.h>
+#include <Libs/Rendering/VertexBuffer.h>
+#include <Libs/Resource/Resource.h>
 
 #include <memory>
 
@@ -11,11 +11,10 @@ namespace tactics::resource {
 
 class SubMesh {
 public:
-	SubMesh(
-		unsigned int index,
-		std::unique_ptr<VertexBuffer> vertexBuffer,
-		std::unique_ptr<IndexBuffer> indexBuffer,
-		std::unique_ptr<VertexAttributes> vertexAttributes);
+	SubMesh(unsigned int index,
+			std::unique_ptr<VertexBuffer> vertexBuffer,
+			std::unique_ptr<IndexBuffer> indexBuffer,
+			std::unique_ptr<VertexAttributes> vertexAttributes);
 	~SubMesh();
 	SubMesh(const SubMesh&) = delete;
 	SubMesh& operator=(const SubMesh&) = delete;
@@ -30,7 +29,7 @@ public:
 	std::unique_ptr<VertexAttributes> vertexAttributes;
 };
 
-class Mesh: public Resource<Mesh> {
+class Mesh : public Resource<Mesh> {
 public:
 	static const ResourceType TYPE = ResourceType::Mesh;
 	using Resource<Mesh>::Resource;
@@ -41,4 +40,4 @@ public:
 	std::vector<SubMesh> subMeshes;
 };
 
-}
+} // namespace tactics::resource

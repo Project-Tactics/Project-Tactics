@@ -4,7 +4,7 @@
 
 namespace tactics {
 
-class DemoMapState: public FsmStateWithServices {
+class DemoMapState : public FsmStateWithServices {
 public:
 	using FsmStateWithServices::FsmStateWithServices;
 	FsmAction enter() override;
@@ -18,4 +18,4 @@ private:
 	unsigned int _mapIndex{};
 };
 
-}
+} // namespace tactics

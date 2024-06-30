@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Libs/Overlay/Overlay.h>
-
 #include <Libs/Resource/Resource.h>
 
 namespace tactics {
@@ -10,9 +9,9 @@ class Pack;
 class PackGroup;
 class ResourceInfo;
 class ResourceSystem;
-}
+} // namespace resource
 
-class ResourcesOverlay: public Overlay {
+class ResourcesOverlay : public Overlay {
 public:
 	ResourcesOverlay(resource::ResourceSystem& resourceSystem);
 	void update() override;
@@ -22,8 +21,15 @@ private:
 	void _drawByTypeTabItem();
 	void _drawByPackTabItem();
 	bool _drawResourcePackCollapsingHeader(const resource::Pack& pack, float colorMultiplier);
-	bool _drawResourceTypeCollapsingHeader(const HashId& id, resource::ResourceType resourceType, unsigned int count, float colorMultiplier);
-	bool _drawResourceCollapsingHeader(bool isLoaded, const HashId& name, resource::ResourceType resourceType, const resource::BaseResource* resource, float colorMultiplier);
+	bool _drawResourceTypeCollapsingHeader(const HashId& id,
+										   resource::ResourceType resourceType,
+										   unsigned int count,
+										   float colorMultiplier);
+	bool _drawResourceCollapsingHeader(bool isLoaded,
+									   const HashId& name,
+									   resource::ResourceType resourceType,
+									   const resource::BaseResource* resource,
+									   float colorMultiplier);
 	void _drawHeaderTypeLegend(const resource::Pack& pack);
 
 	struct uiPackGroup {
@@ -50,4 +56,4 @@ private:
 	resource::ResourceSystem& _resourceSystem;
 };
 
-}
+} // namespace tactics

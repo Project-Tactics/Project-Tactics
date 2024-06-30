@@ -2,13 +2,12 @@
 
 #include "CustomOverlayColors.h"
 
-#include <Libs/Rendering/RenderSystem.h>
-
-#include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/FrustumComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/Component/ViewportComponent.h>
+#include <Libs/Ecs/EntityComponentSystem.h>
+#include <Libs/Rendering/RenderSystem.h>
 
 #include <string>
 
@@ -47,7 +46,7 @@ void RenderingOverlay::_drawRenderStats() {
 void RenderingOverlay::_drawViewportStats() {
 	using namespace component;
 	auto view = _ecs.sceneRegistry().view<Viewport>();
-	view.each([&] (Viewport& viewport) {
+	view.each([&](Viewport& viewport) {
 		ImGui::TextColored(_titleColor, "%s", "VIEWPORT");
 		glm::vec2 topLeft = viewport.topLeft;
 		glm::vec2 size = viewport.size;
@@ -73,12 +72,10 @@ void RenderingOverlay::_drawViewportStats() {
 void RenderingOverlay::_drawCameraStats() {
 	using namespace component;
 	auto view = _ecs.sceneRegistry().view<Transform, Frustum, Camera>();
-	view.each([&] (Transform& transform, Frustum& frustum, Camera&) {
+	view.each([&](Transform& transform, Frustum& frustum, Camera&) {
 		ImGui::TextColored(_titleColor, "%s", "CAMERA");
 		auto position = transform.getPosition();
-		if (_vector3("Position", position, 0, 0.1f)) {
-			transform.setPosition(position);
-		}
+		if (_vector3("Position", position, 0, 0.1f)) { transform.setPosition(position); }
 
 		glm::vec2 angles = glm::eulerAngles(transform.getRotation());
 		if (_vector2("Rotation", angles, 0, 0.01f)) {
@@ -95,16 +92,21 @@ bool RenderingOverlay::_vector3(const char* label, glm::vec3& vec, float compone
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("%s", label);
 	if (componentWidth == 0) {
-		componentWidth = (ImGui::GetContentRegionAvail().x - (ImGui::CalcTextSize(label).x + ImGui::GetStyle().ItemSpacing.x * 4)) / 3;
+		componentWidth =
+			(ImGui::GetContentRegionAvail().x - (ImGui::CalcTextSize(label).x + ImGui::GetStyle().ItemSpacing.x * 4)) /
+			3;
 	}
 	ImGui::BeginGroup();
 	ImGui::SameLine();
 	bool valueChanged = false;
-	valueChanged |= _vecComponent(&vec.x, _xComponentColor, componentWidth, componentSpeed, ("##x" + std::string(label)).c_str());
+	valueChanged |=
+		_vecComponent(&vec.x, _xComponentColor, componentWidth, componentSpeed, ("##x" + std::string(label)).c_str());
 	ImGui::SameLine();
-	valueChanged |= _vecComponent(&vec.y, _yComponentColor, componentWidth, componentSpeed, ("##y" + std::string(label)).c_str());
+	valueChanged |=
+		_vecComponent(&vec.y, _yComponentColor, componentWidth, componentSpeed, ("##y" + std::string(label)).c_str());
 	ImGui::SameLine();
-	valueChanged |= _vecComponent(&vec.z, _zComponentColor, componentWidth, componentSpeed, ("##z" + std::string(label)).c_str());
+	valueChanged |=
+		_vecComponent(&vec.z, _zComponentColor, componentWidth, componentSpeed, ("##z" + std::string(label)).c_str());
 	ImGui::EndGroup();
 	return valueChanged;
 }
@@ -113,14 +115,18 @@ bool RenderingOverlay::_vector2(const char* label, glm::vec2& vec, float compone
 	ImGui::AlignTextToFramePadding();
 	ImGui::Text("%s", label);
 	if (componentWidth == 0) {
-		componentWidth = (ImGui::GetContentRegionAvail().x - (ImGui::CalcTextSize(label).x + ImGui::GetStyle().ItemSpacing.x * 3)) / 2;
+		componentWidth =
+			(ImGui::GetContentRegionAvail().x - (ImGui::CalcTextSize(label).x + ImGui::GetStyle().ItemSpacing.x * 3)) /
+			2;
 	}
 	ImGui::BeginGroup();
 	ImGui::SameLine();
 	bool valueChanged = false;
-	valueChanged |= _vecComponent(&vec.x, _xComponentColor, componentWidth, componentSpeed, ("##x" + std::string(label)).c_str());
+	valueChanged |=
+		_vecComponent(&vec.x, _xComponentColor, componentWidth, componentSpeed, ("##x" + std::string(label)).c_str());
 	ImGui::SameLine();
-	valueChanged |= _vecComponent(&vec.y, _yComponentColor, componentWidth, componentSpeed, ("##y" + std::string(label)).c_str());
+	valueChanged |=
+		_vecComponent(&vec.y, _yComponentColor, componentWidth, componentSpeed, ("##y" + std::string(label)).c_str());
 	ImGui::EndGroup();
 	return valueChanged;
 }
@@ -129,7 +135,9 @@ bool RenderingOverlay::_vecComponent(float* component, const ImVec4& color, floa
 	ImVec2 squareSize(2, 23);
 	ImVec2 cursorPos = ImGui::GetCursorScreenPos();
 	ImDrawList* drawList = ImGui::GetWindowDrawList();
-	drawList->AddRectFilled(cursorPos, ImVec2(cursorPos.x + squareSize.x, cursorPos.y + squareSize.y), ImGui::ColorConvertFloat4ToU32(color));
+	drawList->AddRectFilled(cursorPos,
+							ImVec2(cursorPos.x + squareSize.x, cursorPos.y + squareSize.y),
+							ImGui::ColorConvertFloat4ToU32(color));
 	auto dummySize = ImVec2(squareSize.x - 12, squareSize.y);
 	ImGui::Dummy(dummySize);
 
@@ -138,4 +146,4 @@ bool RenderingOverlay::_vecComponent(float* component, const ImVec4& color, floa
 	return ImGui::DragFloat(id, component, speed);
 }
 
-}
+} // namespace tactics

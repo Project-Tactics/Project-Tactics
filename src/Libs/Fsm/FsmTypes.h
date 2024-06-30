@@ -4,10 +4,10 @@
 
 #include <Libs/Utility/HashId.h>
 
-#include <memory>
-#include <vector>
 #include <functional>
+#include <memory>
 #include <unordered_map>
+#include <vector>
 
 namespace tactics {
 
@@ -36,4 +36,4 @@ struct FsmInfo {
 	HashId startState;
 };
 
-}
+} // namespace tactics

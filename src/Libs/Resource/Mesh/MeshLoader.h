@@ -1,11 +1,12 @@
 #pragma once
 
-#include <Libs/Resource/ResourceLoader.h>
 #include "Mesh.h"
+
+#include <Libs/Resource/ResourceLoader.h>
 
 namespace tactics::resource {
 
-class MeshLoader: public ResourceLoader {
+class MeshLoader : public ResourceLoader {
 public:
 	using ResourceLoader::ResourceLoader;
 	[[nodiscard]] std::shared_ptr<Mesh> load(const nlohmann::json& descriptor);
@@ -18,4 +19,4 @@ private:
 	std::unique_ptr<VertexAttributes> _createDefaultVertexAttributes();
 };
 
-}
+} // namespace tactics::resource

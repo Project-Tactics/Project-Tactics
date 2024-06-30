@@ -1,9 +1,10 @@
 #include "DemoSpriteState.h"
 
-#include <Engine/Scene/SceneSystem.h>
-#include <Libs/Ecs/Component/TransformComponent.h>
-
 #include "../Component/RotateAroundPoint.h"
+
+#include <Engine/Scene/SceneSystem.h>
+
+#include <Libs/Ecs/Component/TransformComponent.h>
 
 namespace tactics {
 
@@ -33,7 +34,8 @@ void DemoSpriteState::exit() {
 }
 
 FsmAction DemoSpriteState::update() {
-	component::RotateAroundPointSystem::update(getService<SceneSystem>().getRegistry().view<component::Transform, component::RotateAroundPoint>());
+	component::RotateAroundPointSystem::update(
+		getService<SceneSystem>().getRegistry().view<component::Transform, component::RotateAroundPoint>());
 	return FsmAction::none();
 }
 
@@ -60,4 +62,4 @@ FsmEventAction DemoSpriteState::onKeyPress(SDL_KeyboardEvent& event) {
 	return FsmEventAction::none();
 }
 
-}
+} // namespace tactics

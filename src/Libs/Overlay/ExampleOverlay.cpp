@@ -4,8 +4,6 @@
 
 namespace tactics {
 
-void ExampleOverlay::update() {
-	ImGui::ShowDemoWindow();
-}
+void ExampleOverlay::update() { ImGui::ShowDemoWindow(); }
 
-}
+} // namespace tactics

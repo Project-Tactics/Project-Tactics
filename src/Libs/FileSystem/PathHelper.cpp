@@ -2,9 +2,7 @@
 
 namespace tactics {
 
-PathHelper::PathHelper(const std::filesystem::path& dataPath) {
-	_updateDataRelativePath(dataPath);
-}
+PathHelper::PathHelper(const std::filesystem::path& dataPath) { _updateDataRelativePath(dataPath); }
 
 void PathHelper::_updateDataRelativePath(const std::filesystem::path& dataPath) {
 	_dataRelativePath = dataPath;
@@ -16,4 +14,4 @@ std::string PathHelper::makeAbsolutePath(const std::filesystem::path& path) cons
 	return (_dataAbsolutePath / path).string();
 }
 
-}
+} // namespace tactics

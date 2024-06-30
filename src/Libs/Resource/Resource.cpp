@@ -1,7 +1,7 @@
 #include "Resource.h"
 
-#include <Libs/Utility/UUID.h>
 #include <Libs/Utility/Exception.h>
+#include <Libs/Utility/UUID.h>
 
 namespace tactics::resource {
 
@@ -11,7 +11,7 @@ BaseResource::BaseResource(HashId name, ResourceType type) {
 	this->type = type;
 }
 
-}
+} // namespace tactics::resource
 
 namespace tactics {
 
@@ -67,4 +67,4 @@ resource::ResourceType Str<resource::ResourceType>::from(std::string_view string
 	return ResourceType::Unkwown;
 }
 
-}
+} // namespace tactics

@@ -2,12 +2,13 @@
 
 #include <Libs/Utility/Exception.h>
 
-//#include "Scripting/ScriptingSystem.h"
+// #include "Scripting/ScriptingSystem.h"
 
 namespace tactics {
 
 ScriptedOverlay::ScriptedOverlay(std::string_view name, sol::state_view& solState, sol::table luaOverlay)
-	: _name(name), _solState(solState) {
+	: _name(name)
+	, _solState(solState) {
 	_addFunctionToRegistry(luaOverlay, _closeFunctionReference, "close");
 	_addFunctionToRegistry(luaOverlay, _updateFunctionReference, "update");
 	sol::protected_function initFunction = luaOverlay["init"];
@@ -21,16 +22,12 @@ ScriptedOverlay::ScriptedOverlay(std::string_view name, sol::state_view& solStat
 
 ScriptedOverlay::~ScriptedOverlay() {
 	auto closeFunction = _prepareFunction(_closeFunctionReference);
-	if (closeFunction.valid()) {
-		closeFunction();
-	}
+	if (closeFunction.valid()) { closeFunction(); }
 }
 
 void ScriptedOverlay::update() {
 	auto updateFunction = _prepareFunction(_updateFunctionReference);
-	if (updateFunction.valid()) {
-		updateFunction();
-	}
+	if (updateFunction.valid()) { updateFunction(); }
 }
 
 void ScriptedOverlay::_addFunctionToRegistry(sol::table& table, sol::reference& ref, std::string_view functionName) {
@@ -50,13 +47,11 @@ sol::protected_function ScriptedOverlay::_prepareFunction(sol::reference& functi
 
 void ScriptedOverlay::_setErrorHandler(sol::protected_function& function) {
 	sol::function errorHandler = _solState["_globalErrorHandler"];
-	if (errorHandler.valid()) {
-		function.set_error_handler(errorHandler);
-	}
+	if (errorHandler.valid()) { function.set_error_handler(errorHandler); }
 }
 
 void ScriptedOverlay::_logMissingFunctionWarning(std::string_view functionName) {
 	throw TACTICS_EXCEPTION("Missing [{}] function for the Scripted Overlay: {}", functionName, _name);
 }
 
-}
+} // namespace tactics

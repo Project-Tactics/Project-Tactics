@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Libs/Ecs/EntityUtilities.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
+#include <Libs/Ecs/EntityUtilities.h>
 #include <Libs/Utility/Reflection.h>
 
 #include <glm/glm.hpp>
@@ -21,4 +21,4 @@ public:
 	static void update(const ecs_view<Transform, RotateItem>& view);
 };
 
-}
+} // namespace tactics::component

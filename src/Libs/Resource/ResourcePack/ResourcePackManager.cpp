@@ -10,8 +10,7 @@ namespace tactics::resource {
 
 ResourcePackManager::ResourcePackManager(FileSystem& fileSystem, const ResourceProvider& resourceProvider)
 	: _fileSystem(fileSystem)
-	, _resourceProvider(resourceProvider) {
-}
+	, _resourceProvider(resourceProvider) {}
 
 void ResourcePackManager::loadPackDefinition(const std::filesystem::path& packDefinitionPath) {
 	auto fileHandle = _loadPackDefinition(packDefinitionPath);
@@ -21,9 +20,7 @@ void ResourcePackManager::loadPackDefinition(const std::filesystem::path& packDe
 
 		for (auto&& [resourceType, value] : packData.items()) {
 			auto& packGroup = pack.getOrCreatePackGroup(fromString<ResourceType>(resourceType));
-			for (auto&& [resourceName, data] : value.items()) {
-				packGroup.addResource(HashId(resourceName), data);
-			}
+			for (auto&& [resourceName, data] : value.items()) { packGroup.addResource(HashId(resourceName), data); }
 		}
 	}
 }
@@ -60,18 +57,20 @@ void ResourcePackManager::loadExternalResource(const HashId& packName, std::shar
 	pack.loadExternalResource(_resourceProvider, resource);
 }
 
-void ResourcePackManager::loadExternalResource(const HashId& packName, const HashId& resourceName, ResourceType type, const nlohmann::json& data) {
+void ResourcePackManager::loadExternalResource(const HashId& packName,
+											   const HashId& resourceName,
+											   ResourceType type,
+											   const nlohmann::json& data) {
 	auto& pack = _getResourcePack(packName);
 	pack.loadExternalResource(_resourceProvider, resourceName, type, data);
 }
 
 void ResourcePackManager::forEachPack(const std::function<void(const Pack&)>& callback) {
-	for (auto&& [packName, pack] : _packs) {
-		callback(*pack);
-	}
+	for (auto&& [packName, pack] : _packs) { callback(*pack); }
 }
 
-std::unique_ptr<FileHandle<nlohmann::ordered_json>> ResourcePackManager::_loadPackDefinition(const std::filesystem::path& packDefinitionPath) {
+std::unique_ptr<FileHandle<nlohmann::ordered_json>>
+ResourcePackManager::_loadPackDefinition(const std::filesystem::path& packDefinitionPath) {
 	auto jsonFileHandle = _fileSystem.createJsonFileHandle(packDefinitionPath);
 	if (!jsonFileHandle->exists()) {
 		throw TACTICS_EXCEPTION("Pack definition file [{}] does not exist", packDefinitionPath.string());
@@ -85,4 +84,4 @@ std::unique_ptr<FileHandle<nlohmann::ordered_json>> ResourcePackManager::_loadPa
 	return jsonFileHandle;
 }
 
-}
+} // namespace tactics::resource

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "SpriteSheet.h"
 #include "../ResourceLoader.h"
+#include "SpriteSheet.h"
 
 #include <Libs/Utility/Json/MathJsonSerializer.h>
+
 #include <glm/glm.hpp>
 
 namespace tactics::resource {
@@ -16,10 +17,10 @@ struct SpriteSheetDescriptor {
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteSheetDescriptor, texture, spriteSize, animations)
 };
 
-class SpriteSheetLoader: public ResourceLoader {
+class SpriteSheetLoader : public ResourceLoader {
 public:
 	using ResourceLoader::ResourceLoader;
 	[[nodiscard]] std::shared_ptr<SpriteSheet> load(const SpriteSheetDescriptor& descriptor);
 };
 
-}
+} // namespace tactics::resource

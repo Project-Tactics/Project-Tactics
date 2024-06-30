@@ -5,10 +5,7 @@ namespace tactics::resource {
 Rect SpriteSheet::getUVRect(uint32_t spriteIndex) const {
 	auto coordinates = getUVCoordinates(spriteIndex);
 	auto size = getUVSpriteSize();
-	return {
-		coordinates,
-		{coordinates.x + size.x, coordinates.y - size.y}
-	};
+	return {coordinates, {coordinates.x + size.x, coordinates.y - size.y}};
 }
 
 glm::vec2 SpriteSheet::getUVCoordinates(uint32_t spriteIndex) const {
@@ -29,4 +26,4 @@ unsigned int SpriteSheet::getSpriteCount() const {
 	return spritesPerRow * spritesPerColumn;
 }
 
-}
+} // namespace tactics::resource

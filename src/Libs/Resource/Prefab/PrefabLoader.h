@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../ResourceLoader.h"
-
 #include "Prefab.h"
 
 #include <Libs/Ecs/Entity.h>
@@ -11,13 +10,14 @@ class EntityComponentSystem;
 
 namespace resource {
 
-class PrefabLoader: public ResourceLoader {
+class PrefabLoader : public ResourceLoader {
 public:
 	PrefabLoader(FileSystem& fileSystem, const ResourceProvider& resourceProvider, EntityComponentSystem& ecs);
 	[[nodiscard]] std::shared_ptr<Prefab> load(HashId name, const FileDescriptor& descriptor);
+
 private:
 	EntityComponentSystem& _ecs;
 };
 
-}
-}
+} // namespace resource
+} // namespace tactics

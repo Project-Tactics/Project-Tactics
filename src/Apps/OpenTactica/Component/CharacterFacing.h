@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Libs/Ecs/EntityUtilities.h>
-#include <Libs/Ecs/Component/SpriteComponent.h>
-#include <Libs/Utility/Reflection.h>
-
 #include "BattleCamera.h"
+
+#include <Libs/Ecs/Component/SpriteComponent.h>
+#include <Libs/Ecs/EntityUtilities.h>
+#include <Libs/Utility/Reflection.h>
 
 namespace tactics::component {
 
@@ -15,12 +15,9 @@ enum class Facing {
 	West
 };
 
-NLOHMANN_JSON_SERIALIZE_ENUM(Facing, {
-	{Facing::North, "north"},
-	{Facing::South, "south"},
-	{Facing::East, "east"},
-	{Facing::West, "west"}
-});
+NLOHMANN_JSON_SERIALIZE_ENUM(
+	Facing,
+	{{Facing::North, "north"}, {Facing::South, "south"}, {Facing::East, "east"}, {Facing::West, "west"}});
 
 struct CharacterFacing {
 	Facing facing = Facing::South;
@@ -31,10 +28,12 @@ struct CharacterFacing {
 
 class CharacterFacingSystem {
 public:
-	static void update(BattleCamera& battleCamera, ecs_view<CharacterFacing, SpriteAnimation, Sprite>& characterFacingView);
+	static void update(BattleCamera& battleCamera,
+					   ecs_view<CharacterFacing, SpriteAnimation, Sprite>& characterFacingView);
 
 private:
-	static void _updateAnimation(SpriteAnimation& animation, Sprite& sprite, const HashId& animationName, const glm::vec2& uvFlip);
+	static void
+	_updateAnimation(SpriteAnimation& animation, Sprite& sprite, const HashId& animationName, const glm::vec2& uvFlip);
 };
 
-}
+} // namespace tactics::component

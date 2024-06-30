@@ -25,7 +25,7 @@ struct FsmInfo;
 
 class Engine {
 public:
-	template <typename TApplication> static void run() {
+	template<typename TApplication> static void run() {
 		TApplication application;
 		_run(application);
 	}

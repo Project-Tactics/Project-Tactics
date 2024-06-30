@@ -11,9 +11,9 @@ void RotateItem::defineReflection() {
 }
 
 void RotateItemSystem::update(const ecs_view<Transform, RotateItem>& view) {
-	view.each([] (auto& transform, auto& rotateItem) {
+	view.each([](auto& transform, auto& rotateItem) {
 		transform.rotate(rotateItem.speed * EngineTime::fixedDeltaTime<float>(), rotateItem.axis);
 	});
 }
 
-}
+} // namespace tactics::component

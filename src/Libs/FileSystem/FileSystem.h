@@ -3,10 +3,10 @@
 #include "FileHandle/FileHandle.h"
 #include "PathHelper.h"
 
-#include <nlohmann/json.hpp>
-#include <inicpp.h>
 #include <filesystem>
+#include <inicpp.h>
 #include <memory>
+#include <nlohmann/json.hpp>
 #include <string_view>
 #include <vector>
 
@@ -28,4 +28,4 @@ private:
 	std::unique_ptr<FileLoader> _fileLoader;
 };
 
-}
+} // namespace tactics

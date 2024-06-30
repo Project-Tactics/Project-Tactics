@@ -1,26 +1,25 @@
 #include "DrawMeshesRenderStep.h"
 
-#include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/Component/AlphaBlendedComponent.h>
 #include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
+#include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Rendering/IndexBuffer.h>
-#include <Libs/Rendering/VertexBuffer.h>
 #include <Libs/Rendering/VertexAttributes.h>
+#include <Libs/Rendering/VertexBuffer.h>
 
 #include <glad/gl.h>
 #include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/norm.inl>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/norm.inl>
 
 namespace tactics::renderstep {
 
 DrawMeshes::DrawMeshes(EntityComponentSystem& ecs, AlphaBlendedFlag alphaBlendedFlag)
 	: _ecs(ecs)
-	, _alphaBlendedFlag(alphaBlendedFlag) {
-}
+	, _alphaBlendedFlag(alphaBlendedFlag) {}
 
 void DrawMeshes::execute(RenderStepInfo&) {
 	using namespace component;
@@ -28,12 +27,12 @@ void DrawMeshes::execute(RenderStepInfo&) {
 	auto& registry = _ecs.sceneRegistry();
 
 	if (_alphaBlendedFlag == AlphaBlendedFlag::WithoutAlphaBlend) {
-		registry.view<Camera, CurrentCamera>().each([this] (auto& camera) {
+		registry.view<Camera, CurrentCamera>().each([this](auto& camera) {
 			auto viewProjectionMatrix = camera.projection * camera.view;
 			_drawOpaqueGeometry(viewProjectionMatrix);
 		});
 	} else {
-		registry.view<Camera, Transform, CurrentCamera>().each([this] (auto& camera, auto& transform) {
+		registry.view<Camera, Transform, CurrentCamera>().each([this](auto& camera, auto& transform) {
 			auto viewProjectionMatrix = camera.projection * camera.view;
 			_drawAlphaBlendedGeometry(viewProjectionMatrix, transform);
 		});
@@ -49,9 +48,7 @@ void DrawMeshes::_drawOpaqueGeometry(const glm::mat4x4& viewProjection) {
 	glDepthMask(GL_TRUE);
 
 	auto view = _ecs.sceneRegistry().view<Transform, Mesh>(entt::exclude<FullyAlphaBlended>);
-	for (auto&& [entity, transform, mesh] : view.each()) {
-		_drawMesh(viewProjection, transform, mesh, false);
-	}
+	for (auto&& [entity, transform, mesh] : view.each()) { _drawMesh(viewProjection, transform, mesh, false); }
 }
 
 void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, component::Transform& cameraTransform) {
@@ -63,21 +60,22 @@ void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, co
 	glDepthMask(GL_FALSE);
 
 	auto& registry = _ecs.sceneRegistry();
-	registry.sort<AlphaBlended>([&registry, &cameraTransform] (const entt::entity lhs, const entt::entity rhs) {
+	registry.sort<AlphaBlended>([&registry, &cameraTransform](const entt::entity lhs, const entt::entity rhs) {
 		auto diff1 = registry.get<Transform>(lhs).getPosition() - cameraTransform.getPosition();
 		auto diff2 = registry.get<Transform>(rhs).getPosition() - cameraTransform.getPosition();
 		return glm::length2(diff1) > glm::length2(diff2);
 	});
 	auto view = registry.view<AlphaBlended, Transform, Mesh>();
-	for (auto&& [entity, transform, mesh] : view.each()) {
-		_drawMesh(viewProjection, transform, mesh, true);
-	}
+	for (auto&& [entity, transform, mesh] : view.each()) { _drawMesh(viewProjection, transform, mesh, true); }
 
 	glDepthMask(GL_TRUE);
 	glDisable(GL_BLEND);
 }
 
-void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection, component::Transform& transform, const component::Mesh& inMesh, bool filterTransparent) {
+void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection,
+						   component::Transform& transform,
+						   const component::Mesh& inMesh,
+						   bool filterTransparent) {
 	auto& materials = inMesh.materials;
 	auto& mesh = inMesh.mesh;
 
@@ -120,4 +118,4 @@ void DrawMeshes::_drawGeometry(const resource::SubMesh& mesh) {
 	mesh.vertexBuffer->unbind();
 }
 
-}
+} // namespace tactics::renderstep

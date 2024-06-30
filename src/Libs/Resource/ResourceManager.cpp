@@ -1,4 +1,3 @@
 #include "ResourceManager.h"
 
-namespace tactics::resource {
-}
+namespace tactics::resource {}

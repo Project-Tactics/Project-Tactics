@@ -14,10 +14,14 @@ void ScriptingHelper::executeFunction(sol::state_view& luaState, sol::reference&
 		}
 	}
 }
-int ScriptingHelper::exceptionHandler(lua_State* L, sol::optional<const std::exception&> maybe_exception, sol::string_view description) {
+
+int ScriptingHelper::exceptionHandler(lua_State* L,
+									  sol::optional<const std::exception&> maybe_exception,
+									  sol::string_view description) {
 	// L is the lua state, which you can wrap in a state_view if necessary
 	// maybe_exception will contain exception, if it exists
-	// description will either be the what() of the exception or a description saying that we hit the general-case catch(...)
+	// description will either be the what() of the exception or a description saying that we hit the general-case
+	// catch(...)
 	std::cout << "An exception occurred in a function, here's what it says ";
 	if (maybe_exception) {
 		std::cout << "(straight from the exception): ";
@@ -36,4 +40,4 @@ int ScriptingHelper::exceptionHandler(lua_State* L, sol::optional<const std::exc
 	return sol::stack::push(L, description);
 }
 
-}
+} // namespace tactics

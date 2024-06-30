@@ -1,10 +1,9 @@
 #pragma once
 
-#include <Libs/Utility/String.h>
 #include <Libs/Utility/HashId.h>
+#include <Libs/Utility/String.h>
 
 #include <nlohmann/json.hpp>
-
 #include <stdint.h>
 #include <string>
 
@@ -21,15 +20,13 @@ enum class ResourceType {
 	Unkwown
 };
 
-const std::array<ResourceType, 7> resourceTypeLoadingOrder = {
-	ResourceType::IniFile,
-	ResourceType::Shader,
-	ResourceType::Texture,
-	ResourceType::Material,
-	ResourceType::Mesh,
-	ResourceType::SpriteSheet,
-	ResourceType::Prefab
-};
+const std::array<ResourceType, 7> resourceTypeLoadingOrder = {ResourceType::IniFile,
+															  ResourceType::Shader,
+															  ResourceType::Texture,
+															  ResourceType::Material,
+															  ResourceType::Mesh,
+															  ResourceType::SpriteSheet,
+															  ResourceType::Prefab};
 
 using ResourceId = uint64_t;
 
@@ -46,41 +43,40 @@ public:
 	ResourceType type;
 };
 
-template<typename TResource>
-class Resource: public BaseResource {
+template<typename TResource> class Resource : public BaseResource {
 public:
-	explicit Resource(HashId name): BaseResource(name, TResource::TYPE) {}
-	Resource(): BaseResource(""_id, TResource::TYPE) {}
+	explicit Resource(HashId name) : BaseResource(name, TResource::TYPE) {}
+
+	Resource() : BaseResource(""_id, TResource::TYPE) {}
 };
 
 /*
- * Common file descriptor used to extract info from json objects when the resource has just a name and a path for the file
-*/
+ * Common file descriptor used to extract info from json objects when the resource has just a name and a path for the
+ * file
+ */
 struct FileDescriptor {
 	std::string path;
 
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE(FileDescriptor, path);
 };
 
-}
+} // namespace tactics::resource
 
 namespace tactics {
 
-template<>
-class Str<resource::ResourceType> {
+template<> class Str<resource::ResourceType> {
 public:
 	static std::string to(resource::ResourceType resourceType);
 	static resource::ResourceType from(std::string_view string);
 };
 
-}
+} // namespace tactics
 
-template <>
-struct fmt::formatter<tactics::resource::ResourceType > {
+template<> struct fmt::formatter<tactics::resource::ResourceType> {
 public:
 	constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
-	template <typename Context>
-	constexpr auto format(tactics::resource::ResourceType const& obj, Context& ctx) const {
+
+	template<typename Context> constexpr auto format(tactics::resource::ResourceType const& obj, Context& ctx) const {
 		return fmt::format_to(ctx.out(), "{}", tactics::Str<tactics::resource::ResourceType>::to(obj));
 	}
 };

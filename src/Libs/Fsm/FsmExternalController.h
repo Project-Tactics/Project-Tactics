@@ -9,4 +9,4 @@ public:
 	virtual FsmAction update(const HashId& currentStateName) = 0;
 };
 
-}
+} // namespace tactics

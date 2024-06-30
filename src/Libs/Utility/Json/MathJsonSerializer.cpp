@@ -3,12 +3,7 @@
 namespace nlohmann {
 
 void adl_serializer<glm::vec4>::to_json(json& j, const glm::vec4& value) {
-	j = nlohmann::json{
-		{"x", value.x},
-		{"y", value.y},
-		{"z", value.z},
-		{"w", value.w}
-	};
+	j = nlohmann::json{{"x", value.x}, {"y", value.y}, {"z", value.z}, {"w", value.w}};
 }
 
 void adl_serializer<glm::vec4>::from_json(const json& j, glm::vec4& value) {
@@ -19,11 +14,7 @@ void adl_serializer<glm::vec4>::from_json(const json& j, glm::vec4& value) {
 }
 
 void adl_serializer<glm::vec3>::to_json(json& j, const glm::vec3& value) {
-	j = nlohmann::json{
-		{"x", value.x},
-		{"y", value.y},
-		{"z", value.z}
-	};
+	j = nlohmann::json{{"x", value.x}, {"y", value.y}, {"z", value.z}};
 }
 
 void adl_serializer<glm::vec3>::from_json(const json& j, glm::vec3& value) {
@@ -45,12 +36,7 @@ void adl_serializer<glm::vec2>::from_json(const json& j, glm::vec2& value) {
 }
 
 void adl_serializer<glm::quat>::to_json(json& j, const glm::quat& value) {
-	j = nlohmann::json{
-		{"x", value.x},
-		{"y", value.y},
-		{"z", value.z},
-		{"w", value.w}
-	};
+	j = nlohmann::json{{"x", value.x}, {"y", value.y}, {"z", value.z}, {"w", value.w}};
 }
 
 void adl_serializer<glm::quat>::from_json(const json& j, glm::quat& value) {
@@ -73,24 +59,22 @@ void adl_serializer<glm::quat>::from_json(const json& j, glm::quat& value) {
 }
 
 void adl_serializer<glm::mat4>::to_json(json& j, const glm::mat4& value) {
-	j = nlohmann::json{
-		{"m00", value[0][0]},
-		{"m01", value[0][1]},
-		{"m02", value[0][2]},
-		{"m03", value[0][3]},
-		{"m10", value[1][0]},
-		{"m11", value[1][1]},
-		{"m12", value[1][2]},
-		{"m13", value[1][3]},
-		{"m20", value[2][0]},
-		{"m21", value[2][1]},
-		{"m22", value[2][2]},
-		{"m23", value[2][3]},
-		{"m30", value[3][0]},
-		{"m31", value[3][1]},
-		{"m32", value[3][2]},
-		{"m33", value[3][3]}
-	};
+	j = nlohmann::json{{"m00", value[0][0]},
+					   {"m01", value[0][1]},
+					   {"m02", value[0][2]},
+					   {"m03", value[0][3]},
+					   {"m10", value[1][0]},
+					   {"m11", value[1][1]},
+					   {"m12", value[1][2]},
+					   {"m13", value[1][3]},
+					   {"m20", value[2][0]},
+					   {"m21", value[2][1]},
+					   {"m22", value[2][2]},
+					   {"m23", value[2][3]},
+					   {"m30", value[3][0]},
+					   {"m31", value[3][1]},
+					   {"m32", value[3][2]},
+					   {"m33", value[3][3]}};
 }
 
 void adl_serializer<glm::mat4>::from_json(const json& j, glm::mat4& value) {
@@ -112,4 +96,4 @@ void adl_serializer<glm::mat4>::from_json(const json& j, glm::mat4& value) {
 	j.at("m33").get_to(value[3][3]);
 }
 
-}
+} // namespace nlohmann

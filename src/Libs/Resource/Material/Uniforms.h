@@ -1,14 +1,13 @@
 #pragma once
 
-
-#include <Libs/Resource/Texture/Texture.h>
 #include <Libs/Resource/Shader/Shader.h>
+#include <Libs/Resource/Texture/Texture.h>
 #include <Libs/Utility/TransparentTypes.h>
 
+#include <glm/glm.hpp>
+#include <memory>
 #include <string>
 #include <string_view>
-#include <memory>
-#include <glm/glm.hpp>
 
 namespace tactics::resource {
 
@@ -48,4 +47,4 @@ private:
 	std::unordered_map<std::string, glm::mat4> _matrices;
 };
 
-}
+} // namespace tactics::resource

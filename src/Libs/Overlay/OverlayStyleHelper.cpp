@@ -1,13 +1,12 @@
 #include "OverlayStyleHelper.h"
 
-#include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/FileSystem/FileSystem.h>
+#include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Utility/Ini/IniMathConverter.h>
 
-#include <imgui/imgui.h>
-
-#include <sstream>
 #include <array>
+#include <imgui/imgui.h>
+#include <sstream>
 
 namespace tactics {
 
@@ -68,7 +67,8 @@ void OverlayStyleHelper::setupImGuiStyle(const resource::IniFile& iniFile, const
 
 	category = "imguiFonts";
 	// TODO(Gerark) FileSystem: We should provide a FileHandle to the font file instead of relying on this custom code.
-	std::filesystem::path fontPath = fileSystem.getPathHelper().makeAbsolutePath(file.at(category).at("fontPath").as<std::string>());
+	std::filesystem::path fontPath =
+		fileSystem.getPathHelper().makeAbsolutePath(file.at(category).at("fontPath").as<std::string>());
 	if (std::filesystem::exists(fontPath)) {
 		auto fontPathStr = fontPath.string();
 		auto& io = ImGui::GetIO();
@@ -80,10 +80,8 @@ void OverlayStyleHelper::setupImGuiStyle(const resource::IniFile& iniFile, const
 		std::string str;
 		while (std::getline(ss, str, ',')) {
 			auto font = io.Fonts->AddFontFromFileTTF(fontPathStr.c_str(), static_cast<float>(std::atof(str.c_str())));
-			if (str == defaultSize) {
-				io.FontDefault = font;
-			}
+			if (str == defaultSize) { io.FontDefault = font; }
 		}
 	}
 }
-}
+} // namespace tactics

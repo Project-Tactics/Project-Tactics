@@ -4,11 +4,11 @@ namespace tactics {
 
 // TODO(Gerark): The step info can be renamed into some sort of context object
 // where the RenderSteps can set information like current camera or other rendering information
-struct RenderStepInfo {
-};
+struct RenderStepInfo {};
 
 /**
- * @brief Interface implemented to handle rendering operations such as drawing meshes, setting clear color, applying post-processing effects, etc.
+ * @brief Interface implemented to handle rendering operations such as drawing meshes, setting clear color, applying
+ * post-processing effects, etc.
  */
 class RenderStep {
 public:
@@ -21,4 +21,4 @@ public:
 	virtual void execute(RenderStepInfo& renderInfo) = 0;
 };
 
-}
+} // namespace tactics

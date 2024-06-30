@@ -14,12 +14,8 @@ bool EventsListener::onEvent(SDL_Event& event) {
 	return false;
 }
 
-bool EventsListener::onKeyPress(SDL_KeyboardEvent& /*event*/) {
-	return false;
-}
+bool EventsListener::onKeyPress(SDL_KeyboardEvent& /*event*/) { return false; }
 
-bool EventsListener::onKeyRelease(SDL_KeyboardEvent& /*event*/) {
-	return false;
-}
+bool EventsListener::onKeyRelease(SDL_KeyboardEvent& /*event*/) { return false; }
 
-}
+} // namespace tactics

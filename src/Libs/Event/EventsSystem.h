@@ -16,4 +16,4 @@ private:
 	std::vector<EventsListener*> _eventsListeners;
 };
 
-}
+} // namespace tactics

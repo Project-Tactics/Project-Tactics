@@ -6,7 +6,7 @@
 
 namespace tactics {
 
-class IniFileHandle: public FileHandle<ini::IniFile> {
+class IniFileHandle : public FileHandle<ini::IniFile> {
 public:
 	IniFileHandle(const std::filesystem::path& path);
 	~IniFileHandle() override;
@@ -18,4 +18,4 @@ private:
 	std::filesystem::path _path;
 };
 
-}
+} // namespace tactics

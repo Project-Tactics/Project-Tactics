@@ -12,4 +12,4 @@ public:
 	static void setupImGuiStyle(const resource::IniFile& iniFile, const FileSystem& fileSystem);
 };
 
-}
+} // namespace tactics

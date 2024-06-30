@@ -15,14 +15,15 @@ struct ShaderDescriptor {
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE(ShaderDescriptor, vertexShader, fragmentShader);
 };
 
-class ShaderLoader: public ResourceLoader {
+class ShaderLoader : public ResourceLoader {
 public:
 	using ResourceLoader::ResourceLoader;
 	[[nodiscard]] std::shared_ptr<Shader> load(const ShaderDescriptor& descriptor);
 
 private:
-	std::tuple<unsigned int, std::string, std::string> _loadProgram(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
+	std::tuple<unsigned int, std::string, std::string> _loadProgram(const std::string& vertexShaderFilePath,
+																	const std::string& fragmentShaderFilePath);
 	std::tuple<unsigned int, std::string> _loadShader(unsigned int shaderType, const std::string& shaderFilePath);
 };
 
-}
+} // namespace tactics::resource

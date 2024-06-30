@@ -12,20 +12,15 @@ public:
 	virtual void load() = 0;
 };
 
-template<typename TContent>
-class FileHandle: public BaseFileHandle {
+template<typename TContent> class FileHandle : public BaseFileHandle {
 public:
-	TContent& getContent() {
-		return _content;
-	}
+	TContent& getContent() { return _content; }
 
 protected:
-	void _setContent(const TContent& content) {
-		_content = content;
-	}
+	void _setContent(const TContent& content) { _content = content; }
 
 private:
 	TContent _content;
 };
 
-}
+} // namespace tactics

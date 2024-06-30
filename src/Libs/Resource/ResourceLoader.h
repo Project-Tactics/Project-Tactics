@@ -16,13 +16,11 @@ protected:
 	FileSystem& _getFileSystem() const;
 	const ResourceProvider& _getResourceProvider() const;
 
-	template<typename TResource>
-	std::shared_ptr<TResource> _getResource(const HashId& name) {
+	template<typename TResource> std::shared_ptr<TResource> _getResource(const HashId& name) {
 		return _resourceProvider.getResource<TResource>(name);
 	}
 
-	template<typename TResource>
-	std::shared_ptr<TResource> _getResource(ResourceId id) {
+	template<typename TResource> std::shared_ptr<TResource> _getResource(ResourceId id) {
 		return _resourceProvider.getResource<TResource>(id);
 	}
 
@@ -31,4 +29,4 @@ private:
 	const ResourceProvider& _resourceProvider;
 };
 
-}
+} // namespace tactics::resource

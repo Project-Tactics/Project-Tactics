@@ -1,15 +1,14 @@
 #include "PrepareViewportRenderStep.h"
 
-#include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/Component/ViewportComponent.h>
+#include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Utility/Exception.h>
 
 #include <glad/gl.h>
 
 namespace tactics::renderstep {
 
-PrepareViewport::PrepareViewport(EntityComponentSystem& ecs): _ecs(ecs) {
-}
+PrepareViewport::PrepareViewport(EntityComponentSystem& ecs) : _ecs(ecs) {}
 
 void PrepareViewport::execute(RenderStepInfo&) {
 	auto view = _ecs.sceneRegistry().view<component::Viewport, component::CurrentViewport>();
@@ -20,7 +19,7 @@ void PrepareViewport::execute(RenderStepInfo&) {
 		throw TACTICS_EXCEPTION("There must be exactly one entity with a CurrentViewport component");
 	}
 
-	view.each([&] (component::Viewport& viewport) {
+	view.each([&](component::Viewport& viewport) {
 		auto& color = viewport.clearColor;
 		glViewport(viewport.topLeft.x, viewport.topLeft.y, viewport.size.x, viewport.size.y);
 		glScissor(viewport.topLeft.x, viewport.topLeft.y, viewport.size.x, viewport.size.y);
@@ -29,4 +28,4 @@ void PrepareViewport::execute(RenderStepInfo&) {
 	});
 }
 
-}
+} // namespace tactics::renderstep

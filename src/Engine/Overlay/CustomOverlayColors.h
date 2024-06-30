@@ -7,7 +7,7 @@ namespace tactics {
 namespace resource {
 class IniFile;
 enum class ResourceType;
-}
+} // namespace resource
 
 class CustomOverlayColors {
 public:
@@ -35,4 +35,4 @@ private:
 	static Colors _colors;
 };
 
-}
+} // namespace tactics

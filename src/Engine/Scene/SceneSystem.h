@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Libs/Resource/Resource.h>
 #include <Libs/Ecs/Entity.h>
-#include <Libs/Utility/Math.h>
+#include <Libs/Resource/Resource.h>
 #include <Libs/Utility/Color.h>
+#include <Libs/Utility/Math.h>
 
 #include <nlohmann/json.hpp>
 
@@ -17,9 +17,7 @@ class Scene;
 
 class SceneSystem {
 public:
-	SceneSystem(
-		EntityComponentSystem& ecs,
-		resource::ResourceSystem& resourceSystem);
+	SceneSystem(EntityComponentSystem& ecs, resource::ResourceSystem& resourceSystem);
 	~SceneSystem();
 
 	void clearScene(bool clearCameras = false);
@@ -27,32 +25,23 @@ public:
 	[[nodiscard]] const entt::registry& getRegistry() const;
 	[[nodiscard]] entt::registry& getRegistry();
 
-	Entity createViewport(
-		const glm::vec2& topLeft,
-		const glm::vec2& size,
-		const glm::vec4& clearColor = Color::black);
+	Entity createViewport(const glm::vec2& topLeft, const glm::vec2& size, const glm::vec4& clearColor = Color::black);
 
-	Entity createCamera(
-		const HashId& name,
-		const glm::vec3& position,
-		const glm::vec3& direction,
-		const glm::vec3& up,
-		float fov,
-		float near,
-		float far
-	);
+	Entity createCamera(const HashId& name,
+						const glm::vec3& position,
+						const glm::vec3& direction,
+						const glm::vec3& up,
+						float fov,
+						float near,
+						float far);
 
-	Entity createEntity(
-		const glm::vec3& position,
-		const HashId& meshName,
-		const std::vector<HashId>& materials,
-		const glm::quat& rotation = Quaternion::identity,
-		const glm::vec3& scale = Vector3::one);
+	Entity createEntity(const glm::vec3& position,
+						const HashId& meshName,
+						const std::vector<HashId>& materials,
+						const glm::quat& rotation = Quaternion::identity,
+						const glm::vec3& scale = Vector3::one);
 
-	Entity createEntity(
-		const HashId& name,
-		const HashId& prefabName
-	);
+	Entity createEntity(const HashId& name, const HashId& prefabName);
 
 	[[nodiscard]] Entity getEntityByName(const HashId& name);
 	[[nodiscard]] Entity getCurrentCamera();
@@ -66,8 +55,6 @@ private:
 
 	EntityComponentSystem& _ecs;
 	resource::ResourceSystem& _resourceSystem;
-
-
 };
 
-}
+} // namespace tactics

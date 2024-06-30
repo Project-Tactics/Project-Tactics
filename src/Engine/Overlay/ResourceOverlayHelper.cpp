@@ -3,20 +3,20 @@
 #include "CustomOverlayColors.h"
 
 #include <Libs/Resource/IniFile/IniFile.h>
-#include <Libs/Resource/Mesh/Mesh.h>
 #include <Libs/Resource/Material/Material.h>
+#include <Libs/Resource/Mesh/Mesh.h>
 #include <Libs/Resource/ResourcePack/ResourcePack.h>
 #include <Libs/Resource/Shader/Shader.h>
 #include <Libs/Resource/SpriteSheet/SpriteSheet.h>
 #include <Libs/Resource/Texture/Texture.h>
-
 #include <Libs/Utility/ImGuiUtilities.h>
 
 namespace tactics {
 
 unsigned int ResourceOverlayHelper::_selectedSpriteForSpriteViewer = 0;
 
-void ResourceOverlayHelper::drawResource(const resource::ResourceInfo& resourceInfo, resource::ResourceType resourceType) {
+void ResourceOverlayHelper::drawResource(const resource::ResourceInfo& resourceInfo,
+										 resource::ResourceType resourceType) {
 	using namespace resource;
 
 	ImGui::PushStyleColor(ImGuiCol_TabActive, toColor(resourceType, 0.4f));
@@ -73,7 +73,11 @@ void ResourceOverlayHelper::drawResource(const resource::Texture& texture) {
 	auto width = static_cast<float>(texture.info.width);
 	auto height = static_cast<float>(texture.info.height);
 	auto ratio = height / width;
-	if (ImGui::ImageButton((void*)(intptr_t)texture.rendererId, ImVec2(100, 100 * ratio), ImVec2(0, 1), ImVec2(1, 0), 1)) {
+	if (ImGui::ImageButton((void*)(intptr_t)texture.rendererId,
+						   ImVec2(100, 100 * ratio),
+						   ImVec2(0, 1),
+						   ImVec2(1, 0),
+						   1)) {
 		ImGui::OpenPopup("Texture Viewer");
 	}
 
@@ -91,9 +95,7 @@ void ResourceOverlayHelper::drawResource(const resource::IniFile& iniFile) {
 	auto& data = iniFile.fileHandle->getContent();
 	for (auto& [sectionName, section] : data) {
 		ImGui::TextColored(toColor(ResourceType::IniFile), "[%s]", sectionName.c_str());
-		for (auto& [key, value] : section) {
-			ImGui::Text("%s = %s", key.c_str(), value.as<std::string>().c_str());
-		}
+		for (auto& [key, value] : section) { ImGui::Text("%s = %s", key.c_str(), value.as<std::string>().c_str()); }
 		ImGui::Separator();
 	}
 }
@@ -163,7 +165,9 @@ void ResourceOverlayHelper::drawResource(const resource::SpriteSheet& spriteShee
 	using namespace resource;
 	auto& textureInfo = spriteSheet.texture->info;
 	ImGui::Text("Sprite Sheet Size: %dx%d", textureInfo.width, textureInfo.height);
-	ImGui::Text("Sprite Size: %dx%d", static_cast<int>(spriteSheet.spriteSize.x), static_cast<int>(spriteSheet.spriteSize.y));
+	ImGui::Text("Sprite Size: %dx%d",
+				static_cast<int>(spriteSheet.spriteSize.x),
+				static_cast<int>(spriteSheet.spriteSize.y));
 
 	auto spriteCount = spriteSheet.getSpriteCount();
 	ImGui::Text("Sprites: %d", spriteCount);
@@ -171,13 +175,12 @@ void ResourceOverlayHelper::drawResource(const resource::SpriteSheet& spriteShee
 	auto uvSpriteSize = spriteSheet.getUVSpriteSize();
 	for (auto i = 0u; i < spriteCount; i++) {
 		auto imageButtonId = "Sprite" + std::to_string(i);
-		if (_drawSpriteButton(
-			imageButtonId.c_str(),
-			toImGuiTexture(*spriteSheet.texture),
-			toImVec2(spriteSheet.spriteSize),
-			spriteSheet.getUVRect(i),
-			i < spriteCount - 1,
-			i)) {
+		if (_drawSpriteButton(imageButtonId.c_str(),
+							  toImGuiTexture(*spriteSheet.texture),
+							  toImVec2(spriteSheet.spriteSize),
+							  spriteSheet.getUVRect(i),
+							  i < spriteCount - 1,
+							  i)) {
 			_selectedSpriteForSpriteViewer = i;
 			ImGui::OpenPopup("Sprite Viewer");
 		}
@@ -186,23 +189,25 @@ void ResourceOverlayHelper::drawResource(const resource::SpriteSheet& spriteShee
 	_drawSpriteViewer(spriteSheet);
 }
 
-bool ResourceOverlayHelper::_drawSpriteButton(const char* id, void* texture, const ImVec2& buttonSize, const Rect& uvRect, bool isLast, unsigned int index) {
+bool ResourceOverlayHelper::_drawSpriteButton(const char* id,
+											  void* texture,
+											  const ImVec2& buttonSize,
+											  const Rect& uvRect,
+											  bool isLast,
+											  unsigned int index) {
 	auto overlayPosition = ImGui::GetCursorPos();
 	overlayPosition.x += 2;
 	overlayPosition.y += 1;
-	bool pressed = ImGui::ImageButton(id, texture,
-		ImVec2(buttonSize.x, buttonSize.y),
-		ImVec2(uvRect.bounds.min.x, uvRect.bounds.min.y),
-		ImVec2(uvRect.bounds.max.x, uvRect.bounds.max.y));
+	bool pressed = ImGui::ImageButton(id,
+									  texture,
+									  ImVec2(buttonSize.x, buttonSize.y),
+									  ImVec2(uvRect.bounds.min.x, uvRect.bounds.min.y),
+									  ImVec2(uvRect.bounds.max.x, uvRect.bounds.max.y));
 
-	if (isLast) {
-		ImGui::SameLine();
-	}
+	if (isLast) { ImGui::SameLine(); }
 
 	auto remainingSize = ImGui::GetContentRegionAvail();
-	if (remainingSize.x < buttonSize.x) {
-		ImGui::NewLine();
-	}
+	if (remainingSize.x < buttonSize.x) { ImGui::NewLine(); }
 
 	auto resetPositionAfterOverlay = ImGui::GetCursorPos();
 	ImGui::SetCursorPos(overlayPosition);
@@ -223,13 +228,11 @@ void ResourceOverlayHelper::_drawSpriteViewer(const resource::SpriteSheet& sprit
 		auto previewWidth = std::min(width, 512.f);
 		ImGui::Text("Sprite [%d]", _selectedSpriteForSpriteViewer);
 		auto uvRect = spriteSheet.getUVRect(_selectedSpriteForSpriteViewer);
-		ImGui::Image(
-			toImGuiTexture(*spriteSheet.texture),
-			{previewWidth, previewWidth * ratio},
-			toImVec2(uvRect.bounds.min),
-			toImVec2(uvRect.bounds.max),
-			{1, 1, 1, 1}
-		);
+		ImGui::Image(toImGuiTexture(*spriteSheet.texture),
+					 {previewWidth, previewWidth * ratio},
+					 toImVec2(uvRect.bounds.min),
+					 toImVec2(uvRect.bounds.max),
+					 {1, 1, 1, 1});
 
 		ImGui::Text("Sprite Sheet");
 		_drawTexture(*spriteSheet.texture);
@@ -243,7 +246,11 @@ void ResourceOverlayHelper::_drawTexture(const resource::Texture& texture, float
 	auto height = static_cast<float>(texture.info.height);
 	auto ratio = height / width;
 	auto previewWidth = std::min(width, maxWidth);
-	ImGui::Image(toImGuiTexture(texture), {previewWidth, previewWidth * ratio}, ImVec2(0, 1), ImVec2(1, 0), {1, 1, 1, 1});
+	ImGui::Image(toImGuiTexture(texture),
+				 {previewWidth, previewWidth * ratio},
+				 ImVec2(0, 1),
+				 ImVec2(1, 0),
+				 {1, 1, 1, 1});
 }
 
 bool ResourceOverlayHelper::_beginTabItem(const char* name, resource::ResourceType resourceType) {
@@ -264,4 +271,4 @@ ImVec4 ResourceOverlayHelper::toColor(resource::ResourceType resourceType, float
 	return color;
 }
 
-}
+} // namespace tactics

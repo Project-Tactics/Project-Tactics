@@ -22,4 +22,4 @@ private:
 	double _currentTime;
 };
 
-}
+} // namespace tactics

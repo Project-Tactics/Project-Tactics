@@ -6,7 +6,7 @@
 
 namespace tactics {
 
-class StringFileHandle: public FileHandle<std::string> {
+class StringFileHandle : public FileHandle<std::string> {
 public:
 	StringFileHandle(const std::filesystem::path& path);
 	bool exists() const override;
@@ -17,4 +17,4 @@ private:
 	std::filesystem::path _path;
 };
 
-}
+} // namespace tactics

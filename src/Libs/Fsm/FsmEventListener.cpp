@@ -19,12 +19,8 @@ FsmEventAction FsmEventListener::onEvent(SDL_Event& event) {
 	return FsmEventAction::none();
 }
 
-FsmEventAction FsmEventListener::onKeyPress(SDL_KeyboardEvent&) {
-	return FsmEventAction::none();
-}
+FsmEventAction FsmEventListener::onKeyPress(SDL_KeyboardEvent&) { return FsmEventAction::none(); }
 
-FsmEventAction FsmEventListener::onKeyRelease(SDL_KeyboardEvent&) {
-	return FsmEventAction::none();
-}
+FsmEventAction FsmEventListener::onKeyRelease(SDL_KeyboardEvent&) { return FsmEventAction::none(); }
 
-}
+} // namespace tactics

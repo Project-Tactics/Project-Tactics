@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace tactics {
 
@@ -16,8 +16,7 @@ class RenderQueue {
 public:
 	void execute(RenderStepInfo& renderInfo);
 
-	template<typename TRenderStep, typename ...TArgs>
-	void addStep(TArgs&&... args) {
+	template<typename TRenderStep, typename... TArgs> void addStep(TArgs&&... args) {
 		auto renderStep = std::make_unique<TRenderStep>(std::forward<TArgs&&>(args)...);
 		_renderSteps.push_back(std::move(renderStep));
 	}
@@ -26,4 +25,4 @@ private:
 	std::vector<std::unique_ptr<RenderStep>> _renderSteps;
 };
 
-}
+} // namespace tactics

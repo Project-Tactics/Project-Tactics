@@ -3,12 +3,12 @@
 #include <Libs/FileSystem/FileSystem.h>
 #include <Libs/Utility/Exception.h>
 
-#include <glm/glm.hpp>
-#include <assimp/Importer.hpp>      // C++ importer interface
-#include <assimp/scene.h>           // Output data structure
-#include <assimp/postprocess.h>     // Post processing flags
-#include <regex>
+#include <assimp/Importer.hpp>	// C++ importer interface
+#include <assimp/postprocess.h> // Post processing flags
+#include <assimp/scene.h>		// Output data structure
 #include <functional>
+#include <glm/glm.hpp>
+#include <regex>
 
 namespace tactics::resource {
 
@@ -39,20 +39,17 @@ std::vector<T> parseString(const std::string& str, std::function<T(const std::st
 	std::sregex_token_iterator end;
 
 	for (; it != end; ++it) {
-		if (!it->str().empty()) {
-			result.push_back(convertFunc(it->str()));
-		}
+		if (!it->str().empty()) { result.push_back(convertFunc(it->str())); }
 	}
 	return result;
 }
 
 std::vector<float> MeshLoader::_parseVertices(const std::string& strVertices) {
-	return parseString<float>(strVertices, [] (const std::string& str) { return std::stof(str); });
-
+	return parseString<float>(strVertices, [](const std::string& str) { return std::stof(str); });
 }
 
 std::vector<unsigned int> MeshLoader::_parseIndices(const std::string& strIndices) {
-	return parseString<unsigned int>(strIndices, [] (const std::string& str) { return std::stoul(str); });
+	return parseString<unsigned int>(strIndices, [](const std::string& str) { return std::stoul(str); });
 }
 
 std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& strVertices, const std::string& strIndices) {
@@ -63,19 +60,17 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& strVertices, cons
 	meshVertices->unbind();
 
 	auto mesh = std::make_shared<Mesh>(""_id);
-	mesh->subMeshes.emplace_back(
-		0,
-		std::move(meshVertices),
-		std::make_unique<IndexBuffer>(_parseIndices(strIndices), rp::DynamicDraw::value),
-		std::move(vertexAttributes)
-	);
+	mesh->subMeshes.emplace_back(0,
+								 std::move(meshVertices),
+								 std::make_unique<IndexBuffer>(_parseIndices(strIndices), rp::DynamicDraw::value),
+								 std::move(vertexAttributes));
 	return mesh;
 }
 
 std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 	Assimp::Importer importer;
-	// TODO(Gerark) We should have more control on how we load the meshes through filesystem and not relying on assimp to do the dirty job
-	// assimp gives us the option to define our way of accessing files and filesystem ops.
+	// TODO(Gerark) We should have more control on how we load the meshes through filesystem and not relying on assimp
+	// to do the dirty job assimp gives us the option to define our way of accessing files and filesystem ops.
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenNormals);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
@@ -84,14 +79,13 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 
 	auto meshResource = std::make_shared<Mesh>();
 
-	// TODO(Gerark) This is a very simple loader, it only loads the first UV channel and the vertices and indices of each mesh
-	// It should be improved to load more data from the mesh like normals, tangents, bitangents, etc.
+	// TODO(Gerark) This is a very simple loader, it only loads the first UV channel and the vertices and indices of
+	// each mesh It should be improved to load more data from the mesh like normals, tangents, bitangents, etc.
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		std::vector<float> vertices;
 		std::vector<unsigned int> indices;
 		const aiMesh* mesh = scene->mMeshes[meshIndex];
 		for (unsigned int vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
-
 			auto vertex = scene->mRootNode->mTransformation * mesh->mVertices[vertexIndex];
 
 			vertices.push_back(vertex.x);
@@ -110,9 +104,7 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 		}
 		for (unsigned int faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
 			const aiFace& face = mesh->mFaces[faceIndex];
-			for (unsigned int index = 0; index < face.mNumIndices; ++index) {
-				indices.push_back(face.mIndices[index]);
-			}
+			for (unsigned int index = 0; index < face.mNumIndices; ++index) { indices.push_back(face.mIndices[index]); }
 		}
 
 		// TODO(Gerark) Using dynamic draw is just temporary, we should have a way to define this through the descriptor
@@ -121,12 +113,10 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 		auto vertexAttributes = _createDefaultVertexAttributes();
 		meshVertices->unbind();
 
-		meshResource->subMeshes.emplace_back(
-			meshIndex,
-			std::move(meshVertices),
-			std::make_unique<IndexBuffer>(indices, rp::DynamicDraw::value),
-			std::move(vertexAttributes)
-		);
+		meshResource->subMeshes.emplace_back(meshIndex,
+											 std::move(meshVertices),
+											 std::make_unique<IndexBuffer>(indices, rp::DynamicDraw::value),
+											 std::move(vertexAttributes));
 	}
 	return meshResource;
 }
@@ -139,4 +129,4 @@ std::unique_ptr<VertexAttributes> MeshLoader::_createDefaultVertexAttributes() {
 	return attributes;
 }
 
-}
+} // namespace tactics::resource

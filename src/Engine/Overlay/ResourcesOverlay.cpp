@@ -9,8 +9,7 @@
 
 namespace tactics {
 
-ResourcesOverlay::ResourcesOverlay(resource::ResourceSystem& resourceSystem): _resourceSystem(resourceSystem) {
-}
+ResourcesOverlay::ResourcesOverlay(resource::ResourceSystem& resourceSystem) : _resourceSystem(resourceSystem) {}
 
 OverlayConfig ResourcesOverlay::getConfig() {
 	OverlayConfig config;
@@ -21,7 +20,6 @@ OverlayConfig ResourcesOverlay::getConfig() {
 }
 
 void ResourcesOverlay::update() {
-
 	ImGui::BeginTabBar("ResourcesTabBar");
 	if (ImGui::BeginTabItem("By Type")) {
 		_drawByTypeTabItem();
@@ -86,15 +84,17 @@ void ResourcesOverlay::_drawPacks(const std::vector<uiPack>& packs, float colorM
 
 void ResourcesOverlay::_drawGroups(const HashId& id, const std::vector<uiPackGroup>& groups, float colorMultiplier) {
 	for (auto& group : groups) {
-		if (_drawResourceTypeCollapsingHeader(id, group.type, static_cast<unsigned int>(group.resources.size()), colorMultiplier)) {
+		if (_drawResourceTypeCollapsingHeader(id,
+											  group.type,
+											  static_cast<unsigned int>(group.resources.size()),
+											  colorMultiplier)) {
 			ImGui::Indent();
 			for (auto& resource : group.resources) {
-				if (_drawResourceCollapsingHeader(
-					resource->isLoaded(),
-					resource->getName(),
-					group.type,
-					resource->getResource().get(),
-					colorMultiplier)) {
+				if (_drawResourceCollapsingHeader(resource->isLoaded(),
+												  resource->getName(),
+												  group.type,
+												  resource->getResource().get(),
+												  colorMultiplier)) {
 					ImGui::Indent();
 					ResourceOverlayHelper::drawResource(*resource, group.type);
 					ImGui::Unindent();
@@ -105,12 +105,11 @@ void ResourcesOverlay::_drawGroups(const HashId& id, const std::vector<uiPackGro
 	}
 }
 
-bool ResourcesOverlay::_drawResourceCollapsingHeader(
-	bool isLoaded,
-	const HashId& name,
-	resource::ResourceType resourceType,
-	const resource::BaseResource* resource,
-	float colorMultiplier) {
+bool ResourcesOverlay::_drawResourceCollapsingHeader(bool isLoaded,
+													 const HashId& name,
+													 resource::ResourceType resourceType,
+													 const resource::BaseResource* resource,
+													 float colorMultiplier) {
 	using namespace resource;
 	auto id = isLoaded ? toString(resource->id) : "X";
 	auto resourceHeader = fmt::format("[ID:{}] {}", id, name);
@@ -122,7 +121,10 @@ bool ResourcesOverlay::_drawResourceCollapsingHeader(
 	return collapsed;
 }
 
-bool ResourcesOverlay::_drawResourceTypeCollapsingHeader(const HashId& id, resource::ResourceType resourceType, unsigned int count, float colorMultiplier) {
+bool ResourcesOverlay::_drawResourceTypeCollapsingHeader(const HashId& id,
+														 resource::ResourceType resourceType,
+														 unsigned int count,
+														 float colorMultiplier) {
 	auto resourceTypeString = toString(resourceType);
 	std::transform(resourceTypeString.begin(), resourceTypeString.end(), resourceTypeString.begin(), tactics::toupper);
 	auto groupHeader = fmt::format("{} [{}]##{}", resourceTypeString, count, id);
@@ -157,7 +159,9 @@ bool ResourcesOverlay::_drawResourcePackCollapsingHeader(const resource::Pack& p
 
 	if (collapsed && pack.isManuallyCreated() && !pack.isLoaded() && pack.getResourceCount() == 0) {
 		ImGui::Indent();
-		ImGui::TextWrapped("This is a manually created pack. When these types of packs are unloaded all the resources are removed and no metadata is kept.");
+		ImGui::TextWrapped(
+			"This is a manually created pack. When these types of packs are unloaded all the resources are removed and "
+			"no metadata is kept.");
 		ImGui::Unindent();
 		return false;
 	}
@@ -167,9 +171,7 @@ bool ResourcesOverlay::_drawResourcePackCollapsingHeader(const resource::Pack& p
 
 void ResourcesOverlay::_drawHeaderTypeLegend(const resource::Pack& pack) {
 	std::vector<resource::ResourceType> resourceTypes;
-	pack.forEachGroup([&resourceTypes] (const resource::PackGroup& group) {
-		resourceTypes.push_back(group.getType());
-	});
+	pack.forEachGroup([&resourceTypes](const resource::PackGroup& group) { resourceTypes.push_back(group.getType()); });
 
 	for (auto&& resourceType : resourceTypes) {
 		ImGui::SameLine();
@@ -177,10 +179,9 @@ void ResourcesOverlay::_drawHeaderTypeLegend(const resource::Pack& pack) {
 		ImVec2 cursorPos = ImGui::GetCursorScreenPos();
 		cursorPos.y += 10;
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
-		drawList->AddRectFilled(
-			cursorPos,
-			ImVec2(cursorPos.x + squareSize.x, cursorPos.y + squareSize.y),
-			ImGui::ColorConvertFloat4ToU32(ResourceOverlayHelper::toColor(resourceType, 0.6f)));
+		drawList->AddRectFilled(cursorPos,
+								ImVec2(cursorPos.x + squareSize.x, cursorPos.y + squareSize.y),
+								ImGui::ColorConvertFloat4ToU32(ResourceOverlayHelper::toColor(resourceType, 0.6f)));
 		auto dummySize = ImVec2(squareSize.x - 8, squareSize.y);
 		ImGui::Dummy(dummySize);
 	}
@@ -196,7 +197,7 @@ std::tuple<unsigned int, unsigned int> ResourcesOverlay::_fillInfo() {
 
 	unsigned int loadedCount = 0;
 	unsigned int unloadedCount = 0;
-	_resourceSystem.forEachPack([this, &loadedCount, &unloadedCount] (const Pack& pack) {
+	_resourceSystem.forEachPack([this, &loadedCount, &unloadedCount](const Pack& pack) {
 		unsigned int* count;
 		std::vector<uiPack>* packs;
 		std::vector<uiPackGroup>* groups;
@@ -212,13 +213,13 @@ std::tuple<unsigned int, unsigned int> ResourcesOverlay::_fillInfo() {
 		packs->push_back({&pack});
 		uiPack& uiPack = packs->back();
 
-		pack.forEachGroup([this, &uiPack, &count, &groups] (const PackGroup& group) {
+		pack.forEachGroup([this, &uiPack, &count, &groups](const PackGroup& group) {
 			uiPack.groups.push_back({group.getType()});
 
 			auto& uiGroupForTypes = _getOrCreateGroup(*groups, group.getType());
 			auto& uiGroupForPacks = uiPack.groups.back();
 
-			group.forEachResource([&uiGroupForPacks, &uiGroupForTypes, &count] (const ResourceInfo& resourceInfo) {
+			group.forEachResource([&uiGroupForPacks, &uiGroupForTypes, &count](const ResourceInfo& resourceInfo) {
 				uiGroupForPacks.resources.push_back(&resourceInfo);
 				uiGroupForTypes.resources.push_back(&resourceInfo);
 				++(*count);
@@ -228,10 +229,9 @@ std::tuple<unsigned int, unsigned int> ResourcesOverlay::_fillInfo() {
 	return {loadedCount, unloadedCount};
 }
 
-ResourcesOverlay::uiPackGroup& ResourcesOverlay::_getOrCreateGroup(std::vector<uiPackGroup>& groups, resource::ResourceType type) {
-	auto itr = std::ranges::find_if(groups, [type] (const uiPackGroup& uiGroup) {
-		return uiGroup.type == type;
-	});
+ResourcesOverlay::uiPackGroup& ResourcesOverlay::_getOrCreateGroup(std::vector<uiPackGroup>& groups,
+																   resource::ResourceType type) {
+	auto itr = std::ranges::find_if(groups, [type](const uiPackGroup& uiGroup) { return uiGroup.type == type; });
 	if (itr == groups.end()) {
 		groups.push_back({type});
 		return groups.back();
@@ -239,4 +239,4 @@ ResourcesOverlay::uiPackGroup& ResourcesOverlay::_getOrCreateGroup(std::vector<u
 	return *itr;
 }
 
-}
+} // namespace tactics

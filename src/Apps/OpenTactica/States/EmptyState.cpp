@@ -2,20 +2,12 @@
 
 namespace tactics {
 
-FsmAction EmptyState::enter() {
-	return FsmAction::none();
-}
+FsmAction EmptyState::enter() { return FsmAction::none(); }
 
-void EmptyState::exit() {
+void EmptyState::exit() {}
 
-}
+FsmAction EmptyState::update() { return FsmAction::none(); }
 
-FsmAction EmptyState::update() {
-	return FsmAction::none();
-}
+FsmEventAction EmptyState::onKeyPress(SDL_KeyboardEvent& /*event*/) { return FsmEventAction::transition("proceed"_id); }
 
-FsmEventAction EmptyState::onKeyPress(SDL_KeyboardEvent& /*event*/) {
-	return FsmEventAction::transition("proceed"_id);
-}
-
-}
+} // namespace tactics

@@ -1,11 +1,10 @@
 #pragma once
 
-#include "VertexAttributes.h"
-#include "VertexBuffer.h"
 #include "IndexBuffer.h"
-
 #include "Libs/Utility/Exception.h"
 #include "Libs/Utility/HashId.h"
+#include "VertexAttributes.h"
+#include "VertexBuffer.h"
 
 #include <memory>
 #include <vector>
@@ -41,4 +40,4 @@ private:
 	SubMeshInfo* _currentSubMesh{};
 };
 
-}
+} // namespace tactics

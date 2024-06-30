@@ -2,7 +2,6 @@
 
 #include "Uniforms.h"
 
-
 #include <Libs/Resource/Resource.h>
 #include <Libs/Resource/Shader/Shader.h>
 #include <Libs/Resource/Texture/Texture.h>
@@ -13,12 +12,12 @@
 
 namespace tactics::resource {
 
-class Material: public Resource<Material>, public Uniforms {
+class Material : public Resource<Material>, public Uniforms {
 public:
 	static const ResourceType TYPE = ResourceType::Material;
 	using Resource<Material>::Resource;
 
-	class Instance: public Uniforms {
+	class Instance : public Uniforms {
 	public:
 		explicit Instance(std::shared_ptr<Material> parent);
 		void updateShaderUniforms();
@@ -44,4 +43,4 @@ public:
 	std::shared_ptr<Shader> shader;
 };
 
-}
+} // namespace tactics::resource

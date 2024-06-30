@@ -2,8 +2,8 @@
 
 #include "Resource.h"
 #include "ResourceManager.h"
-#include "ResourceProvider.h"
 #include "ResourcePack/ResourcePack.h"
+#include "ResourceProvider.h"
 
 #include <memory>
 #include <unordered_map>
@@ -22,7 +22,7 @@ class ResourcePackManager;
  * It also provides a way to register and unregister resource managers for different types of resources.
  */
 
-class ResourceSystem: public ResourceProvider {
+class ResourceSystem : public ResourceProvider {
 public:
 	ResourceSystem(FileSystem& fileSystem);
 	~ResourceSystem();
@@ -39,25 +39,23 @@ public:
 		_loadExternalResource(packName, resourceName, TResource::TYPE, data);
 	}
 
-	template<typename TResource>
-	[[nodiscard]] std::shared_ptr<TResource> getResource(const HashId& name) {
+	template<typename TResource> [[nodiscard]] std::shared_ptr<TResource> getResource(const HashId& name) {
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(name));
 	}
 
-	template<typename TResource>
-	[[nodiscard]] std::shared_ptr<TResource> getResource(ResourceId id) {
+	template<typename TResource> [[nodiscard]] std::shared_ptr<TResource> getResource(ResourceId id) {
 		return std::dynamic_pointer_cast<TResource>(_getManager<TResource>()->getResource(id));
 	}
 
-	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType, const HashId& name) const override;
+	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType,
+															const HashId& name) const override;
 	[[nodiscard]] std::shared_ptr<BaseResource> getResource(ResourceType resourceType, ResourceId id) const override;
 	[[nodiscard]] BaseResourceManager& getManager(ResourceType resourceType) const override;
 	[[nodiscard]] BaseResourceManager& getManager(ResourceType resourceType) override;
 
 	void registerManager(std::unique_ptr<BaseResourceManager> resourceManager);
 
-	template<typename TResourceManager>
-	void unregisterManager() {
+	template<typename TResourceManager> void unregisterManager() {
 		auto manager = _getManager<typename TResourceManager::ResourceType>();
 		_unregisterManager(manager);
 	}
@@ -68,21 +66,18 @@ public:
 
 private:
 	void _unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager);
-	void _loadExternalResource(const HashId& packName, const HashId& resourceName, ResourceType resourceType, const nlohmann::json& data);
+	void _loadExternalResource(const HashId& packName,
+							   const HashId& resourceName,
+							   ResourceType resourceType,
+							   const nlohmann::json& data);
 
-	template<typename TResource>
-	BaseResourceManager* _getManager() {
-		return _getManager(TResource::TYPE);
-	}
+	template<typename TResource> BaseResourceManager* _getManager() { return _getManager(TResource::TYPE); }
 
 	BaseResourceManager* _getManager(ResourceType resourceType) {
 		return const_cast<BaseResourceManager*>(const_cast<const ResourceSystem*>(this)->_getManager(resourceType));
 	}
 
-	template<typename TResource>
-	const BaseResourceManager* _getManager() const {
-		return _getManager(TResource::TYPE);
-	}
+	template<typename TResource> const BaseResourceManager* _getManager() const { return _getManager(TResource::TYPE); }
 
 	const BaseResourceManager* _getManager(ResourceType resourceType) const {
 		if (!_resourceManagers.contains(resourceType)) {
@@ -96,4 +91,4 @@ private:
 	std::filesystem::path _absoluteDataPath;
 };
 
-}
+} // namespace tactics::resource

@@ -10,14 +10,14 @@
 
 // TODO(Gerark) These are totally temporary functions, should be moved or removed entirely
 void epilogue(cereal::JSONInputArchive&, const tactics::component::Transform&) {}
+
 void prologue(cereal::JSONInputArchive&, const tactics::component::Transform&) {}
 
 namespace tactics::resource {
 
 PrefabLoader::PrefabLoader(FileSystem& fileSystem, const ResourceProvider& resourceProvider, EntityComponentSystem& ecs)
 	: ResourceLoader(fileSystem, resourceProvider)
-	, _ecs(ecs) {
-}
+	, _ecs(ecs) {}
 
 std::shared_ptr<Prefab> PrefabLoader::load(HashId name, const FileDescriptor& descriptor) {
 	auto prefab = std::make_shared<Prefab>(name);
@@ -29,4 +29,4 @@ std::shared_ptr<Prefab> PrefabLoader::load(HashId name, const FileDescriptor& de
 	return prefab;
 }
 
-}
+} // namespace tactics::resource

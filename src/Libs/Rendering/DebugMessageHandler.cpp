@@ -55,21 +55,21 @@ void DebugMessageHandler::checkGlErrors(const char* context) const {
 }
 
 void GLAD_API_PTR DebugMessageHandler::_onGlDebugMessage(GLenum source,
-	GLenum type,
-	GLuint id,
-	GLenum severity,
-	GLsizei /*length*/,
-	const GLchar* message,
-	const void* userParam) {
+														 GLenum type,
+														 GLuint id,
+														 GLenum severity,
+														 GLsizei /*length*/,
+														 const GLchar* message,
+														 const void* userParam) {
 	const DebugMessageHandler* handler = static_cast<const DebugMessageHandler*>(userParam);
 	handler->_handleMessage(source, type, id, severity, message);
 }
 
 void DebugMessageHandler::_handleMessage(GLenum source,
-	GLenum type,
-	GLuint id,
-	GLenum severity,
-	const GLchar* message) const {
+										 GLenum type,
+										 GLuint id,
+										 GLenum severity,
+										 const GLchar* message) const {
 	// TODO(Gerark) Better to rely on a Log System here
 	if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
 		printf("GL Debug Message:\n");

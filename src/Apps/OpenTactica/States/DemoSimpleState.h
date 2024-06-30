@@ -4,7 +4,7 @@
 
 namespace tactics {
 
-class DemoSimpleState: public FsmStateWithServices {
+class DemoSimpleState : public FsmStateWithServices {
 public:
 	using FsmStateWithServices::FsmStateWithServices;
 	FsmAction update() override;
@@ -21,4 +21,4 @@ private:
 	void _createCustomQuadWithCustomResources();
 };
 
-}
+} // namespace tactics

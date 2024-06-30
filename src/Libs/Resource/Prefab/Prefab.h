@@ -6,7 +6,7 @@
 
 namespace tactics::resource {
 
-class Prefab: public Resource<Prefab> {
+class Prefab : public Resource<Prefab> {
 public:
 	static const ResourceType TYPE = ResourceType::Prefab;
 	using Resource<Prefab>::Resource;
@@ -14,4 +14,4 @@ public:
 	Entity entity;
 };
 
-}
+} // namespace tactics::resource

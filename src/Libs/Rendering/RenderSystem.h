@@ -2,10 +2,9 @@
 
 #include <Libs/Resource/IniFile/IniFile.h>
 
+#include <glm/glm.hpp>
 #include <memory>
 #include <vector>
-
-#include <glm/glm.hpp>
 
 struct SDL_Window;
 
@@ -42,8 +41,7 @@ private:
 	void _setupOglVersion();
 	void _setupOglContextProfile();
 
-	template<typename TValue>
-	TValue _getConfigValue(std::string_view fieldName, const TValue& defaultValue) {
+	template<typename TValue> TValue _getConfigValue(std::string_view fieldName, const TValue& defaultValue) {
 		return _configFile->getOrCreate("Graphics", fieldName, defaultValue);
 	}
 
@@ -53,4 +51,4 @@ private:
 	std::vector<std::unique_ptr<RenderQueue>> _renderQueues;
 	std::shared_ptr<resource::IniFile> _configFile;
 };
-}
+} // namespace tactics
