@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Libs/Resource/SpriteSheet/SpriteSheet.h>
-#include <Libs/Resource/Mesh/Mesh.h>
 #include <Libs/Resource/Material/Material.h>
+#include <Libs/Resource/Mesh/Mesh.h>
+#include <Libs/Resource/SpriteSheet/SpriteSheet.h>
 #include <Libs/Utility/Reflection.h>
 
 #include <memory>
@@ -28,4 +28,4 @@ struct SpriteAnimation {
 	static void defineReflection();
 };
 
-}
+} // namespace tactics::component

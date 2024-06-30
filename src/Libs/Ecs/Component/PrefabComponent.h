@@ -6,4 +6,4 @@ struct Prefab {
 	std::vector<HashId> componentTypes;
 };
 
-}
+} // namespace tactics::component

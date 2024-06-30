@@ -15,4 +15,4 @@ void Frustum::defineReflection() {
 		.data<&Frustum::orthoSize>("orthoSize"_id);
 }
 
-}
+} // namespace tactics::component

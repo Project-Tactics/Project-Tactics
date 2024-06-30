@@ -12,4 +12,4 @@ struct Viewport {
 
 struct CurrentViewport {};
 
-}
+} // namespace tactics::component

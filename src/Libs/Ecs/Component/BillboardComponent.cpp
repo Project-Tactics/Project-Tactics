@@ -4,8 +4,6 @@
 
 namespace tactics::component {
 
-void Billboard::defineReflection() {
-	componentReflection<Billboard>("billboard");
-}
+void Billboard::defineReflection() { componentReflection<Billboard>("billboard"); }
 
-}
+} // namespace tactics::component

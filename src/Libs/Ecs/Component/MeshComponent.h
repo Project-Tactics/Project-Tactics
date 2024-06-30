@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Libs/Resource/Mesh/Mesh.h>
 #include <Libs/Resource/Material/Material.h>
+#include <Libs/Resource/Mesh/Mesh.h>
 #include <Libs/Utility/Reflection.h>
 
 namespace tactics::component {
@@ -15,4 +15,4 @@ struct Mesh {
 	Mesh clone();
 };
 
-}
+} // namespace tactics::component

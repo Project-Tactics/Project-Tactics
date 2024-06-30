@@ -21,13 +21,10 @@ void Sprite::deserialize(const resource::ResourceProvider* resourceProvider, con
 	uvFlip = descriptor.uvFlip;
 }
 
-void Sprite::defineReflection() {
-	componentReflection<Sprite>("sprite");
-}
+void Sprite::defineReflection() { componentReflection<Sprite>("sprite"); }
 
 void SpriteAnimation::defineReflection() {
-	componentReflection<SpriteAnimation>("spriteAnimation")
-		.data<&SpriteAnimation::currentTime>("spriteIndices"_id);
+	componentReflection<SpriteAnimation>("spriteAnimation").data<&SpriteAnimation::currentTime>("spriteIndices"_id);
 }
 
 void SpriteAnimation::startAnimation(const HashId& animation) {
@@ -35,4 +32,4 @@ void SpriteAnimation::startAnimation(const HashId& animation) {
 	currentTime = 0.0f;
 }
 
-}
+} // namespace tactics::component
