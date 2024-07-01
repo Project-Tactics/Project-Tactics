@@ -1,14 +1,12 @@
 #pragma once
 
-#include "../Component/TransformComponent.h"
-
 #include <Libs/Ecs/EntityUtilities.h>
 
 namespace tactics::component {
 
 class TransformSystem {
 public:
-	static void updateTransformMatrices(ecs_view<Transform>& view);
+	static void updateTransformMatrices(entt::registry& registry);
 };
 
 } // namespace tactics::component

@@ -19,16 +19,11 @@ FsmAction DemoMapState::enter() {
 
 FsmAction DemoMapState::update() {
 	using namespace component;
-	auto& scene = getService<SceneSystem>();
-	component::RotateAroundPointSystem::update(scene.getRegistry().view<Transform, RotateAroundPoint>());
-	component::RotateItemSystem::update(scene.getRegistry().view<Transform, RotateItem>());
-
-	auto [battleCameraEntity, battleCamera] = *scene.getRegistry().view<BattleCamera>().each().begin();
-	component::CharacterFacingSystem::update(battleCamera,
-											 scene.getRegistry().view<CharacterFacing, SpriteAnimation, Sprite>());
-
-	component::BattleCameraSystem::update(scene.getRegistry().view<BattleCamera, Transform>());
-
+	auto& registry = getService<SceneSystem>().getRegistry();
+	RotateAroundPointSystem::update(registry);
+	RotateItemSystem::update(registry);
+	CharacterFacingSystem::update(registry);
+	BattleCameraSystem::update(registry);
 	return FsmAction::none();
 }
 

@@ -37,10 +37,9 @@ void DemoSimpleState::exit() {
 }
 
 FsmAction DemoSimpleState::update() {
-	auto& ecs = getService<EntityComponentSystem>();
-	component::RotateItemSystem::update(ecs.sceneRegistry().view<component::Transform, component::RotateItem>());
-	component::RotateAroundPointSystem::update(
-		ecs.sceneRegistry().view<component::Transform, component::RotateAroundPoint>());
+	auto& registry = getService<EntityComponentSystem>().sceneRegistry();
+	component::RotateItemSystem::update(registry);
+	component::RotateAroundPointSystem::update(registry);
 
 	return FsmAction::none();
 }

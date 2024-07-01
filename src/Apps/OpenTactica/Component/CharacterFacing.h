@@ -1,7 +1,5 @@
 #pragma once
 
-#include "BattleCamera.h"
-
 #include <Libs/Ecs/Component/SpriteComponent.h>
 #include <Libs/Ecs/EntityUtilities.h>
 #include <Libs/Utility/Reflection.h>
@@ -28,8 +26,7 @@ struct CharacterFacing {
 
 class CharacterFacingSystem {
 public:
-	static void update(BattleCamera& battleCamera,
-					   ecs_view<CharacterFacing, SpriteAnimation, Sprite>& characterFacingView);
+	static void update(entt::registry& registry);
 
 private:
 	static void

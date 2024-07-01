@@ -36,7 +36,7 @@ struct BattleCamera {
 
 class BattleCameraSystem {
 public:
-	static void update(ecs_view<BattleCamera, Transform> view);
+	static void update(entt::registry& registry);
 };
 
 } // namespace tactics::component
