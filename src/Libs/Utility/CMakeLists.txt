@@ -40,7 +40,8 @@ set(SOURCES
     UUID.cpp)
 
 add_library(libs_utility STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_utility PUBLIC glm fmt::fmt inicpp json_wrapper imgui entt PRIVATE spdlog)
+target_link_libraries(libs_utility PUBLIC glm 
+    cpptrace::cpptrace fmt::fmt inicpp json_wrapper imgui entt PRIVATE spdlog)
 add_to_libs_folder(libs_utility)
 
 set(TEST_SOURCES

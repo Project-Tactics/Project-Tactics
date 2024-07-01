@@ -15,7 +15,8 @@ void RotateAroundPoint::defineReflection() {
 		.data<&RotateAroundPoint::currentAngle>("currentAngle"_id);
 }
 
-void RotateAroundPointSystem::update(ecs_view<Transform, RotateAroundPoint> view) {
+void RotateAroundPointSystem::update(entt::registry& registry) {
+	auto view = registry.view<Transform, RotateAroundPoint>();
 	view.each([](Transform& transform, RotateAroundPoint& rotate) {
 		rotate.currentAngle += rotate.speed * EngineTime::fixedDeltaTime<float>();
 		if (rotate.currentAngle > 2 * Math::PI) { rotate.currentAngle = 0; }

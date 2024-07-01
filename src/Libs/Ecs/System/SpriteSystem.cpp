@@ -1,10 +1,14 @@
 #include "SpriteSystem.h"
 
+#include "../Component/MeshComponent.h"
+#include "../Component/SpriteComponent.h"
+
 #include <Libs/Utility/Time/EngineTime.h>
 
 namespace tactics::component {
 
-void SpriteSystem::update(const ecs_view<Sprite, Mesh>& view) {
+void SpriteSystem::update(entt::registry& registry) {
+	auto view = registry.view<Sprite, Mesh>();
 	view.each([](auto& sprite, auto& mesh) {
 		auto& material = mesh.materials[0];
 		material->set("u_SpriteUV", sprite.spriteSheet->getUVCoordinates(sprite.spriteIndex));
@@ -14,7 +18,8 @@ void SpriteSystem::update(const ecs_view<Sprite, Mesh>& view) {
 	});
 }
 
-void SpriteAnimationSystem::update(const ecs_view<Sprite, SpriteAnimation>& view) {
+void SpriteAnimationSystem::update(entt::registry& registry) {
+	auto view = registry.view<Sprite, SpriteAnimation>();
 	view.each([](auto& sprite, auto& spriteAnimation) {
 		if (!spriteAnimation.currentAnimation.isEmpty()) {
 			auto& animation = sprite.spriteSheet->animations.at(spriteAnimation.currentAnimation);

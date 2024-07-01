@@ -1,8 +1,14 @@
 #include "CameraSystem.h"
 
+#include "../Component/CameraComponent.h"
+#include "../Component/FrustumComponent.h"
+#include "../Component/TransformComponent.h"
+#include "../Component/ViewportComponent.h"
+
 namespace tactics::component {
 
-void CameraSystem::updateCameraMatrices(const ecs_view<Frustum, Transform, Camera>& view) {
+void CameraSystem::updateCameraMatrices(entt::registry& registry) {
+	auto view = registry.view<Frustum, Transform, Camera>();
 	view.each([](auto& frustum, auto& transform, auto& camera) {
 		auto target = transform.getPosition() + (transform.getRotation() * Vector3::forward);
 		camera.view = glm::lookAt(transform.getPosition(), target, Vector3::up);
@@ -25,14 +31,13 @@ void CameraSystem::updateCameraMatrices(const ecs_view<Frustum, Transform, Camer
 	});
 }
 
-void CameraSystem::updateCameraAspectRatios(const ecs_view<Viewport, CurrentViewport>& currentViewportView,
-											const ecs_view<Frustum, CurrentCamera>& currentCameraView) {
+void CameraSystem::updateCameraAspectRatios(entt::registry& registry) {
 	// TODO(Gerark) We assume we always have one current viewport and current camera. We might change this in the future
 	// and this has to change accordingly.
+	auto currentViewportView = registry.view<Viewport, CurrentViewport>();
+	auto currentCameraView = registry.view<Frustum, CurrentCamera>();
 	auto&& [entityViewport, viewport] = *currentViewportView.each().begin();
 	auto&& [entityCamera, frustum] = *currentCameraView.each().begin();
-	(void)entityCamera;
-	(void)entityViewport;
 	frustum.aspectRatio = static_cast<float>(viewport.size.x) / viewport.size.y;
 }
 

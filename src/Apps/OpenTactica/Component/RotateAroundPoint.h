@@ -23,7 +23,7 @@ struct RotateAroundPoint {
 };
 
 struct RotateAroundPointSystem {
-	static void update(ecs_view<Transform, RotateAroundPoint> view);
+	static void update(entt::registry& view);
 };
 
 } // namespace tactics::component

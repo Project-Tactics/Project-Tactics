@@ -49,6 +49,8 @@ public:
 private:
 	void _onMeshConstructed(entt::registry& registry, entt::entity entity);
 	void _onMeshUpdated(entt::registry& registry, entt::entity entity);
+	void _onSpriteAnimationConstructed(entt::registry& registry, entt::entity entity);
+	void _onSpriteAnimationUpdated(entt::registry& registry, entt::entity entity);
 	void _updateAlphaBlendFlags(entt::registry& registry, entt::entity entity);
 	void _onCurrentCameraConstructed(entt::registry& registry, entt::entity entity);
 	void _onCurrentViewportConstructed(entt::registry& registry, entt::entity entity);

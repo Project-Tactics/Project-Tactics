@@ -34,8 +34,7 @@ void DemoSpriteState::exit() {
 }
 
 FsmAction DemoSpriteState::update() {
-	component::RotateAroundPointSystem::update(
-		getService<SceneSystem>().getRegistry().view<component::Transform, component::RotateAroundPoint>());
+	component::RotateAroundPointSystem::update(getService<SceneSystem>().getRegistry());
 	return FsmAction::none();
 }
 

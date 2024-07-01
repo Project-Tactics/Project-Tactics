@@ -18,7 +18,7 @@ struct RotateItem {
 
 class RotateItemSystem {
 public:
-	static void update(const ecs_view<Transform, RotateItem>& view);
+	static void update(entt::registry& registry);
 };
 
 } // namespace tactics::component

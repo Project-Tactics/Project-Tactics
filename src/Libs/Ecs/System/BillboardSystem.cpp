@@ -1,9 +1,14 @@
 #include "BillboardSystem.h"
 
+#include "../Component/BillboardComponent.h"
+#include "../Component/CameraComponent.h"
+#include "../Component/TransformComponent.h"
+
 namespace tactics::component {
 
-void BillboardSystem::update(ecs_view<Transform, Camera, CurrentCamera>& currentCameraView,
-							 ecs_view<Transform, Billboard>& view) {
+void BillboardSystem::update(entt::registry& registry) {
+	auto view = registry.view<Transform, Billboard>();
+	auto currentCameraView = registry.view<Transform, Camera, CurrentCamera>();
 	auto&& [entity, cameraTransform, camera] = *currentCameraView.each().begin();
 	view.each([&cameraTransform](Transform& transform) {
 		auto diff = transform.getPosition() - cameraTransform.getPosition();

@@ -1,5 +1,7 @@
 #include "CharacterFacing.h"
 
+#include "BattleCamera.h"
+
 namespace tactics::component {
 
 void CharacterFacing::defineReflection() {
@@ -19,19 +21,24 @@ const std::array<std::array<Facing, 4>, 4> facingTransforms = {{
 	{Facing::West, Facing::East, Facing::North, Facing::South},
 }};
 
-void CharacterFacingSystem::update(BattleCamera& battleCamera,
-								   ecs_view<CharacterFacing, SpriteAnimation, Sprite>& characterFacingView) {
+void CharacterFacingSystem::update(entt::registry& registry) {
+	auto [battleCameraEntity, battleCamera] = *registry.view<BattleCamera>().each().begin();
 	auto index = static_cast<int>(glm::floor(battleCamera.getCurrentRotationDegree() / 90.f));
+
+	ecs_view<CharacterFacing, SpriteAnimation, Sprite>& characterFacingView =
+		registry.view<CharacterFacing, SpriteAnimation, Sprite>();
 
 	for (auto [entity, facing, animation, sprite] : characterFacingView.each()) {
 		auto transformedFacing = facingTransforms[index][static_cast<int>(facing.facing)];
 
-		switch (transformedFacing) {
-		case Facing::North: _updateAnimation(animation, sprite, "idleNorth"_id, {-1, 1}); break;
-		case Facing::South: _updateAnimation(animation, sprite, "idleSouth"_id, {1, 1}); break;
-		case Facing::East : _updateAnimation(animation, sprite, "idleSouth"_id, {-1, 1}); break;
-		case Facing::West : _updateAnimation(animation, sprite, "idleNorth"_id, {1, 1}); break;
-		}
+		registry.patch<SpriteAnimation>(entity, [transformedFacing, &sprite](SpriteAnimation& animation) {
+			switch (transformedFacing) {
+			case Facing::North: _updateAnimation(animation, sprite, "idleNorth"_id, {-1, 1}); break;
+			case Facing::South: _updateAnimation(animation, sprite, "idleSouth"_id, {1, 1}); break;
+			case Facing::East : _updateAnimation(animation, sprite, "idleSouth"_id, {-1, 1}); break;
+			case Facing::West : _updateAnimation(animation, sprite, "idleNorth"_id, {1, 1}); break;
+			}
+		});
 	}
 }
 

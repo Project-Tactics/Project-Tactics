@@ -52,7 +52,7 @@ HashId::HashId(std::string_view str) : HashId(str.data()) {}
 
 [[nodiscard]] bool HashId::operator>(const HashId& other) const { return _id > other._id; }
 
-[[nodiscard]] bool HashId::isEmpty() const { return _id == 0; }
+[[nodiscard]] bool HashId::isEmpty() const { return _id == 0 || _id == HashId::none; }
 
 [[nodiscard]] HashId::operator std::uint32_t() const { return _id; }
 

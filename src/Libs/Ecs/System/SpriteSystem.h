@@ -1,18 +1,17 @@
 #pragma once
 
-#include "../Component/MeshComponent.h"
-#include "../Component/SpriteComponent.h"
+#include <entt/entt.hpp>
 
 namespace tactics::component {
 
 class SpriteSystem {
 public:
-	static void update(const ecs_view<Sprite, Mesh>& view);
+	static void update(entt::registry& registry);
 };
 
 class SpriteAnimationSystem {
 public:
-	static void update(const ecs_view<Sprite, SpriteAnimation>& view);
+	static void update(entt::registry& registry);
 };
 
 } // namespace tactics::component

@@ -15,7 +15,8 @@ void BattleCamera::defineReflection() {
 		.data<&BattleCamera::currentStep>("currentStep"_id);
 }
 
-void BattleCameraSystem::update(ecs_view<BattleCamera, Transform> view) {
+void BattleCameraSystem::update(entt::registry& registry) {
+	auto view = registry.view<BattleCamera, Transform>();
 	for (auto [entity, camera, transform] : view.each()) {
 		if (camera.currentStep != camera.nextStep) {
 			auto rotation = 0.f;

@@ -212,18 +212,12 @@ void Engine::_updateCommonComponentSystems() {
 	using namespace component;
 
 	auto& registry = _ecs->sceneRegistry();
-
-	SpriteAnimationSystem::update(registry.view<Sprite, SpriteAnimation>());
-	SpriteSystem::update(registry.view<Sprite, Mesh>());
-
-	CameraSystem::updateCameraAspectRatios(registry.view<Viewport, CurrentViewport>(),
-										   registry.view<Frustum, CurrentCamera>());
-
-	CameraSystem::updateCameraMatrices(registry.view<Frustum, Transform, Camera>());
-
-	BillboardSystem::update(registry.view<Transform, Camera, CurrentCamera>(), registry.view<Transform, Billboard>());
-
-	TransformSystem::updateTransformMatrices(registry.view<Transform>());
+	SpriteAnimationSystem::update(registry);
+	SpriteSystem::update(registry);
+	CameraSystem::updateCameraAspectRatios(registry);
+	CameraSystem::updateCameraMatrices(registry);
+	BillboardSystem::update(registry);
+	TransformSystem::updateTransformMatrices(registry);
 }
 
 } // namespace tactics
