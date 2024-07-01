@@ -25,11 +25,13 @@ SceneSystem::SceneSystem(EntityComponentSystem& ecs, resource::ResourceSystem& r
 	, _resourceSystem(resourceSystem) {
 	using namespace component;
 	auto& registry = _ecs.sceneRegistry();
-	// TODO(Gerark) I believe the following lines should be moved to the respective System classes
+
 	registry.on_construct<Mesh>().connect<&SceneSystem::_onMeshConstructed>(this);
 	registry.on_update<Mesh>().connect<&SceneSystem::_onMeshUpdated>(this);
 	registry.on_construct<CurrentCamera>().connect<&SceneSystem::_onCurrentCameraConstructed>(this);
 	registry.on_construct<CurrentViewport>().connect<&SceneSystem::_onCurrentViewportConstructed>(this);
+	registry.on_construct<SpriteAnimation>().connect<&SceneSystem::_onSpriteAnimationConstructed>(this);
+	registry.on_update<SpriteAnimation>().connect<&SceneSystem::_onSpriteAnimationUpdated>(this);
 }
 
 SceneSystem::~SceneSystem() {}
@@ -78,6 +80,25 @@ void SceneSystem::_onMeshConstructed(entt::registry& registry, entt::entity enti
 
 void SceneSystem::_onMeshUpdated(entt::registry& registry, entt::entity entity) {
 	_updateAlphaBlendFlags(registry, entity);
+}
+
+void SceneSystem::_onSpriteAnimationUpdated(entt::registry& registry, entt::entity entity) {
+	using namespace component;
+	auto entityWrapper = Entity::create(entity, &registry);
+	auto& spriteAnimation = entityWrapper.getComponent<SpriteAnimation>();
+	if (entityWrapper.hasComponent<Sprite>()) {
+		auto& sprite = entityWrapper.getComponent<Sprite>();
+		if (!spriteAnimation.currentAnimation.isEmpty() &&
+			!sprite.spriteSheet->animations.contains(spriteAnimation.currentAnimation)) {
+			throw TACTICS_EXCEPTION("Animation [{}] not found in sprite sheet [{}]",
+									spriteAnimation.currentAnimation,
+									sprite.spriteSheet->name);
+		}
+	}
+}
+
+void SceneSystem::_onSpriteAnimationConstructed(entt::registry& registry, entt::entity entity) {
+	_onSpriteAnimationUpdated(registry, entity);
 }
 
 void SceneSystem::_updateAlphaBlendFlags(entt::registry& registry, entt::entity entity) {

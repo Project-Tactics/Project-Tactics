@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cpptrace/cpptrace.hpp>
 #include <fmt/core.h>
 #include <stacktrace>
 #include <stdexcept>
@@ -7,22 +8,13 @@
 
 namespace tactics {
 
-class Exception : public std::runtime_error {
+class Exception : public cpptrace::exception_with_message {
 public:
 	template<class... Args>
-	Exception(const std::stacktrace& stackTrace, fmt::format_string<Args...> formatString, Args&&... args)
-		: std::runtime_error(fmt::format(formatString, std::forward<Args>(args)...).c_str())
-		, _stackTrace(stackTrace) {}
-
-	template<class... Args>
 	Exception(fmt::format_string<Args...> formatString, Args&&... args)
-		: std::runtime_error(fmt::format(formatString, std::forward<Args>(args)...).c_str()) {}
-
-	const std::stacktrace& stackTrace() const { return _stackTrace; }
-
-	std::stacktrace _stackTrace;
+		: cpptrace::exception_with_message(fmt::format(formatString, std::forward<Args>(args)...).c_str()) {}
 };
 
-#define TACTICS_EXCEPTION(...) Exception(std::stacktrace::current(0, 10), __VA_ARGS__)
+#define TACTICS_EXCEPTION(...) Exception(__VA_ARGS__)
 
 } // namespace tactics

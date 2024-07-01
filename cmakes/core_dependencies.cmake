@@ -38,4 +38,10 @@ macro(core_dependencies)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
     set_property(TARGET gmock gmock_main gtest gtest_main PROPERTY FOLDER "thirdparty")
+
+    FetchContent_Declare(cpptrace
+        GIT_REPOSITORY https://github.com/jeremy-rifkin/cpptrace.git
+        GIT_TAG v0.6.2)
+    FetchContent_MakeAvailable(cpptrace)
+    set_property(TARGET cpptrace-lib PROPERTY FOLDER "thirdparty")
 endmacro()

@@ -99,24 +99,21 @@ void Log::log(const LogCategory& category, LogLevel level, fmt::string_view fmt,
 void Log::exception(const std::exception& exception) { critical(Log::Engine, "Exception: {}", exception.what()); }
 
 void Log::exception(const Exception& exception) {
-	std::string message = fmt::format("{}\nCallstack:", exception.what());
+	std::string message = fmt::format("{}\nCallstack:", exception.message());
 
-	auto currentStackTrace = std::stacktrace::current();
+	std::filesystem::path rootPath = (*std::stacktrace::current().begin()).source_file();
+	for (auto i = 0; i < 4; ++i, rootPath = rootPath.parent_path()) {}
 
-	// TODO(Gerark) Very hacky way to retrieve the src root
-	// folder, Most probably we'll need to change this
-	// entire function in the future and just rely on a
-	// thirdparty library like backtrace-cpp or similar.
-	std::filesystem::path currentSourceFilePath((*currentStackTrace.begin()).source_file());
-	auto rootPath = currentSourceFilePath.parent_path().parent_path().parent_path().parent_path();
-
-	for (auto&& entry : exception.stackTrace()) {
-		auto entryPath = std::filesystem::path(entry.source_file());
+	for (auto&& entry : exception.trace()) {
+		auto entryPath = std::filesystem::path(entry.filename);
 		auto relativePath = entryPath.lexically_relative(rootPath);
-		message += fmt::format("\n.\\{}:{} {}", relativePath.string(), entry.source_line(), entry.description());
+		message += fmt::format("\n{}", fmt::styled(".\\" + relativePath.string(), fmt::fg(fmt::color::aquamarine)));
+		message += fmt::format(":{}", entry.line.value_or(0));
+		message += fmt::format(" {}\n", fmt::styled(entry.symbol, fmt::fg(fmt::color::bisque)));
+		message += cpptrace::get_snippet(entry.filename, entry.line.value_or(0), 1, false);
 	}
 
-	log(Log::Engine, LogLevel::Critical, message, {});
+	critical(Log::Engine, "{}", message);
 }
 
 bool Log::hasBeenLoggedOverLevel(LogLevel minimumLogLevel) {
