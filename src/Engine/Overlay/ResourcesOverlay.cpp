@@ -3,7 +3,7 @@
 #include "ResourceOverlayHelper.h"
 
 #include <Libs/Resource/ResourceSystem.h>
-#include <Libs/Utility/String.h>
+#include <Libs/Utility/String/String.h>
 
 #include <fmt/format.h>
 
