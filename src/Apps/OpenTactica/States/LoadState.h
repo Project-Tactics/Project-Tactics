@@ -8,7 +8,7 @@ namespace tactics {
 class LoadState : public FsmStateWithServices {
 public:
 	LoadState(ServiceLocator& services,
-			  const std::string& resourceDefinitionPath,
+			  std::string resourceDefinitionPath,
 			  const HashId& resourcePackName,
 			  const HashId& cameraPrefab);
 	FsmAction enter() override;

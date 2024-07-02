@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 # Set the project name
-project("ProjectTactics")
+project("ProjectTactics" LANGUAGES CXX C)
 
 include(CTest)
 enable_testing()

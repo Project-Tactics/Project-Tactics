@@ -9,18 +9,16 @@ on:
 jobs:
   formatting-check:
     name: Formatting Check
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
     - name: Run clang-format
-      uses: jidicula/clang-format-action@v4.13.0
-      with:
-        clang-format-version: '17'
-        check-path: '${{github.workspace}}/src'
+      run: python ${{github.workspace}}/tools/clang-format.py --dir=${{github.workspace}}/src/
 
   build:
+    name: Build
     runs-on: windows-latest
     needs: formatting-check
 
