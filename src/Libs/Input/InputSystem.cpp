@@ -1,51 +1,29 @@
 #include "InputSystem.h"
 
-namespace tactics::input {
+#include "Click/Backends/SDLClickBackend.h"
 
-Context* context = nullptr;
+#include <Libs/Utility/HashId.h>
+#include <Libs/Utility/Log/Log.h>
 
-void initContext() { context = new Context{}; }
+namespace tactics {
 
-Context& getContext() { return *context; }
+InputSystem::InputSystem() {
+	LOG_TRACE(Log::Input, "Initialize click library");
+	click::initializeContext();
 
-InputActionId createAction(ActionType type, HashId name) {
-	auto id = static_cast<unsigned int>(context->actions.size());
-	context->actions.emplace_back(id, name, type);
-	return id;
+	_moveUpActionId = click::createAction(click::ActionType::Impulse, "MoveUp");
+	click::mapAction<click::DeviceType::Keyboard>(_moveUpActionId,
+												  {click::KeyboardAction::KeyW},
+												  click::ActionTrigger::Press);
 }
 
-InputState inputState(InputActionId actionId) { return context->actions[actionId].state; }
+void InputSystem::processEvents(SDL_Event& event) { click::processSdlEvents(event); }
 
-void mapAction(InputActionId actionId, DeviceType deviceType, KeyAction keyAction, ActionTrigger trigger) {
-	Mapping mapping;
-	mapping.actionId = actionId;
-	DeviceInputMapping deviceInputMapping;
-	deviceInputMapping.deviceType = deviceType;
-	deviceInputMapping.deviceAction.key = keyAction;
-	deviceInputMapping.triggers.push_back(trigger);
-
-	context->mappings.push_back(mapping);
-}
-
-void _processKeyActions(KeyAction keyAction, bool pressed) {
-	for (auto& mapping : context->mappings) {
-		for (auto& deviceMapping : mapping.mapping) {
-			if (deviceMapping.deviceType == DeviceType::Keyboard && deviceMapping.deviceAction.key == keyAction) {
-				for (auto trigger : deviceMapping.triggers) {
-					auto& action = context->actions[mapping.actionId];
-					switch (trigger) {
-					case ActionTrigger::Press:
-						action.state = pressed ? InputState::Triggered : InputState::Ended;
-						break;
-					case ActionTrigger::Hold: action.state = pressed ? InputState::Started : InputState::Ended; break;
-					case ActionTrigger::Release:
-						action.state = pressed ? InputState::Ended : InputState::Triggered;
-						break;
-					}
-				}
-			}
-		}
+void InputSystem::update() {
+	if (click::inputState(_moveUpActionId) == click::InputState::Triggered) {
+		LOG_INFO(Log::Input, "Move up");
+	} else {
+		LOG_INFO(Log::Input, "Stop moving up");
 	}
 }
-
-} // namespace tactics::input
+} // namespace tactics

@@ -2,6 +2,8 @@
 
 #include "EventsListener.h"
 
+#include <Libs/Input/InputSystem.h>
+
 #include <SDL.h>
 #include <exception>
 #include <format>
@@ -10,10 +12,13 @@
 
 namespace tactics {
 
+EventsSystem::EventsSystem(InputSystem& inputSystem) : _inputSystem(inputSystem) {}
+
 void EventsSystem::update() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		ImGui_ImplSDL2_ProcessEvent(&event);
+		_inputSystem.processEvents(event);
 		for (auto& listener : _eventsListeners) { listener->onEvent(event); }
 	}
 }

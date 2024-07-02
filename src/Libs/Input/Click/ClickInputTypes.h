@@ -1,12 +1,17 @@
 #pragma once
 
-#include <Libs/Utility/HashId.h>
-
+#include <string>
 #include <vector>
 
-namespace tactics::input {
+namespace click {
 
 using InputActionId = unsigned int;
+
+#if not defined(CLICK_NAME_ID)
+using NameId = std::string;
+#else
+using NameId = CLICK_NAME_ID;
+#endif
 
 enum class ActionType {
 	Impulse,
@@ -29,7 +34,7 @@ enum class DeviceType {
 };
 
 // clang-format off
-enum class KeyAction {
+enum class KeyboardAction {
 	KeyUnknown,
 	KeyReturn,
 	KeyEscape,
@@ -324,6 +329,7 @@ enum class TouchAction {
 };
 
 enum class InputState {
+	None,
 	Triggered,
 	Started,
 	Ended
@@ -331,20 +337,20 @@ enum class InputState {
 
 struct InputAction {
 	InputActionId id{};
-	HashId name;
+	NameId name;
 	ActionType type{};
 	InputState state{};
 };
 
-struct DeviceInputMapping {
-	union DeviceAction {
-		KeyAction key;
-		MouseAction mouse;
-		GamePadAction gamePad;
-		TouchAction touch;
-		int32_t other{};
-	};
+union DeviceAction {
+	KeyboardAction key;
+	MouseAction mouse;
+	GamePadAction gamePad;
+	TouchAction touch;
+	int32_t other{};
+};
 
+struct DeviceInputMapping {
 	DeviceType deviceType{};
 	DeviceAction deviceAction{};
 	std::vector<ActionTrigger> triggers;
@@ -360,4 +366,4 @@ struct Context {
 	std::vector<Mapping> mappings;
 };
 
-} // namespace tactics::input
+} // namespace click

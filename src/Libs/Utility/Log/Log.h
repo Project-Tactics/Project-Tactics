@@ -67,6 +67,7 @@ public:
 	static const LogCategory Rendering;
 	static const LogCategory Overlay;
 	static const LogCategory Fsm;
+	static const LogCategory Input;
 	static const LogCategory Ecs;
 
 	static void init(LogLevel minimumLogLevel = LogLevel::Trace);

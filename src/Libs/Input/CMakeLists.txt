@@ -2,13 +2,16 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
-        InputSystem.cpp
-        Backends/SDLInputBackend.cpp)
+        Click/Backends/SDLClickBackend.cpp
+        Click/Click.cpp
+        InputSystem.cpp)
 
 set(HEADERS
+        Click/Backends/SDLClickBackend.h
+        Click/Click.h
+        Click/ClickInputTypes.h
         InputSystem.h
-        InputTypes.h
-        Backends/SDLInputBackend.h)
+        )
 
 add_library(libs_input STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_input PRIVATE libs_utility sdl2_wrapper)

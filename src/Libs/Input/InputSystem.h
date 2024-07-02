@@ -1,26 +1,20 @@
 #pragma once
 
-#include "InputTypes.h"
+#include "Click/Click.h"
 
-namespace tactics::input {
+#include <SDL.h>
 
-void initContext();
-Context& getContext();
-
-InputActionId createAction(ActionType type, HashId name);
-InputState inputState(InputActionId id);
-
-void mapAction(InputActionId actionId, DeviceType deviceType, KeyAction keyAction, ActionTrigger trigger);
-
-template<DeviceType DeviceType, typename TDeviceAction>
-void mapAction(InputActionId actionId, TDeviceAction deviceAction, ActionTrigger trigger) {
-	mapAction(actionId, DeviceType, deviceAction, trigger);
-}
-
-void _processKeyActions(KeyAction keyAction, bool pressed);
+namespace tactics {
 
 class InputSystem {
 public:
+	InputSystem();
+
+	void processEvents(SDL_Event& event);
+	void update();
+
+private:
+	click::InputActionId _moveUpActionId;
 };
 
-} // namespace tactics::input
+} // namespace tactics

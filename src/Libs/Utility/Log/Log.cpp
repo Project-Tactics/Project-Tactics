@@ -24,6 +24,7 @@ const LogCategory Log::Rendering("Rendering", 0x400000);
 const LogCategory Log::Overlay("Overlay", 0x404000);
 const LogCategory Log::Fsm("Fsm", 0x400040);
 const LogCategory Log::Ecs("Ecs", 0x000000);
+const LogCategory Log::Input("Input", 0x402020);
 
 static std::vector<std::shared_ptr<spdlog::logger>>& getLoggers() {
 	static std::vector<std::shared_ptr<spdlog::logger>> loggers;

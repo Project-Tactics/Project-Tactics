@@ -20,6 +20,7 @@
 #include <Libs/FileSystem/FileLoader.h>
 #include <Libs/FileSystem/FileSystem.h>
 #include <Libs/Fsm/FsmBuilder.h>
+#include <Libs/Input/InputSystem.h>
 #include <Libs/Overlay/ExampleOverlay.h>
 #include <Libs/Overlay/MainOverlay.h>
 #include <Libs/Overlay/OverlaySystem.h>
@@ -86,8 +87,11 @@ void Engine::_initialize(Application& application) {
 	_resourceSystem->createManualPack("_internalCustomPack"_id);
 	_resourceSystem->loadExternalResource("_internalCustomPack"_id, resource::Texture::createNullTexture());
 
+	LOG_TRACE(Log::Engine, "InputSystem Initialization");
+	_inputSystem = std::make_unique<InputSystem>();
+
 	LOG_TRACE(Log::Engine, "EventSystem Initialization");
-	_eventsSystem = std::make_unique<EventsSystem>();
+	_eventsSystem = std::make_unique<EventsSystem>(*_inputSystem);
 
 	LOG_TRACE(Log::Engine, "EventSystem SceneSystem");
 	_sceneSystem = std::make_unique<SceneSystem>(*_ecs, *_resourceSystem);
@@ -106,6 +110,7 @@ void Engine::_internalRun() {
 		_timer.update(TimeUtility::nowInSeconds());
 		while (_timer.hasConsumedAllTicks()) {
 			_eventsSystem->update();
+			_inputSystem->update();
 			_fsm->update();
 			_updateCommonComponentSystems();
 			_timer.consumeTick();
