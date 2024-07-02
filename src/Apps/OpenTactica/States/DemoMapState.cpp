@@ -9,16 +9,31 @@
 
 #include <Libs/Ecs/Component/FrustumComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
+#include <Libs/Input/InputSystem.h>
 
 namespace tactics {
 
 FsmAction DemoMapState::enter() {
 	_createScene();
+	{
+		using namespace input;
+		initContext();
+		auto moveActionId = createAction(ActionType::Axis1D, "move"_id);
+		mapAction<DeviceType::Keyboard>(moveActionId, KeyAction::KeyW, ActionTrigger::Hold);
+		mapAction<DeviceType::Keyboard>(moveActionId, KeyAction::KeyS, ActionTrigger::Hold);
+	}
+
 	return FsmAction::none();
 }
 
 FsmAction DemoMapState::update() {
 	using namespace component;
+
+	{
+		using namespace input;
+		// if (inputState("move"_id) == InputState::Triggered) {}
+	}
+
 	auto& registry = getService<SceneSystem>().getRegistry();
 	RotateAroundPointSystem::update(registry);
 	RotateItemSystem::update(registry);
