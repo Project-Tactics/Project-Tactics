@@ -14,7 +14,8 @@ set(HEADERS
     Math.h
     Reflection.h
     Service/ServiceLocator.h
-    String.h
+    String/Math.h
+    String/String.h
     TransparentTypes.h
     Time/EngineTime.h
     Time/FrameTimer.h
@@ -32,7 +33,7 @@ set(SOURCES
     Json/MathJsonSerializer.cpp
     Log/Log.cpp
     Math.cpp
-    String.cpp
+    String/String.cpp
     Time/EngineTime.cpp
     Time/FrameTimer.cpp
     Time/TimeUtility.cpp
@@ -45,7 +46,8 @@ target_link_libraries(libs_utility PUBLIC glm
 add_to_libs_folder(libs_utility)
 
 set(TEST_SOURCES
+    Tests/Test_FrameTimer.cpp
     Tests/Test_ServiceLocator.cpp
-    Tests/Test_FrameTimer.cpp)
+    Tests/Test_String.cpp)
 set(TEST_LIBS libs_utility)
 add_unit_test(libs_utility "${TEST_SOURCES}" "${TEST_LIBS}")
