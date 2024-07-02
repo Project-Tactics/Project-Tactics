@@ -21,7 +21,7 @@ void DemoSpriteState::_createCharacters(const glm::vec3& offset, int count) {
 		for (auto y = 0; y < count; y++) {
 			auto entity = sceneSystem.createEntity("char"_id, "character"_id);
 			auto& transform = entity.getComponent<component::Transform>();
-			auto position = glm::vec3(x * 1.0f, y * 1.0f, 0.0f);
+			auto position = glm::vec3(static_cast<float>(x) * 1.0f, static_cast<float>(y) * 1.0f, 0.0f);
 			position += offset;
 			transform.setPosition(position);
 		}
