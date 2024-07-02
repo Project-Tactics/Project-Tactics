@@ -6,7 +6,7 @@
 
 #include <Libs/Ecs/EntityUtilities.h>
 #include <Libs/Utility/Exception.h>
-#include <Libs/Utility/String.h>
+#include <Libs/Utility/String/String.h>
 
 #include <algorithm>
 #include <imgui_node_editor.h>

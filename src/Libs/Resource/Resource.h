@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Libs/Utility/HashId.h>
-#include <Libs/Utility/String.h>
+#include <Libs/Utility/String/String.h>
 
 #include <nlohmann/json.hpp>
 #include <stdint.h>
