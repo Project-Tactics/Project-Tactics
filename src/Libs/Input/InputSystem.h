@@ -14,7 +14,9 @@ public:
 	void update();
 
 private:
-	click::InputActionId _moveUpActionId;
+	click::InputActionId _moveActionId;
+	click::InputActionId _mouseActionId;
+	click::InputActionId _spaceActionId;
 };
 
 } // namespace tactics

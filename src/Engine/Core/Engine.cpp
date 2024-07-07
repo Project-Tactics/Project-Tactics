@@ -51,7 +51,9 @@ void Engine::_run(Application& application) {
 		LOG_TRACE(Log::Engine, "Engine Shutdown Started");
 		engine._shutdown();
 		LOG_TRACE(Log::Engine, "Engine Shutdown Ended");
-	} catch (Exception& exception) { LOG_EXCEPTION(exception); } catch (std::exception& exception) {
+	} catch (Exception& exception) {
+		LOG_EXCEPTION(exception);
+	} catch (std::exception& exception) {
 		LOG_EXCEPTION(exception);
 	}
 }
@@ -182,7 +184,7 @@ void Engine::_throwIfAnyImportantLogHappened() {
 
 void Engine::_initializeSDL() {
 	LOG_TRACE(Log::Engine, "SDL Initialization Started");
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0) {
 		throw TACTICS_EXCEPTION("SDL could not initialize! SDL_Error: {}\n", SDL_GetError());
 	}
 	LOG_TRACE(Log::Engine, "SDL Initialization Ended");

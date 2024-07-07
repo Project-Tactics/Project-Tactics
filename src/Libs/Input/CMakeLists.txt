@@ -2,14 +2,21 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
-        Click/Backends/SDLClickBackend.cpp
+        Click/Backend/ClickSDLBackend.cpp
         Click/Click.cpp
+        Click/ClickModifiers.cpp
+        Click/ClickTriggers.cpp
         InputSystem.cpp)
 
 set(HEADERS
-        Click/Backends/SDLClickBackend.h
+        Click/Backend/ClickSDLBackend.h
         Click/Click.h
+        Click/ClickActionValue.h
+        Click/ClickEnumTypes.h
+        Click/ClickEvents.h
         Click/ClickInputTypes.h
+        Click/ClickModifiers.h
+        Click/ClickTriggers.h
         InputSystem.h
         )
 
