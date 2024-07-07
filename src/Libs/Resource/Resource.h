@@ -74,7 +74,9 @@ public:
 
 template<> struct fmt::formatter<tactics::resource::ResourceType> {
 public:
-	constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
+	constexpr auto parse(format_parse_context& ctx) {
+		return ctx.begin();
+	}
 
 	template<typename Context> constexpr auto format(tactics::resource::ResourceType const& obj, Context& ctx) const {
 		return fmt::format_to(ctx.out(), "{}", tactics::Str<tactics::resource::ResourceType>::to(obj));

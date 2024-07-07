@@ -18,7 +18,9 @@ template<typename TService> struct WrappedService : public Service {
 public:
 	WrappedService(TService* service) : _service(service) {}
 
-	[[nodiscard]] TService& get() { return *_service; }
+	[[nodiscard]] TService& get() {
+		return *_service;
+	}
 
 private:
 	TService* _service;

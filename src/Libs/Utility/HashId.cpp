@@ -37,10 +37,14 @@ HashId::HashId(const std::string& str) : HashId(str.c_str()) {}
 
 HashId::HashId(std::string_view str) : HashId(str.data()) {}
 
-[[nodiscard]] std::uint32_t HashId::id() const { return _id; }
+[[nodiscard]] std::uint32_t HashId::id() const {
+	return _id;
+}
 
 [[nodiscard]] const char* HashId::str() const {
-	if (auto itr = hashToStringMap().find(_id); itr != hashToStringMap().end()) { return itr->second.c_str(); }
+	if (auto itr = hashToStringMap().find(_id); itr != hashToStringMap().end()) {
+		return itr->second.c_str();
+	}
 	LOG_ERROR(Log::Engine,
 			  "Trying to get the string for hash {} but it doesn't exist. Be sure to create all hashed string through "
 			  "the tactics::hash method",
@@ -48,14 +52,24 @@ HashId::HashId(std::string_view str) : HashId(str.data()) {}
 	return "";
 }
 
-[[nodiscard]] bool HashId::operator==(const HashId& other) const { return _id == other._id; }
+[[nodiscard]] bool HashId::operator==(const HashId& other) const {
+	return _id == other._id;
+}
 
-[[nodiscard]] bool HashId::operator>(const HashId& other) const { return _id > other._id; }
+[[nodiscard]] bool HashId::operator>(const HashId& other) const {
+	return _id > other._id;
+}
 
-[[nodiscard]] bool HashId::isEmpty() const { return _id == 0 || _id == HashId::none; }
+[[nodiscard]] bool HashId::isEmpty() const {
+	return _id == 0 || _id == HashId::none;
+}
 
-[[nodiscard]] HashId::operator std::uint32_t() const { return _id; }
+[[nodiscard]] HashId::operator std::uint32_t() const {
+	return _id;
+}
 
-HashId operator"" _id(const char* value, size_t) { return HashId(value); }
+HashId operator"" _id(const char* value, size_t) {
+	return HashId(value);
+}
 
 } // namespace tactics

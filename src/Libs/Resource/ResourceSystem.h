@@ -71,13 +71,17 @@ private:
 							   ResourceType resourceType,
 							   const nlohmann::json& data);
 
-	template<typename TResource> BaseResourceManager* _getManager() { return _getManager(TResource::TYPE); }
+	template<typename TResource> BaseResourceManager* _getManager() {
+		return _getManager(TResource::TYPE);
+	}
 
 	BaseResourceManager* _getManager(ResourceType resourceType) {
 		return const_cast<BaseResourceManager*>(const_cast<const ResourceSystem*>(this)->_getManager(resourceType));
 	}
 
-	template<typename TResource> const BaseResourceManager* _getManager() const { return _getManager(TResource::TYPE); }
+	template<typename TResource> const BaseResourceManager* _getManager() const {
+		return _getManager(TResource::TYPE);
+	}
 
 	const BaseResourceManager* _getManager(ResourceType resourceType) const {
 		if (!_resourceManagers.contains(resourceType)) {

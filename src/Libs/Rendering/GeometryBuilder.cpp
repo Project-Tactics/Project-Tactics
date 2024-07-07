@@ -11,7 +11,9 @@ void GeometryBuilder::beginSubMesh() {
 	_currentSubMesh = &_subMeshes.back();
 }
 
-void GeometryBuilder::endSubMesh() { _currentSubMesh = nullptr; }
+void GeometryBuilder::endSubMesh() {
+	_currentSubMesh = nullptr;
+}
 
 void GeometryBuilder::addVertex(std::vector<float> vertex) {
 	if (!_currentSubMesh) {
@@ -57,7 +59,9 @@ std::shared_ptr<resource::Mesh> GeometryBuilder::build(const HashId& name) {
 		auto ibo = std::make_unique<IndexBuffer>(subMesh.indices, rp::StaticDraw::value);
 		vbo->bind();
 		auto builder = VertexAttributes::Builder();
-		for (auto& attribute : _attributes) { builder.attributef(attribute.size); }
+		for (auto& attribute : _attributes) {
+			builder.attributef(attribute.size);
+		}
 		auto vao = builder.create();
 		vbo->unbind();
 

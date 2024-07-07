@@ -6,8 +6,12 @@ ResourceLoader::ResourceLoader(FileSystem& fileSystem, const ResourceProvider& r
 	: _fileSystem(fileSystem)
 	, _resourceProvider(resourceProvider) {}
 
-FileSystem& ResourceLoader::_getFileSystem() const { return _fileSystem; }
+FileSystem& ResourceLoader::_getFileSystem() const {
+	return _fileSystem;
+}
 
-const ResourceProvider& ResourceLoader::_getResourceProvider() const { return _resourceProvider; }
+const ResourceProvider& ResourceLoader::_getResourceProvider() const {
+	return _resourceProvider;
+}
 
 } // namespace tactics::resource

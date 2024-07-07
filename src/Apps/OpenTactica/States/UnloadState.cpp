@@ -15,7 +15,9 @@ FsmAction UnloadState::enter() {
 	return FsmAction::transition("proceed"_id);
 }
 
-FsmAction UnloadState::update() { return FsmAction::none(); }
+FsmAction UnloadState::update() {
+	return FsmAction::none();
+}
 
 void UnloadState::exit() {}
 

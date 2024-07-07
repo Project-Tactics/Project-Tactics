@@ -19,7 +19,9 @@ void EventsSystem::update() {
 	while (SDL_PollEvent(&event)) {
 		ImGui_ImplSDL2_ProcessEvent(&event);
 		_inputSystem.processEvents(event);
-		for (auto& listener : _eventsListeners) { listener->onEvent(event); }
+		for (auto& listener : _eventsListeners) {
+			listener->onEvent(event);
+		}
 	}
 }
 

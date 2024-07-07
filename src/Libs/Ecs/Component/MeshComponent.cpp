@@ -43,10 +43,14 @@ void Mesh::deserialize(const resource::ResourceProvider* resourceProvider, const
 Mesh Mesh::clone() {
 	Mesh clone;
 	clone.mesh = mesh;
-	for (auto& materialInstance : materials) { clone.materials.push_back(materialInstance->clone()); }
+	for (auto& materialInstance : materials) {
+		clone.materials.push_back(materialInstance->clone());
+	}
 	return clone;
 }
 
-void Mesh::defineReflection() { componentReflection<Mesh>("mesh"); }
+void Mesh::defineReflection() {
+	componentReflection<Mesh>("mesh");
+}
 
 } // namespace tactics::component

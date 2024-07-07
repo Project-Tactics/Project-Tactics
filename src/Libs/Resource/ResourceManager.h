@@ -49,15 +49,25 @@ template<typename TResource, IsResourceLoader TResourceLoader> class ResourceMan
 public:
 	ResourceManager(std::unique_ptr<TResourceLoader> loader) : _loader(std::move(loader)) {}
 
-	std::shared_ptr<BaseResource> getResource(HashId name) override final { return _getTResource(name); }
+	std::shared_ptr<BaseResource> getResource(HashId name) override final {
+		return _getTResource(name);
+	}
 
-	std::shared_ptr<BaseResource> getResource(ResourceId id) override final { return _getTResource(id); }
+	std::shared_ptr<BaseResource> getResource(ResourceId id) override final {
+		return _getTResource(id);
+	}
 
-	std::shared_ptr<BaseResource> getResource(HashId name) const final { return _getTResource(name); }
+	std::shared_ptr<BaseResource> getResource(HashId name) const final {
+		return _getTResource(name);
+	}
 
-	std::shared_ptr<BaseResource> getResource(ResourceId id) const final { return _getTResource(id); }
+	std::shared_ptr<BaseResource> getResource(ResourceId id) const final {
+		return _getTResource(id);
+	}
 
-	ResourceType getType() const override final { return TResource::TYPE; }
+	ResourceType getType() const override final {
+		return TResource::TYPE;
+	}
 
 	std::shared_ptr<BaseResource> load(HashId name, const nlohmann::json& data) override final {
 		std::shared_ptr<TResource> resource;
@@ -83,7 +93,9 @@ public:
 	}
 
 	void forEachResource(const std::function<void(const BaseResource&)>& callback) const override final {
-		for (auto& [id, resource] : _resources) { callback(*resource); }
+		for (auto& [id, resource] : _resources) {
+			callback(*resource);
+		}
 	}
 
 	void registerResource(std::shared_ptr<BaseResource> resource) override final {
@@ -99,7 +111,9 @@ public:
 		_registerResource(std::dynamic_pointer_cast<TResource>(resource));
 	}
 
-	unsigned int getResourceCount() const override final { return static_cast<unsigned int>(_resources.size()); }
+	unsigned int getResourceCount() const override final {
+		return static_cast<unsigned int>(_resources.size());
+	}
 
 private:
 	std::shared_ptr<TResource>& _getTResource(ResourceId id) {

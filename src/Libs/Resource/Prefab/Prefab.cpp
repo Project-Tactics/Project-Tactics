@@ -4,6 +4,8 @@
 
 namespace tactics::resource {
 
-Prefab::~Prefab() { entity.destroy(); }
+Prefab::~Prefab() {
+	entity.destroy();
+}
 
 } // namespace tactics::resource

@@ -2,7 +2,9 @@
 
 #include <Libs/Utility/Exception.h>
 
-TEST_F(ResourceTest, EmptySystemWithNoResources) { EXPECT_EQ(getNumberOfResources(), 0); }
+TEST_F(ResourceTest, EmptySystemWithNoResources) {
+	EXPECT_EQ(getNumberOfResources(), 0);
+}
 
 TEST_F(ResourceTest, GetResourceWithoutManager) {
 	EXPECT_THROW([[maybe_unused]] auto res = _resourceSystem->getResource<MockTextureResource>("MyResourceName1"_id),

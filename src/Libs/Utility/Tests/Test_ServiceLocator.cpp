@@ -21,7 +21,9 @@ using ::testing::Return;
 
 class ExampleService {
 public:
-	void foo() { _value = 1; }
+	void foo() {
+		_value = 1;
+	}
 
 private:
 	int _value;
@@ -50,4 +52,6 @@ TEST_F(ServiceLocatorTest, RemoveService) {
 	EXPECT_THROW([[maybe_unused]] auto& service = _serviceLocator.getService<int>(), Exception);
 }
 
-TEST_F(ServiceLocatorTest, RemoveServiceWhichIsNotRegistered) { _serviceLocator.removeService(new int()); }
+TEST_F(ServiceLocatorTest, RemoveServiceWhichIsNotRegistered) {
+	_serviceLocator.removeService(new int());
+}

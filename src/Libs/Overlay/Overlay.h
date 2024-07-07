@@ -8,7 +8,9 @@ class Overlay {
 public:
 	virtual ~Overlay() = default;
 
-	virtual OverlayConfig getConfig() { return {}; }
+	virtual OverlayConfig getConfig() {
+		return {};
+	}
 
 	virtual void update() = 0;
 };

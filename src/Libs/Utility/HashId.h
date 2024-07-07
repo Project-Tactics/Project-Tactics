@@ -32,7 +32,9 @@ private:
 
 template<> struct fmt::formatter<tactics::HashId> {
 public:
-	constexpr auto parse(format_parse_context& ctx) { return ctx.begin(); }
+	constexpr auto parse(format_parse_context& ctx) {
+		return ctx.begin();
+	}
 
 	template<typename Context> constexpr auto format(tactics::HashId const& obj, Context& ctx) const {
 		return format_to(ctx.out(), "{}", obj.str());
@@ -40,5 +42,7 @@ public:
 };
 
 template<> struct std::hash<tactics::HashId> {
-	std::size_t operator()(const tactics::HashId& obj) const noexcept { return obj.id(); }
+	std::size_t operator()(const tactics::HashId& obj) const noexcept {
+		return obj.id();
+	}
 };

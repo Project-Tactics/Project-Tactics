@@ -48,7 +48,9 @@ void DrawMeshes::_drawOpaqueGeometry(const glm::mat4x4& viewProjection) {
 	glDepthMask(GL_TRUE);
 
 	auto view = _ecs.sceneRegistry().view<Transform, Mesh>(entt::exclude<FullyAlphaBlended>);
-	for (auto&& [entity, transform, mesh] : view.each()) { _drawMesh(viewProjection, transform, mesh, false); }
+	for (auto&& [entity, transform, mesh] : view.each()) {
+		_drawMesh(viewProjection, transform, mesh, false);
+	}
 }
 
 void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, component::Transform& cameraTransform) {
@@ -66,7 +68,9 @@ void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, co
 		return glm::length2(diff1) > glm::length2(diff2);
 	});
 	auto view = registry.view<AlphaBlended, Transform, Mesh>();
-	for (auto&& [entity, transform, mesh] : view.each()) { _drawMesh(viewProjection, transform, mesh, true); }
+	for (auto&& [entity, transform, mesh] : view.each()) {
+		_drawMesh(viewProjection, transform, mesh, true);
+	}
 
 	glDepthMask(GL_TRUE);
 	glDisable(GL_BLEND);

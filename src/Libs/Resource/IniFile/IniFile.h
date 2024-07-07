@@ -28,11 +28,15 @@ public:
 
 	template<typename T> T get(std::string_view sectionName, std::string_view key, T defaultValue) {
 		auto& iniFile = fileHandle->getContent();
-		if (!iniFile.contains(sectionName.data())) { return defaultValue; }
+		if (!iniFile.contains(sectionName.data())) {
+			return defaultValue;
+		}
 
 		auto& section = iniFile[std::string(sectionName)];
 		auto itr = section.find(key.data());
-		if (itr == section.end()) { return defaultValue; }
+		if (itr == section.end()) {
+			return defaultValue;
+		}
 
 		return itr->second.as<T>();
 	}

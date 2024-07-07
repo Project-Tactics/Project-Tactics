@@ -42,7 +42,9 @@ void FsmOverlay::_buildModel() {
 	HashId highlightedOutputPinId;
 	if (_model.isAnyHovered) {
 		auto itr = std::ranges::find_if(_model.outputPins, [](auto& pin) { return pin.highlighted; });
-		if (itr != _model.outputPins.end()) { highlightedOutputPinId = itr->id; }
+		if (itr != _model.outputPins.end()) {
+			highlightedOutputPinId = itr->id;
+		}
 	}
 
 	_model.links.clear();
@@ -94,7 +96,9 @@ void FsmOverlay::_drawSidePanel() {
 	ImGui::Separator();
 
 	ImGui::TextColored(colors.TitleTextColor, "TRANSITIONS");
-	for (auto& pin : _model.outputPins) { _drawTransitionButton(pin, {100, 0}); }
+	for (auto& pin : _model.outputPins) {
+		_drawTransitionButton(pin, {100, 0});
+	}
 
 	ImGui::EndGroup();
 }
@@ -119,7 +123,9 @@ FsmStateInfo& FsmOverlay::_getStateInfo(const HashId& stateName) {
 		return stateInfo.name == stateName;
 	});
 
-	if (itr == _fsmInfo.states.end()) { throw TACTICS_EXCEPTION("State {} not found", stateName); }
+	if (itr == _fsmInfo.states.end()) {
+		throw TACTICS_EXCEPTION("State {} not found", stateName);
+	}
 
 	return *itr;
 }
@@ -229,7 +235,9 @@ void FsmOverlay::_drawTransitionButton(Pin& pin, const ImVec2& position) {
 		ImGui::PushStyleColor(ImGuiCol_Button, colors.SelectedButtonColor);
 	}
 
-	if (ImGui::Button(pin.name.str(), position)) { _externalController.setNextTransition(pin.name); }
+	if (ImGui::Button(pin.name.str(), position)) {
+		_externalController.setNextTransition(pin.name);
+	}
 
 	if (ImGui::IsItemHovered()) {
 		pin.highlighted = true;

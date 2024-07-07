@@ -44,7 +44,9 @@ public:
 	const std::string& getName() const;
 	const fmt::text_style& getStyle() const;
 
-	bool operator==(const LogCategory& other) const { return _name == other._name; }
+	bool operator==(const LogCategory& other) const {
+		return _name == other._name;
+	}
 
 private:
 	std::string _name;

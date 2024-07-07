@@ -7,7 +7,9 @@ using namespace tactics;
 
 class FrameTimerTest : public testing::Test {
 protected:
-	FrameTimerTest() { _frameTimer.setFixedDeltaTime(1.0f); }
+	FrameTimerTest() {
+		_frameTimer.setFixedDeltaTime(1.0f);
+	}
 
 	FrameTimer _frameTimer;
 };
@@ -32,7 +34,9 @@ TEST_F(FrameTimerTest, ExpectTwoTicksAfterLeftOverTime) {
 	_frameTimer.reset(1.0f);
 
 	_frameTimer.update(2.1f);
-	while (!_frameTimer.hasConsumedAllTicks()) { _frameTimer.consumeTick(); }
+	while (!_frameTimer.hasConsumedAllTicks()) {
+		_frameTimer.consumeTick();
+	}
 	_frameTimer.update(3.0f);
 	EXPECT_EQ(_frameTimer.getTicks(), 2);
 }

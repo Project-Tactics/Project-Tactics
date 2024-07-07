@@ -2,7 +2,9 @@
 
 namespace tactics {
 
-PathHelper::PathHelper(const std::filesystem::path& dataPath) { _updateDataRelativePath(dataPath); }
+PathHelper::PathHelper(const std::filesystem::path& dataPath) {
+	_updateDataRelativePath(dataPath);
+}
 
 void PathHelper::_updateDataRelativePath(const std::filesystem::path& dataPath) {
 	_dataRelativePath = dataPath;

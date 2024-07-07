@@ -32,7 +32,9 @@ FsmAction LoadState::enter() {
 
 void LoadState::exit() {}
 
-FsmAction LoadState::update() { return FsmAction::none(); }
+FsmAction LoadState::update() {
+	return FsmAction::none();
+}
 
 void LoadState::_loadResources() {
 	auto& resourceSystem = getService<resource::ResourceSystem>();

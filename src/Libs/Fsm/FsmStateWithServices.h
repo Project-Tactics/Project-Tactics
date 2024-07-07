@@ -16,7 +16,9 @@ public:
 	FsmStateWithServices(ServiceLocator& serviceLocator) : _serviceLocator(serviceLocator) {}
 
 protected:
-	template<typename TService> TService& getService() { return _serviceLocator.getService<TService>(); }
+	template<typename TService> TService& getService() {
+		return _serviceLocator.getService<TService>();
+	}
 
 private:
 	ServiceLocator& _serviceLocator;

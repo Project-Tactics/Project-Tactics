@@ -16,14 +16,22 @@ void ResourceSystem::loadPackDefinition(const std::filesystem::path& definitionP
 	_resourcePackManager->loadPackDefinition(definitionPath);
 }
 
-void ResourceSystem::loadPack(const HashId& packName) { _resourcePackManager->loadPack(packName); }
+void ResourceSystem::loadPack(const HashId& packName) {
+	_resourcePackManager->loadPack(packName);
+}
 
-void ResourceSystem::unloadPack(const HashId& packName) { _resourcePackManager->unloadPack(packName); }
+void ResourceSystem::unloadPack(const HashId& packName) {
+	_resourcePackManager->unloadPack(packName);
+}
 
-void ResourceSystem::createManualPack(const HashId& packName) { _resourcePackManager->createPack(packName, true); }
+void ResourceSystem::createManualPack(const HashId& packName) {
+	_resourcePackManager->createPack(packName, true);
+}
 
 void ResourceSystem::forEachManager(const std::function<void(const BaseResourceManager&)>& callback) {
-	for (auto&& [type, manager] : _resourceManagers) { callback(*manager); }
+	for (auto&& [type, manager] : _resourceManagers) {
+		callback(*manager);
+	}
 }
 
 void ResourceSystem::forEachResource(
@@ -60,7 +68,9 @@ void ResourceSystem::_unregisterManager(std::unique_ptr<BaseResourceManager> res
 }
 
 BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) const {
-	if (auto itr = _resourceManagers.find(resourceType); itr != _resourceManagers.end()) { return *itr->second; }
+	if (auto itr = _resourceManagers.find(resourceType); itr != _resourceManagers.end()) {
+		return *itr->second;
+	}
 
 	throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", resourceType);
 }

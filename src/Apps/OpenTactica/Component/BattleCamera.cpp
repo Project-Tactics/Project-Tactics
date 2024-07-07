@@ -40,7 +40,9 @@ void BattleCameraSystem::update(entt::registry& registry) {
 }
 
 float BattleCamera::getCurrentRotationDegree() const {
-	if (currentStep == nextStep) { return rotationSteps[currentStep]; }
+	if (currentStep == nextStep) {
+		return rotationSteps[currentStep];
+	}
 
 	auto startTargetRotation = rotationSteps[currentStep];
 	return startTargetRotation + (targetRotation - startTargetRotation) * rotationTime;

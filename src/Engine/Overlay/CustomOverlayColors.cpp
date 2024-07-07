@@ -37,7 +37,9 @@ void CustomOverlayColors::initialize(resource::IniFile& configFile) {
 	_colors.TextureColor = configFile.get(category, "textureColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 }
 
-const CustomOverlayColors::Colors& CustomOverlayColors::getColors() { return _colors; }
+const CustomOverlayColors::Colors& CustomOverlayColors::getColors() {
+	return _colors;
+}
 
 const ImVec4& CustomOverlayColors::getResourceTypeColor(resource::ResourceType type) {
 	switch (type) {

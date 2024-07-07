@@ -44,7 +44,9 @@ Entity PrefabManager::createPrefab(const HashId& name,
 		auto id = HashId(key);
 		auto type = entt::resolve(id);
 
-		if (!type) { throw TACTICS_EXCEPTION("Component type not found while loading prefab: [{}]", key); }
+		if (!type) {
+			throw TACTICS_EXCEPTION("Component type not found while loading prefab: [{}]", key);
+		}
 
 		prefab.componentTypes.push_back(id);
 		auto componentInstance = type.construct();
@@ -69,8 +71,12 @@ Entity PrefabManager::createPrefab(const HashId& name,
 	return entity;
 }
 
-entt::registry& PrefabManager::getRegistry() { return _registry; }
+entt::registry& PrefabManager::getRegistry() {
+	return _registry;
+}
 
-const entt::registry& PrefabManager::getRegistry() const { return _registry; }
+const entt::registry& PrefabManager::getRegistry() const {
+	return _registry;
+}
 
 } // namespace tactics

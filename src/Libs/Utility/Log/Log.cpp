@@ -45,9 +45,13 @@ LogCategory::LogCategory(std::string_view name, const fmt::text_style& style) : 
 
 LogCategory::LogCategory(std::string_view name, uint32_t rgb) : LogCategory(name, categoryTextStyle(rgb)) {}
 
-const fmt::text_style& LogCategory::getStyle() const { return _style; }
+const fmt::text_style& LogCategory::getStyle() const {
+	return _style;
+}
 
-const std::string& LogCategory::getName() const { return _name; }
+const std::string& LogCategory::getName() const {
+	return _name;
+}
 
 [[nodiscard]] static const char* toString(LogLevel level) {
 	switch (level) {
@@ -73,7 +77,9 @@ static spdlog::level::level_enum convertLogLevelToSpdLog(LogLevel level) {
 	return spdlog::level::off;
 }
 
-void Log::setLogInstance(std::unique_ptr<LogInstance> logInstance) { _logInstance = std::move(logInstance); }
+void Log::setLogInstance(std::unique_ptr<LogInstance> logInstance) {
+	_logInstance = std::move(logInstance);
+}
 
 void LogInstance::log(const LogCategory& category, LogLevel level, const std::string& message) {
 	auto logger = spdlog::get(category.getName());
@@ -92,12 +98,16 @@ void Log::init(LogLevel minimumLogLevel) {
 }
 
 void Log::log(const LogCategory& category, LogLevel level, fmt::string_view fmt, fmt::format_args args) {
-	if (!_isLogEnabled) { return; }
+	if (!_isLogEnabled) {
+		return;
+	}
 	_logInstance->log(category, level, fmt::vformat(fmt, args));
 	++_logCountsByLevel[static_cast<int>(level)];
 }
 
-void Log::exception(const std::exception& exception) { critical(Log::Engine, "Exception: {}", exception.what()); }
+void Log::exception(const std::exception& exception) {
+	critical(Log::Engine, "Exception: {}", exception.what());
+}
 
 void Log::exception(const Exception& exception) {
 	std::string message = fmt::format("{}\nCallstack:", exception.message());
@@ -120,7 +130,9 @@ void Log::exception(const Exception& exception) {
 bool Log::hasBeenLoggedOverLevel(LogLevel minimumLogLevel) {
 	auto totalCount = 0;
 	for (auto logLevelIndex = 0; auto count : _logCountsByLevel) {
-		if (logLevelIndex >= static_cast<int>(minimumLogLevel)) { totalCount += count; }
+		if (logLevelIndex >= static_cast<int>(minimumLogLevel)) {
+			totalCount += count;
+		}
 		++logLevelIndex;
 	}
 	return totalCount > 0;
