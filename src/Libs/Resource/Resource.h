@@ -11,6 +11,8 @@ namespace tactics::resource {
 
 enum class ResourceType {
 	IniFile,
+	InputAction,
+	InputMap,
 	Material,
 	Mesh,
 	Prefab,
@@ -20,7 +22,9 @@ enum class ResourceType {
 	Unkwown
 };
 
-const std::array<ResourceType, 7> resourceTypeLoadingOrder = {ResourceType::IniFile,
+const std::array<ResourceType, 9> resourceTypeLoadingOrder = {ResourceType::IniFile,
+															  ResourceType::InputAction,
+															  ResourceType::InputMap,
 															  ResourceType::Shader,
 															  ResourceType::Texture,
 															  ResourceType::Material,

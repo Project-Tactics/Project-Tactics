@@ -4,20 +4,8 @@
 
 namespace click {
 
-struct KeyboardEvent {
-	Key key{};
-	DeviceId deviceId{};
-	ActionValue value{};
-};
-
-struct MouseEvent {
-	MouseGesture gesture{};
-	DeviceId deviceId{};
-	ActionValue value{};
-};
-
-struct GamepadEvent {
-	GamepadGesture gesture{};
+struct InputEvent {
+	Gesture gesture{};
 	DeviceId deviceId{};
 	ActionValue value{};
 };

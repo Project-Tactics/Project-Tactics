@@ -90,7 +90,7 @@ void Engine::_initialize(Application& application) {
 	_resourceSystem->loadExternalResource("_internalCustomPack"_id, resource::Texture::createNullTexture());
 
 	LOG_TRACE(Log::Engine, "InputSystem Initialization");
-	_inputSystem = std::make_unique<InputSystem>();
+	_inputSystem = std::make_unique<InputSystem>(configFile);
 
 	LOG_TRACE(Log::Engine, "EventSystem Initialization");
 	_eventsSystem = std::make_unique<EventsSystem>(*_inputSystem);
@@ -206,6 +206,7 @@ void Engine::_setupFsm(Application& application) {
 
 void Engine::_setupServiceLocator() {
 	_serviceLocator = std::make_unique<ServiceLocator>();
+	_serviceLocator->addService(_inputSystem.get());
 	_serviceLocator->addService(_resourceSystem.get());
 	_serviceLocator->addService(_overlaySystem.get());
 	_serviceLocator->addService(_renderSystem.get());

@@ -9,25 +9,22 @@
 
 namespace click {
 
-using InputActionId = unsigned int;
+using ActionId = unsigned int;
 using DeviceId = uint8_t;
-using OwnerId = uint8_t;
+using PlayerId = uint8_t;
+using MapId = uint8_t;
+using GestureId = uint16_t;
 
 const auto InvalidDeviceId = std::numeric_limits<uint8_t>::max();
 
-struct InputAction {
-	InputActionId id{};
-	ActionType type{};
+struct InputActionState {
 	InputState state{};
 	ActionValue value{};
 };
 
-union DeviceGestureData {
-	Key key;
-	MouseGesture mouse;
-	GamepadGesture gamepad;
-	TouchGesture touch;
-	int32_t other{};
+struct InputAction {
+	ActionType type{};
+	std::vector<InputActionState> states;
 };
 
 struct Trigger {
@@ -47,9 +44,12 @@ struct Trigger {
 		} release;
 
 		struct {
-			float actuationThreshold;
 			float holdTime;
 		} hold;
+
+		struct {
+			float actuationThreshold;
+		} continuous;
 	} data;
 
 	TriggerState state{};
@@ -62,20 +62,11 @@ struct Modifier {
 		struct {
 		} negate;
 
+		struct {
+			Axis axis;
+		} toAxis;
+
 	} data;
-};
-
-struct DeviceGesture {
-	DeviceId deviceId;
-	DeviceGestureData gesture;
-	std::vector<Trigger> triggers;
-	std::vector<Modifier> modifiers;
-	ActionValue value{};
-};
-
-struct Mapping {
-	InputActionId actionId{};
-	std::vector<DeviceGesture> gestures;
 };
 
 struct DeviceData {
@@ -94,13 +85,46 @@ struct DeviceInfo {
 	DeviceIdList touches;
 
 	DeviceList devices;
+	std::vector<int> _freeDeviceIndices;
+};
+
+struct DeviceGesture {
+	GestureId gestureId;
+	Gesture gesture;
+	std::vector<Trigger> triggers;
+	std::vector<Modifier> modifiers;
+	ActionValue value{};
+};
+
+struct ActionMapping {
+	ActionId actionId{};
+	std::vector<DeviceGesture> gestures;
+};
+
+struct InputMap {
+	MapId id{};
+	std::vector<ActionMapping> actionMaps;
+	bool isEnabled{true};
+};
+
+struct Player {
+	std::vector<InputMap> inputMaps;
+	std::vector<DeviceId> heldDevices;
+};
+
+struct MousePosition {
+	float x{};
+	float y{};
+	float xRel{};
+	float yRel{};
 };
 
 struct Context {
-	std::vector<OwnerId> owners;
 	std::vector<InputAction> actions;
-	std::vector<Mapping> mappings;
+	std::vector<Player> players;
 	DeviceInfo devices;
+	MousePosition mouseState;
+	std::vector<int> _freeActionIndices;
 };
 
 } // namespace click

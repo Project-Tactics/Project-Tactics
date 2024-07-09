@@ -29,3 +29,11 @@ namespace click::hold {
 void processEvent(Trigger& trigger, const ActionValue& value);
 
 } // namespace click::hold
+
+namespace click::continuous {
+
+[[nodiscard]] TriggerState update(Trigger& trigger, float deltaTime);
+void processEvent(Trigger& trigger, const ActionValue& value);
+
+} // namespace click::continuous
+

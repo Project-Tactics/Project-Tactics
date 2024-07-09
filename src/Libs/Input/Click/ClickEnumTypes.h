@@ -15,11 +15,13 @@ enum class TriggerType {
 	Down,
 	Press,
 	Release,
-	Hold
+	Hold,
+	Continuous
 };
 
 enum class ModifierType {
-	Negate
+	Negate,
+	ToAxis
 };
 
 enum class TriggerState {
@@ -44,18 +46,23 @@ enum class InputState {
 	Ended
 };
 
-enum class MouseGesture {
+enum class Axis {
+	XYZ,
+	YZX,
+	ZXY
+};
+
+enum class Gesture {
 	Unknown,
+	// Mouse
 	LeftButton,
 	RightButton,
 	MiddleButton,
 	MouseX,
 	MouseY,
 	MouseZ,
-	MouseXY
-};
-
-enum class GamepadGesture {
+	MouseXY,
+	// Gamepad
 	ButtonA,
 	ButtonB,
 	ButtonX,
@@ -79,14 +86,13 @@ enum class GamepadGesture {
 	ButtonTouchpad,
 	AxisLeftX,
 	AxisLeftY,
+	AxisLeftXY,
 	AxisRightX,
 	AxisRightY,
+	AxisRightXY,
 	AxisTriggerLeft,
 	AxisTriggerRight,
-	Unknown
-};
-
-enum class TouchGesture {
+	// Touch
 	Touch1,
 	Touch2,
 	Touch3,
@@ -96,11 +102,8 @@ enum class TouchGesture {
 	Touch7,
 	Touch8,
 	Touch9,
-	Touch10
-};
-
-enum class Key {
-	KeyUnknown,
+	Touch10,
+	// Keyboard
 	KeyReturn,
 	KeyEscape,
 	KeyBackspace,

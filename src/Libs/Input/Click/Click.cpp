@@ -14,6 +14,20 @@ auto _isValueZero(const ActionValue& value) {
 }
 
 /*
+ * Player
+ */
+
+void clearPlayer(PlayerId playerId) {
+	auto& player = ctx->players[playerId];
+	player.inputMaps.clear();
+	player.heldDevices.clear();
+}
+
+unsigned int players() {
+	return static_cast<unsigned int>(ctx->players.size());
+}
+
+/*
  * Device
  */
 
@@ -108,15 +122,24 @@ DeviceType deviceType(DeviceId id) {
 	return ctx->devices.devices[id].type;
 }
 
+void holdDevice(PlayerId playerId, DeviceId deviceId) {
+	Player& player = ctx->players[playerId];
+	player.heldDevices.emplace_back(deviceId);
+}
+
+void releaseDevice(PlayerId playerId, DeviceId deviceId) {
+	Player& player = ctx->players[playerId];
+	std::erase(player.heldDevices, deviceId);
+}
+
 /*
  * Core
  */
 
-void initializeContext() {
+void initialize(unsigned int maxPlayers) {
 	ctx = new Context{};
 	ctx->actions.reserve(32);
-	ctx->mappings.reserve(32);
-	ctx->owners.reserve(32);
+	ctx->players.resize(maxPlayers);
 	ctx->devices.mice.reserve(8);
 	ctx->devices.keyboards.reserve(8);
 	ctx->devices.gamepads.reserve(8);
@@ -128,81 +151,25 @@ Context& getContext() {
 	return *ctx;
 }
 
-InputActionId createAction(ActionType type) {
-	auto id = static_cast<unsigned int>(ctx->actions.size());
-	ctx->actions.emplace_back(id, type);
-	ctx->mappings.emplace_back(Mapping{});
-	return id;
-}
-
-OwnerId owner() {
-	auto ownerId = static_cast<OwnerId>(ctx->owners.size());
-	ctx->owners.push_back(ownerId);
-	return ownerId;
-}
-
-InputActionId impulse() {
-	return createAction(ActionType::Impulse);
-}
-
-InputActionId axis1D() {
-	return createAction(ActionType::Axis1D);
-}
-
-InputActionId axis2D() {
-	return createAction(ActionType::Axis2D);
-}
-
-InputActionId axis3D() {
-	return createAction(ActionType::Axis3D);
-}
-
-ActionType type(InputActionId id) {
-	return ctx->actions[id].type;
-}
-
-std::tuple<InputState, ActionValue> _inputState(InputActionId actionId, ActionType type) {
-	assert(type == ctx->actions[actionId].type);
-	return {ctx->actions[actionId].state, ctx->actions[actionId].value};
-}
-
-std::tuple<InputState, bool> impulseState(InputActionId id) {
-	auto [state, value] = _inputState(id, ActionType::Impulse);
-	return {state, value.axis1D != 0.0f};
-}
-
-std::tuple<InputState, float> axis1DState(InputActionId id) {
-	auto [state, value] = _inputState(id, ActionType::Axis1D);
-	return {state, value.axis1D};
-}
-
-std::tuple<InputState, Axis2D> axis2DState(InputActionId id) {
-	auto [state, value] = _inputState(id, ActionType::Axis2D);
-	return {state, value.axis2D};
-}
-
-std::tuple<InputState, Axis3D> axis3DState(InputActionId id) {
-	auto [state, value] = _inputState(id, ActionType::Axis3D);
-	return {state, value.axis3D};
-}
-
 void _processTrigger(Trigger& trigger, const ActionValue& value) {
 	switch (trigger.type) {
-	case TriggerType::Down	 : click::down::processEvent(trigger, value); break;
-	case TriggerType::Press	 : click::press::processEvent(trigger, value); break;
-	case TriggerType::Release: click::release::processEvent(trigger, value); break;
-	case TriggerType::Hold	 : click::hold::processEvent(trigger, value); break;
-	default					 : assert(false); break;
+	case TriggerType::Down		: click::down::processEvent(trigger, value); break;
+	case TriggerType::Press		: click::press::processEvent(trigger, value); break;
+	case TriggerType::Release	: click::release::processEvent(trigger, value); break;
+	case TriggerType::Hold		: click::hold::processEvent(trigger, value); break;
+	case TriggerType::Continuous: click::continuous::processEvent(trigger, value); break;
+	default						: assert(false); break;
 	}
 }
 
 TriggerState _updateTrigger(Trigger& trigger, float deltaTime) {
 	switch (trigger.type) {
-	case TriggerType::Down	 : return click::down::update(trigger, deltaTime); break;
-	case TriggerType::Press	 : return click::press::update(trigger, deltaTime); break;
-	case TriggerType::Release: return click::release::update(trigger, deltaTime); break;
-	case TriggerType::Hold	 : return click::hold::update(trigger, deltaTime); break;
-	default					 : assert(false); break;
+	case TriggerType::Down		: return click::down::update(trigger, deltaTime); break;
+	case TriggerType::Press		: return click::press::update(trigger, deltaTime); break;
+	case TriggerType::Release	: return click::release::update(trigger, deltaTime); break;
+	case TriggerType::Hold		: return click::hold::update(trigger, deltaTime); break;
+	case TriggerType::Continuous: return click::continuous::update(trigger, deltaTime); break;
+	default						: assert(false); break;
 	}
 
 	return TriggerState::Idle;
@@ -211,82 +178,57 @@ TriggerState _updateTrigger(Trigger& trigger, float deltaTime) {
 void _processModifier(Modifier& modifier, ActionValue& value) {
 	switch (modifier.type) {
 	case ModifierType::Negate: click::negate::modify(modifier, value); break;
+	case ModifierType::ToAxis: click::toAxis::modify(modifier, value); break;
 	default					 : assert(false); break;
 	}
 }
 
 void update(float deltaTime) {
-	for (auto actionId = 0; auto& mapping : ctx->mappings) {
-		auto state = InputState::None;
-		auto value = ActionValue{};
-		for (auto& gesture : mapping.gestures) {
-			if (gesture.triggers.empty()) {
-				if (!_isValueZero(gesture.value)) {
-					state = InputState::Triggered;
-					value = gesture.value;
-					gesture.value = ActionValue{};
-				}
-				break;
-			}
-
-			auto allTriggersSucceded = true;
-			for (auto& trigger : gesture.triggers) {
-				auto triggerState = _updateTrigger(trigger, deltaTime);
-				allTriggersSucceded &= triggerState == TriggerState::Triggered;
-			}
-
-			if (allTriggersSucceded) {
-				state = InputState::Triggered;
-				value = gesture.value;
-				break;
-			}
-		}
-
-		ctx->actions[actionId].state = state;
-		ctx->actions[actionId].value = value;
-		++actionId;
-	}
-}
-
-void processKeyboardEvent(const KeyboardEvent& event) {
-	for (auto& mapping : ctx->mappings) {
-		for (auto& gesture : mapping.gestures) {
-			if (gesture.deviceId == event.deviceId && gesture.gesture.key == event.key) {
-				gesture.value = event.value;
-				for (auto& modifier : gesture.modifiers) {
-					_processModifier(modifier, gesture.value);
-				}
-				for (auto& trigger : gesture.triggers) {
-					_processTrigger(trigger, gesture.value);
-				}
-			}
+	for (auto& action : ctx->actions) {
+		for (auto& state : action.states) {
+			state.state = InputState::None;
+			state.value = ActionValue{};
 		}
 	}
-}
 
-void processGamepadEvent(const GamepadEvent& event) {
-	for (auto& mapping : ctx->mappings) {
-		for (auto& gesture : mapping.gestures) {
-			if (gesture.deviceId == event.deviceId && gesture.gesture.gamepad == event.gesture) {
-				gesture.value = event.value;
-				for (auto& trigger : gesture.triggers) {
-					_processTrigger(trigger, gesture.value);
+	for (auto i = 0; auto& player : ctx->players) {
+		for (auto& inputMap : player.inputMaps) {
+			for (auto& actionMap : inputMap.actionMaps) {
+				auto state = InputState::None;
+				auto value = ActionValue{};
+				for (auto& gesture : actionMap.gestures) {
+					if (gesture.triggers.empty()) {
+						if (!_isValueZero(gesture.value)) {
+							state = InputState::Triggered;
+							value = gesture.value;
+							gesture.value = ActionValue{};
+						}
+						break;
+					}
+
+					auto allTriggersSucceded = true;
+					for (auto& trigger : gesture.triggers) {
+						auto triggerState = _updateTrigger(trigger, deltaTime);
+						allTriggersSucceded &= triggerState == TriggerState::Triggered;
+					}
+
+					if (allTriggersSucceded) {
+						state = InputState::Triggered;
+						value.axis3D.x += gesture.value.axis3D.x;
+						value.axis3D.y += gesture.value.axis3D.y;
+						value.axis3D.z += gesture.value.axis3D.z;
+					}
 				}
+
+				auto& actionState = ctx->actions[actionMap.actionId].states[i];
+				if (actionState.state == InputState::Triggered) {
+					continue;
+				}
+				actionState.state = state;
+				actionState.value = value;
 			}
 		}
-	}
-}
-
-void processMouseEvent(const MouseEvent& event) {
-	for (auto& mapping : ctx->mappings) {
-		for (auto& gesture : mapping.gestures) {
-			if (gesture.deviceId == event.deviceId && gesture.gesture.mouse == event.gesture) {
-				gesture.value = event.value;
-				for (auto& trigger : gesture.triggers) {
-					_processTrigger(trigger, gesture.value);
-				}
-			}
-		}
+		++i;
 	}
 }
 
@@ -302,21 +244,262 @@ Trigger releaseTrigger(float actuationThreshold) {
 	return Trigger{TriggerType::Release, {.release = {actuationThreshold}}};
 }
 
-Trigger holdTrigger(float actuationThreshold, float holdTime) {
-	return Trigger{TriggerType::Hold, {.hold = {actuationThreshold, holdTime}}};
+Trigger holdTrigger(float holdTime) {
+	return Trigger{TriggerType::Hold, {.hold = {holdTime}}};
+}
+
+Trigger continuousTrigger(float actuationThreshold) {
+	return Trigger{TriggerType::Continuous, {.continuous = {actuationThreshold}}};
 }
 
 Modifier negateModifier() {
 	return Modifier{ModifierType::Negate, {}};
 }
 
-void map(InputActionId actionId,
-		 DeviceId deviceId,
-		 const DeviceGestureData& gestureData,
-		 std::vector<Trigger> triggers,
-		 std::vector<Modifier> modifiers) {
-	auto& mapping = ctx->mappings[actionId];
-	mapping.gestures.emplace_back(deviceId, gestureData, std::move(triggers), std::move(modifiers));
+Modifier toAxisModifier(Axis axis) {
+	return Modifier{ModifierType::ToAxis, {.toAxis = axis}};
+}
+
+/*
+ * Mapping
+ *
+ */
+
+InputMap* _getInputMap(MapId mapId) {
+	for (auto& player : ctx->players) {
+		for (auto& inputMap : player.inputMaps) {
+			if (inputMap.id == mapId) {
+				return &inputMap;
+			}
+		}
+	}
+	return nullptr;
+}
+
+MapId addInputMap(PlayerId playerId) {
+	static MapId mapId = 0;
+	auto& player = ctx->players[playerId];
+	player.inputMaps.emplace_back(mapId);
+	return mapId++;
+}
+
+void removeInputMap(MapId mapId) {
+	for (auto& player : ctx->players) {
+		std::erase_if(player.inputMaps, [mapId](const InputMap& inputMap) { return inputMap.id == mapId; });
+	}
+}
+
+void disableInputMap(MapId mapId) {
+	auto inputMap = _getInputMap(mapId);
+	assert(inputMap != nullptr);
+	inputMap->isEnabled = false;
+}
+
+void enableInputMap(MapId mapId) {
+	auto inputMap = _getInputMap(mapId);
+	assert(inputMap != nullptr);
+	inputMap->isEnabled = true;
+}
+
+/*
+ * Action
+ */
+
+ActionId createAction(ActionType type) {
+	ActionId actionId = 0;
+	if (ctx->_freeActionIndices.empty()) {
+		actionId = static_cast<unsigned int>(ctx->actions.size());
+		ctx->actions.emplace_back();
+	} else {
+		actionId = ctx->_freeActionIndices.back();
+		ctx->_freeActionIndices.pop_back();
+	}
+	auto& action = ctx->actions[actionId];
+	action.type = type;
+	action.states.resize(ctx->players.size());
+	return actionId++;
+}
+
+void destroyAction(ActionId actionId) {
+	ctx->_freeActionIndices.push_back(actionId);
+	ctx->actions[actionId] = {};
+
+	for (auto& player : ctx->players) {
+		for (auto& inputMap : player.inputMaps) {
+			std::erase_if(inputMap.actionMaps,
+						  [actionId](const ActionMapping& actionMap) { return actionMap.actionId == actionId; });
+		}
+	}
+}
+
+ActionType type(ActionId id) {
+	return ctx->actions[id].type;
+}
+
+std::tuple<InputState, ActionValue> _inputState(ActionId actionId, ActionType type, PlayerId playerId) {
+	assert(type == ctx->actions[actionId].type);
+	auto& state = ctx->actions[actionId].states[playerId];
+	return {state.state, state.value};
+}
+
+std::tuple<InputState, bool> impulseState(ActionId id, PlayerId playerId) {
+	auto [state, value] = _inputState(id, ActionType::Impulse, playerId);
+	return {state, value.axis1D != 0.0f};
+}
+
+std::tuple<InputState, float> axis1DState(ActionId id, PlayerId playerId) {
+	auto [state, value] = _inputState(id, ActionType::Axis1D, playerId);
+	return {state, value.axis1D};
+}
+
+std::tuple<InputState, Axis2D> axis2DState(ActionId id, PlayerId playerId) {
+	auto [state, value] = _inputState(id, ActionType::Axis2D, playerId);
+	return {state, value.axis2D};
+}
+
+std::tuple<InputState, Axis3D> axis3DState(ActionId id, PlayerId playerId) {
+	auto [state, value] = _inputState(id, ActionType::Axis3D, playerId);
+	return {state, value.axis3D};
+}
+
+/*
+ * Gesture
+ */
+
+GestureId _bindGesture(InputMap& inputMap,
+					   ActionId actionId,
+					   Gesture gesture,
+					   std::vector<Trigger> triggers,
+					   std::vector<Modifier> modifiers) {
+	auto itr = std::ranges::find_if(inputMap.actionMaps,
+									[actionId](const ActionMapping& item) { return item.actionId == actionId; });
+	if (itr == inputMap.actionMaps.end()) {
+		inputMap.actionMaps.emplace_back(actionId);
+		itr = inputMap.actionMaps.end() - 1;
+	}
+
+	static GestureId gestureId = 0;
+	itr->gestures.emplace_back(gestureId, gesture, std::move(triggers), std::move(modifiers));
+	return gestureId++;
+}
+
+DeviceGesture* _getGesture(InputMap* inputMap, GestureId gestureId) {
+	for (auto& actionMap : inputMap->actionMaps) {
+		for (auto& gesture : actionMap.gestures) {
+			if (gesture.gestureId == gestureId) {
+				return &gesture;
+			}
+		}
+	}
+	return nullptr;
+}
+
+DeviceGesture* _getGesture(MapId inputMapId, GestureId gestureId) {
+	auto inputMap = _getInputMap(inputMapId);
+	assert(inputMap != nullptr);
+	return _getGesture(inputMap, gestureId);
+}
+
+GestureId bindGesture(MapId inputMapId,
+					  ActionId actionId,
+					  Gesture gesture,
+					  std::vector<Trigger> triggers,
+					  std::vector<Modifier> modifiers) {
+	auto inputMap = _getInputMap(inputMapId);
+	assert(inputMap != nullptr);
+	return _bindGesture(*inputMap, actionId, gesture, std::move(triggers), std::move(modifiers));
+}
+
+void rebindGesture(MapId inputMapId,
+				   GestureId gestureId,
+				   Gesture gesture,
+				   std::vector<Trigger> triggers,
+				   std::vector<Modifier> modifiers) {
+	auto gestureToChange = _getGesture(inputMapId, gestureId);
+	assert(gestureToChange != nullptr);
+	gestureToChange->gesture = gesture;
+	gestureToChange->triggers = std::move(triggers);
+	gestureToChange->modifiers = std::move(modifiers);
+	gestureToChange->value = ActionValue{};
+}
+
+void rebindGesture(MapId inputMapId, GestureId gestureId, Gesture gesture, std::vector<Trigger> triggers) {
+	auto gestureToChange = _getGesture(inputMapId, gestureId);
+	assert(gestureToChange != nullptr);
+	gestureToChange->gesture = gesture;
+	gestureToChange->triggers = std::move(triggers);
+	gestureToChange->value = ActionValue{};
+}
+
+void rebindGesture(MapId inputMapId, GestureId gestureId, Gesture gesture) {
+	auto gestureToChange = _getGesture(inputMapId, gestureId);
+	assert(gestureToChange != nullptr);
+	gestureToChange->gesture = gesture;
+	gestureToChange->value = ActionValue{};
+}
+
+void unbindGesture(GestureId gestureId) {
+	for (auto& player : ctx->players) {
+		for (auto& inputMap : player.inputMaps) {
+			for (auto& actionMap : inputMap.actionMaps) {
+				if (std::erase_if(actionMap.gestures, [gestureId](const DeviceGesture& gesture) {
+						return gesture.gestureId == gestureId;
+					}) > 0) {
+					return;
+				}
+			}
+		}
+	}
+}
+
+/*
+ * Input & Event Processing
+ */
+
+void updateMouse(DeviceId mouseId, float x, float y) {
+	auto xRel = x - ctx->mouseState.x;
+	auto yRel = y - ctx->mouseState.y;
+	ctx->mouseState.xRel = xRel;
+	ctx->mouseState.yRel = yRel;
+	ctx->mouseState.x = x;
+	ctx->mouseState.y = y;
+
+	processInputEvent({Gesture::MouseX, mouseId, xRel});
+	processInputEvent({Gesture::MouseY, mouseId, yRel});
+	processInputEvent({Gesture::MouseXY, mouseId, {.axis2D = {xRel, yRel}}});
+}
+
+void updateGamepadAxis(DeviceId gamepadId, Gesture axis, ActionValue& value) {
+	processInputEvent({axis, gamepadId, value});
+}
+
+void processInputEvent(const InputEvent& event) {
+	for (auto& player : ctx->players) {
+		if (player.heldDevices.empty() ||
+			std::ranges::find(player.heldDevices, event.deviceId) == player.heldDevices.end()) {
+			continue;
+		}
+
+		for (auto& inputMap : player.inputMaps) {
+			if (!inputMap.isEnabled) {
+				continue;
+			}
+
+			for (auto& actionMap : inputMap.actionMaps) {
+				for (auto& gesture : actionMap.gestures) {
+					if (gesture.gesture == event.gesture) {
+						gesture.value = event.value;
+						for (auto& modifier : gesture.modifiers) {
+							_processModifier(modifier, gesture.value);
+						}
+						for (auto& trigger : gesture.triggers) {
+							_processTrigger(trigger, gesture.value);
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 } // namespace click

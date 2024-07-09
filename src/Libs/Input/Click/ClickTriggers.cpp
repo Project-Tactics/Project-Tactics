@@ -1,5 +1,15 @@
 #include "ClickTriggers.h"
 
+namespace click {
+
+bool _isOverActuationThreshold(float actuationThreshold, const ActionValue& value) {
+	auto magnitudeSquared =
+		value.axis3D.x * value.axis3D.x + value.axis3D.y * value.axis3D.y + value.axis3D.z * value.axis3D.z;
+	return magnitudeSquared >= actuationThreshold * actuationThreshold;
+}
+
+} // namespace click
+
 namespace click::down {
 
 TriggerState update(Trigger& trigger, float /*deltaTime*/) {
@@ -7,7 +17,7 @@ TriggerState update(Trigger& trigger, float /*deltaTime*/) {
 }
 
 void processEvent(Trigger& trigger, const ActionValue& value) {
-	if (std::abs(value.axis1D) >= trigger.data.down.actuationThreshold) {
+	if (_isOverActuationThreshold(trigger.data.down.actuationThreshold, value)) {
 		trigger.state = TriggerState::Triggered;
 	} else {
 		trigger.state = TriggerState::Idle;
@@ -26,12 +36,13 @@ TriggerState update(Trigger& trigger, float /*deltaTime*/) {
 }
 
 void processEvent(Trigger& trigger, const ActionValue& value) {
-	if (std::abs(value.axis1D) >= trigger.data.down.actuationThreshold) {
+	if (_isOverActuationThreshold(trigger.data.press.actuationThreshold, value)) {
 		trigger.state = TriggerState::Triggered;
 	} else {
 		trigger.state = TriggerState::Idle;
 	}
 }
+
 } // namespace click::press
 
 namespace click::release {
@@ -44,7 +55,7 @@ TriggerState update(Trigger& trigger, float /*deltaTime*/) {
 }
 
 void processEvent(Trigger& trigger, const ActionValue& value) {
-	if (std::abs(value.axis1D) < trigger.data.down.actuationThreshold) {
+	if (_isOverActuationThreshold(trigger.data.down.actuationThreshold, value)) {
 		trigger.state = TriggerState::Triggered;
 	} else {
 		trigger.state = TriggerState::Idle;
@@ -62,3 +73,19 @@ TriggerState update(Trigger& trigger, float /*deltaTime*/) {
 void processEvent(Trigger& /*trigger*/, const ActionValue& /*value*/) {}
 
 } // namespace click::hold
+
+namespace click::continuous {
+
+TriggerState update(Trigger& trigger, float /*deltaTime*/) {
+	return trigger.state;
+}
+
+void processEvent(Trigger& trigger, const ActionValue& value) {
+	if (_isOverActuationThreshold(trigger.data.continuous.actuationThreshold, value)) {
+		trigger.state = TriggerState::Triggered;
+	} else {
+		trigger.state = TriggerState::Idle;
+	}
+}
+
+} // namespace click::continuous
