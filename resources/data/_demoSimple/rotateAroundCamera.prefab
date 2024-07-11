@@ -3,8 +3,8 @@
     "transform": {
         "position": {
             "x": 0,
-            "y": 0,
-            "z": 0
+            "y": 40,
+            "z": 100
         },
         "rotation": {
             "x": 0,
@@ -26,19 +26,11 @@
         "near": 1,
         "far": 1000
     },
-    "rotateAroundPoint": {
-        "speed": 0.25,
-        "distanceFromPoint": 100,
-        "currentAngle": 0,
-        "point": {
-            "x": 0,
-            "y": 2,
-            "z": 0
-        },
-        "offset": {
-            "x": 0,
-            "y": 40,
-            "z": 0
-        }
+    "freeCamera": {
+        "speed": 5,
+        "sensitivity": 0.125,
+        "moveAction": "cameraMove",
+        "lookAction": "cameraLook",
+        "player": 0
     }
 }

@@ -22,6 +22,12 @@ std::string Str<resource::ResourceType>::to(resource::ResourceType resourceType)
 	case ResourceType::IniFile: {
 		return "ini";
 	}
+	case ResourceType::InputAction: {
+		return "inputAction";
+	}
+	case ResourceType::InputMap: {
+		return "inputMap";
+	}
 	case ResourceType::Material: {
 		return "material";
 	}
@@ -50,6 +56,10 @@ resource::ResourceType Str<resource::ResourceType>::from(std::string_view string
 
 	if (string == "ini") {
 		return ResourceType::IniFile;
+	} else if (string == "inputAction") {
+		return ResourceType::InputAction;
+	} else if (string == "inputMap") {
+		return ResourceType::InputMap;
 	} else if (string == "material") {
 		return ResourceType::Material;
 	} else if (string == "mesh") {

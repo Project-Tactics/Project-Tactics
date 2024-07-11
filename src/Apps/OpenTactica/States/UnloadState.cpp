@@ -1,5 +1,7 @@
 #include "UnloadState.h"
 
+#include <Engine/Scene/SceneSystem.h>
+
 #include <Libs/Resource/ResourceSystem.h>
 
 namespace tactics {
@@ -9,6 +11,9 @@ UnloadState::UnloadState(ServiceLocator& services, const HashId& packageName)
 	, _packageName(packageName) {}
 
 FsmAction UnloadState::enter() {
+	auto& sceneSystem = getService<SceneSystem>();
+	sceneSystem.clearScene(true);
+
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 	resourceSystem.unloadPack(_packageName);
 	resourceSystem.unloadPack("common"_id);

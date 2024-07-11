@@ -5,6 +5,7 @@ set(SOURCES
     Component/CameraComponent.cpp
     Component/ComponentReflection.cpp
     Component/FrustumComponent.cpp
+    Component/InputComponent.cpp
     Component/MeshComponent.cpp
     Component/PrefabComponent.cpp
     Component/SpriteComponent.cpp
@@ -24,6 +25,7 @@ set(HEADERS
     Component/CameraComponent.h
     Component/ComponentReflection.h
     Component/FrustumComponent.h
+    Component/InputComponent.h
     Component/MeshComponent.h
     Component/NameComponent.h
     Component/PrefabComponent.h

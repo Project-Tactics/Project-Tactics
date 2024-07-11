@@ -28,8 +28,18 @@ public:
 	virtual std::shared_ptr<BaseResource> getResource(HashId name) const = 0;
 	virtual std::shared_ptr<BaseResource> getResource(ResourceId id) const = 0;
 	virtual void forEachResource(const std::function<void(const BaseResource&)>& callback) const = 0;
+	virtual void forEachResource(const std::function<void(BaseResource&)>& callback) = 0;
 	virtual void registerResource(std::shared_ptr<BaseResource> resource) = 0;
 	virtual unsigned int getResourceCount() const = 0;
+
+	template<typename TResource> void forEachTResource(const std::function<void(const TResource&)>& callback) const {
+		forEachResource(
+			[&callback](const BaseResource& resource) { callback(static_cast<const TResource&>(resource)); });
+	}
+
+	template<typename TResource> void forEachTResource(const std::function<void(TResource&)>& callback) {
+		forEachResource([&callback](BaseResource& resource) { callback(static_cast<TResource&>(resource)); });
+	}
 };
 
 template<typename T>
@@ -93,6 +103,12 @@ public:
 	}
 
 	void forEachResource(const std::function<void(const BaseResource&)>& callback) const override final {
+		for (auto& [id, resource] : _resources) {
+			callback(*resource);
+		}
+	}
+
+	void forEachResource(const std::function<void(BaseResource&)>& callback) override final {
 		for (auto& [id, resource] : _resources) {
 			callback(*resource);
 		}

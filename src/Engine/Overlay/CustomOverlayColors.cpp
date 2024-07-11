@@ -19,6 +19,8 @@ ImVec4 CustomOverlayColors::Colors::ResourceColor;
 ImVec4 CustomOverlayColors::Colors::ShaderColor;
 ImVec4 CustomOverlayColors::Colors::SpriteSheetColor;
 ImVec4 CustomOverlayColors::Colors::TextureColor;
+ImVec4 CustomOverlayColors::Colors::InputActionColor;
+ImVec4 CustomOverlayColors::Colors::InputMapColor;
 
 void CustomOverlayColors::initialize(resource::IniFile& configFile) {
 	auto category = "imguiCustomColors";
@@ -35,6 +37,8 @@ void CustomOverlayColors::initialize(resource::IniFile& configFile) {
 	_colors.ShaderColor = configFile.get(category, "shaderColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.SpriteSheetColor = configFile.get(category, "spriteSheetColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.TextureColor = configFile.get(category, "textureColor", ImVec4{1, 0.5f, 0.5f, 1.f});
+	_colors.InputActionColor = configFile.get(category, "inputActionColor", ImVec4{1, 0.5f, 0.0f, 1.f});
+	_colors.InputMapColor = configFile.get(category, "inputMapColor", ImVec4{1, 0.0f, 0.5f, 1.f});
 }
 
 const CustomOverlayColors::Colors& CustomOverlayColors::getColors() {
@@ -45,6 +49,12 @@ const ImVec4& CustomOverlayColors::getResourceTypeColor(resource::ResourceType t
 	switch (type) {
 	case resource::ResourceType::IniFile: {
 		return _colors.IniFileColor;
+	}
+	case resource::ResourceType::InputAction: {
+		return _colors.InputActionColor;
+	}
+	case resource::ResourceType::InputMap: {
+		return _colors.InputMapColor;
 	}
 	case resource::ResourceType::Material: {
 		return _colors.MaterialColor;

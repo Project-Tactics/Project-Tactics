@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ClickActionValue.h"
 #include "ClickEnumTypes.h"
 
 #include <array>
@@ -17,14 +16,31 @@ using GestureId = uint16_t;
 
 const auto InvalidDeviceId = std::numeric_limits<uint8_t>::max();
 
-struct InputActionState {
+struct Vec3 {
+	float x{};
+	float y{};
+	float z{};
+};
+
+struct Vec2 {
+	float x{};
+	float y{};
+};
+
+union ActionValue {
+	float scalar;
+	Vec2 vec2;
+	Vec3 vec3{};
+};
+
+struct ActionState {
 	InputState state{};
 	ActionValue value{};
 };
 
 struct InputAction {
 	ActionType type{};
-	std::vector<InputActionState> states;
+	std::vector<ActionState> states;
 };
 
 struct Trigger {

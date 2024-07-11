@@ -75,12 +75,24 @@ void enableInputMap(MapId mapId);
 ActionId createAction(ActionType type);
 void destroyAction(ActionId actionId);
 
-std::tuple<InputState, bool> impulseState(ActionId id, PlayerId playerId);
-std::tuple<InputState, float> axis1DState(ActionId id, PlayerId playerId);
-std::tuple<InputState, Axis2D> axis2DState(ActionId id, PlayerId playerId);
-std::tuple<InputState, Axis3D> axis3DState(ActionId id, PlayerId playerId);
+const ActionState& actionState(ActionId id, PlayerId playerId);
+
+/*
+template<typename TValue = ActionValue> std::tuple<InputState, TValue> actionState(ActionId id, PlayerId playerId) {
+	auto [state, value] = _actionState(id, playerId);
+	if constexpr (std::is_same_v<TValue, float>) {
+		return {state, value.scalar};
+	} else if constexpr (std::is_same_v<TValue, Vec2>) {
+		return {state, value.vec2};
+	} else if constexpr (std::is_same_v<TValue, Vec3>) {
+		return {state, value.vec3};
+	} else {
+		return {state, value};
+	}
+}*/
 
 ActionType type(ActionId id);
+unsigned int actions();
 
 /*
  * Gesture

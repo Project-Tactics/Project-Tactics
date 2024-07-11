@@ -5,8 +5,7 @@
 namespace click {
 
 enum class ActionType {
-	Impulse,
-	Axis1D,
+	Scalar,
 	Axis2D,
 	Axis3D
 };

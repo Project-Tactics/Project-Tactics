@@ -1,5 +1,6 @@
 #include "DemoSimpleState.h"
 
+#include "../Component/FreeCamera.h"
 #include "../Component/RotateAroundPoint.h"
 #include "../Component/RotateItem.h"
 
@@ -9,10 +10,13 @@
 #include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
+#include <Libs/Input/InputSystem.h>
 #include <Libs/Rendering/GeometryBuilder.h>
 #include <Libs/Rendering/RenderSystem.h>
+#include <Libs/Resource/Input/InputMap.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Utility/Math.h>
+#include <Libs/Utility/Time/EngineTime.h>
 
 #include <glm/glm.hpp>
 
@@ -25,6 +29,7 @@ FsmAction DemoSimpleState::enter() {
 	_createQuads();
 	_createExtraRotatingQuads();
 	_createCustomQuadWithCustomResources();
+	_setupInputMap();
 	return FsmAction::none();
 }
 
@@ -40,8 +45,20 @@ FsmAction DemoSimpleState::update() {
 	auto& registry = getService<EntityComponentSystem>().sceneRegistry();
 	component::RotateItemSystem::update(registry);
 	component::RotateAroundPointSystem::update(registry);
-
+	component::FreeCameraSystem::update(registry);
 	return FsmAction::none();
+}
+
+void DemoSimpleState::_setupInputMap() {
+	auto& inputSystem = getService<InputSystem>();
+	auto& resourceSystem = getService<resource::ResourceSystem>();
+
+	auto inputMap = resourceSystem.getResource<resource::InputMap>("defaultInputMap"_id);
+	inputSystem.assignInputMap(inputMap, 0);
+	auto keyboard = inputSystem.getDeviceId(click::DeviceType::Keyboard, 0);
+	auto mouse = inputSystem.getDeviceId(click::DeviceType::Mouse, 0);
+	inputSystem.assignDevice(keyboard, 0);
+	inputSystem.assignDevice(mouse, 0);
 }
 
 FsmEventAction DemoSimpleState::onKeyPress(SDL_KeyboardEvent& event) {
@@ -58,7 +75,7 @@ void DemoSimpleState::_createCrate() {
 	auto& sceneSystem = getService<SceneSystem>();
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 
-	auto crate = sceneSystem.createEntity({40.0f, 5.0f, 0.0f}, "cube"_id, {"texturedUnlit"_id});
+	auto crate = sceneSystem.createEntity("crate"_id, {40.0f, 5.0f, 0.0f}, "cube"_id, {"texturedUnlit"_id});
 	crate.getComponent<component::Transform>().setScale({10, 10, 10});
 	crate.updateComponent<component::Mesh>([&resourceSystem](auto& mesh) {
 		mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("crate"_id));
@@ -68,7 +85,7 @@ void DemoSimpleState::_createCrate() {
 void DemoSimpleState::_createTeapot() {
 	auto& sceneSystem = getService<SceneSystem>();
 
-	auto teapot = sceneSystem.createEntity({0.0f, 0.0f, 0.0f}, "teapot"_id, {"coloredUnlit"_id});
+	auto teapot = sceneSystem.createEntity("teapot"_id, {0.0f, 0.0f, 0.0f}, "teapot"_id, {"coloredUnlit"_id});
 	auto& transform = teapot.getComponent<component::Transform>();
 	transform.setRotation(glm::radians(90.0f), Vector3::up);
 	transform.setScale({5, 5, 5});
@@ -88,7 +105,8 @@ void DemoSimpleState::_createQuads() {
 	const int height = 4;
 	for (auto x = -width / 2; x < width / 2; ++x) {
 		for (auto y = -height / 2; y < height / 2; ++y) {
-			auto quad = sceneSystem.createEntity({-50.0f + y * 20.f, 10.0f, x * 10.f},
+			auto quad = sceneSystem.createEntity(HashId::none,
+												 {-50.0f + y * 20.f, 10.0f, x * 10.f},
 												 "quad"_id,
 												 {"texturedUnlitWithAlpha"_id});
 			quad.getComponent<component::Transform>().setScale({15, 15, 15});
@@ -172,7 +190,8 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 	resourceSystem.loadExternalResource("CustomPack"_id, material);
 
 	// Now I can use the quad mesh by applying the custom material with a specialized fragment shader
-	auto customQuad = sceneSystem.createEntity({0.0f, 40.0f, 0.0f}, "customQuadMesh"_id, {"colorOnly"_id});
+	auto customQuad =
+		sceneSystem.createEntity("customQuad"_id, {0.0f, 40.0f, 0.0f}, "customQuadMesh"_id, {"colorOnly"_id});
 	customQuad.addComponent<component::RotateItem>(5.f, Vector3::forward);
 }
 

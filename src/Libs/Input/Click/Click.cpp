@@ -10,7 +10,7 @@ namespace click {
 Context* ctx = nullptr;
 
 auto _isValueZero(const ActionValue& value) {
-	return value.axis3D.x == 0.0f && value.axis3D.y == 0.0f && value.axis3D.z == 0.0f;
+	return value.vec3.x == 0.0f && value.vec3.y == 0.0f && value.vec3.z == 0.0f;
 }
 
 /*
@@ -214,9 +214,9 @@ void update(float deltaTime) {
 
 					if (allTriggersSucceded) {
 						state = InputState::Triggered;
-						value.axis3D.x += gesture.value.axis3D.x;
-						value.axis3D.y += gesture.value.axis3D.y;
-						value.axis3D.z += gesture.value.axis3D.z;
+						value.vec3.x += gesture.value.vec3.x;
+						value.vec3.y += gesture.value.vec3.y;
+						value.vec3.z += gesture.value.vec3.z;
 					}
 				}
 
@@ -336,30 +336,13 @@ ActionType type(ActionId id) {
 	return ctx->actions[id].type;
 }
 
-std::tuple<InputState, ActionValue> _inputState(ActionId actionId, ActionType type, PlayerId playerId) {
-	assert(type == ctx->actions[actionId].type);
+unsigned int actions() {
+	return static_cast<unsigned int>(ctx->actions.size());
+}
+
+const ActionState& actionState(ActionId actionId, PlayerId playerId) {
 	auto& state = ctx->actions[actionId].states[playerId];
-	return {state.state, state.value};
-}
-
-std::tuple<InputState, bool> impulseState(ActionId id, PlayerId playerId) {
-	auto [state, value] = _inputState(id, ActionType::Impulse, playerId);
-	return {state, value.axis1D != 0.0f};
-}
-
-std::tuple<InputState, float> axis1DState(ActionId id, PlayerId playerId) {
-	auto [state, value] = _inputState(id, ActionType::Axis1D, playerId);
-	return {state, value.axis1D};
-}
-
-std::tuple<InputState, Axis2D> axis2DState(ActionId id, PlayerId playerId) {
-	auto [state, value] = _inputState(id, ActionType::Axis2D, playerId);
-	return {state, value.axis2D};
-}
-
-std::tuple<InputState, Axis3D> axis3DState(ActionId id, PlayerId playerId) {
-	auto [state, value] = _inputState(id, ActionType::Axis3D, playerId);
-	return {state, value.axis3D};
+	return state;
 }
 
 /*
@@ -466,7 +449,7 @@ void updateMouse(DeviceId mouseId, float x, float y) {
 
 	processInputEvent({Gesture::MouseX, mouseId, xRel});
 	processInputEvent({Gesture::MouseY, mouseId, yRel});
-	processInputEvent({Gesture::MouseXY, mouseId, {.axis2D = {xRel, yRel}}});
+	processInputEvent({Gesture::MouseXY, mouseId, {.vec2 = {xRel, yRel}}});
 }
 
 void updateGamepadAxis(DeviceId gamepadId, Gesture axis, ActionValue& value) {

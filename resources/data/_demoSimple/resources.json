@@ -2,7 +2,7 @@
     "demoSimple": {
         "texture": {
             "tacticsIcon": {
-                "path": "_demoSimple/tactics_icon.png"
+                "path": "_demoSimple/tacticsIcon.png"
             },
             "crate": {
                 "path": "_demoSimple/crate.jpg"
@@ -25,6 +25,191 @@
             },
             "rotateAroundCamera": {
                 "path": "_demoSimple/rotateAroundCamera.prefab"
+            }
+        },
+        "inputAction": {
+            "move": {
+                "type": "axis2d"
+            },
+            "cameraMove": {
+                "type": "axis2d"
+            },
+            "cameraLook": {
+                "type": "axis2d"
+            }
+        },
+        "inputMap": {
+            "defaultInputMap": {
+                "bindings": [
+                    {
+                        "action": "cameraLook",
+                        "gesture": "mouseXY",
+                        "triggers": [
+                            {
+                                "type": "continuous",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": []
+                    },
+                    {
+                        "action": "move",
+                        "gesture": "keyD",
+                        "triggers": [
+                            {
+                                "type": "down",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": []
+                    },
+                    {
+                        "action": "move",
+                        "gesture": "keyA",
+                        "triggers": [
+                            {
+                                "type": "down",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": [
+                            {
+                                "type": "negate"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "move",
+                        "gesture": "keyW",
+                        "triggers": [
+                            {
+                                "type": "down",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": [
+                            {
+                                "type": "toAxis",
+                                "axis": "yzx"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "move",
+                        "gesture": "keyS",
+                        "triggers": [
+                            {
+                                "type": "down",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": [
+                            {
+                                "type": "toAxis",
+                                "axis": "yzx"
+                            },
+                            {
+                                "type": "negate"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "cameraMove",
+                        "gesture": "keyD",
+                        "triggers": [
+                            {
+                                "type": "down",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": []
+                    },
+                    {
+                        "action": "cameraMove",
+                        "gesture": "keyA",
+                        "triggers": [
+                            {
+                                "type": "down",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": [
+                            {
+                                "type": "negate"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "cameraMove",
+                        "gesture": "keyW",
+                        "triggers": [
+                            {
+                                "type": "down",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": [
+                            {
+                                "type": "toAxis",
+                                "axis": "zxy"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "cameraMove",
+                        "gesture": "keyS",
+                        "triggers": [
+                            {
+                                "type": "down",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": [
+                            {
+                                "type": "toAxis",
+                                "axis": "zxy"
+                            },
+                            {
+                                "type": "negate"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "cameraMove",
+                        "gesture": "keyQ",
+                        "triggers": [
+                            {
+                                "type": "down",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": [
+                            {
+                                "type": "toAxis",
+                                "axis": "yzx"
+                            },
+                            {
+                                "type": "negate"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "cameraMove",
+                        "gesture": "keyE",
+                        "triggers": [
+                            {
+                                "type": "down",
+                                "actuationThreshold": 0.5
+                            }
+                        ],
+                        "modifiers": [
+                            {
+                                "type": "toAxis",
+                                "axis": "yzx"
+                            }
+                        ]
+                    }
+                ]
             }
         }
     }

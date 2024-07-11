@@ -6,6 +6,7 @@
 #include <fmt/color.h>
 #include <fmt/core.h>
 #include <memory>
+#include <nlohmann/detail/exceptions.hpp>
 #include <string_view>
 
 namespace tactics {
@@ -106,6 +107,7 @@ public:
 	}
 
 	static void exception(const std::exception& exception);
+	static void exception(const nlohmann::detail::exception& exception);
 	static void exception(const Exception& exception);
 
 	static void log(const LogCategory& category, LogLevel level, fmt::string_view fmt, fmt::format_args args);

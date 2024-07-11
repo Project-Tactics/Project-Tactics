@@ -12,6 +12,7 @@ public:
 	static const ResourceType TYPE = ResourceType::InputAction;
 
 	click::ActionId actionId;
+	std::vector<click::ActionState> states;
 };
 
 } // namespace tactics::resource

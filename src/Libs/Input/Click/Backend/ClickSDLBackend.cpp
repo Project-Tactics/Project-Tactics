@@ -351,31 +351,31 @@ void shutdownSdlBackend() {
 
 void _processMouseButtonEvent(float axisValue, Uint8 button) {
 	auto mouseGesture = _toMouseGesture(button);
-	auto value = ActionValue{.axis1D = axisValue};
+	auto value = ActionValue{.scalar = axisValue};
 	click::processInputEvent({mouseGesture, _mouseDeviceId(), value});
 }
 
 void _processKeyboardButtonEvent(float axisValue, SDL_Keycode keyCode, Uint8 repeat) {
 	if (repeat == 0) {
 		auto key = _toKey(keyCode);
-		auto value = ActionValue{.axis1D = axisValue};
+		auto value = ActionValue{.scalar = axisValue};
 		click::processInputEvent({key, _keyboardDeviceId(), value});
 	}
 }
 
 void _processMouseMotionEvent(float xRel, float yRel) {
 	auto mouseGesture = Gesture::MouseXY;
-	auto axis2D = ActionValue{.axis2D = {xRel, yRel}};
+	auto axis2D = ActionValue{.vec2 = {xRel, yRel}};
 	click::processInputEvent({mouseGesture, _mouseDeviceId(), axis2D});
 
 	if (xRel != 0.0f) {
-		auto axis1D = ActionValue{.axis1D = {xRel}};
+		auto axis1D = ActionValue{.scalar = {xRel}};
 		mouseGesture = Gesture::MouseX;
 		click::processInputEvent({mouseGesture, _mouseDeviceId(), axis1D});
 	}
 
 	if (yRel != 0.0f) {
-		auto axis1D = ActionValue{.axis1D = {yRel}};
+		auto axis1D = ActionValue{.scalar = {yRel}};
 		mouseGesture = Gesture::MouseY;
 		click::processInputEvent({mouseGesture, _mouseDeviceId(), axis1D});
 	}
@@ -400,12 +400,12 @@ void processSdlEvents(SDL_Event& event) {
 	}
 	case SDL_CONTROLLERBUTTONDOWN: {
 		auto gamepadGesture = _toGamepadGesture(static_cast<SDL_GameControllerButton>(event.cbutton.button));
-		processInputEvent({gamepadGesture, *_gamepadDeviceId(event.cbutton.which), {.axis1D = 1.0f}});
+		processInputEvent({gamepadGesture, *_gamepadDeviceId(event.cbutton.which), {.scalar = 1.0f}});
 		break;
 	}
 	case SDL_CONTROLLERBUTTONUP: {
 		auto gamepadGesture = _toGamepadGesture(static_cast<SDL_GameControllerButton>(event.cbutton.button));
-		processInputEvent({gamepadGesture, *_gamepadDeviceId(event.cbutton.which), {.axis1D = 0.0f}});
+		processInputEvent({gamepadGesture, *_gamepadDeviceId(event.cbutton.which), {.scalar = 0.0f}});
 		break;
 	}
 	case SDL_CONTROLLERAXISMOTION: {
@@ -452,12 +452,12 @@ void updateSdlBackend() {
 		if (gameController) {
 			auto x = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTX);
 			auto y = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTY);
-			auto value = ActionValue{.axis2D = {static_cast<float>(x) / 32767.0f, static_cast<float>(y) / 32767.0f}};
+			auto value = ActionValue{.vec2 = {static_cast<float>(x) / 32767.0f, static_cast<float>(y) / 32767.0f}};
 			click::updateGamepadAxis(gamepadDeviceId, Gesture::AxisLeftXY, value);
 
 			x = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTX);
 			y = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTY);
-			value = ActionValue{.axis2D = {static_cast<float>(x) / 32767.0f, static_cast<float>(y) / 32767.0f}};
+			value = ActionValue{.vec2 = {static_cast<float>(x) / 32767.0f, static_cast<float>(y) / 32767.0f}};
 			click::updateGamepadAxis(gamepadDeviceId, Gesture::AxisRightXY, value);
 		}
 	}

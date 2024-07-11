@@ -3,8 +3,7 @@
 namespace click {
 
 bool _isOverActuationThreshold(float actuationThreshold, const ActionValue& value) {
-	auto magnitudeSquared =
-		value.axis3D.x * value.axis3D.x + value.axis3D.y * value.axis3D.y + value.axis3D.z * value.axis3D.z;
+	auto magnitudeSquared = value.vec3.x * value.vec3.x + value.vec3.y * value.vec3.y + value.vec3.z * value.vec3.z;
 	return magnitudeSquared >= actuationThreshold * actuationThreshold;
 }
 

@@ -6,19 +6,19 @@ set(SOURCES
         Click/Click.cpp
         Click/ClickModifiers.cpp
         Click/ClickTriggers.cpp
+        InputSerialization.cpp
         InputSystem.cpp)
 
 set(HEADERS
         Click/Backend/ClickSDLBackend.h
         Click/Click.h
-        Click/ClickActionValue.h
         Click/ClickEnumTypes.h
         Click/ClickEvents.h
         Click/ClickInputTypes.h
         Click/ClickModifiers.h
         Click/ClickTriggers.h
-        InputSystem.h
-        )
+        InputSerialization.h
+        InputSystem.h)
 
 add_library(libs_input STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_input PRIVATE libs_utility sdl2_wrapper)

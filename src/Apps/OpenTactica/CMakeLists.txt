@@ -12,6 +12,7 @@ set(SOURCES
     States/UnloadState.cpp
     Component/BattleCamera.cpp
     Component/CharacterFacing.cpp
+    Component/FreeCamera.cpp
     Component/RotateAroundPoint.cpp
     Component/RotateItem.cpp)
     
@@ -25,6 +26,7 @@ set(HEADERS
     States/UnloadState.h
     Component/BattleCamera.h
     Component/CharacterFacing.h
+    Component/FreeCamera.h
     Component/RotateAroundPoint.h
     Component/RotateItem.h)
 

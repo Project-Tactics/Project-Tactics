@@ -158,13 +158,14 @@ Entity SceneSystem::createCamera(const HashId& name,
 	return entity;
 }
 
-Entity SceneSystem::createEntity(const glm::vec3& position,
+Entity SceneSystem::createEntity(const HashId& name,
+								 const glm::vec3& position,
 								 const HashId& meshName,
 								 const std::vector<HashId>& materials,
 								 const glm::quat& rotation,
 								 const glm::vec3& scale) {
 	using namespace component;
-	auto entity = Entity::create(""_id, &_ecs.sceneRegistry());
+	auto entity = Entity::create(name, &_ecs.sceneRegistry());
 	auto& transform = entity.addComponent<Transform>();
 	transform.setPosition(position);
 	transform.setRotation(rotation);

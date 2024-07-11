@@ -76,7 +76,7 @@ BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) const
 }
 
 BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) {
-	return const_cast<ResourceSystem*>(this)->getManager(resourceType);
+	return *_getManager(resourceType);
 }
 
 std::shared_ptr<BaseResource> ResourceSystem::getResource(ResourceType resourceType, const HashId& name) const {

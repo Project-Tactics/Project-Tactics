@@ -49,6 +49,8 @@ public:
 
 template<typename TResource> class Resource : public BaseResource {
 public:
+	using Ptr = std::shared_ptr<TResource>;
+
 	explicit Resource(HashId name) : BaseResource(name, TResource::TYPE) {}
 
 	Resource() : BaseResource(""_id, TResource::TYPE) {}

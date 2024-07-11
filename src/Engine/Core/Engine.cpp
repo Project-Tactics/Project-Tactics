@@ -41,10 +41,10 @@
 namespace tactics {
 
 void Engine::_run(Application& application) {
+	Log::init(LogLevel::Trace);
+	LOG_TRACE(Log::Engine, "Engine Initialization Started");
+	auto engine = Engine();
 	try {
-		Log::init(LogLevel::Trace);
-		LOG_TRACE(Log::Engine, "Engine Initialization Started");
-		auto engine = Engine();
 		engine._initialize(application);
 		LOG_INFO(Log::Engine, "Engine Initialized");
 		engine._internalRun();
@@ -52,6 +52,8 @@ void Engine::_run(Application& application) {
 		engine._shutdown();
 		LOG_TRACE(Log::Engine, "Engine Shutdown Ended");
 	} catch (Exception& exception) {
+		LOG_EXCEPTION(exception);
+	} catch (nlohmann::detail::exception& exception) {
 		LOG_EXCEPTION(exception);
 	} catch (std::exception& exception) {
 		LOG_EXCEPTION(exception);
@@ -90,7 +92,7 @@ void Engine::_initialize(Application& application) {
 	_resourceSystem->loadExternalResource("_internalCustomPack"_id, resource::Texture::createNullTexture());
 
 	LOG_TRACE(Log::Engine, "InputSystem Initialization");
-	_inputSystem = std::make_unique<InputSystem>(configFile);
+	_inputSystem = std::make_unique<InputSystem>(configFile, *_resourceSystem);
 
 	LOG_TRACE(Log::Engine, "EventSystem Initialization");
 	_eventsSystem = std::make_unique<EventsSystem>(*_inputSystem);
@@ -110,9 +112,9 @@ void Engine::_internalRun() {
 	_timer.reset(TimeUtility::nowInSeconds());
 	while (!_fsm->hasReachedExitState()) {
 		_timer.update(TimeUtility::nowInSeconds());
+		_eventsSystem->update();
+		_inputSystem->update();
 		while (_timer.hasConsumedAllTicks()) {
-			_eventsSystem->update();
-			_inputSystem->update();
 			_fsm->update();
 			_updateCommonComponentSystems();
 			_timer.consumeTick();
