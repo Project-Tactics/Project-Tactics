@@ -13,6 +13,24 @@ auto _isValueZero(const ActionValue& value) {
 	return value.vec3.x == 0.0f && value.vec3.y == 0.0f && value.vec3.z == 0.0f;
 }
 
+float _magnitude(const ActionValue& value) {
+	return sqrtf(value.vec3.x * value.vec3.x + value.vec3.y * value.vec3.y + value.vec3.z * value.vec3.z);
+}
+
+float _magnitudeSquared(const ActionValue& value) {
+	return value.vec3.x * value.vec3.x + value.vec3.y * value.vec3.y + value.vec3.z * value.vec3.z;
+}
+
+void _normalize(ActionValue& value) {
+	auto magnitude = _magnitude(value);
+	if (magnitude == 0.0f) {
+		return;
+	}
+	value.vec3.x /= magnitude;
+	value.vec3.y /= magnitude;
+	value.vec3.z /= magnitude;
+}
+
 /*
  * Player
  */
@@ -136,7 +154,7 @@ void releaseDevice(PlayerId playerId, DeviceId deviceId) {
  * Core
  */
 
-void initialize(unsigned int maxPlayers) {
+void initialize(unsigned int maxPlayers, float screenWidth, float screenHeight) {
 	ctx = new Context{};
 	ctx->actions.reserve(32);
 	ctx->players.resize(maxPlayers);
@@ -145,10 +163,22 @@ void initialize(unsigned int maxPlayers) {
 	ctx->devices.gamepads.reserve(8);
 	ctx->devices.touches.reserve(8);
 	ctx->devices.devices.fill({DeviceType::None, InvalidDeviceId, nullptr});
+	ctx->_screenWidth = screenWidth;
+	ctx->_screenHeight = screenHeight;
+}
+
+void changeScreenSize(float width, float height) {
+	ctx->_screenHeight = height;
+	ctx->_screenWidth = width;
 }
 
 Context& getContext() {
 	return *ctx;
+}
+
+void shutdown() {
+	delete ctx;
+	ctx = nullptr;
 }
 
 void _processTrigger(Trigger& trigger, const ActionValue& value) {
@@ -178,7 +208,6 @@ TriggerState _updateTrigger(Trigger& trigger, float deltaTime) {
 void _processModifier(Modifier& modifier, ActionValue& value) {
 	switch (modifier.type) {
 	case ModifierType::Negate: click::negate::modify(modifier, value); break;
-	case ModifierType::ToAxis: click::toAxis::modify(modifier, value); break;
 	default					 : assert(false); break;
 	}
 }
@@ -196,36 +225,43 @@ void update(float deltaTime) {
 			for (auto& actionMap : inputMap.actionMaps) {
 				auto state = InputState::None;
 				auto value = ActionValue{};
-				for (auto& gesture : actionMap.gestures) {
-					if (gesture.triggers.empty()) {
-						if (!_isValueZero(gesture.value)) {
+				for (auto& binding : actionMap.bindings) {
+					if (binding.triggers.empty()) {
+						if (!_isValueZero(binding.value)) {
 							state = InputState::Triggered;
-							value = gesture.value;
-							gesture.value = ActionValue{};
+							value = binding.value;
+							binding.value = ActionValue{};
 						}
 						break;
 					}
 
 					auto allTriggersSucceded = true;
-					for (auto& trigger : gesture.triggers) {
+					for (auto& trigger : binding.triggers) {
 						auto triggerState = _updateTrigger(trigger, deltaTime);
 						allTriggersSucceded &= triggerState == TriggerState::Triggered;
 					}
 
 					if (allTriggersSucceded) {
 						state = InputState::Triggered;
-						value.vec3.x += gesture.value.vec3.x;
-						value.vec3.y += gesture.value.vec3.y;
-						value.vec3.z += gesture.value.vec3.z;
+						value.vec3.x += binding.value.vec3.x;
+						value.vec3.y += binding.value.vec3.y;
+						value.vec3.z += binding.value.vec3.z;
 					}
 				}
 
-				auto& actionState = ctx->actions[actionMap.actionId].states[i];
+				auto& action = ctx->actions[actionMap.actionId];
+				auto& actionState = action.states[i];
 				if (actionState.state == InputState::Triggered) {
+					if (action.normalized) {
+						_normalize(actionState.value);
+					}
 					continue;
 				}
 				actionState.state = state;
 				actionState.value = value;
+				if (action.normalized) {
+					_normalize(actionState.value);
+				}
 			}
 		}
 		++i;
@@ -254,10 +290,6 @@ Trigger continuousTrigger(float actuationThreshold) {
 
 Modifier negateModifier() {
 	return Modifier{ModifierType::Negate, {}};
-}
-
-Modifier toAxisModifier(Axis axis) {
-	return Modifier{ModifierType::ToAxis, {.toAxis = axis}};
 }
 
 /*
@@ -305,7 +337,7 @@ void enableInputMap(MapId mapId) {
  * Action
  */
 
-ActionId createAction(ActionType type) {
+ActionId createAction(ActionType type, bool normalized) {
 	ActionId actionId = 0;
 	if (ctx->_freeActionIndices.empty()) {
 		actionId = static_cast<unsigned int>(ctx->actions.size());
@@ -316,6 +348,7 @@ ActionId createAction(ActionType type) {
 	}
 	auto& action = ctx->actions[actionId];
 	action.type = type;
+	action.normalized = normalized;
 	action.states.resize(ctx->players.size());
 	return actionId++;
 }
@@ -346,14 +379,14 @@ const ActionState& actionState(ActionId actionId, PlayerId playerId) {
 }
 
 /*
- * Gesture
+ * InputCode
  */
 
-GestureId _bindGesture(InputMap& inputMap,
-					   ActionId actionId,
-					   Gesture gesture,
-					   std::vector<Trigger> triggers,
-					   std::vector<Modifier> modifiers) {
+BindingId _bind(InputMap& inputMap,
+				ActionId actionId,
+				Gesture gesture,
+				std::vector<Trigger> triggers,
+				std::vector<Modifier> modifiers) {
 	auto itr = std::ranges::find_if(inputMap.actionMaps,
 									[actionId](const ActionMapping& item) { return item.actionId == actionId; });
 	if (itr == inputMap.actionMaps.end()) {
@@ -361,73 +394,71 @@ GestureId _bindGesture(InputMap& inputMap,
 		itr = inputMap.actionMaps.end() - 1;
 	}
 
-	static GestureId gestureId = 0;
-	itr->gestures.emplace_back(gestureId, gesture, std::move(triggers), std::move(modifiers));
-	return gestureId++;
+	static BindingId id = 0;
+	itr->bindings.emplace_back(id, std::move(gesture), std::move(triggers), std::move(modifiers));
+	return id++;
 }
 
-DeviceGesture* _getGesture(InputMap* inputMap, GestureId gestureId) {
+Binding* _getBinding(InputMap* inputMap, BindingId id) {
 	for (auto& actionMap : inputMap->actionMaps) {
-		for (auto& gesture : actionMap.gestures) {
-			if (gesture.gestureId == gestureId) {
-				return &gesture;
+		for (auto& binding : actionMap.bindings) {
+			if (binding.id == id) {
+				return &binding;
 			}
 		}
 	}
 	return nullptr;
 }
 
-DeviceGesture* _getGesture(MapId inputMapId, GestureId gestureId) {
+Binding* _getBinding(MapId inputMapId, BindingId id) {
 	auto inputMap = _getInputMap(inputMapId);
 	assert(inputMap != nullptr);
-	return _getGesture(inputMap, gestureId);
+	return _getBinding(inputMap, id);
 }
 
-GestureId bindGesture(MapId inputMapId,
-					  ActionId actionId,
-					  Gesture gesture,
-					  std::vector<Trigger> triggers,
-					  std::vector<Modifier> modifiers) {
+BindingId bind(MapId inputMapId,
+			   ActionId actionId,
+			   Gesture gesture,
+			   std::vector<Trigger> triggers,
+			   std::vector<Modifier> modifiers) {
 	auto inputMap = _getInputMap(inputMapId);
 	assert(inputMap != nullptr);
-	return _bindGesture(*inputMap, actionId, gesture, std::move(triggers), std::move(modifiers));
+	return _bind(*inputMap, actionId, std::move(gesture), std::move(triggers), std::move(modifiers));
 }
 
-void rebindGesture(MapId inputMapId,
-				   GestureId gestureId,
-				   Gesture gesture,
-				   std::vector<Trigger> triggers,
-				   std::vector<Modifier> modifiers) {
-	auto gestureToChange = _getGesture(inputMapId, gestureId);
-	assert(gestureToChange != nullptr);
-	gestureToChange->gesture = gesture;
-	gestureToChange->triggers = std::move(triggers);
-	gestureToChange->modifiers = std::move(modifiers);
-	gestureToChange->value = ActionValue{};
+void rebind(MapId inputMapId,
+			BindingId id,
+			Gesture gesture,
+			std::vector<Trigger> triggers,
+			std::vector<Modifier> modifiers) {
+	auto binding = _getBinding(inputMapId, id);
+	assert(binding != nullptr);
+	binding->gesture = std::move(gesture);
+	binding->triggers = std::move(triggers);
+	binding->modifiers = std::move(modifiers);
+	binding->value = ActionValue{};
 }
 
-void rebindGesture(MapId inputMapId, GestureId gestureId, Gesture gesture, std::vector<Trigger> triggers) {
-	auto gestureToChange = _getGesture(inputMapId, gestureId);
-	assert(gestureToChange != nullptr);
-	gestureToChange->gesture = gesture;
-	gestureToChange->triggers = std::move(triggers);
-	gestureToChange->value = ActionValue{};
+void rebind(MapId inputMapId, BindingId id, Gesture gesture, std::vector<Trigger> triggers) {
+	auto binding = _getBinding(inputMapId, id);
+	assert(binding != nullptr);
+	binding->gesture = std::move(gesture);
+	binding->triggers = std::move(triggers);
+	binding->value = ActionValue{};
 }
 
-void rebindGesture(MapId inputMapId, GestureId gestureId, Gesture gesture) {
-	auto gestureToChange = _getGesture(inputMapId, gestureId);
-	assert(gestureToChange != nullptr);
-	gestureToChange->gesture = gesture;
-	gestureToChange->value = ActionValue{};
+void rebind(MapId inputMapId, BindingId id, Gesture gesture) {
+	auto binding = _getBinding(inputMapId, id);
+	assert(binding != nullptr);
+	binding->gesture = std::move(gesture);
+	binding->value = ActionValue{};
 }
 
-void unbindGesture(GestureId gestureId) {
+void unbind(BindingId id) {
 	for (auto& player : ctx->players) {
 		for (auto& inputMap : player.inputMaps) {
 			for (auto& actionMap : inputMap.actionMaps) {
-				if (std::erase_if(actionMap.gestures, [gestureId](const DeviceGesture& gesture) {
-						return gesture.gestureId == gestureId;
-					}) > 0) {
+				if (std::erase_if(actionMap.bindings, [id](auto& binding) { return binding.id == id; }) > 0) {
 					return;
 				}
 			}
@@ -440,6 +471,8 @@ void unbindGesture(GestureId gestureId) {
  */
 
 void updateMouse(DeviceId mouseId, float x, float y) {
+	x /= ctx->_screenWidth;
+	y /= ctx->_screenHeight;
 	auto xRel = x - ctx->mouseState.x;
 	auto yRel = y - ctx->mouseState.y;
 	ctx->mouseState.xRel = xRel;
@@ -447,13 +480,89 @@ void updateMouse(DeviceId mouseId, float x, float y) {
 	ctx->mouseState.x = x;
 	ctx->mouseState.y = y;
 
-	processInputEvent({Gesture::MouseX, mouseId, xRel});
-	processInputEvent({Gesture::MouseY, mouseId, yRel});
-	processInputEvent({Gesture::MouseXY, mouseId, {.vec2 = {xRel, yRel}}});
+	processInputEvent({InputCode::MouseX, mouseId, xRel});
+	processInputEvent({InputCode::MouseY, mouseId, yRel});
+	processInputEvent({InputCode::MouseXY, mouseId, {.vec2 = {xRel, yRel}}});
 }
 
-void updateGamepadAxis(DeviceId gamepadId, Gesture axis, ActionValue& value) {
+void updateGamepadAxis(DeviceId gamepadId, InputCode axis, const ActionValue& value) {
 	processInputEvent({axis, gamepadId, value});
+}
+
+void _processInputEvent(Binding& binding, const InputEvent&) {
+	for (auto& modifier : binding.modifiers) {
+		_processModifier(modifier, binding.value);
+	}
+	for (auto& trigger : binding.triggers) {
+		_processTrigger(trigger, binding.value);
+	}
+}
+
+void _processInputEvent(Binding& binding, GestureSimple& gesture, const InputEvent& event) {
+	if (event.inputCode == gesture.input) {
+		binding.value = event.value;
+	} else {
+		return;
+	}
+	_processInputEvent(binding, event);
+}
+
+void _processInputEvent(Binding& binding, Gesture2D& gesture, const InputEvent& event) {
+	if (event.inputCode == gesture.x) {
+		binding.value.vec3.x = event.value.scalar;
+	} else if (event.inputCode == gesture.y) {
+		binding.value.vec3.y = event.value.scalar;
+	} else {
+		return;
+	}
+	_processInputEvent(binding, event);
+}
+
+void _processInputEvent(Binding& binding, Gesture3D& gesture, const InputEvent& event) {
+	if (event.inputCode == gesture.x) {
+		binding.value.vec3.x = event.value.scalar;
+	} else if (event.inputCode == gesture.y) {
+		binding.value.vec3.y = event.value.scalar;
+	} else if (event.inputCode == gesture.z) {
+		binding.value.vec3.z = event.value.scalar;
+	} else {
+		return;
+	}
+	_processInputEvent(binding, event);
+}
+
+void _processInputEvent(Binding& binding, GestureDirectional2D& gesture, const InputEvent& event) {
+	if (event.inputCode == gesture.left) {
+		binding.value.vec3.x = -event.value.scalar;
+	} else if (event.inputCode == gesture.right) {
+		binding.value.vec3.x = event.value.scalar;
+	} else if (event.inputCode == gesture.up) {
+		binding.value.vec3.y = event.value.scalar;
+	} else if (event.inputCode == gesture.down) {
+		binding.value.vec3.y = -event.value.scalar;
+	} else {
+		return;
+	}
+	_processInputEvent(binding, event);
+}
+
+void _processInputEvent(Binding& binding, GestureDirectional3D& gesture, const InputEvent& event) {
+	if (event.inputCode == gesture.left) {
+		binding.value.vec3.x = -event.value.scalar;
+	} else if (event.inputCode == gesture.right) {
+		binding.value.vec3.x = event.value.scalar;
+	} else if (event.inputCode == gesture.up) {
+		binding.value.vec3.y = event.value.scalar;
+	} else if (event.inputCode == gesture.down) {
+		binding.value.vec3.y = -event.value.scalar;
+	} else if (event.inputCode == gesture.forward) {
+		binding.value.vec3.z = event.value.scalar;
+	} else if (event.inputCode == gesture.back) {
+		binding.value.vec3.z = -event.value.scalar;
+	} else {
+		return;
+	}
+	_processInputEvent(binding, event);
 }
 
 void processInputEvent(const InputEvent& event) {
@@ -469,16 +578,8 @@ void processInputEvent(const InputEvent& event) {
 			}
 
 			for (auto& actionMap : inputMap.actionMaps) {
-				for (auto& gesture : actionMap.gestures) {
-					if (gesture.gesture == event.gesture) {
-						gesture.value = event.value;
-						for (auto& modifier : gesture.modifiers) {
-							_processModifier(modifier, gesture.value);
-						}
-						for (auto& trigger : gesture.triggers) {
-							_processTrigger(trigger, gesture.value);
-						}
-					}
+				for (auto& binding : actionMap.bindings) {
+					std::visit([&](auto&& arg) { _processInputEvent(binding, arg, event); }, binding.gesture);
 				}
 			}
 		}

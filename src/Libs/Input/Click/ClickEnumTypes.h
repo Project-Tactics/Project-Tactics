@@ -51,7 +51,7 @@ enum class Axis {
 	ZXY
 };
 
-enum class Gesture {
+enum class InputCode {
 	Unknown,
 	// Mouse
 	LeftButton,

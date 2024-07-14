@@ -8,8 +8,10 @@
  */
 namespace click {
 
-void initialize(unsigned int maxPlayers);
+void initialize(unsigned int maxPlayers, float screenWidth, float screenHeight);
+void changeScreenSize(float width, float height);
 void update(float deltaTime);
+void shutdown();
 
 /*
  * Player
@@ -47,6 +49,7 @@ void releaseDevice(PlayerId playerId, DeviceId deviceId);
 /*
  * Trigger Creation
  */
+
 Trigger downTrigger(float actuationThreshold);
 Trigger pressTrigger(float actuationThreshold);
 Trigger releaseTrigger(float actuationThreshold);
@@ -56,8 +59,8 @@ Trigger continuousTrigger(float actuationThreshold);
 /*
  * Modifier Creation
  */
+
 Modifier negateModifier();
-Modifier toAxisModifier(Axis axis);
 
 /*
  * Mapping
@@ -72,45 +75,31 @@ void enableInputMap(MapId mapId);
  * Action
  */
 
-ActionId createAction(ActionType type);
+ActionId createAction(ActionType type, bool normalized);
 void destroyAction(ActionId actionId);
 
 const ActionState& actionState(ActionId id, PlayerId playerId);
-
-/*
-template<typename TValue = ActionValue> std::tuple<InputState, TValue> actionState(ActionId id, PlayerId playerId) {
-	auto [state, value] = _actionState(id, playerId);
-	if constexpr (std::is_same_v<TValue, float>) {
-		return {state, value.scalar};
-	} else if constexpr (std::is_same_v<TValue, Vec2>) {
-		return {state, value.vec2};
-	} else if constexpr (std::is_same_v<TValue, Vec3>) {
-		return {state, value.vec3};
-	} else {
-		return {state, value};
-	}
-}*/
 
 ActionType type(ActionId id);
 unsigned int actions();
 
 /*
- * Gesture
+ * InputCode
  */
 
-GestureId bindGesture(MapId inputMapId,
-					  ActionId actionId,
-					  Gesture gesture,
-					  std::vector<Trigger> triggers,
-					  std::vector<Modifier> modifiers);
-void rebindGesture(MapId inputMapId,
-				   GestureId gestureId,
-				   Gesture gesture,
-				   std::vector<Trigger> triggers,
-				   std::vector<Modifier> modifiers);
-void rebindGesture(MapId inputMapId, GestureId gestureId, Gesture gesture, std::vector<Trigger> triggers);
-void rebindGesture(MapId inputMapId, GestureId gestureId, Gesture gesture);
-void unbindGesture(GestureId gestureId);
+BindingId bind(MapId inputMapId,
+			   ActionId actionId,
+			   Gesture gesture,
+			   std::vector<Trigger> triggers,
+			   std::vector<Modifier> modifiers);
+void rebind(MapId inputMapId,
+			BindingId id,
+			Gesture gesture,
+			std::vector<Trigger> triggers,
+			std::vector<Modifier> modifiers);
+void rebind(MapId inputMapId, BindingId id, Gesture gesture, std::vector<Trigger> triggers);
+void rebind(MapId inputMapId, BindingId id, Gesture gesture);
+void unbind(BindingId id);
 
 /*
  * Event Processing
@@ -122,6 +111,6 @@ void processInputEvent(const InputEvent& event);
  * Input Processing
  */
 void updateMouse(DeviceId mouseId, float x, float y);
-void updateGamepadAxis(DeviceId gamepadId, Gesture axis, ActionValue& value);
+void updateGamepadAxis(DeviceId gamepadId, InputCode axis, const ActionValue& value);
 
 } // namespace click

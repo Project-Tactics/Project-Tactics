@@ -5,7 +5,7 @@
 namespace click {
 
 struct InputEvent {
-	Gesture gesture{};
+	InputCode inputCode{};
 	DeviceId deviceId{};
 	ActionValue value{};
 };

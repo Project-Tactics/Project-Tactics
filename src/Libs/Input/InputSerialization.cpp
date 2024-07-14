@@ -1,5 +1,7 @@
 #include "InputSerialization.h"
 
+#include <Libs/Utility/Log/Log.h>
+
 namespace tactics {
 
 std::string Str<click::DeviceType>::to(click::DeviceType deviceType) {
@@ -49,7 +51,26 @@ void from_json(const nlohmann::json& json, Modifier& modifier) {
 	modifier.type = json["type"];
 	switch (modifier.type) {
 	case ModifierType::Negate: break;
-	case ModifierType::ToAxis: modifier.data.toAxis.axis = json["axis"]; break;
+	}
+}
+
+void to_json(nlohmann::json&, const Gesture&) {}
+
+void from_json(const nlohmann::json& json, Gesture& gesture) {
+	std::string type = json["type"];
+	auto& data = json["data"];
+	if (type == "simple") {
+		gesture = data.get<GestureSimple>();
+	} else if (type == "2d") {
+		gesture = data.get<Gesture2D>();
+	} else if (type == "3d") {
+		gesture = data.get<Gesture3D>();
+	} else if (type == "dir2D") {
+		gesture = data.get<GestureDirectional2D>();
+	} else if (type == "dir3D") {
+		gesture = data.get<GestureDirectional3D>();
+	} else {
+		LOG_ERROR(tactics::Log::Input, "Unknown gesture type: {}", type);
 	}
 }
 

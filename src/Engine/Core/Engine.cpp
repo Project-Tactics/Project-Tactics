@@ -92,7 +92,7 @@ void Engine::_initialize(Application& application) {
 	_resourceSystem->loadExternalResource("_internalCustomPack"_id, resource::Texture::createNullTexture());
 
 	LOG_TRACE(Log::Engine, "InputSystem Initialization");
-	_inputSystem = std::make_unique<InputSystem>(configFile, *_resourceSystem);
+	_inputSystem = std::make_unique<InputSystem>(configFile, *_resourceSystem, _renderSystem->getWindowSize());
 
 	LOG_TRACE(Log::Engine, "EventSystem Initialization");
 	_eventsSystem = std::make_unique<EventsSystem>(*_inputSystem);

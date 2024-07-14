@@ -4,6 +4,7 @@
 
 #include <array>
 #include <tuple>
+#include <variant>
 #include <vector>
 
 namespace click {
@@ -12,7 +13,7 @@ using ActionId = unsigned int;
 using DeviceId = uint8_t;
 using PlayerId = uint8_t;
 using MapId = uint8_t;
-using GestureId = uint16_t;
+using BindingId = uint16_t;
 
 const auto InvalidDeviceId = std::numeric_limits<uint8_t>::max();
 
@@ -33,6 +34,10 @@ union ActionValue {
 	Vec3 vec3{};
 };
 
+float _magnitude(const ActionValue& value);
+float _magnitudeSquared(const ActionValue& value);
+void _normalize(ActionValue& value);
+
 struct ActionState {
 	InputState state{};
 	ActionValue value{};
@@ -40,6 +45,7 @@ struct ActionState {
 
 struct InputAction {
 	ActionType type{};
+	bool normalized{};
 	std::vector<ActionState> states;
 };
 
@@ -79,11 +85,43 @@ struct Modifier {
 		} negate;
 
 		struct {
-			Axis axis;
-		} toAxis;
+		} normalize;
 
 	} data;
 };
+
+struct GestureSimple {
+	InputCode input{};
+};
+
+struct Gesture2D {
+	InputCode x{};
+	InputCode y{};
+};
+
+struct Gesture3D {
+	InputCode x{};
+	InputCode y{};
+	InputCode z{};
+};
+
+struct GestureDirectional2D {
+	InputCode left{};
+	InputCode right{};
+	InputCode down{};
+	InputCode up{};
+};
+
+struct GestureDirectional3D {
+	InputCode left{};
+	InputCode right{};
+	InputCode down{};
+	InputCode up{};
+	InputCode back{};
+	InputCode forward{};
+};
+
+using Gesture = std::variant<GestureSimple, Gesture2D, Gesture3D, GestureDirectional2D, GestureDirectional3D>;
 
 struct DeviceData {
 	DeviceType type{DeviceType::None};
@@ -104,8 +142,8 @@ struct DeviceInfo {
 	std::vector<int> _freeDeviceIndices;
 };
 
-struct DeviceGesture {
-	GestureId gestureId;
+struct Binding {
+	BindingId id;
 	Gesture gesture;
 	std::vector<Trigger> triggers;
 	std::vector<Modifier> modifiers;
@@ -114,7 +152,7 @@ struct DeviceGesture {
 
 struct ActionMapping {
 	ActionId actionId{};
-	std::vector<DeviceGesture> gestures;
+	std::vector<Binding> bindings;
 };
 
 struct InputMap {
@@ -141,6 +179,8 @@ struct Context {
 	DeviceInfo devices;
 	MousePosition mouseState;
 	std::vector<int> _freeActionIndices;
+	float _screenWidth{};
+	float _screenHeight{};
 };
 
 } // namespace click

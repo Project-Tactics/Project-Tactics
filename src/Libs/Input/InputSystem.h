@@ -3,6 +3,7 @@
 #include "Click/Click.h"
 
 #include <SDL.h>
+#include <glm/vec2.hpp>
 #include <memory>
 
 namespace tactics {
@@ -15,8 +16,12 @@ class ResourceProvider;
 
 class InputSystem {
 public:
-	InputSystem(std::shared_ptr<resource::IniFile> configFile, resource::ResourceProvider& resourceProvider);
+	InputSystem(std::shared_ptr<resource::IniFile> configFile,
+				resource::ResourceProvider& resourceProvider,
+				const glm::vec2& screenSize);
+	~InputSystem();
 
+	void changeScreenSize(const glm::vec2& screenSize);
 	void processEvents(SDL_Event& event);
 	void update();
 

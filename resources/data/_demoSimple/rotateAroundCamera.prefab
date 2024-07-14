@@ -28,7 +28,7 @@
     },
     "freeCamera": {
         "speed": 5,
-        "sensitivity": 0.125,
+        "sensitivity": 0.5,
         "moveAction": "cameraMove",
         "lookAction": "cameraLook",
         "player": 0

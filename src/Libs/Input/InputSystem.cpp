@@ -13,15 +13,26 @@
 
 namespace tactics {
 
-InputSystem::InputSystem(std::shared_ptr<resource::IniFile> configFile, resource::ResourceProvider& resourceProvider)
+InputSystem::InputSystem(std::shared_ptr<resource::IniFile> configFile,
+						 resource::ResourceProvider& resourceProvider,
+						 const glm::vec2& screenSize)
 	: _resourceProvider(resourceProvider) {
 	LOG_TRACE(Log::Input, "Initialize click library");
-	click::initialize(configFile->get("Engine", "players", 1));
+	click::initialize(configFile->get("Engine", "players", 1), screenSize.x, screenSize.y);
 	click::initSdlBackend();
+}
+
+InputSystem::~InputSystem() {
+	LOG_TRACE(Log::Input, "Shutting down click library");
+	click::shutdown();
 }
 
 void InputSystem::processEvents(SDL_Event& event) {
 	click::processSdlEvents(event);
+}
+
+void InputSystem::changeScreenSize(const glm::vec2& screenSize) {
+	click::changeScreenSize(screenSize.x, screenSize.y);
 }
 
 void InputSystem::update() {
@@ -37,10 +48,10 @@ void InputSystem::update() {
 	});
 }
 
-void InputSystem::assignInputMap(resource::InputMap::Ptr inputMap, click::PlayerId playerId) {
+void InputSystem::assignInputMap(std::shared_ptr<resource::InputMap> inputMap, click::PlayerId playerId) {
 	auto mapId = click::addInputMap(playerId);
 	for (const auto& binding : inputMap->bindings) {
-		click::bindGesture(mapId, binding.action->actionId, binding.gesture, binding.triggers, binding.modifiers);
+		click::bind(mapId, binding.action->actionId, binding.gesture, binding.triggers, binding.modifiers);
 	}
 }
 

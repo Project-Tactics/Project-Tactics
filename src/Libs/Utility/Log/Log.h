@@ -29,13 +29,13 @@ enum LogLevel {
 #define LOG_CRITICAL(...)		 (void)0
 #define LOG_EXCEPTION(exception) (void)0
 #else
-#define LOG_TRACE(...)			 Log::trace(__VA_ARGS__)
-#define LOG_DEBUG(...)			 Log::debug(__VA_ARGS__)
-#define LOG_INFO(...)			 Log::info(__VA_ARGS__)
-#define LOG_WARNING(...)		 Log::warning(__VA_ARGS__)
-#define LOG_ERROR(...)			 Log::error(__VA_ARGS__)
-#define LOG_CRITICAL(...)		 Log::critical(__VA_ARGS__)
-#define LOG_EXCEPTION(exception) Log::exception(exception)
+#define LOG_TRACE(...)			 tactics::Log::trace(__VA_ARGS__)
+#define LOG_DEBUG(...)			 tactics::Log::debug(__VA_ARGS__)
+#define LOG_INFO(...)			 tactics::Log::info(__VA_ARGS__)
+#define LOG_WARNING(...)		 tactics::Log::warning(__VA_ARGS__)
+#define LOG_ERROR(...)			 tactics::Log::error(__VA_ARGS__)
+#define LOG_CRITICAL(...)		 tactics::Log::critical(__VA_ARGS__)
+#define LOG_EXCEPTION(exception) tactics::Log::exception(exception)
 #endif
 
 class LogCategory {
