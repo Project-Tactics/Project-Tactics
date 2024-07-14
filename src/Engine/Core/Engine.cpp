@@ -112,9 +112,9 @@ void Engine::_internalRun() {
 	_timer.reset(TimeUtility::nowInSeconds());
 	while (!_fsm->hasReachedExitState()) {
 		_timer.update(TimeUtility::nowInSeconds());
-		_eventsSystem->update();
-		_inputSystem->update();
 		while (_timer.hasConsumedAllTicks()) {
+			_eventsSystem->update();
+			_inputSystem->update();
 			_fsm->update();
 			_updateCommonComponentSystems();
 			_timer.consumeTick();

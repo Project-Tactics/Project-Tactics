@@ -50,7 +50,7 @@ unsigned int players() {
  */
 
 DeviceId _getNextAvailableDeviceId() {
-	for (auto index = 0; index < ctx->devices.devices.size(); ++index) {
+	for (auto index = 0u; index < ctx->devices.devices.size(); ++index) {
 		if (ctx->devices.devices[index].type == DeviceType::None) {
 			return static_cast<DeviceId>(index);
 		}
