@@ -7,6 +7,7 @@
 #include <Engine/Overlay/CustomOverlayColors.h>
 #include <Engine/Overlay/EngineCoreOverlay.h>
 #include <Engine/Overlay/FsmOverlay.h>
+#include <Engine/Overlay/InputOverlay.h>
 #include <Engine/Overlay/RenderingOverlay.h>
 #include <Engine/Overlay/ResourcesOverlay.h>
 #include <Engine/Scene/SceneSystem.h>
@@ -150,6 +151,7 @@ void Engine::_registerOverlays() {
 		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem, *_ecs);
 		_overlaySystem->addOverlay<ResourcesOverlay>("Resources", false, *_resourceSystem);
 		_overlaySystem->addOverlay<FsmOverlay>("Fsm", false, *_fsmExternalController, *_fsmInfo);
+		_overlaySystem->addOverlay<InputOverlay>("Input", false, *_inputSystem);
 		_overlaySystem->addOverlay<ExampleOverlay>("ImGui Demo", false);
 	}
 }
@@ -160,6 +162,7 @@ void Engine::_unregisterOverlays() {
 		LOG_TRACE(Log::Engine, "Unregister Engine Overlays");
 		_overlaySystem->removeOverlay("ImGui Demo");
 		_overlaySystem->removeOverlay("Fsm");
+		_overlaySystem->removeOverlay("Input");
 		_overlaySystem->removeOverlay("Resources");
 		_overlaySystem->removeOverlay("Rendering");
 		_overlaySystem->removeOverlay("Engine");

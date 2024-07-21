@@ -51,6 +51,16 @@ template<typename T> std::array<T, 4> parseStringToVectorValues(const std::strin
 
 } // namespace tactics
 
+#define STRING_SERIALIZATION(TYPE)                 \
+	namespace tactics {                            \
+	template<> class Str<TYPE> {                   \
+	public:                                        \
+		static std::string to(const TYPE& value);  \
+		static TYPE from(std::string_view string); \
+	};                                             \
+	}                                              \
+	FORMAT_STR(click::DeviceType);
+
 #define FORMAT_STR(TYPE)                                                                        \
 	template<> struct fmt::formatter<TYPE> {                                                    \
 	public:                                                                                     \

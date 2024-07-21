@@ -47,6 +47,14 @@ InputSystem::~InputSystem() {
 	click::shutdown();
 }
 
+unsigned int InputSystem::getNumPlayers() const {
+	return click::players();
+}
+
+const click::Player& InputSystem::getPlayer(click::PlayerId playerId) const {
+	return click::player(playerId);
+}
+
 void InputSystem::processEvents(SDL_Event& event) {
 	click::processSdlEvents(event);
 }

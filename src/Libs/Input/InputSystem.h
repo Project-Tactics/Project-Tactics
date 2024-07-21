@@ -23,6 +23,9 @@ public:
 				const glm::vec2& screenSize);
 	~InputSystem();
 
+	unsigned int getNumPlayers() const;
+	const click::Player& getPlayer(click::PlayerId playerId) const;
+
 	void changeScreenSize(const glm::vec2& screenSize);
 	void processEvents(SDL_Event& event);
 	void update();

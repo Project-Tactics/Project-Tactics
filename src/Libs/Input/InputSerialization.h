@@ -5,17 +5,7 @@
 
 #include <nlohmann/json.hpp>
 
-namespace tactics {
-
-template<> class Str<click::DeviceType> {
-public:
-	static std::string to(click::DeviceType value);
-	static click::DeviceType from(std::string_view string);
-};
-
-} // namespace tactics
-
-FORMAT_STR(click::DeviceType);
+STRING_SERIALIZATION(click::DeviceType);
 
 namespace click {
 

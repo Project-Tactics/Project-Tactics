@@ -4,11 +4,12 @@
 
 namespace tactics {
 
-std::string Str<click::DeviceType>::to(click::DeviceType deviceType) {
+std::string Str<click::DeviceType>::to(const click::DeviceType& deviceType) {
 	switch (deviceType) {
 	case click::DeviceType::Keyboard: return "keyboard";
 	case click::DeviceType::Mouse	: return "mouse";
 	case click::DeviceType::Gamepad : return "gamepad";
+	case click::DeviceType::Touch	: return "touch";
 	}
 
 	return "none";
@@ -17,12 +18,12 @@ std::string Str<click::DeviceType>::to(click::DeviceType deviceType) {
 click::DeviceType Str<click::DeviceType>::from(std::string_view str) {
 	if (str == "keyboard") {
 		return click::DeviceType::Keyboard;
-	}
-	if (str == "mouse") {
+	} else if (str == "mouse") {
 		return click::DeviceType::Mouse;
-	}
-	if (str == "gamepad") {
+	} else if (str == "gamepad") {
 		return click::DeviceType::Gamepad;
+	} else if (str == "touch") {
+		return click::DeviceType::Touch;
 	}
 
 	return click::DeviceType::None;

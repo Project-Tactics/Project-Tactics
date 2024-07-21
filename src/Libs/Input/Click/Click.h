@@ -20,6 +20,7 @@ void setDeviceChangedCallback(DeviceChangedCallback callback, void* userData);
 
 void clearPlayer(PlayerId playerId);
 unsigned int players();
+Player& player(PlayerId playerId);
 
 /*
  * Device
@@ -50,6 +51,8 @@ const DeviceIdList& touches();
 
 void holdDevice(PlayerId playerId, DeviceId deviceId);
 void releaseDevice(PlayerId playerId, DeviceId deviceId);
+
+DeviceType getDeviceTypeFromInputCode(InputCode code);
 
 /*
  * Mapping

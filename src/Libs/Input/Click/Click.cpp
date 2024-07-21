@@ -9,6 +9,8 @@ namespace click {
 
 Context* ctx = nullptr;
 
+std::array<DeviceType, static_cast<unsigned int>(InputCode::Count)> inputCodeToDevice = {DeviceType::None};
+
 std::array mouseInputCode = {InputCode::LeftButton,
 							 InputCode::RightButton,
 							 InputCode::MiddleButton,
@@ -338,6 +340,10 @@ unsigned int players() {
 	return static_cast<unsigned int>(ctx->players.size());
 }
 
+Player& player(PlayerId playerId) {
+	return ctx->players[playerId];
+}
+
 /*
  * Device
  */
@@ -503,6 +509,10 @@ void releaseDevice(PlayerId playerId, DeviceId deviceId) {
 	std::erase(player.heldDevices, deviceId);
 }
 
+DeviceType getDeviceTypeFromInputCode(InputCode code) {
+	return inputCodeToDevice[static_cast<unsigned int>(code)];
+}
+
 /*
  * Core
  */
@@ -518,6 +528,22 @@ void initialize(unsigned int maxPlayers, float screenWidth, float screenHeight) 
 	ctx->devices.devices.fill({DeviceType::None, InvalidDeviceId, nullptr});
 	ctx->_screenWidth = screenWidth;
 	ctx->_screenHeight = screenHeight;
+
+	for (auto& code : mouseInputCode) {
+		inputCodeToDevice[static_cast<unsigned int>(code)] = DeviceType::Mouse;
+	}
+
+	for (auto& code : gamepadInputCode) {
+		inputCodeToDevice[static_cast<unsigned int>(code)] = DeviceType::Gamepad;
+	}
+
+	for (auto& code : touchInputCode) {
+		inputCodeToDevice[static_cast<unsigned int>(code)] = DeviceType::Touch;
+	}
+
+	for (auto& code : keyboardInputCode) {
+		inputCodeToDevice[static_cast<unsigned int>(code)] = DeviceType::Keyboard;
+	}
 }
 
 void changeScreenSize(float width, float height) {
