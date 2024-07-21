@@ -51,33 +51,33 @@ struct InputAction {
 	std::vector<ActionState> states;
 };
 
-struct DownTrigger {
+struct DownCondition {
 	float actuationThreshold{};
 };
 
-struct PressTrigger {
+struct PressCondition {
 	float actuationThreshold{};
-	TriggerState state{};
+	ConditionState state{};
 };
 
-struct ReleaseTrigger {
+struct ReleaseCondition {
 	float actuationThreshold{};
-	TriggerState state{};
+	ConditionState state{};
 };
 
-struct HoldTrigger {
+struct HoldCondition {
 	float actuationThreshold{};
 	float holdTime{};
 	float currentTime{};
-	TriggerState state{};
+	ConditionState state{};
 };
 
-struct ContinuousTrigger {
+struct ContinuousCondition {
 	float actuationThreshold{};
-	TriggerState state{};
+	ConditionState state{};
 };
 
-using Trigger = std::variant<DownTrigger, PressTrigger, ReleaseTrigger, HoldTrigger, ContinuousTrigger>;
+using Condition = std::variant<DownCondition, PressCondition, ReleaseCondition, HoldCondition, ContinuousCondition>;
 
 struct NegateModifier {
 	Axis axis{};
@@ -147,7 +147,7 @@ struct DeviceInfo {
 struct Binding {
 	BindingId id;
 	Gesture gesture;
-	std::vector<Trigger> triggers;
+	std::vector<Condition> conditions;
 	std::vector<Modifier> modifiers;
 	ActionValue value{};
 };

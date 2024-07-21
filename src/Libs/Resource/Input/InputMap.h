@@ -10,7 +10,7 @@ namespace tactics::resource {
 struct InputBinding {
 	std::shared_ptr<InputAction> action;
 	click::Gesture gesture;
-	std::vector<click::Trigger> triggers;
+	std::vector<click::Condition> triggers;
 	std::vector<click::Modifier> modifiers;
 };
 

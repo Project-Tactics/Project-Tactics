@@ -11,20 +11,7 @@ enum class ActionType {
 	Axis3D
 };
 
-enum class TriggerType {
-	Down,
-	Press,
-	Release,
-	Hold,
-	Continuous
-};
-
-enum class ModifierType {
-	Negate,
-	Invert
-};
-
-enum class TriggerState {
+enum class ConditionState {
 	Idle,
 	Ongoing,
 	Triggered

@@ -32,9 +32,9 @@ click::DeviceType Str<click::DeviceType>::from(std::string_view str) {
 
 namespace click {
 
-void to_json(nlohmann::json&, const Trigger&) {}
+void to_json(nlohmann::json&, const Condition&) {}
 
-void from_json(const nlohmann::json& json, Trigger& trigger) {
+void from_json(const nlohmann::json& json, Condition& trigger) {
 	if (!json.contains("type")) {
 		LOG_ERROR(tactics::Log::Input, "Input Modifier missing [type]");
 		return;
@@ -42,15 +42,15 @@ void from_json(const nlohmann::json& json, Trigger& trigger) {
 
 	std::string type = json["type"];
 	if (type == "down") {
-		trigger = json.get<DownTrigger>();
+		trigger = json.get<DownCondition>();
 	} else if (type == "press") {
-		trigger = json.get<PressTrigger>();
+		trigger = json.get<PressCondition>();
 	} else if (type == "release") {
-		trigger = json.get<ReleaseTrigger>();
+		trigger = json.get<ReleaseCondition>();
 	} else if (type == "hold") {
-		trigger = json.get<HoldTrigger>();
+		trigger = json.get<HoldCondition>();
 	} else if (type == "continuous") {
-		trigger = json.get<ContinuousTrigger>();
+		trigger = json.get<ContinuousCondition>();
 	} else {
 		LOG_ERROR(tactics::Log::Input, "Unknown trigger type: {}", type);
 	}

@@ -19,8 +19,8 @@ FORMAT_STR(click::DeviceType);
 
 namespace click {
 
-void to_json(nlohmann::json&, const Trigger&);
-void from_json(const nlohmann::json& json, Trigger& trigger);
+void to_json(nlohmann::json&, const Condition&);
+void from_json(const nlohmann::json& json, Condition& trigger);
 void to_json(nlohmann::json&, const Modifier&);
 void from_json(const nlohmann::json& json, Modifier& modifier);
 void to_json(nlohmann::json&, const Gesture&);
@@ -32,22 +32,13 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Gesture3D, x, y, z);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(GestureDirectional2D, left, right, down, up);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(GestureDirectional3D, left, right, down, up, back, forward);
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(DownTrigger, actuationThreshold);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(PressTrigger, actuationThreshold);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ReleaseTrigger, actuationThreshold, state);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(HoldTrigger, actuationThreshold, holdTime, state);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ContinuousTrigger, actuationThreshold, state);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(DownCondition, actuationThreshold);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(PressCondition, actuationThreshold);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ReleaseCondition, actuationThreshold, state);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(HoldCondition, actuationThreshold, holdTime, state);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ContinuousCondition, actuationThreshold, state);
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(NegateModifier, axis);
-
-NLOHMANN_JSON_SERIALIZE_ENUM(TriggerType,
-							 {{TriggerType::Down, "down"},
-							  {TriggerType::Press, "press"},
-							  {TriggerType::Release, "release"},
-							  {TriggerType::Hold, "hold"},
-							  {TriggerType::Continuous, "continuous"}});
-
-NLOHMANN_JSON_SERIALIZE_ENUM(ModifierType, {{ModifierType::Negate, "negate"}, {ModifierType::ToAxis, "toAxis"}});
 
 NLOHMANN_JSON_SERIALIZE_ENUM(Axis, {{Axis::X, "x"}, {Axis::Y, "y"}, {Axis::Z, "z"}});
 

@@ -55,7 +55,7 @@
                                         "down": "keyQ"
                                     }
                                 },
-                                "triggers": [
+                                "conditions": [
                                     {
                                         "type": "down",
                                         "actuationThreshold": 0.5
@@ -71,7 +71,7 @@
                                         "z": "axisLeftY"
                                     }
                                 },
-                                "triggers": [
+                                "conditions": [
                                     {
                                         "type": "continuous",
                                         "actuationThreshold": 0.5
@@ -93,7 +93,7 @@
                                         "y": "axisTriggerLeft"
                                     }
                                 },
-                                "triggers": [
+                                "conditions": [
                                     {
                                         "type": "continuous",
                                         "actuationThreshold": 0.5
@@ -115,7 +115,7 @@
                                         "y": "axisTriggerRight"
                                     }
                                 },
-                                "triggers": [
+                                "conditions": [
                                     {
                                         "type": "continuous",
                                         "actuationThreshold": 0.5
@@ -136,10 +136,10 @@
                                     }
                                 },
                                 "modifiers": [],
-                                "triggers": [
+                                "conditions": [
                                     {
                                         "type": "continuous",
-                                        "actuationThreshold": 0.01
+                                        "actuationThreshold": 0.0001
                                     }
                                 ]
                             },
@@ -151,7 +151,7 @@
                                     }
                                 },
                                 "modifiers": [],
-                                "triggers": [
+                                "conditions": [
                                     {
                                         "type": "continuous",
                                         "actuationThreshold": 0.5

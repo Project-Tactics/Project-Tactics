@@ -1,7 +1,7 @@
 #include "Click.h"
 
+#include "ClickConditions.h"
 #include "ClickModifiers.h"
-#include "ClickTriggers.h"
 
 #include <assert.h>
 
@@ -606,14 +606,14 @@ void update(float deltaTime) {
 						std::visit([&](auto&& arg) { modify(arg, binding.value); }, modifier);
 					}
 
-					auto allTriggersSucceded = true;
-					for (auto& trigger : binding.triggers) {
-						auto triggerState =
-							std::visit([&](auto&& arg) { return update(arg, binding, deltaTime); }, trigger);
-						allTriggersSucceded &= triggerState == TriggerState::Triggered;
+					auto allConditionsSucceded = true;
+					for (auto& condition : binding.conditions) {
+						auto conditionState =
+							std::visit([&](auto&& arg) { return update(arg, binding, deltaTime); }, condition);
+						allConditionsSucceded &= conditionState == ConditionState::Triggered;
 					}
 
-					if (allTriggersSucceded) {
+					if (allConditionsSucceded) {
 						state = InputState::Triggered;
 						value.vec3.x += binding.value.vec3.x;
 						value.vec3.y += binding.value.vec3.y;
@@ -733,7 +733,7 @@ const ActionState& actionState(ActionId actionId, PlayerId playerId) {
 BindingId _bind(InputMap& inputMap,
 				ActionId actionId,
 				Gesture gesture,
-				std::vector<Trigger> triggers,
+				std::vector<Condition> conditions,
 				std::vector<Modifier> modifiers) {
 	auto itr = std::ranges::find_if(inputMap.actionMaps,
 									[actionId](const ActionMapping& item) { return item.actionId == actionId; });
@@ -743,7 +743,7 @@ BindingId _bind(InputMap& inputMap,
 	}
 
 	static BindingId id = 0;
-	itr->bindings.emplace_back(id, std::move(gesture), std::move(triggers), std::move(modifiers));
+	itr->bindings.emplace_back(id, std::move(gesture), std::move(conditions), std::move(modifiers));
 	return id++;
 }
 
@@ -767,31 +767,31 @@ Binding* _getBinding(MapId inputMapId, BindingId id) {
 BindingId bind(MapId inputMapId,
 			   ActionId actionId,
 			   Gesture gesture,
-			   std::vector<Trigger> triggers,
+			   std::vector<Condition> conditions,
 			   std::vector<Modifier> modifiers) {
 	auto inputMap = _getInputMap(inputMapId);
 	assert(inputMap != nullptr);
-	return _bind(*inputMap, actionId, std::move(gesture), std::move(triggers), std::move(modifiers));
+	return _bind(*inputMap, actionId, std::move(gesture), std::move(conditions), std::move(modifiers));
 }
 
 void rebind(MapId inputMapId,
 			BindingId id,
 			Gesture gesture,
-			std::vector<Trigger> triggers,
+			std::vector<Condition> conditions,
 			std::vector<Modifier> modifiers) {
 	auto binding = _getBinding(inputMapId, id);
 	assert(binding != nullptr);
 	binding->gesture = std::move(gesture);
-	binding->triggers = std::move(triggers);
+	binding->conditions = std::move(conditions);
 	binding->modifiers = std::move(modifiers);
 	binding->value = ActionValue{};
 }
 
-void rebind(MapId inputMapId, BindingId id, Gesture gesture, std::vector<Trigger> triggers) {
+void rebind(MapId inputMapId, BindingId id, Gesture gesture, std::vector<Condition> conditions) {
 	auto binding = _getBinding(inputMapId, id);
 	assert(binding != nullptr);
 	binding->gesture = std::move(gesture);
-	binding->triggers = std::move(triggers);
+	binding->conditions = std::move(conditions);
 	binding->value = ActionValue{};
 }
 

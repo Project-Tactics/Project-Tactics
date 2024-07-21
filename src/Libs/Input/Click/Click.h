@@ -79,14 +79,14 @@ unsigned int actions();
 BindingId bind(MapId inputMapId,
 			   ActionId actionId,
 			   Gesture gesture,
-			   std::vector<Trigger> triggers,
+			   std::vector<Condition> triggers,
 			   std::vector<Modifier> modifiers);
 void rebind(MapId inputMapId,
 			BindingId id,
 			Gesture gesture,
-			std::vector<Trigger> triggers,
+			std::vector<Condition> triggers,
 			std::vector<Modifier> modifiers);
-void rebind(MapId inputMapId, BindingId id, Gesture gesture, std::vector<Trigger> triggers);
+void rebind(MapId inputMapId, BindingId id, Gesture gesture, std::vector<Condition> triggers);
 void rebind(MapId inputMapId, BindingId id, Gesture gesture);
 void unbind(BindingId id);
 

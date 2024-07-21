@@ -10,10 +10,10 @@ namespace tactics::resource {
 
 struct InputMapBindingGestureDescriptor {
 	click::Gesture gesture;
-	std::vector<click::Trigger> triggers;
+	std::vector<click::Condition> conditions;
 	std::vector<click::Modifier> modifiers;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(InputMapBindingGestureDescriptor, gesture, triggers, modifiers);
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(InputMapBindingGestureDescriptor, gesture, conditions, modifiers);
 };
 
 struct InputMapBindingDescriptor {

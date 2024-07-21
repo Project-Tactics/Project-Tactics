@@ -5,7 +5,7 @@ set(SOURCES
         Click/Backend/ClickSDLBackend.cpp
         Click/Click.cpp
         Click/ClickModifiers.cpp
-        Click/ClickTriggers.cpp
+        Click/ClickConditions.cpp
         InputSerialization.cpp
         InputSystem.cpp)
 
@@ -16,7 +16,7 @@ set(HEADERS
         Click/ClickEvents.h
         Click/ClickInputTypes.h
         Click/ClickModifiers.h
-        Click/ClickTriggers.h
+        Click/ClickConditions.h
         InputSerialization.h
         InputSystem.h)
 

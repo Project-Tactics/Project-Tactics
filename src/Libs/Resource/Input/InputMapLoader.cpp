@@ -9,7 +9,7 @@ std::shared_ptr<InputMap> InputMapLoader::load(const InputMapDescriptor& descrip
 		for (const auto& gesture : binding.gestures) {
 			inputMap->bindings.emplace_back(_getResource<InputAction>(binding.action),
 											gesture.gesture,
-											gesture.triggers,
+											gesture.conditions,
 											gesture.modifiers);
 		}
 	}
