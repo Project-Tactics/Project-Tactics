@@ -32,6 +32,14 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Gesture3D, x, y, z);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(GestureDirectional2D, left, right, down, up);
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(GestureDirectional3D, left, right, down, up, back, forward);
 
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(DownTrigger, actuationThreshold);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(PressTrigger, actuationThreshold);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ReleaseTrigger, actuationThreshold, state);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(HoldTrigger, actuationThreshold, holdTime, state);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(ContinuousTrigger, actuationThreshold, state);
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(NegateModifier, axis);
+
 NLOHMANN_JSON_SERIALIZE_ENUM(TriggerType,
 							 {{TriggerType::Down, "down"},
 							  {TriggerType::Press, "press"},
@@ -41,7 +49,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(TriggerType,
 
 NLOHMANN_JSON_SERIALIZE_ENUM(ModifierType, {{ModifierType::Negate, "negate"}, {ModifierType::ToAxis, "toAxis"}});
 
-NLOHMANN_JSON_SERIALIZE_ENUM(Axis, {{Axis::XYZ, "xyz"}, {Axis::YZX, "yzx"}, {Axis::ZXY, "zxy"}});
+NLOHMANN_JSON_SERIALIZE_ENUM(Axis, {{Axis::X, "x"}, {Axis::Y, "y"}, {Axis::Z, "z"}});
 
 NLOHMANN_JSON_SERIALIZE_ENUM(ActionType,
 							 {{ActionType::Scalar, "scalar"},

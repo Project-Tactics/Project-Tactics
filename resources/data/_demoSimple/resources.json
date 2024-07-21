@@ -42,72 +42,121 @@
                 "bindings": [
                     {
                         "action": "cameraMove",
-                        "gesture": {
-                            "type": "dir3D",
-                            "data": {
-                                "left": "keyA",
-                                "right": "keyD",
-                                "forward": "keyW",
-                                "back": "keyS",
-                                "up": "keyE",
-                                "down": "keyQ"
-                            }
-                        },
-                        "triggers": [
+                        "gestures": [
                             {
-                                "type": "down",
-                                "actuationThreshold": 0.5
-                            }
-                        ],
-                        "modifiers": []
-                    },
-                    {
-                        "action": "cameraMove",
-                        "gesture": {
-                            "type": "3d",
-                            "data": {
-                                "x": "axisLeftX",
-                                "y": "keyJ",
-                                "z": "axisLeftY"
-                            }
-                        },
-                        "triggers": [
+                                "gesture": {
+                                    "type": "dir3D",
+                                    "data": {
+                                        "left": "keyA",
+                                        "right": "keyD",
+                                        "forward": "keyW",
+                                        "back": "keyS",
+                                        "up": "keyE",
+                                        "down": "keyQ"
+                                    }
+                                },
+                                "triggers": [
+                                    {
+                                        "type": "down",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": []
+                            },
                             {
-                                "type": "continuous",
-                                "actuationThreshold": 0.5
-                            }
-                        ],
-                        "modifiers": []
-                    },
-                    {
-                        "action": "cameraLook",
-                        "gesture": {
-                            "type": "simple",
-                            "data": {
-                                "input": "mouseXY"
-                            }
-                        },
-                        "modifiers": [],
-                        "triggers": [
+                                "gesture": {
+                                    "type": "3d",
+                                    "data": {
+                                        "x": "axisLeftX",
+                                        "z": "axisLeftY"
+                                    }
+                                },
+                                "triggers": [
+                                    {
+                                        "type": "continuous",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": [
+                                    {
+                                        "type": "negate",
+                                        "data": {
+                                            "axis": "z"
+                                        }
+                                    }
+                                ]
+                            },
                             {
-                                "type": "continuous",
-                                "actuationThreshold": 0
+                                "gesture": {
+                                    "type": "2d",
+                                    "data": {
+                                        "y": "axisTriggerLeft"
+                                    }
+                                },
+                                "triggers": [
+                                    {
+                                        "type": "continuous",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": [
+                                    {
+                                        "type": "negate",
+                                        "data": {
+                                            "axis": "y"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "gesture": {
+                                    "type": "2d",
+                                    "data": {
+                                        "y": "axisTriggerRight"
+                                    }
+                                },
+                                "triggers": [
+                                    {
+                                        "type": "continuous",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": []
                             }
                         ]
                     },
                     {
                         "action": "cameraLook",
-                        "gesture": {
-                            "type": "simple",
-                            "data": {
-                                "input": "axisRightXY"
-                            }
-                        },
-                        "modifiers": [],
-                        "triggers": [
+                        "gestures": [
                             {
-                                "type": "continuous",
-                                "actuationThreshold": 0.5
+                                "gesture": {
+                                    "type": "simple",
+                                    "data": {
+                                        "input": "mouseXY"
+                                    }
+                                },
+                                "modifiers": [],
+                                "triggers": [
+                                    {
+                                        "type": "continuous",
+                                        "actuationThreshold": 0.01
+                                    }
+                                ]
+                            },
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "data": {
+                                        "input": "axisRightXY"
+                                    }
+                                },
+                                "modifiers": [],
+                                "triggers": [
+                                    {
+                                        "type": "continuous",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
                             }
                         ]
                     }

@@ -12,6 +12,7 @@ void initialize(unsigned int maxPlayers, float screenWidth, float screenHeight);
 void changeScreenSize(float width, float height);
 void update(float deltaTime);
 void shutdown();
+void setDeviceChangedCallback(DeviceChangedCallback callback, void* userData);
 
 /*
  * Player
@@ -38,6 +39,10 @@ DeviceId gamepad(unsigned int index);
 DeviceType deviceType(DeviceId id);
 DeviceData& device(DeviceId id);
 
+bool hasKeyboard(unsigned int index);
+bool hasMouse(unsigned int index);
+bool hasGamepad(unsigned int index);
+
 const DeviceIdList& gamepads();
 const DeviceIdList& mice();
 const DeviceIdList& keyboards();
@@ -45,22 +50,6 @@ const DeviceIdList& touches();
 
 void holdDevice(PlayerId playerId, DeviceId deviceId);
 void releaseDevice(PlayerId playerId, DeviceId deviceId);
-
-/*
- * Trigger Creation
- */
-
-Trigger downTrigger(float actuationThreshold);
-Trigger pressTrigger(float actuationThreshold);
-Trigger releaseTrigger(float actuationThreshold);
-Trigger holdTrigger(float holdTime);
-Trigger continuousTrigger(float actuationThreshold);
-
-/*
- * Modifier Creation
- */
-
-Modifier negateModifier();
 
 /*
  * Mapping

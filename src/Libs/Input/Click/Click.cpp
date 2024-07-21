@@ -9,6 +9,299 @@ namespace click {
 
 Context* ctx = nullptr;
 
+std::array mouseInputCode = {InputCode::LeftButton,
+							 InputCode::RightButton,
+							 InputCode::MiddleButton,
+							 InputCode::MouseX,
+							 InputCode::MouseY,
+							 InputCode::MouseZ,
+							 InputCode::MouseXY};
+
+std::array gamepadInputCode = {InputCode::ButtonA,
+							   InputCode::ButtonB,
+							   InputCode::ButtonX,
+							   InputCode::ButtonY,
+							   InputCode::ButtonBack,
+							   InputCode::ButtonGuide,
+							   InputCode::ButtonStart,
+							   InputCode::ButtonLeftStick,
+							   InputCode::ButtonRightStick,
+							   InputCode::ButtonLeftShoulder,
+							   InputCode::ButtonRightShoulder,
+							   InputCode::ButtonDPadUp,
+							   InputCode::ButtonDPadDown,
+							   InputCode::ButtonDPadRight,
+							   InputCode::ButtonDPadLeft,
+							   InputCode::ButtonMisc,
+							   InputCode::ButtonPaddle1,
+							   InputCode::ButtonPaddle2,
+							   InputCode::ButtonPaddle3,
+							   InputCode::ButtonPaddle4,
+							   InputCode::ButtonTouchpad,
+							   InputCode::AxisLeftX,
+							   InputCode::AxisLeftY,
+							   InputCode::AxisLeftXY,
+							   InputCode::AxisRightX,
+							   InputCode::AxisRightY,
+							   InputCode::AxisRightXY,
+							   InputCode::AxisTriggerLeft,
+							   InputCode::AxisTriggerRight};
+
+std::array touchInputCode = {InputCode::Touch1,
+							 InputCode::Touch2,
+							 InputCode::Touch3,
+							 InputCode::Touch4,
+							 InputCode::Touch5,
+							 InputCode::Touch6,
+							 InputCode::Touch7,
+							 InputCode::Touch8,
+							 InputCode::Touch9,
+							 InputCode::Touch10};
+
+std::array keyboardInputCode = {InputCode::KeyReturn,
+								InputCode::KeyEscape,
+								InputCode::KeyBackspace,
+								InputCode::KeyTab,
+								InputCode::KeySpace,
+								InputCode::KeyExclaim,
+								InputCode::KeyQuotedbl,
+								InputCode::KeyHash,
+								InputCode::KeyPercent,
+								InputCode::KeyDollar,
+								InputCode::KeyAmpersand,
+								InputCode::KeyQuote,
+								InputCode::KeyLeftparen,
+								InputCode::KeyRightparen,
+								InputCode::KeyAsterisk,
+								InputCode::KeyPlus,
+								InputCode::KeyComma,
+								InputCode::KeyMinus,
+								InputCode::KeyPeriod,
+								InputCode::KeySlash,
+								InputCode::Key0,
+								InputCode::Key1,
+								InputCode::Key2,
+								InputCode::Key3,
+								InputCode::Key4,
+								InputCode::Key5,
+								InputCode::Key6,
+								InputCode::Key7,
+								InputCode::Key8,
+								InputCode::Key9,
+								InputCode::KeyColon,
+								InputCode::KeySemicolon,
+								InputCode::KeyLess,
+								InputCode::KeyEquals,
+								InputCode::KeyGreater,
+								InputCode::KeyQuestion,
+								InputCode::KeyAt,
+								InputCode::KeyLeftbracket,
+								InputCode::KeyBackslash,
+								InputCode::KeyRightbracket,
+								InputCode::KeyCaret,
+								InputCode::KeyUnderscore,
+								InputCode::KeyBackquote,
+								InputCode::KeyA,
+								InputCode::KeyB,
+								InputCode::KeyC,
+								InputCode::KeyD,
+								InputCode::KeyE,
+								InputCode::KeyF,
+								InputCode::KeyG,
+								InputCode::KeyH,
+								InputCode::KeyI,
+								InputCode::KeyJ,
+								InputCode::KeyK,
+								InputCode::KeyL,
+								InputCode::KeyM,
+								InputCode::KeyN,
+								InputCode::KeyO,
+								InputCode::KeyP,
+								InputCode::KeyQ,
+								InputCode::KeyR,
+								InputCode::KeyS,
+								InputCode::KeyT,
+								InputCode::KeyU,
+								InputCode::KeyV,
+								InputCode::KeyW,
+								InputCode::KeyX,
+								InputCode::KeyY,
+								InputCode::KeyZ,
+								InputCode::KeyCapslock,
+								InputCode::KeyF1,
+								InputCode::KeyF2,
+								InputCode::KeyF3,
+								InputCode::KeyF4,
+								InputCode::KeyF5,
+								InputCode::KeyF6,
+								InputCode::KeyF7,
+								InputCode::KeyF8,
+								InputCode::KeyF9,
+								InputCode::KeyF10,
+								InputCode::KeyF11,
+								InputCode::KeyF12,
+								InputCode::KeyPrintscreen,
+								InputCode::KeyScrolllock,
+								InputCode::KeyPause,
+								InputCode::KeyInsert,
+								InputCode::KeyHome,
+								InputCode::KeyPageup,
+								InputCode::KeyDelete,
+								InputCode::KeyEnd,
+								InputCode::KeyPagedown,
+								InputCode::KeyRight,
+								InputCode::KeyLeft,
+								InputCode::KeyDown,
+								InputCode::KeyUp,
+								InputCode::KeyNumlockclear,
+								InputCode::KeypadDivide,
+								InputCode::KeypadMultiply,
+								InputCode::KeypadMinus,
+								InputCode::KeypadPlus,
+								InputCode::KeypadEnter,
+								InputCode::Keypad1,
+								InputCode::Keypad2,
+								InputCode::Keypad3,
+								InputCode::Keypad4,
+								InputCode::Keypad5,
+								InputCode::Keypad6,
+								InputCode::Keypad7,
+								InputCode::Keypad8,
+								InputCode::Keypad9,
+								InputCode::Keypad0,
+								InputCode::KeypadPeriod,
+								InputCode::KeyApplication,
+								InputCode::KeyPower,
+								InputCode::KeypadEquals,
+								InputCode::KeyF13,
+								InputCode::KeyF14,
+								InputCode::KeyF15,
+								InputCode::KeyF16,
+								InputCode::KeyF17,
+								InputCode::KeyF18,
+								InputCode::KeyF19,
+								InputCode::KeyF20,
+								InputCode::KeyF21,
+								InputCode::KeyF22,
+								InputCode::KeyF23,
+								InputCode::KeyF24,
+								InputCode::KeyExecute,
+								InputCode::KeyHelp,
+								InputCode::KeyMenu,
+								InputCode::KeySelect,
+								InputCode::KeyStop,
+								InputCode::KeyAgain,
+								InputCode::KeyUndo,
+								InputCode::KeyCut,
+								InputCode::KeyCopy,
+								InputCode::KeyPaste,
+								InputCode::KeyFind,
+								InputCode::KeyMute,
+								InputCode::KeyVolumeup,
+								InputCode::KeyVolumedown,
+								InputCode::KeypadComma,
+								InputCode::KeypadEqualsas400,
+								InputCode::KeyAlterase,
+								InputCode::KeySysreq,
+								InputCode::KeyCancel,
+								InputCode::KeyClear,
+								InputCode::KeyPrior,
+								InputCode::KeyReturn2,
+								InputCode::KeySeparator,
+								InputCode::KeyOut,
+								InputCode::KeyOper,
+								InputCode::KeyClearagain,
+								InputCode::KeyCrsel,
+								InputCode::KeyExsel,
+								InputCode::Keypad00,
+								InputCode::Keypad000,
+								InputCode::KeyThousandsseparator,
+								InputCode::KeyDecimalseparator,
+								InputCode::KeyCurrencyunit,
+								InputCode::KeyCurrencysubunit,
+								InputCode::KeypadLeftparen,
+								InputCode::KeypadRightparen,
+								InputCode::KeypadLeftbrace,
+								InputCode::KeypadRightbrace,
+								InputCode::KeypadTab,
+								InputCode::KeypadBackspace,
+								InputCode::KeypadA,
+								InputCode::KeypadB,
+								InputCode::KeypadC,
+								InputCode::KeypadD,
+								InputCode::KeypadE,
+								InputCode::KeypadF,
+								InputCode::KeypadXor,
+								InputCode::KeypadPower,
+								InputCode::KeypadPercent,
+								InputCode::KeypadLess,
+								InputCode::KeypadGreater,
+								InputCode::KeypadAmpersand,
+								InputCode::KeypadDblampersand,
+								InputCode::KeypadVerticalbar,
+								InputCode::KeypadDblverticalbar,
+								InputCode::KeypadColon,
+								InputCode::KeypadHash,
+								InputCode::KeypadSpace,
+								InputCode::KeypadAt,
+								InputCode::KeypadExclam,
+								InputCode::KeypadMemstore,
+								InputCode::KeypadMemrecall,
+								InputCode::KeypadMemclear,
+								InputCode::KeypadMemadd,
+								InputCode::KeypadMemsubtract,
+								InputCode::KeypadMemmultiply,
+								InputCode::KeypadMemdivide,
+								InputCode::KeypadPlusminus,
+								InputCode::KeypadClear,
+								InputCode::KeypadClearentry,
+								InputCode::KeypadBinary,
+								InputCode::KeypadOctal,
+								InputCode::KeypadDecimal,
+								InputCode::KeypadHexadecimal,
+								InputCode::KeyLctrl,
+								InputCode::KeyLshift,
+								InputCode::KeyLalt,
+								InputCode::KeyLgui,
+								InputCode::KeyRctrl,
+								InputCode::KeyRshift,
+								InputCode::KeyRalt,
+								InputCode::KeyRgui,
+								InputCode::KeyMode,
+								InputCode::KeyAudionext,
+								InputCode::KeyAudioprev,
+								InputCode::KeyAudiostop,
+								InputCode::KeyAudioplay,
+								InputCode::KeyAudiomute,
+								InputCode::KeyMediaselect,
+								InputCode::KeyWww,
+								InputCode::KeyMail,
+								InputCode::KeyCalculator,
+								InputCode::KeyComputer,
+								InputCode::KeyAcSearch,
+								InputCode::KeyAcHome,
+								InputCode::KeyAcBack,
+								InputCode::KeyAcForward,
+								InputCode::KeyAcStop,
+								InputCode::KeyAcRefresh,
+								InputCode::KeyAcBookmarks,
+								InputCode::KeyBrightnessdown,
+								InputCode::KeyBrightnessup,
+								InputCode::KeyDisplayswitch,
+								InputCode::KeyKbdillumtoggle,
+								InputCode::KeyKbdillumdown,
+								InputCode::KeyKbdillumup,
+								InputCode::KeyEject,
+								InputCode::KeySleep,
+								InputCode::KeyApp1,
+								InputCode::KeyApp2,
+								InputCode::KeyAudiorewind,
+								InputCode::KeyAudiofastforward,
+								InputCode::KeySoftleft,
+								InputCode::KeySoftright,
+								InputCode::KeyCall,
+								InputCode::KeyEndcall};
+
 auto _isValueZero(const ActionValue& value) {
 	return value.vec3.x == 0.0f && value.vec3.y == 0.0f && value.vec3.z == 0.0f;
 }
@@ -65,43 +358,88 @@ DeviceId _createDevice(DeviceType type, void* customData) {
 	return nextId;
 }
 
+void _notifyDeviceChanged(DeviceId id, DeviceType type, DeviceEvent event) {
+	if (ctx->_deviceChanged.callback != nullptr) {
+		ctx->_deviceChanged.callback(id, type, event, ctx->_deviceChanged.userData);
+	}
+}
+
+void _clearInputValuesFor(InputValues& inputValues, DeviceType deviceType) {
+	switch (deviceType) {
+	case DeviceType::Mouse: {
+		for (auto& inputCode : mouseInputCode) {
+			inputValues[static_cast<unsigned int>(inputCode)] = {};
+		}
+		break;
+	}
+	case DeviceType::Gamepad: {
+		for (auto& inputCode : gamepadInputCode) {
+			inputValues[static_cast<unsigned int>(inputCode)] = {};
+		}
+		break;
+	}
+	case DeviceType::Keyboard: {
+		for (auto& inputCode : keyboardInputCode) {
+			inputValues[static_cast<unsigned int>(inputCode)] = {};
+		}
+		break;
+	}
+	case DeviceType::Touch: {
+		for (auto& inputCode : touchInputCode) {
+			inputValues[static_cast<unsigned int>(inputCode)] = {};
+		}
+		break;
+	}
+	default: break;
+	}
+}
+
+void _releaseDevice(DeviceType deviceType, DeviceId deviceId) {
+	for (auto& player : ctx->players) {
+		if (std::erase(player.heldDevices, deviceId) > 0) {
+			_clearInputValuesFor(player.inputValues, deviceType);
+		}
+	}
+}
+
+void _installDevice(DeviceIdList& deviceIds, DeviceType type, void* customData) {
+	auto id = _createDevice(type, customData);
+	deviceIds.push_back(id);
+	_notifyDeviceChanged(id, type, DeviceEvent::Added);
+}
+
 void installGamepad(void* customData) {
-	auto id = _createDevice(DeviceType::Gamepad, customData);
-	ctx->devices.gamepads.push_back(id);
+	_installDevice(ctx->devices.gamepads, DeviceType::Gamepad, customData);
 }
 
 void installKeyboard() {
-	auto id = _createDevice(DeviceType::Keyboard, nullptr);
-	ctx->devices.keyboards.push_back(id);
+	_installDevice(ctx->devices.keyboards, DeviceType::Keyboard, nullptr);
 }
 
 void installMouse() {
-	auto id = _createDevice(DeviceType::Mouse, nullptr);
-	ctx->devices.mice.push_back(id);
+	_installDevice(ctx->devices.mice, DeviceType::Mouse, nullptr);
+}
+
+void _uninstallDevice(DeviceIdList& deviceIds, DeviceType deviceType, DeviceId id) {
+	auto& device = ctx->devices.devices[id];
+	device.type = DeviceType::None;
+	device.customData = nullptr;
+	device.deviceId = 0;
+	std::erase(deviceIds, id);
+	_notifyDeviceChanged(id, deviceType, DeviceEvent::Removed);
+	_releaseDevice(deviceType, id);
 }
 
 void uninstallMouse(DeviceId id) {
-	auto& device = ctx->devices.devices[id];
-	device.type = DeviceType::None;
-	device.customData = nullptr;
-	device.deviceId = 0;
-	std::erase(ctx->devices.mice, id);
+	_uninstallDevice(ctx->devices.mice, DeviceType::Mouse, id);
 }
 
 void uninstallKeyboard(DeviceId id) {
-	auto& device = ctx->devices.devices[id];
-	device.type = DeviceType::None;
-	device.customData = nullptr;
-	device.deviceId = 0;
-	std::erase(ctx->devices.keyboards, id);
+	_uninstallDevice(ctx->devices.keyboards, DeviceType::Keyboard, id);
 }
 
 void uninstallGamepad(DeviceId id) {
-	auto& device = ctx->devices.devices[id];
-	device.type = DeviceType::None;
-	device.customData = nullptr;
-	device.deviceId = 0;
-	std::erase(ctx->devices.gamepads, id);
+	_uninstallDevice(ctx->devices.gamepads, DeviceType::Gamepad, id);
 }
 
 DeviceId keyboard(unsigned int index) {
@@ -114,6 +452,18 @@ DeviceId mouse(unsigned int index) {
 
 DeviceId gamepad(unsigned int index) {
 	return ctx->devices.gamepads[index];
+}
+
+bool hasKeyboard(unsigned int index) {
+	return index < ctx->devices.keyboards.size();
+}
+
+bool hasMouse(unsigned int index) {
+	return index < ctx->devices.mice.size();
+}
+
+bool hasGamepad(unsigned int index) {
+	return index < ctx->devices.gamepads.size();
 }
 
 const DeviceIdList& gamepads() {
@@ -142,6 +492,9 @@ DeviceType deviceType(DeviceId id) {
 
 void holdDevice(PlayerId playerId, DeviceId deviceId) {
 	Player& player = ctx->players[playerId];
+	if (std::ranges::find(player.heldDevices, deviceId) != player.heldDevices.end()) {
+		return;
+	}
 	player.heldDevices.emplace_back(deviceId);
 }
 
@@ -181,35 +534,53 @@ void shutdown() {
 	ctx = nullptr;
 }
 
-void _processTrigger(Trigger& trigger, const ActionValue& value) {
-	switch (trigger.type) {
-	case TriggerType::Down		: click::down::processEvent(trigger, value); break;
-	case TriggerType::Press		: click::press::processEvent(trigger, value); break;
-	case TriggerType::Release	: click::release::processEvent(trigger, value); break;
-	case TriggerType::Hold		: click::hold::processEvent(trigger, value); break;
-	case TriggerType::Continuous: click::continuous::processEvent(trigger, value); break;
-	default						: assert(false); break;
-	}
+void setDeviceChangedCallback(DeviceChangedCallback callback, void* userData) {
+	ctx->_deviceChanged = {callback, userData};
 }
 
-TriggerState _updateTrigger(Trigger& trigger, float deltaTime) {
-	switch (trigger.type) {
-	case TriggerType::Down		: return click::down::update(trigger, deltaTime); break;
-	case TriggerType::Press		: return click::press::update(trigger, deltaTime); break;
-	case TriggerType::Release	: return click::release::update(trigger, deltaTime); break;
-	case TriggerType::Hold		: return click::hold::update(trigger, deltaTime); break;
-	case TriggerType::Continuous: return click::continuous::update(trigger, deltaTime); break;
-	default						: assert(false); break;
-	}
-
-	return TriggerState::Idle;
+ActionValue& _getInputValueFromPlayer(Player& player, InputCode inputCode) {
+	return player.inputValues[static_cast<unsigned int>(inputCode)];
 }
 
-void _processModifier(Modifier& modifier, ActionValue& value) {
-	switch (modifier.type) {
-	case ModifierType::Negate: click::negate::modify(modifier, value); break;
-	default					 : assert(false); break;
-	}
+void _updateBindingValue(Player& player, Binding& binding, GestureSimple& gesture) {
+	binding.value = _getInputValueFromPlayer(player, gesture.input);
+}
+
+void _updateBindingValue(Player& player, Binding& binding, Gesture2D& gesture) {
+	auto& xValue = _getInputValueFromPlayer(player, gesture.x);
+	auto& yValue = _getInputValueFromPlayer(player, gesture.y);
+	binding.value.vec3.x = xValue.scalar;
+	binding.value.vec3.y = yValue.scalar;
+}
+
+void _updateBindingValue(Player& player, Binding& binding, Gesture3D& gesture) {
+	auto& xValue = _getInputValueFromPlayer(player, gesture.x);
+	auto& yValue = _getInputValueFromPlayer(player, gesture.y);
+	auto& zValue = _getInputValueFromPlayer(player, gesture.z);
+	binding.value.vec3.x = xValue.scalar;
+	binding.value.vec3.y = yValue.scalar;
+	binding.value.vec3.z = zValue.scalar;
+}
+
+void _updateBindingValue(Player& player, Binding& binding, GestureDirectional2D& gesture) {
+	auto& leftValue = _getInputValueFromPlayer(player, gesture.left);
+	auto& rightValue = _getInputValueFromPlayer(player, gesture.right);
+	auto& upValue = _getInputValueFromPlayer(player, gesture.up);
+	auto& downValue = _getInputValueFromPlayer(player, gesture.down);
+	binding.value.vec3.x = rightValue.scalar - leftValue.scalar;
+	binding.value.vec3.y = upValue.scalar - downValue.scalar;
+}
+
+void _updateBindingValue(Player& player, Binding& binding, GestureDirectional3D& gesture) {
+	auto& leftValue = _getInputValueFromPlayer(player, gesture.left);
+	auto& rightValue = _getInputValueFromPlayer(player, gesture.right);
+	auto& upValue = _getInputValueFromPlayer(player, gesture.up);
+	auto& downValue = _getInputValueFromPlayer(player, gesture.down);
+	auto& backValue = _getInputValueFromPlayer(player, gesture.back);
+	auto& forwardValue = _getInputValueFromPlayer(player, gesture.forward);
+	binding.value.vec3.x = rightValue.scalar - leftValue.scalar;
+	binding.value.vec3.y = upValue.scalar - downValue.scalar;
+	binding.value.vec3.z = forwardValue.scalar - backValue.scalar;
 }
 
 void update(float deltaTime) {
@@ -220,24 +591,25 @@ void update(float deltaTime) {
 		}
 	}
 
-	for (auto i = 0; auto& player : ctx->players) {
+	for (auto playerIndex = 0; auto& player : ctx->players) {
 		for (auto& inputMap : player.inputMaps) {
+			if (!inputMap.isEnabled) {
+				continue;
+			}
 			for (auto& actionMap : inputMap.actionMaps) {
 				auto state = InputState::None;
 				auto value = ActionValue{};
 				for (auto& binding : actionMap.bindings) {
-					if (binding.triggers.empty()) {
-						if (!_isValueZero(binding.value)) {
-							state = InputState::Triggered;
-							value = binding.value;
-							binding.value = ActionValue{};
-						}
-						break;
+					std::visit([&](auto&& arg) { _updateBindingValue(player, binding, arg); }, binding.gesture);
+
+					for (auto& modifier : binding.modifiers) {
+						std::visit([&](auto&& arg) { modify(arg, binding.value); }, modifier);
 					}
 
 					auto allTriggersSucceded = true;
 					for (auto& trigger : binding.triggers) {
-						auto triggerState = _updateTrigger(trigger, deltaTime);
+						auto triggerState =
+							std::visit([&](auto&& arg) { return update(arg, binding, deltaTime); }, trigger);
 						allTriggersSucceded &= triggerState == TriggerState::Triggered;
 					}
 
@@ -250,7 +622,7 @@ void update(float deltaTime) {
 				}
 
 				auto& action = ctx->actions[actionMap.actionId];
-				auto& actionState = action.states[i];
+				auto& actionState = action.states[playerIndex];
 				if (actionState.state == InputState::Triggered) {
 					if (action.normalized) {
 						_normalize(actionState.value);
@@ -264,32 +636,8 @@ void update(float deltaTime) {
 				}
 			}
 		}
-		++i;
+		++playerIndex;
 	}
-}
-
-Trigger downTrigger(float actuationThreshold) {
-	return Trigger{TriggerType::Down, {.down = {actuationThreshold}}};
-}
-
-Trigger pressTrigger(float actuationThreshold) {
-	return Trigger{TriggerType::Press, {.press = {actuationThreshold}}};
-}
-
-Trigger releaseTrigger(float actuationThreshold) {
-	return Trigger{TriggerType::Release, {.release = {actuationThreshold}}};
-}
-
-Trigger holdTrigger(float holdTime) {
-	return Trigger{TriggerType::Hold, {.hold = {holdTime}}};
-}
-
-Trigger continuousTrigger(float actuationThreshold) {
-	return Trigger{TriggerType::Continuous, {.continuous = {actuationThreshold}}};
-}
-
-Modifier negateModifier() {
-	return Modifier{ModifierType::Negate, {}};
 }
 
 /*
@@ -475,10 +823,15 @@ void updateMouse(DeviceId mouseId, float x, float y) {
 	y /= ctx->_screenHeight;
 	auto xRel = x - ctx->mouseState.x;
 	auto yRel = y - ctx->mouseState.y;
-	ctx->mouseState.xRel = xRel;
-	ctx->mouseState.yRel = yRel;
 	ctx->mouseState.x = x;
 	ctx->mouseState.y = y;
+
+	if (xRel == ctx->mouseState.xRel && yRel == ctx->mouseState.yRel) {
+		return;
+	}
+
+	ctx->mouseState.xRel = xRel;
+	ctx->mouseState.yRel = yRel;
 
 	processInputEvent({InputCode::MouseX, mouseId, xRel});
 	processInputEvent({InputCode::MouseY, mouseId, yRel});
@@ -489,82 +842,6 @@ void updateGamepadAxis(DeviceId gamepadId, InputCode axis, const ActionValue& va
 	processInputEvent({axis, gamepadId, value});
 }
 
-void _processInputEvent(Binding& binding, const InputEvent&) {
-	for (auto& modifier : binding.modifiers) {
-		_processModifier(modifier, binding.value);
-	}
-	for (auto& trigger : binding.triggers) {
-		_processTrigger(trigger, binding.value);
-	}
-}
-
-void _processInputEvent(Binding& binding, GestureSimple& gesture, const InputEvent& event) {
-	if (event.inputCode == gesture.input) {
-		binding.value = event.value;
-	} else {
-		return;
-	}
-	_processInputEvent(binding, event);
-}
-
-void _processInputEvent(Binding& binding, Gesture2D& gesture, const InputEvent& event) {
-	if (event.inputCode == gesture.x) {
-		binding.value.vec3.x = event.value.scalar;
-	} else if (event.inputCode == gesture.y) {
-		binding.value.vec3.y = event.value.scalar;
-	} else {
-		return;
-	}
-	_processInputEvent(binding, event);
-}
-
-void _processInputEvent(Binding& binding, Gesture3D& gesture, const InputEvent& event) {
-	if (event.inputCode == gesture.x) {
-		binding.value.vec3.x = event.value.scalar;
-	} else if (event.inputCode == gesture.y) {
-		binding.value.vec3.y = event.value.scalar;
-	} else if (event.inputCode == gesture.z) {
-		binding.value.vec3.z = event.value.scalar;
-	} else {
-		return;
-	}
-	_processInputEvent(binding, event);
-}
-
-void _processInputEvent(Binding& binding, GestureDirectional2D& gesture, const InputEvent& event) {
-	if (event.inputCode == gesture.left) {
-		binding.value.vec3.x = -event.value.scalar;
-	} else if (event.inputCode == gesture.right) {
-		binding.value.vec3.x = event.value.scalar;
-	} else if (event.inputCode == gesture.up) {
-		binding.value.vec3.y = event.value.scalar;
-	} else if (event.inputCode == gesture.down) {
-		binding.value.vec3.y = -event.value.scalar;
-	} else {
-		return;
-	}
-	_processInputEvent(binding, event);
-}
-
-void _processInputEvent(Binding& binding, GestureDirectional3D& gesture, const InputEvent& event) {
-	if (event.inputCode == gesture.left) {
-		binding.value.vec3.x = -event.value.scalar;
-	} else if (event.inputCode == gesture.right) {
-		binding.value.vec3.x = event.value.scalar;
-	} else if (event.inputCode == gesture.up) {
-		binding.value.vec3.y = event.value.scalar;
-	} else if (event.inputCode == gesture.down) {
-		binding.value.vec3.y = -event.value.scalar;
-	} else if (event.inputCode == gesture.forward) {
-		binding.value.vec3.z = event.value.scalar;
-	} else if (event.inputCode == gesture.back) {
-		binding.value.vec3.z = -event.value.scalar;
-	} else {
-		return;
-	}
-	_processInputEvent(binding, event);
-}
-
 void processInputEvent(const InputEvent& event) {
 	for (auto& player : ctx->players) {
 		if (player.heldDevices.empty() ||
@@ -572,17 +849,7 @@ void processInputEvent(const InputEvent& event) {
 			continue;
 		}
 
-		for (auto& inputMap : player.inputMaps) {
-			if (!inputMap.isEnabled) {
-				continue;
-			}
-
-			for (auto& actionMap : inputMap.actionMaps) {
-				for (auto& binding : actionMap.bindings) {
-					std::visit([&](auto&& arg) { _processInputEvent(binding, arg, event); }, binding.gesture);
-				}
-			}
-		}
+		player.inputValues[static_cast<unsigned int>(event.inputCode)] = event.value;
 	}
 }
 

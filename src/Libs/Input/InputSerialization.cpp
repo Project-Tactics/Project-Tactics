@@ -35,28 +35,62 @@ namespace click {
 void to_json(nlohmann::json&, const Trigger&) {}
 
 void from_json(const nlohmann::json& json, Trigger& trigger) {
-	trigger.type = json["type"];
-	switch (trigger.type) {
-	case TriggerType::Down		: trigger.data.down.actuationThreshold = json["actuationThreshold"]; break;
-	case TriggerType::Press		: trigger.data.press.actuationThreshold = json["actuationThreshold"]; break;
-	case TriggerType::Release	: trigger.data.release.actuationThreshold = json["actuationThreshold"]; break;
-	case TriggerType::Hold		: trigger.data.hold.holdTime = json["holdTime"]; break;
-	case TriggerType::Continuous: trigger.data.continuous.actuationThreshold = json["actuationThreshold"]; break;
+	if (!json.contains("type")) {
+		LOG_ERROR(tactics::Log::Input, "Input Modifier missing [type]");
+		return;
+	}
+
+	std::string type = json["type"];
+	if (type == "down") {
+		trigger = json.get<DownTrigger>();
+	} else if (type == "press") {
+		trigger = json.get<PressTrigger>();
+	} else if (type == "release") {
+		trigger = json.get<ReleaseTrigger>();
+	} else if (type == "hold") {
+		trigger = json.get<HoldTrigger>();
+	} else if (type == "continuous") {
+		trigger = json.get<ContinuousTrigger>();
+	} else {
+		LOG_ERROR(tactics::Log::Input, "Unknown trigger type: {}", type);
 	}
 }
 
 void to_json(nlohmann::json&, const Modifier&) {}
 
 void from_json(const nlohmann::json& json, Modifier& modifier) {
-	modifier.type = json["type"];
-	switch (modifier.type) {
-	case ModifierType::Negate: break;
+	if (!json.contains("type")) {
+		LOG_ERROR(tactics::Log::Input, "Input Modifier missing [type]");
+		return;
+	}
+
+	if (!json.contains("data")) {
+		LOG_ERROR(tactics::Log::Input, "Input Modifier missing field [data]");
+		return;
+	}
+
+	std::string type = json["type"];
+	auto& data = json["data"];
+	if (type == "negate") {
+		modifier = data.get<NegateModifier>();
+	} else {
+		LOG_ERROR(tactics::Log::Input, "Unknown modifier type: {}", type);
 	}
 }
 
 void to_json(nlohmann::json&, const Gesture&) {}
 
 void from_json(const nlohmann::json& json, Gesture& gesture) {
+	if (!json.contains("type")) {
+		LOG_ERROR(tactics::Log::Input, "Input Modifier missing [type]");
+		return;
+	}
+
+	if (!json.contains("data")) {
+		LOG_ERROR(tactics::Log::Input, "Input Modifier missing field [data]");
+		return;
+	}
+
 	std::string type = json["type"];
 	auto& data = json["data"];
 	if (type == "simple") {

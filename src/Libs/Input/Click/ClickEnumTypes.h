@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstdint>
 
 namespace click {
@@ -20,13 +21,18 @@ enum class TriggerType {
 
 enum class ModifierType {
 	Negate,
-	ToAxis
+	Invert
 };
 
 enum class TriggerState {
 	Idle,
 	Ongoing,
 	Triggered
+};
+
+enum class DeviceEvent {
+	Added,
+	Removed
 };
 
 enum class DeviceType : uint8_t {
@@ -46,9 +52,9 @@ enum class InputState {
 };
 
 enum class Axis {
-	XYZ,
-	YZX,
-	ZXY
+	X,
+	Y,
+	Z
 };
 
 enum class InputCode {
@@ -345,7 +351,8 @@ enum class InputCode {
 	KeySoftleft,
 	KeySoftright,
 	KeyCall,
-	KeyEndcall
+	KeyEndcall,
+	Count
 };
 
 } // namespace click

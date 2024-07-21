@@ -363,24 +363,6 @@ void _processKeyboardButtonEvent(float axisValue, SDL_Keycode keyCode, Uint8 rep
 	}
 }
 
-void _processMouseMotionEvent(float xRel, float yRel) {
-	auto inputCode = InputCode::MouseXY;
-	auto axis2D = ActionValue{.vec2 = {xRel, yRel}};
-	click::processInputEvent({inputCode, _mouseDeviceId(), axis2D});
-
-	if (xRel != 0.0f) {
-		auto axis1D = ActionValue{.scalar = {xRel}};
-		inputCode = InputCode::MouseX;
-		click::processInputEvent({inputCode, _mouseDeviceId(), axis1D});
-	}
-
-	if (yRel != 0.0f) {
-		auto axis1D = ActionValue{.scalar = {yRel}};
-		inputCode = InputCode::MouseY;
-		click::processInputEvent({inputCode, _mouseDeviceId(), axis1D});
-	}
-}
-
 void processSdlEvents(SDL_Event& event) {
 	switch (event.type) {
 	case SDL_JOYDEVICEADDED: {
@@ -408,13 +390,6 @@ void processSdlEvents(SDL_Event& event) {
 		processInputEvent({inputCode, *_gamepadDeviceId(event.cbutton.which), {.scalar = 0.0f}});
 		break;
 	}
-	case SDL_CONTROLLERAXISMOTION: {
-		/*
-		auto inputCode = _toGamepadInputCode(static_cast<SDL_GameControllerAxis>(event.caxis.axis));
-		auto value = ActionValue{.axis1D = static_cast<float>(event.caxis.value) / 32767.0f};
-		processInputEvent({inputCode, *_gamepadDeviceId(event.caxis.which), value});*/
-		break;
-	}
 	case SDL_KEYDOWN: {
 		_processKeyboardButtonEvent(1.0f, event.key.keysym.sym, event.key.repeat);
 		break;
@@ -431,9 +406,6 @@ void processSdlEvents(SDL_Event& event) {
 		_processMouseButtonEvent(0.0f, event.button.button);
 		break;
 	}
-	case SDL_MOUSEMOTION: {
-		//_processMouseMotionEvent(static_cast<float>(event.motion.xrel), static_cast<float>(event.motion.yrel));
-	} break;
 	}
 }
 
@@ -452,19 +424,22 @@ void updateSdlBackend() {
 		if (gameController) {
 			auto x = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTX) / 32767.0f;
 			auto y = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_LEFTY) / 32767.0f;
-			auto value = ActionValue{.vec2 = {x, y}};
-			click::updateGamepadAxis(gamepadDeviceId, InputCode::AxisLeftXY, value);
+			click::updateGamepadAxis(gamepadDeviceId, InputCode::AxisLeftXY, {.vec2 = {x, y}});
 
 			click::updateGamepadAxis(gamepadDeviceId, InputCode::AxisLeftX, ActionValue{.scalar = x});
 			click::updateGamepadAxis(gamepadDeviceId, InputCode::AxisLeftY, ActionValue{.scalar = y});
 
-			x = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTX);
-			y = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTY);
-			value = ActionValue{.vec2 = {static_cast<float>(x) / 32767.0f, static_cast<float>(y) / 32767.0f}};
-			click::updateGamepadAxis(gamepadDeviceId, InputCode::AxisRightXY, value);
+			x = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTX) / 32767.0f;
+			y = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_RIGHTY) / 32767.0f;
+			click::updateGamepadAxis(gamepadDeviceId, InputCode::AxisRightXY, {.vec2 = {x, y}});
 
 			click::updateGamepadAxis(gamepadDeviceId, InputCode::AxisRightX, ActionValue{.scalar = x});
 			click::updateGamepadAxis(gamepadDeviceId, InputCode::AxisRightY, ActionValue{.scalar = y});
+
+			auto triggerLeft = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_TRIGGERLEFT) / 32767.0f;
+			auto triggerRight = SDL_GameControllerGetAxis(gameController, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) / 32767.0f;
+			click::updateGamepadAxis(gamepadDeviceId, InputCode::AxisTriggerLeft, ActionValue{.scalar = triggerLeft});
+			click::updateGamepadAxis(gamepadDeviceId, InputCode::AxisTriggerRight, ActionValue{.scalar = triggerRight});
 		}
 	}
 }

@@ -6,84 +6,69 @@ bool _isOverActuationThreshold(float actuationThreshold, const ActionValue& valu
 	return _magnitudeSquared(value) >= actuationThreshold * actuationThreshold;
 }
 
+TriggerState update(DownTrigger& trigger, Binding& binding, float /*deltaTime*/) {
+	if (_isOverActuationThreshold(trigger.actuationThreshold, binding.value)) {
+		return TriggerState::Triggered;
+	}
+
+	return TriggerState::Idle;
+}
+
+TriggerState update(PressTrigger& trigger, Binding& binding, float /*deltaTime*/) {
+	if (_isOverActuationThreshold(trigger.actuationThreshold, binding.value)) {
+		if (trigger.state == TriggerState::Idle) {
+			trigger.state = TriggerState::Triggered;
+			return TriggerState::Triggered;
+		}
+	}
+
+	trigger.state = TriggerState::Idle;
+	return TriggerState::Idle;
+}
+
+TriggerState update(ReleaseTrigger& trigger, Binding& binding, float /*deltaTime*/) {
+	auto isOverThreshold = _isOverActuationThreshold(trigger.actuationThreshold, binding.value);
+	switch (trigger.state) {
+	case TriggerState::Idle: {
+		if (isOverThreshold) {
+			trigger.state = TriggerState::Ongoing;
+			return trigger.state;
+		}
+		break;
+	}
+	case TriggerState::Ongoing: {
+		if (!isOverThreshold) {
+			trigger.state = TriggerState::Idle;
+			return TriggerState::Triggered;
+		}
+		break;
+	}
+	}
+
+	return trigger.state;
+}
+
+TriggerState update(HoldTrigger& trigger, Binding& binding, float deltaTime) {
+	if (_isOverActuationThreshold(trigger.actuationThreshold, binding.value)) {
+		trigger.state = TriggerState::Ongoing;
+		trigger.currentTime += deltaTime;
+		if (trigger.currentTime >= trigger.holdTime) {
+			trigger.state = TriggerState::Triggered;
+		}
+	} else {
+		trigger.state = TriggerState::Idle;
+		trigger.currentTime = 0.0f;
+	}
+
+	return trigger.state;
+}
+
+TriggerState update(ContinuousTrigger& trigger, Binding& binding, float /*deltaTime*/) {
+	if (_isOverActuationThreshold(trigger.actuationThreshold, binding.value)) {
+		return TriggerState::Triggered;
+	}
+
+	return TriggerState::Idle;
+}
+
 } // namespace click
-
-namespace click::down {
-
-TriggerState update(Trigger& trigger, float /*deltaTime*/) {
-	return trigger.state;
-}
-
-void processEvent(Trigger& trigger, const ActionValue& value) {
-	if (_isOverActuationThreshold(trigger.data.down.actuationThreshold, value)) {
-		trigger.state = TriggerState::Triggered;
-	} else {
-		trigger.state = TriggerState::Idle;
-	}
-}
-
-} // namespace click::down
-
-namespace click::press {
-
-TriggerState update(Trigger& trigger, float /*deltaTime*/) {
-	if (trigger.state == TriggerState::Triggered) {
-		return std::exchange(trigger.state, TriggerState::Idle);
-	}
-	return trigger.state;
-}
-
-void processEvent(Trigger& trigger, const ActionValue& value) {
-	if (_isOverActuationThreshold(trigger.data.press.actuationThreshold, value)) {
-		trigger.state = TriggerState::Triggered;
-	} else {
-		trigger.state = TriggerState::Idle;
-	}
-}
-
-} // namespace click::press
-
-namespace click::release {
-
-TriggerState update(Trigger& trigger, float /*deltaTime*/) {
-	if (trigger.state == TriggerState::Triggered) {
-		return std::exchange(trigger.state, TriggerState::Idle);
-	}
-	return trigger.state;
-}
-
-void processEvent(Trigger& trigger, const ActionValue& value) {
-	if (_isOverActuationThreshold(trigger.data.down.actuationThreshold, value)) {
-		trigger.state = TriggerState::Triggered;
-	} else {
-		trigger.state = TriggerState::Idle;
-	}
-}
-
-} // namespace click::release
-
-namespace click::hold {
-
-TriggerState update(Trigger& trigger, float /*deltaTime*/) {
-	return trigger.state;
-}
-
-void processEvent(Trigger& /*trigger*/, const ActionValue& /*value*/) {}
-
-} // namespace click::hold
-
-namespace click::continuous {
-
-TriggerState update(Trigger& trigger, float /*deltaTime*/) {
-	return trigger.state;
-}
-
-void processEvent(Trigger& trigger, const ActionValue& value) {
-	if (_isOverActuationThreshold(trigger.data.continuous.actuationThreshold, value)) {
-		trigger.state = TriggerState::Triggered;
-	} else {
-		trigger.state = TriggerState::Idle;
-	}
-}
-
-} // namespace click::continuous

@@ -15,6 +15,8 @@ using PlayerId = uint8_t;
 using MapId = uint8_t;
 using BindingId = uint16_t;
 
+using DeviceChangedCallback = void (*)(DeviceId id, DeviceType type, DeviceEvent event, void* userData);
+
 const auto InvalidDeviceId = std::numeric_limits<uint8_t>::max();
 
 struct Vec3 {
@@ -49,46 +51,39 @@ struct InputAction {
 	std::vector<ActionState> states;
 };
 
-struct Trigger {
-	TriggerType type;
+struct DownTrigger {
+	float actuationThreshold{};
+};
 
-	union {
-		struct {
-			float actuationThreshold;
-		} down;
-
-		struct {
-			float actuationThreshold;
-		} press;
-
-		struct {
-			float actuationThreshold;
-		} release;
-
-		struct {
-			float holdTime;
-		} hold;
-
-		struct {
-			float actuationThreshold;
-		} continuous;
-	} data;
-
+struct PressTrigger {
+	float actuationThreshold{};
 	TriggerState state{};
 };
 
-struct Modifier {
-	ModifierType type;
-
-	union {
-		struct {
-		} negate;
-
-		struct {
-		} normalize;
-
-	} data;
+struct ReleaseTrigger {
+	float actuationThreshold{};
+	TriggerState state{};
 };
+
+struct HoldTrigger {
+	float actuationThreshold{};
+	float holdTime{};
+	float currentTime{};
+	TriggerState state{};
+};
+
+struct ContinuousTrigger {
+	float actuationThreshold{};
+	TriggerState state{};
+};
+
+using Trigger = std::variant<DownTrigger, PressTrigger, ReleaseTrigger, HoldTrigger, ContinuousTrigger>;
+
+struct NegateModifier {
+	Axis axis{};
+};
+
+using Modifier = std::variant<NegateModifier>;
 
 struct GestureSimple {
 	InputCode input{};
@@ -122,6 +117,13 @@ struct GestureDirectional3D {
 };
 
 using Gesture = std::variant<GestureSimple, Gesture2D, Gesture3D, GestureDirectional2D, GestureDirectional3D>;
+
+struct MouseState {
+	float x{};
+	float y{};
+	float xRel{};
+	float yRel{};
+};
 
 struct DeviceData {
 	DeviceType type{DeviceType::None};
@@ -161,23 +163,25 @@ struct InputMap {
 	bool isEnabled{true};
 };
 
+using InputValues = std::array<ActionValue, static_cast<unsigned int>(InputCode::Count)>;
+
 struct Player {
 	std::vector<InputMap> inputMaps;
 	std::vector<DeviceId> heldDevices;
+	InputValues inputValues;
 };
 
-struct MousePosition {
-	float x{};
-	float y{};
-	float xRel{};
-	float yRel{};
+struct DeviceChanged {
+	DeviceChangedCallback callback{};
+	void* userData{};
 };
 
 struct Context {
 	std::vector<InputAction> actions;
 	std::vector<Player> players;
 	DeviceInfo devices;
-	MousePosition mouseState;
+	MouseState mouseState;
+	DeviceChanged _deviceChanged;
 	std::vector<int> _freeActionIndices;
 	float _screenWidth{};
 	float _screenHeight{};

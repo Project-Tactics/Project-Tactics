@@ -8,13 +8,19 @@
 
 namespace tactics::resource {
 
-struct InputMapBindingDescriptor {
-	HashId action;
+struct InputMapBindingGestureDescriptor {
 	click::Gesture gesture;
 	std::vector<click::Trigger> triggers;
 	std::vector<click::Modifier> modifiers;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(InputMapBindingDescriptor, action, gesture, triggers, modifiers);
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(InputMapBindingGestureDescriptor, gesture, triggers, modifiers);
+};
+
+struct InputMapBindingDescriptor {
+	HashId action;
+	std::vector<InputMapBindingGestureDescriptor> gestures;
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(InputMapBindingDescriptor, action, gestures);
 };
 
 struct InputMapDescriptor {

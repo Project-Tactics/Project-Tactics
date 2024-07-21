@@ -2,8 +2,8 @@
 
 #include "ClickInputTypes.h"
 
-namespace click::negate {
+namespace click {
 
-void modify(Modifier& modifier, ActionValue& value);
+void modify(NegateModifier& modifier, ActionValue& value);
 
-} // namespace click::negate
+} // namespace click
