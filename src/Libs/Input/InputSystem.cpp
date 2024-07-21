@@ -69,8 +69,8 @@ void InputSystem::update() {
 
 	auto& manager = _resourceProvider.getManager(resource::ResourceType::InputAction);
 	manager.forEachTResource<resource::InputAction>([&](resource::InputAction& inputAction) {
-		for (auto playerIndex = 0u; playerIndex < click::players(); ++playerIndex) {
-			auto& actionState = getActionState(inputAction.actionId, 0);
+		for (click::PlayerId playerIndex = 0u; playerIndex < click::players(); ++playerIndex) {
+			auto& actionState = getActionState(inputAction.actionId, playerIndex);
 			inputAction.states[playerIndex] = actionState;
 		}
 	});
@@ -84,14 +84,19 @@ void InputSystem::assignInputMap(std::shared_ptr<resource::InputMap> inputMap, c
 }
 
 void InputSystem::assignDevice(click::DeviceType deviceType, unsigned int deviceIndex, click::PlayerId playerId) {
-	auto itr = _playerDevices.find(playerId);
-	if (itr == _playerDevices.end()) {
-		_playerDevices[playerId] = std::make_tuple(deviceType, deviceIndex);
-	} else {
-		itr->second = std::make_tuple(deviceType, deviceIndex);
+	_playerDevices[playerId].push_back({deviceType, deviceIndex});
+	_updateDeviceAssignment();
+}
+
+bool InputSystem::hasDeviceAssigned(click::PlayerId playerId, click::DeviceType deviceType) const {
+	auto it = _playerDevices.find(playerId);
+	if (it == _playerDevices.end()) {
+		return false;
 	}
 
-	_updateDeviceAssignment();
+	return std::count_if(it->second.begin(), it->second.end(), [&](const auto& device) {
+			   return std::get<0>(device) == deviceType;
+		   }) > 0;
 }
 
 void InputSystem::assignKeyboard(click::PlayerId playerId) {
@@ -107,12 +112,14 @@ void InputSystem::assignGamepad(click::PlayerId playerId, unsigned int deviceInd
 }
 
 void InputSystem::_updateDeviceAssignment() {
-	for (const auto& playerDevice : _playerDevices) {
-		auto deviceType = std::get<0>(playerDevice.second);
-		auto deviceIndex = std::get<1>(playerDevice.second);
-		if (hasDevice(deviceType, deviceIndex)) {
+	for (const auto& [playerId, devices] : _playerDevices) {
+		for (auto& [deviceType, deviceIndex] : devices) {
+			if (!hasDevice(deviceType, deviceIndex)) {
+				continue;
+			}
+
 			auto deviceId = getDeviceId(deviceType, deviceIndex);
-			click::holdDevice(playerDevice.first, deviceId);
+			click::holdDevice(playerId, deviceId);
 		}
 	}
 }
@@ -145,8 +152,16 @@ click::DeviceId InputSystem::getDeviceId(click::DeviceType deviceType, unsigned 
 	return 0;
 }
 
+const click::DeviceData& InputSystem::getDevice(click::DeviceId deviceId) const {
+	return click::device(deviceId);
+}
+
 const click::ActionState& InputSystem::getActionState(click::ActionId actionId, click::PlayerId playerId) {
 	return click::actionState(actionId, playerId);
+}
+
+const click::ActionValue& InputSystem::getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId) {
+	return click::inputValue(inputCode, playerId);
 }
 
 } // namespace tactics

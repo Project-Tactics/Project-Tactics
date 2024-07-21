@@ -27,6 +27,10 @@ public:
 		static ImVec4 TextureColor;
 		static ImVec4 InputMapColor;
 		static ImVec4 InputActionColor;
+		static ImVec4 InputChangeColorVeryLow;
+		static ImVec4 InputChangeColorLow;
+		static ImVec4 InputChangeColorMid;
+		static ImVec4 InputChangeColorHigh;
 	};
 
 	static void initialize(resource::IniFile& configFile);

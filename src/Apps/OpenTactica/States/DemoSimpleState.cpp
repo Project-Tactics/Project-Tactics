@@ -56,8 +56,8 @@ void DemoSimpleState::_setupInputMap() {
 	auto inputMap = resourceSystem.getResource<resource::InputMap>("defaultInputMap"_id);
 	inputSystem.assignInputMap(inputMap, 0);
 	inputSystem.assignKeyboard(0);
-	inputSystem.assignMouse(0);
 	inputSystem.assignGamepad(0, 0);
+	inputSystem.assignMouse(0);
 }
 
 FsmEventAction DemoSimpleState::onKeyPress(SDL_KeyboardEvent& event) {

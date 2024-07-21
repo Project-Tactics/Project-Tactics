@@ -34,17 +34,20 @@ public:
 	void assignDevice(click::DeviceType deviceType, unsigned int deviceIndex, click::PlayerId playerId);
 	void assignKeyboard(click::PlayerId playerId);
 	void assignMouse(click::PlayerId playerId);
+	bool hasDeviceAssigned(click::PlayerId playerId, click::DeviceType deviceType) const;
 	void assignGamepad(click::PlayerId playerId, unsigned int deviceIndex);
 	click::DeviceId getDeviceId(click::DeviceType deviceType, unsigned int deviceIndex) const;
+	const click::DeviceData& getDevice(click::DeviceId deviceId) const;
 	bool hasDevice(click::DeviceType deviceType, unsigned int deviceIndex) const;
 	const click::ActionState& getActionState(click::ActionId actionId, click::PlayerId playerId);
+	const click::ActionValue& getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId);
 
 private:
 	void _updateDeviceAssignment();
 	static void _onDeviceChanged(click::DeviceId id, click::DeviceType type, click::DeviceEvent event, void* userData);
 
 	resource::ResourceProvider& _resourceProvider;
-	std::unordered_map<click::PlayerId, std::tuple<click::DeviceType, unsigned int>> _playerDevices;
+	std::unordered_map<click::PlayerId, std::vector<std::tuple<click::DeviceType, unsigned int>>> _playerDevices;
 };
 
 } // namespace tactics

@@ -509,6 +509,21 @@ void releaseDevice(PlayerId playerId, DeviceId deviceId) {
 	std::erase(player.heldDevices, deviceId);
 }
 
+bool isHoldingDevice(PlayerId playerId, DeviceType deviceType) {
+	auto& player = ctx->players[playerId];
+	for (auto& deviceId : player.heldDevices) {
+		if (ctx->devices.devices[deviceId].type == deviceType) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool isHoldingDevice(PlayerId playerId, DeviceId deviceId) {
+	auto& player = ctx->players[playerId];
+	return std::ranges::find(player.heldDevices, deviceId) != player.heldDevices.end();
+}
+
 DeviceType getDeviceTypeFromInputCode(InputCode code) {
 	return inputCodeToDevice[static_cast<unsigned int>(code)];
 }
@@ -877,6 +892,10 @@ void processInputEvent(const InputEvent& event) {
 
 		player.inputValues[static_cast<unsigned int>(event.inputCode)] = event.value;
 	}
+}
+
+const ActionValue& inputValue(InputCode code, PlayerId playerId) {
+	return ctx->players[playerId].inputValues[static_cast<unsigned int>(code)];
 }
 
 } // namespace click

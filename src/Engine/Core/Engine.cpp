@@ -151,7 +151,7 @@ void Engine::_registerOverlays() {
 		_overlaySystem->addOverlay<RenderingOverlay>("Rendering", false, *_renderSystem, *_ecs);
 		_overlaySystem->addOverlay<ResourcesOverlay>("Resources", false, *_resourceSystem);
 		_overlaySystem->addOverlay<FsmOverlay>("Fsm", false, *_fsmExternalController, *_fsmInfo);
-		_overlaySystem->addOverlay<InputOverlay>("Input", false, *_inputSystem);
+		_overlaySystem->addOverlay<InputOverlay>("Input", false, *_inputSystem, *_resourceSystem);
 		_overlaySystem->addOverlay<ExampleOverlay>("ImGui Demo", false);
 	}
 }

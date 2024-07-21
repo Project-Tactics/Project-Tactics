@@ -32,6 +32,10 @@ add_subdirectory(stb)
 # https://github.com/USCiLab/cereal
 add_subdirectory(cereal)
 
+# Adding magic_enum for enum reflection
+# https://github.com/Neargye/magic_enum
+add_subdirectory(magic_enum)
+
 # Adding inifile-cpp for reading .ini files
 # https://github.com/Rookfighter/inifile-cpp
 # We're not really in need of going through their cmakelists.txt

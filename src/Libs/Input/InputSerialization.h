@@ -5,7 +5,15 @@
 
 #include <nlohmann/json.hpp>
 
-STRING_SERIALIZATION(click::DeviceType);
+template<> struct magic_enum::customize::enum_range<click::InputCode> {
+	static constexpr int min = 0;
+	static constexpr int max = 300;
+};
+
+STRING_ENUM_SERIALIZATION(click::DeviceType)
+STRING_ENUM_SERIALIZATION(click::InputCode)
+STRING_ENUM_SERIALIZATION(click::InputState)
+STRING_SERIALIZATION(click::ActionValue)
 
 namespace click {
 
