@@ -35,7 +35,8 @@ public:
 						float near,
 						float far);
 
-	Entity createEntity(const glm::vec3& position,
+	Entity createEntity(const HashId& name,
+						const glm::vec3& position,
 						const HashId& meshName,
 						const std::vector<HashId>& materials,
 						const glm::quat& rotation = Quaternion::identity,

@@ -80,7 +80,9 @@ void OverlayStyleHelper::setupImGuiStyle(const resource::IniFile& iniFile, const
 		std::string str;
 		while (std::getline(ss, str, ',')) {
 			auto font = io.Fonts->AddFontFromFileTTF(fontPathStr.c_str(), static_cast<float>(std::atof(str.c_str())));
-			if (str == defaultSize) { io.FontDefault = font; }
+			if (str == defaultSize) {
+				io.FontDefault = font;
+			}
 		}
 	}
 }

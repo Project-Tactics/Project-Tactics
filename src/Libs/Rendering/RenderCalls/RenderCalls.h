@@ -162,7 +162,9 @@ template<BufferType bufferType> void bindBuffer(unsigned int buffer) {
 	bindBuffer(BufferTypeValue<bufferType>::value, buffer);
 }
 
-template<BufferType bufferType> void unbindBuffer() { unbindBuffer(BufferTypeValue<bufferType>::value); }
+template<BufferType bufferType> void unbindBuffer() {
+	unbindBuffer(BufferTypeValue<bufferType>::value);
+}
 
 template<BufferType bufferType, BufferUsage usage> void bufferData(unsigned int size, const void* data) {
 	bufferData(BufferTypeValue<bufferType>::value, size, data, BufferUsageValue<usage>::value);
@@ -188,7 +190,9 @@ template<TextureType textureType> void bindTexture(unsigned int texture) {
 	bindTexture(TextureTypeValue<textureType>::value, texture);
 }
 
-template<TextureType textureType> void unbindTexture() { unbindTexture(TextureTypeValue<textureType>::value); }
+template<TextureType textureType> void unbindTexture() {
+	unbindTexture(TextureTypeValue<textureType>::value);
+}
 
 } // namespace render::pipeline
 

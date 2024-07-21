@@ -14,8 +14,12 @@ void Camera::defineReflection() {
 	componentReflection<Camera>("camera").data<&Camera::projectionType>("projectionType"_id);
 }
 
-Camera Camera::clone() { return *this; }
+Camera Camera::clone() {
+	return *this;
+}
 
-void CurrentCamera::defineReflection() { componentReflection<CurrentCamera>("currentCamera"); }
+void CurrentCamera::defineReflection() {
+	componentReflection<CurrentCamera>("currentCamera");
+}
 
 } // namespace tactics::component

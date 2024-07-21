@@ -59,9 +59,13 @@ void Transform::setScale(const glm::vec3& newScale) {
 	_dirty = true;
 }
 
-const glm::vec3& Transform::getPosition() const { return position; }
+const glm::vec3& Transform::getPosition() const {
+	return position;
+}
 
-const glm::quat& Transform::getRotation() const { return rotation; }
+const glm::quat& Transform::getRotation() const {
+	return rotation;
+}
 
 const glm::mat4x4& Transform::computeMatrix() {
 	if (_dirty) {
@@ -76,6 +80,8 @@ const glm::mat4x4& Transform::computeMatrix() {
 	return transformMatrix;
 }
 
-const glm::mat4x4& Transform::getMatrix() const { return transformMatrix; }
+const glm::mat4x4& Transform::getMatrix() const {
+	return transformMatrix;
+}
 
 } // namespace tactics::component

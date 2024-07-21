@@ -1,6 +1,8 @@
 #include "ResourceSystemInitializer.h"
 
 #include <Libs/Resource/IniFile/IniFileLoader.h>
+#include <Libs/Resource/Input/InputActionLoader.h>
+#include <Libs/Resource/Input/InputMapLoader.h>
 #include <Libs/Resource/Material/MaterialLoader.h>
 #include <Libs/Resource/Mesh/MeshLoader.h>
 #include <Libs/Resource/Prefab/PrefabLoader.h>
@@ -23,6 +25,8 @@ std::unique_ptr<resource::ResourceSystem> ResourceSystemInitializer::initialize(
 	using namespace resource;
 	auto resourceSystem = std::make_unique<resource::ResourceSystem>(fileSystem);
 	registerManager<IniFile, IniFileLoader>(fileSystem, *resourceSystem);
+	registerManager<InputAction, InputActionLoader>(fileSystem, *resourceSystem);
+	registerManager<InputMap, InputMapLoader>(fileSystem, *resourceSystem);
 	registerManager<Texture, TextureLoader>(fileSystem, *resourceSystem);
 	registerManager<Shader, ShaderLoader>(fileSystem, *resourceSystem);
 	registerManager<Mesh, MeshLoader>(fileSystem, *resourceSystem);

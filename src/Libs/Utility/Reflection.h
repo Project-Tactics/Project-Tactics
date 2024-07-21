@@ -14,7 +14,9 @@ concept HasDeserialize = requires(T obj, resource::ResourceProvider* provider, c
 	{ obj.deserialize(provider, json) };
 };
 
-template<typename... TArgs> void defineComponentsReflection() { (TArgs::defineReflection(), ...); }
+template<typename... TArgs> void defineComponentsReflection() {
+	(TArgs::defineReflection(), ...);
+}
 
 template<typename TComponent, bool DefaultDeserialization = true>
 entt::meta_factory<TComponent> componentReflection(const char* name) {

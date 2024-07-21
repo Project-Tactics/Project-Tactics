@@ -75,7 +75,9 @@ void RenderingOverlay::_drawCameraStats() {
 	view.each([&](Transform& transform, Frustum& frustum, Camera&) {
 		ImGui::TextColored(_titleColor, "%s", "CAMERA");
 		auto position = transform.getPosition();
-		if (_vector3("Position", position, 0, 0.1f)) { transform.setPosition(position); }
+		if (_vector3("Position", position, 0, 0.1f)) {
+			transform.setPosition(position);
+		}
 
 		glm::vec2 angles = glm::eulerAngles(transform.getRotation());
 		if (_vector2("Rotation", angles, 0, 0.01f)) {

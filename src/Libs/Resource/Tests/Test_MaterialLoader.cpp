@@ -5,7 +5,9 @@
 
 #include <Libs/Utility/Exception.h>
 
-TEST_F(ResourceTest, CreateMaterialLoader) { [[maybe_unused]] MaterialLoader loader(*_fileSystem, *_resourceSystem); }
+TEST_F(ResourceTest, CreateMaterialLoader) {
+	[[maybe_unused]] MaterialLoader loader(*_fileSystem, *_resourceSystem);
+}
 
 TEST_F(ResourceTest, LoadEmptyMaterialDescriptor) {
 	MockResourceProvider mockProvider;

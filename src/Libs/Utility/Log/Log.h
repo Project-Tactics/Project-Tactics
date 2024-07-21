@@ -6,6 +6,7 @@
 #include <fmt/color.h>
 #include <fmt/core.h>
 #include <memory>
+#include <nlohmann/detail/exceptions.hpp>
 #include <string_view>
 
 namespace tactics {
@@ -28,13 +29,13 @@ enum LogLevel {
 #define LOG_CRITICAL(...)		 (void)0
 #define LOG_EXCEPTION(exception) (void)0
 #else
-#define LOG_TRACE(...)			 Log::trace(__VA_ARGS__)
-#define LOG_DEBUG(...)			 Log::debug(__VA_ARGS__)
-#define LOG_INFO(...)			 Log::info(__VA_ARGS__)
-#define LOG_WARNING(...)		 Log::warning(__VA_ARGS__)
-#define LOG_ERROR(...)			 Log::error(__VA_ARGS__)
-#define LOG_CRITICAL(...)		 Log::critical(__VA_ARGS__)
-#define LOG_EXCEPTION(exception) Log::exception(exception)
+#define LOG_TRACE(...)			 tactics::Log::trace(__VA_ARGS__)
+#define LOG_DEBUG(...)			 tactics::Log::debug(__VA_ARGS__)
+#define LOG_INFO(...)			 tactics::Log::info(__VA_ARGS__)
+#define LOG_WARNING(...)		 tactics::Log::warning(__VA_ARGS__)
+#define LOG_ERROR(...)			 tactics::Log::error(__VA_ARGS__)
+#define LOG_CRITICAL(...)		 tactics::Log::critical(__VA_ARGS__)
+#define LOG_EXCEPTION(exception) tactics::Log::exception(exception)
 #endif
 
 class LogCategory {
@@ -44,7 +45,9 @@ public:
 	const std::string& getName() const;
 	const fmt::text_style& getStyle() const;
 
-	bool operator==(const LogCategory& other) const { return _name == other._name; }
+	bool operator==(const LogCategory& other) const {
+		return _name == other._name;
+	}
 
 private:
 	std::string _name;
@@ -67,6 +70,7 @@ public:
 	static const LogCategory Rendering;
 	static const LogCategory Overlay;
 	static const LogCategory Fsm;
+	static const LogCategory Input;
 	static const LogCategory Ecs;
 
 	static void init(LogLevel minimumLogLevel = LogLevel::Trace);
@@ -103,6 +107,7 @@ public:
 	}
 
 	static void exception(const std::exception& exception);
+	static void exception(const nlohmann::detail::exception& exception);
 	static void exception(const Exception& exception);
 
 	static void log(const LogCategory& category, LogLevel level, fmt::string_view fmt, fmt::format_args args);

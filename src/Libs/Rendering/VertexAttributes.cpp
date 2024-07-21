@@ -26,22 +26,32 @@ VertexAttributes::VertexAttributes(unsigned int componentPerVertex) : _component
 	glGenVertexArrays(1, &_vao);
 }
 
-VertexAttributes::~VertexAttributes() { glDeleteVertexArrays(1, &_vao); }
+VertexAttributes::~VertexAttributes() {
+	glDeleteVertexArrays(1, &_vao);
+}
 
-void VertexAttributes::bind() { glBindVertexArray(_vao); }
+void VertexAttributes::bind() {
+	glBindVertexArray(_vao);
+}
 
-void VertexAttributes::unbind() { glBindVertexArray(0); }
+void VertexAttributes::unbind() {
+	glBindVertexArray(0);
+}
 
 void VertexAttributes::release() {
 	glDeleteVertexArrays(1, &_vao);
 	_vao = 0;
 }
 
-bool VertexAttributes::isValid() const { return _vao != 0; }
+bool VertexAttributes::isValid() const {
+	return _vao != 0;
+}
 
 void VertexAttributes::Builder::_defineAttributes(VertexAttributes& vertexAttribute) {
 	vertexAttribute.bind();
-	for (auto& attribute : _attributes) { attribute(); }
+	for (auto& attribute : _attributes) {
+		attribute();
+	}
 	vertexAttribute.unbind();
 }
 

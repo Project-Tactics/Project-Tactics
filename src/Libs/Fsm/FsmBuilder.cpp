@@ -20,7 +20,9 @@ FsmBuilder& FsmBuilder::state(std::string_view stateName, std::unique_ptr<FsmSta
 	return *this;
 }
 
-FsmBuilder& FsmBuilder::on(std::string_view transitionName) { return _on(HashId(transitionName)); }
+FsmBuilder& FsmBuilder::on(std::string_view transitionName) {
+	return _on(HashId(transitionName));
+}
 
 FsmBuilder& FsmBuilder::_on(const HashId& transitionName) {
 	_latestOnTransition = HashId::none;
@@ -40,11 +42,17 @@ FsmBuilder& FsmBuilder::_on(const HashId& transitionName) {
 	return *this;
 }
 
-FsmBuilder& FsmBuilder::onAppExitRequest() { return _on(FsmEventListener::appExitRequestTransition); }
+FsmBuilder& FsmBuilder::onAppExitRequest() {
+	return _on(FsmEventListener::appExitRequestTransition);
+}
 
-FsmBuilder& FsmBuilder::jumpTo(std::string_view targetState) { return jumpTo(nullptr, targetState); }
+FsmBuilder& FsmBuilder::jumpTo(std::string_view targetState) {
+	return jumpTo(nullptr, targetState);
+}
 
-FsmBuilder& FsmBuilder::exitFsm() { return _jumpTo(nullptr, Fsm::exitState); }
+FsmBuilder& FsmBuilder::exitFsm() {
+	return _jumpTo(nullptr, Fsm::exitState);
+}
 
 FsmBuilder& FsmBuilder::_jumpTo(std::function<bool()> condition, const HashId& targetState) {
 	if (!_latestState) {
@@ -78,7 +86,9 @@ FsmBuilder::build(const HashId& startStateName, FsmExternalController* externalC
 
 	auto fsmInfo = std::make_unique<FsmInfo>();
 	fsmInfo->startState = startStateName;
-	for (auto& [name, state] : _states) { fsmInfo->states.emplace_back(state->name, state->transitions); }
+	for (auto& [name, state] : _states) {
+		fsmInfo->states.emplace_back(state->name, state->transitions);
+	}
 
 	auto fsm = std::make_unique<Fsm>(std::move(_states), startStateName, externalController);
 	_states.clear();

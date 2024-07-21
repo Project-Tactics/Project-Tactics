@@ -22,7 +22,9 @@ ResourceInfo::ResourceInfo(BaseResourceManager& manager, std::shared_ptr<BaseRes
 }
 
 void ResourceInfo::load(BaseResourceManager& manager) {
-	if (isLoaded()) { throw TACTICS_EXCEPTION("Resource [{}] is already loaded. Can't load again.", toString(_name)); }
+	if (isLoaded()) {
+		throw TACTICS_EXCEPTION("Resource [{}] is already loaded. Can't load again.", toString(_name));
+	}
 	_resource = manager.load(_name, _data);
 }
 
@@ -35,13 +37,21 @@ void ResourceInfo::unload(BaseResourceManager& manager) {
 	manager.unload(id);
 }
 
-[[nodiscard]] const HashId& ResourceInfo::getName() const { return _name; }
+[[nodiscard]] const HashId& ResourceInfo::getName() const {
+	return _name;
+}
 
-[[nodiscard]] const nlohmann::ordered_json& ResourceInfo::getData() const { return _data; }
+[[nodiscard]] const nlohmann::ordered_json& ResourceInfo::getData() const {
+	return _data;
+}
 
-[[nodiscard]] std::shared_ptr<BaseResource> ResourceInfo::getResource() const { return _resource; }
+[[nodiscard]] std::shared_ptr<BaseResource> ResourceInfo::getResource() const {
+	return _resource;
+}
 
-[[nodiscard]] bool ResourceInfo::isLoaded() const { return _resource != nullptr; }
+[[nodiscard]] bool ResourceInfo::isLoaded() const {
+	return _resource != nullptr;
+}
 
 /// PackGroup
 
@@ -51,16 +61,22 @@ void PackGroup::addResource(const HashId& name, const nlohmann::ordered_json& da
 	_resources.push_back(std::make_unique<ResourceInfo>(name, data));
 }
 
-[[nodiscard]] ResourceType PackGroup::getType() const { return _type; }
+[[nodiscard]] ResourceType PackGroup::getType() const {
+	return _type;
+}
 
 void PackGroup::load(BaseResourceManager& manager) {
 	LOG_TRACE(Log::Resource, "Loading resources of type [{}]...", toString(_type));
-	for (auto&& resourceInfo : _resources) { resourceInfo->load(manager); }
+	for (auto&& resourceInfo : _resources) {
+		resourceInfo->load(manager);
+	}
 }
 
 void PackGroup::unload(BaseResourceManager& manager) {
 	for (auto&& resource : _resources) {
-		if (resource->isLoaded()) { resource->unload(manager); }
+		if (resource->isLoaded()) {
+			resource->unload(manager);
+		}
 	}
 }
 
@@ -74,10 +90,14 @@ void PackGroup::loadExternalResource(BaseResourceManager& manager, const HashId&
 }
 
 void PackGroup::forEachResource(const std::function<void(const ResourceInfo&)>& callback) const {
-	for (auto&& resource : _resources) { callback(*resource); }
+	for (auto&& resource : _resources) {
+		callback(*resource);
+	}
 }
 
-unsigned int PackGroup::getResourceCount() const { return static_cast<unsigned int>(_resources.size()); }
+unsigned int PackGroup::getResourceCount() const {
+	return static_cast<unsigned int>(_resources.size());
+}
 
 /// Pack
 
@@ -87,14 +107,22 @@ Pack::Pack(HashId name, bool manuallyCreated) : _name(name), _isManuallyCreated(
 	_isLoaded = _isManuallyCreated;
 }
 
-const HashId& Pack::getName() const { return _name; }
+const HashId& Pack::getName() const {
+	return _name;
+}
 
-bool Pack::isLoaded() const { return _isLoaded; }
+bool Pack::isLoaded() const {
+	return _isLoaded;
+}
 
-bool Pack::isManuallyCreated() const { return _isManuallyCreated; }
+bool Pack::isManuallyCreated() const {
+	return _isManuallyCreated;
+}
 
 PackGroup& Pack::getOrCreatePackGroup(ResourceType type) {
-	if (_groups.contains(type)) { return *_groups[type]; }
+	if (_groups.contains(type)) {
+		return *_groups[type];
+	}
 
 	auto group = std::make_unique<PackGroup>(type);
 	_groups.insert({type, std::move(group)});
@@ -109,7 +137,9 @@ void Pack::load(const ResourceProvider& resourceProvider) {
 			"again.",
 			_name);
 	}
-	if (_isLoaded) { throw TACTICS_EXCEPTION("Can't load pack [{}]. The pack is already loaded.", _name); }
+	if (_isLoaded) {
+		throw TACTICS_EXCEPTION("Can't load pack [{}]. The pack is already loaded.", _name);
+	}
 
 	for (auto&& resourceType : resourceTypeLoadingOrder) {
 		if (auto itr = _groups.find(resourceType); itr != _groups.end()) {
@@ -123,7 +153,9 @@ void Pack::load(const ResourceProvider& resourceProvider) {
 }
 
 void Pack::unload(const ResourceProvider& resourceProvider) {
-	if (!_isLoaded) { throw TACTICS_EXCEPTION("Can't unload pack [{}]. The pack has not been loaded yet.", _name); }
+	if (!_isLoaded) {
+		throw TACTICS_EXCEPTION("Can't unload pack [{}]. The pack has not been loaded yet.", _name);
+	}
 
 	for (auto&& resourceType : resourceTypeLoadingOrder | std::views::reverse) {
 		if (auto itr = _groups.find(resourceType); itr != _groups.end()) {
@@ -136,7 +168,9 @@ void Pack::unload(const ResourceProvider& resourceProvider) {
 	// Clear all resources if the pack is manually created. We can't maintain metadata information since we don't know
 	// if resources have been provided externally or through json data. We could probably check if that's the case but
 	// for now we'll just clear everything.
-	if (_isManuallyCreated) { _groups.clear(); }
+	if (_isManuallyCreated) {
+		_groups.clear();
+	}
 }
 
 void Pack::loadExternalResource(const ResourceProvider& resourceProvider, std::shared_ptr<BaseResource> resource) {
@@ -180,12 +214,16 @@ void Pack::forEachResource(
 }
 
 void Pack::forEachGroup(const std::function<void(const PackGroup&)>& callback) const {
-	for (auto&& [type, group] : _groups) { callback(*group); }
+	for (auto&& [type, group] : _groups) {
+		callback(*group);
+	}
 }
 
 unsigned int Pack::getResourceCount() const {
 	unsigned int count = 0;
-	for (auto&& [type, group] : _groups) { count += group->getResourceCount(); }
+	for (auto&& [type, group] : _groups) {
+		count += group->getResourceCount();
+	}
 	return count;
 }
 

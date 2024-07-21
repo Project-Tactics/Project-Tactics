@@ -2,7 +2,7 @@
     "demoSimple": {
         "texture": {
             "tacticsIcon": {
-                "path": "_demoSimple/tactics_icon.png"
+                "path": "_demoSimple/tacticsIcon.png"
             },
             "crate": {
                 "path": "_demoSimple/crate.jpg"
@@ -25,6 +25,142 @@
             },
             "rotateAroundCamera": {
                 "path": "_demoSimple/rotateAroundCamera.prefab"
+            }
+        },
+        "inputAction": {
+            "cameraMove": {
+                "type": "axis2d",
+                "normalized": true
+            },
+            "cameraLook": {
+                "type": "axis2d",
+                "normalized": true
+            }
+        },
+        "inputMap": {
+            "defaultInputMap": {
+                "bindings": [
+                    {
+                        "action": "cameraMove",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "dir3D",
+                                    "data": {
+                                        "left": "keyA",
+                                        "right": "keyD",
+                                        "forward": "keyW",
+                                        "back": "keyS",
+                                        "up": "keyE",
+                                        "down": "keyQ"
+                                    }
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "down",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": []
+                            },
+                            {
+                                "gesture": {
+                                    "type": "3d",
+                                    "data": {
+                                        "x": "axisLeftX",
+                                        "z": "axisLeftY"
+                                    }
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "continuous",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": [
+                                    {
+                                        "type": "negate",
+                                        "data": {
+                                            "axis": "z"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "gesture": {
+                                    "type": "2d",
+                                    "data": {
+                                        "y": "axisTriggerLeft"
+                                    }
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "continuous",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": [
+                                    {
+                                        "type": "negate",
+                                        "data": {
+                                            "axis": "y"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "gesture": {
+                                    "type": "2d",
+                                    "data": {
+                                        "y": "axisTriggerRight"
+                                    }
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "continuous",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": []
+                            }
+                        ]
+                    },
+                    {
+                        "action": "cameraLook",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "data": {
+                                        "input": "mouseXY"
+                                    }
+                                },
+                                "modifiers": [],
+                                "conditions": [
+                                    {
+                                        "type": "continuous",
+                                        "actuationThreshold": 0.0001
+                                    }
+                                ]
+                            },
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "data": {
+                                        "input": "axisRightXY"
+                                    }
+                                },
+                                "modifiers": [],
+                                "conditions": [
+                                    {
+                                        "type": "continuous",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
             }
         }
     }

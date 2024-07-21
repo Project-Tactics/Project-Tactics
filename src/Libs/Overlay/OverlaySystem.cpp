@@ -24,7 +24,9 @@ OverlaySystem::OverlaySystem(std::shared_ptr<resource::IniFile> devUserSettings,
 	OverlayStyleHelper::setupImGuiStyle(imGuiSettings, fileSystem);
 }
 
-OverlaySystem::~OverlaySystem() { ImGui::DestroyContext(); }
+OverlaySystem::~OverlaySystem() {
+	ImGui::DestroyContext();
+}
 
 void OverlaySystem::_addOverlay(std::string_view name,
 								std::unique_ptr<Overlay> overlay,
@@ -39,10 +41,14 @@ void OverlaySystem::_addOverlay(std::string_view name,
 	_overlays.insert({name, OverlayItem{std::move(overlay), config, type, enabled}});
 }
 
-void OverlaySystem::removeOverlay(std::string_view name) { _overlays.erase(name); }
+void OverlaySystem::removeOverlay(std::string_view name) {
+	_overlays.erase(name);
+}
 
 void OverlaySystem::update() {
-	if (!_isEnabled) { return; }
+	if (!_isEnabled) {
+		return;
+	}
 
 	ImGui::BeginGroup();
 	for (auto&& [name, overlayItem] : _overlays) {
@@ -52,9 +58,13 @@ void OverlaySystem::update() {
 				bool enabled = overlayItem.enabled;
 				ImGui::SetNextWindowPos(overlayItem.config.position, ImGuiCond_FirstUseEver);
 				ImGui::SetNextWindowSize(overlayItem.config.size, ImGuiCond_FirstUseEver);
-				if (ImGui::Begin(name.data(), &enabled)) { overlayItem.overlay->update(); }
+				if (ImGui::Begin(name.data(), &enabled)) {
+					overlayItem.overlay->update();
+				}
 				ImGui::End();
-				if (!enabled) { enableOverlay(name, false); }
+				if (!enabled) {
+					enableOverlay(name, false);
+				}
 				break;
 			}
 			case OverlayType::MenuBar: {
@@ -77,12 +87,18 @@ void OverlaySystem::update() {
 	ImGui::EndGroup();
 }
 
-bool OverlaySystem::isEnabled() const { return _isEnabled; }
+bool OverlaySystem::isEnabled() const {
+	return _isEnabled;
+}
 
-void OverlaySystem::setEnabled(bool enable) { _isEnabled = enable; }
+void OverlaySystem::setEnabled(bool enable) {
+	_isEnabled = enable;
+}
 
 void OverlaySystem::forEachOverlay(const std::function<void(const std::string&, OverlayItem&)>& callback) {
-	for (auto&& [name, overlayItem] : _overlays) { callback(name, overlayItem); }
+	for (auto&& [name, overlayItem] : _overlays) {
+		callback(name, overlayItem);
+	}
 }
 
 void OverlaySystem::enableOverlay(std::string_view name, bool enabled) {
@@ -91,7 +107,9 @@ void OverlaySystem::enableOverlay(std::string_view name, bool enabled) {
 	}
 
 	auto& overlay = _overlays[name];
-	if (enabled != overlay.enabled) { _setOverlayStoredEnableValue(name, enabled); }
+	if (enabled != overlay.enabled) {
+		_setOverlayStoredEnableValue(name, enabled);
+	}
 
 	overlay.enabled = enabled;
 }

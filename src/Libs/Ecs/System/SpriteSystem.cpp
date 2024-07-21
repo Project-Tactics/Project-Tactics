@@ -25,7 +25,9 @@ void SpriteAnimationSystem::update(entt::registry& registry) {
 			auto& animation = sprite.spriteSheet->animations.at(spriteAnimation.currentAnimation);
 
 			spriteAnimation.currentTime += EngineTime::fixedDeltaTime<float>();
-			if (spriteAnimation.currentTime >= animation.duration) { spriteAnimation.currentTime = 0.0f; }
+			if (spriteAnimation.currentTime >= animation.duration) {
+				spriteAnimation.currentTime = 0.0f;
+			}
 			auto frameIndex =
 				static_cast<unsigned int>(spriteAnimation.currentTime / animation.duration * animation.frames.size());
 			sprite.spriteIndex = animation.frames[frameIndex];

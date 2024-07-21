@@ -20,6 +20,7 @@
 #include <Libs/FileSystem/FileLoader.h>
 #include <Libs/FileSystem/FileSystem.h>
 #include <Libs/Fsm/FsmBuilder.h>
+#include <Libs/Input/InputSystem.h>
 #include <Libs/Overlay/ExampleOverlay.h>
 #include <Libs/Overlay/MainOverlay.h>
 #include <Libs/Overlay/OverlaySystem.h>
@@ -40,17 +41,21 @@
 namespace tactics {
 
 void Engine::_run(Application& application) {
+	Log::init(LogLevel::Trace);
+	LOG_TRACE(Log::Engine, "Engine Initialization Started");
+	auto engine = Engine();
 	try {
-		Log::init(LogLevel::Trace);
-		LOG_TRACE(Log::Engine, "Engine Initialization Started");
-		auto engine = Engine();
 		engine._initialize(application);
 		LOG_INFO(Log::Engine, "Engine Initialized");
 		engine._internalRun();
 		LOG_TRACE(Log::Engine, "Engine Shutdown Started");
 		engine._shutdown();
 		LOG_TRACE(Log::Engine, "Engine Shutdown Ended");
-	} catch (Exception& exception) { LOG_EXCEPTION(exception); } catch (std::exception& exception) {
+	} catch (Exception& exception) {
+		LOG_EXCEPTION(exception);
+	} catch (nlohmann::detail::exception& exception) {
+		LOG_EXCEPTION(exception);
+	} catch (std::exception& exception) {
 		LOG_EXCEPTION(exception);
 	}
 }
@@ -86,8 +91,11 @@ void Engine::_initialize(Application& application) {
 	_resourceSystem->createManualPack("_internalCustomPack"_id);
 	_resourceSystem->loadExternalResource("_internalCustomPack"_id, resource::Texture::createNullTexture());
 
+	LOG_TRACE(Log::Engine, "InputSystem Initialization");
+	_inputSystem = std::make_unique<InputSystem>(configFile, *_resourceSystem, _renderSystem->getWindowSize());
+
 	LOG_TRACE(Log::Engine, "EventSystem Initialization");
-	_eventsSystem = std::make_unique<EventsSystem>();
+	_eventsSystem = std::make_unique<EventsSystem>(*_inputSystem);
 
 	LOG_TRACE(Log::Engine, "EventSystem SceneSystem");
 	_sceneSystem = std::make_unique<SceneSystem>(*_ecs, *_resourceSystem);
@@ -104,8 +112,10 @@ void Engine::_internalRun() {
 	_timer.reset(TimeUtility::nowInSeconds());
 	while (!_fsm->hasReachedExitState()) {
 		_timer.update(TimeUtility::nowInSeconds());
+		_eventsSystem->update();
+		_inputSystem->update();
+
 		while (_timer.hasConsumedAllTicks()) {
-			_eventsSystem->update();
 			_fsm->update();
 			_updateCommonComponentSystems();
 			_timer.consumeTick();
@@ -177,7 +187,7 @@ void Engine::_throwIfAnyImportantLogHappened() {
 
 void Engine::_initializeSDL() {
 	LOG_TRACE(Log::Engine, "SDL Initialization Started");
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0) {
 		throw TACTICS_EXCEPTION("SDL could not initialize! SDL_Error: {}\n", SDL_GetError());
 	}
 	LOG_TRACE(Log::Engine, "SDL Initialization Ended");
@@ -199,6 +209,7 @@ void Engine::_setupFsm(Application& application) {
 
 void Engine::_setupServiceLocator() {
 	_serviceLocator = std::make_unique<ServiceLocator>();
+	_serviceLocator->addService(_inputSystem.get());
 	_serviceLocator->addService(_resourceSystem.get());
 	_serviceLocator->addService(_overlaySystem.get());
 	_serviceLocator->addService(_renderSystem.get());

@@ -41,7 +41,9 @@ private:
 	bool _performExternalUpdateTransition();
 
 	template<typename TAction> void _performAction(const TAction& action) {
-		if (action.hasTransition()) { _executeTransition(action.transitionName()); }
+		if (action.hasTransition()) {
+			_executeTransition(action.transitionName());
+		}
 	}
 
 	FsmStateEntries _states;

@@ -21,7 +21,9 @@ JsonFileHandle::JsonFileHandle(const std::filesystem::path& path, PathHelper& pa
 	}
 }
 
-bool JsonFileHandle::exists() const { return std::filesystem::exists(_path); }
+bool JsonFileHandle::exists() const {
+	return std::filesystem::exists(_path);
+}
 
 void JsonFileHandle::save() {
 	if (_path.extension() == ".lua") {

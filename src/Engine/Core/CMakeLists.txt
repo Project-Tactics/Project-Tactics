@@ -31,7 +31,8 @@ target_link_libraries(engine_core
     libs_overlay
     libs_ecs
     libs_utility
-    libs_filesystem)
+    libs_filesystem
+    libs_input)
 add_to_engine_folder(engine_core)
 
 unset(SOURCES)

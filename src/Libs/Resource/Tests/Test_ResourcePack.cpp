@@ -2,7 +2,9 @@
 
 #include <Libs/Utility/Exception.h>
 
-TEST_F(ResourceTest, LoadInvalidPack) { EXPECT_THROW(_resourceSystem->loadPack("InvalidPack"_id), Exception); }
+TEST_F(ResourceTest, LoadInvalidPack) {
+	EXPECT_THROW(_resourceSystem->loadPack("InvalidPack"_id), Exception);
+}
 
 TEST_F(ResourceTest, LoadValidPackWithMissingManager) {
 	givenValidPackDefinitionLoaded();

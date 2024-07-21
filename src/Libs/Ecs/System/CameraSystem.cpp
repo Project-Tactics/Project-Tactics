@@ -32,10 +32,14 @@ void CameraSystem::updateCameraMatrices(entt::registry& registry) {
 }
 
 void CameraSystem::updateCameraAspectRatios(entt::registry& registry) {
-	// TODO(Gerark) We assume we always have one current viewport and current camera. We might change this in the future
-	// and this has to change accordingly.
-	auto currentViewportView = registry.view<Viewport, CurrentViewport>();
+	// TODO(Gerark) We assume we always have one current viewport and current camera. We might change this rule in the
+	// future and this code has to change accordingly.
 	auto currentCameraView = registry.view<Frustum, CurrentCamera>();
+	if (currentCameraView.size_hint() == 0) {
+		return;
+	}
+
+	auto currentViewportView = registry.view<Viewport, CurrentViewport>();
 	auto&& [entityViewport, viewport] = *currentViewportView.each().begin();
 	auto&& [entityCamera, frustum] = *currentCameraView.each().begin();
 	frustum.aspectRatio = static_cast<float>(viewport.size.x) / viewport.size.y;

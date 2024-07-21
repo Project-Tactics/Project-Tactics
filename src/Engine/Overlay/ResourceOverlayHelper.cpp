@@ -95,7 +95,9 @@ void ResourceOverlayHelper::drawResource(const resource::IniFile& iniFile) {
 	auto& data = iniFile.fileHandle->getContent();
 	for (auto& [sectionName, section] : data) {
 		ImGui::TextColored(toColor(ResourceType::IniFile), "[%s]", sectionName.c_str());
-		for (auto& [key, value] : section) { ImGui::Text("%s = %s", key.c_str(), value.as<std::string>().c_str()); }
+		for (auto& [key, value] : section) {
+			ImGui::Text("%s = %s", key.c_str(), value.as<std::string>().c_str());
+		}
 		ImGui::Separator();
 	}
 }
@@ -204,10 +206,14 @@ bool ResourceOverlayHelper::_drawSpriteButton(const char* id,
 									  ImVec2(uvRect.bounds.min.x, uvRect.bounds.min.y),
 									  ImVec2(uvRect.bounds.max.x, uvRect.bounds.max.y));
 
-	if (isLast) { ImGui::SameLine(); }
+	if (isLast) {
+		ImGui::SameLine();
+	}
 
 	auto remainingSize = ImGui::GetContentRegionAvail();
-	if (remainingSize.x < buttonSize.x) { ImGui::NewLine(); }
+	if (remainingSize.x < buttonSize.x) {
+		ImGui::NewLine();
+	}
 
 	auto resetPositionAfterOverlay = ImGui::GetCursorPos();
 	ImGui::SetCursorPos(overlayPosition);

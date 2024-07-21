@@ -9,6 +9,7 @@
 
 #include <Libs/Ecs/Component/FrustumComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
+#include <Libs/Input/InputSystem.h>
 
 namespace tactics {
 

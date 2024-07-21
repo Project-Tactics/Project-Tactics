@@ -37,7 +37,9 @@ class MockTextureLoader : public ResourceLoader {
 public:
 	using ResourceLoader::ResourceLoader;
 
-	std::shared_ptr<MockTextureResource> load(const nlohmann::ordered_json&) { return nullptr; }
+	std::shared_ptr<MockTextureResource> load(const nlohmann::ordered_json&) {
+		return nullptr;
+	}
 };
 
 using MockShaderManager = ResourceManager<MockShaderResource, MockShaderLoader>;
@@ -62,7 +64,9 @@ public:
 	MOCK_METHOD(void, save, (), (override));
 	MOCK_METHOD(void, load, (), (override));
 
-	void setData(const nlohmann::ordered_json& data) { _setContent(data); }
+	void setData(const nlohmann::ordered_json& data) {
+		_setContent(data);
+	}
 };
 
 class MockResourceProvider : public ResourceProvider {
@@ -82,7 +86,9 @@ public:
 		_resourceSystem = std::make_unique<ResourceSystem>(*_fileSystem);
 	}
 
-	void expectJsonFileLoad(int times) { EXPECT_CALL(*_jsonPackFileHandle, load()).Times(Exactly(times)); }
+	void expectJsonFileLoad(int times) {
+		EXPECT_CALL(*_jsonPackFileHandle, load()).Times(Exactly(times));
+	}
 
 	void givenJsonFileCreation() {
 		_jsonPackFileHandleUniquePtr = std::make_unique<MockJsonFileHandle>();
@@ -131,7 +137,9 @@ public:
 	int getNumberOfLoadedResources() {
 		int countFromPacks = 0;
 		_resourceSystem->forEachResource([&countFromPacks](const auto& pack, const auto&, const auto&) {
-			if (pack.isLoaded()) { ++countFromPacks; }
+			if (pack.isLoaded()) {
+				++countFromPacks;
+			}
 		});
 		int countFromManagers = 0;
 		_resourceSystem->forEachManager([&countFromManagers](const auto& manager) {

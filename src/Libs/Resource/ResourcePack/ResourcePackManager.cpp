@@ -20,7 +20,9 @@ void ResourcePackManager::loadPackDefinition(const std::filesystem::path& packDe
 
 		for (auto&& [resourceType, value] : packData.items()) {
 			auto& packGroup = pack.getOrCreatePackGroup(fromString<ResourceType>(resourceType));
-			for (auto&& [resourceName, data] : value.items()) { packGroup.addResource(HashId(resourceName), data); }
+			for (auto&& [resourceName, data] : value.items()) {
+				packGroup.addResource(HashId(resourceName), data);
+			}
 		}
 	}
 }
@@ -66,7 +68,9 @@ void ResourcePackManager::loadExternalResource(const HashId& packName,
 }
 
 void ResourcePackManager::forEachPack(const std::function<void(const Pack&)>& callback) {
-	for (auto&& [packName, pack] : _packs) { callback(*pack); }
+	for (auto&& [packName, pack] : _packs) {
+		callback(*pack);
+	}
 }
 
 std::unique_ptr<FileHandle<nlohmann::ordered_json>>

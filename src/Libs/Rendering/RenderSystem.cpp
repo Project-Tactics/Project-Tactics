@@ -22,7 +22,9 @@ RenderSystem::RenderSystem(std::shared_ptr<resource::IniFile> configFile) : _con
 	_initializeImGui();
 
 	auto useDebugMessages = _getConfigValue("useDebugMessages", false);
-	if (useDebugMessages) { _debugMessageHandler = std::make_unique<DebugMessageHandler>(); }
+	if (useDebugMessages) {
+		_debugMessageHandler = std::make_unique<DebugMessageHandler>();
+	}
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -60,7 +62,9 @@ void RenderSystem::_createWindow() {
 							   windowSize.y,
 							   SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0));
 	LOG_TRACE(Log::Rendering, "Window Created {}x{}", windowSize.x, windowSize.y);
-	if (_window == nullptr) { throw TACTICS_EXCEPTION("Failed to open window: %s\n", SDL_GetError()); }
+	if (_window == nullptr) {
+		throw TACTICS_EXCEPTION("Failed to open window: %s\n", SDL_GetError());
+	}
 }
 
 void RenderSystem::_initializeGlContext() {
@@ -69,7 +73,9 @@ void RenderSystem::_initializeGlContext() {
 	_setupVSync();
 
 	int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
-	if (version == 0) { throw TACTICS_EXCEPTION("Failed to initialize OpenGL context\n"); }
+	if (version == 0) {
+		throw TACTICS_EXCEPTION("Failed to initialize OpenGL context\n");
+	}
 
 	LOG_TRACE(Log::Rendering, "Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 }
@@ -77,7 +83,9 @@ void RenderSystem::_initializeGlContext() {
 void RenderSystem::render() {
 	RenderStepInfo renderInfo{};
 
-	for (auto& renderQueue : _renderQueues) { renderQueue->execute(renderInfo); }
+	for (auto& renderQueue : _renderQueues) {
+		renderQueue->execute(renderInfo);
+	}
 	SDL_GL_SwapWindow(_window);
 }
 

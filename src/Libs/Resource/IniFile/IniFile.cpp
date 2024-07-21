@@ -4,7 +4,9 @@ namespace tactics::resource {
 
 ini::IniSection& IniFile::createSection(std::string_view section) {
 	auto& file = fileHandle->getContent();
-	if (!file.contains(section.data())) { file[section.data()] = {}; }
+	if (!file.contains(section.data())) {
+		file[section.data()] = {};
+	}
 	return file[section.data()];
 }
 

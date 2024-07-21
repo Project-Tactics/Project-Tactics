@@ -39,7 +39,9 @@ std::vector<T> parseString(const std::string& str, std::function<T(const std::st
 	std::sregex_token_iterator end;
 
 	for (; it != end; ++it) {
-		if (!it->str().empty()) { result.push_back(convertFunc(it->str())); }
+		if (!it->str().empty()) {
+			result.push_back(convertFunc(it->str()));
+		}
 	}
 	return result;
 }
@@ -104,7 +106,9 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 		}
 		for (unsigned int faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
 			const aiFace& face = mesh->mFaces[faceIndex];
-			for (unsigned int index = 0; index < face.mNumIndices; ++index) { indices.push_back(face.mIndices[index]); }
+			for (unsigned int index = 0; index < face.mNumIndices; ++index) {
+				indices.push_back(face.mIndices[index]);
+			}
 		}
 
 		// TODO(Gerark) Using dynamic draw is just temporary, we should have a way to define this through the descriptor

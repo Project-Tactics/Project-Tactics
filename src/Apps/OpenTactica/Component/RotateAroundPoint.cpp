@@ -19,7 +19,9 @@ void RotateAroundPointSystem::update(entt::registry& registry) {
 	auto view = registry.view<Transform, RotateAroundPoint>();
 	view.each([](Transform& transform, RotateAroundPoint& rotate) {
 		rotate.currentAngle += rotate.speed * EngineTime::fixedDeltaTime<float>();
-		if (rotate.currentAngle > 2 * Math::PI) { rotate.currentAngle = 0; }
+		if (rotate.currentAngle > 2 * Math::PI) {
+			rotate.currentAngle = 0;
+		}
 
 		float distance = rotate.distanceFromPoint;
 		glm::vec3 position =

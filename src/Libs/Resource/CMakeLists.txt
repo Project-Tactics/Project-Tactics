@@ -4,6 +4,10 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
     IniFile/IniFile.cpp
     IniFile/IniFileLoader.cpp
+    Input/InputAction.cpp
+    Input/InputActionLoader.cpp
+    Input/InputMap.cpp
+    Input/InputMapLoader.cpp
     Material/Material.cpp
     Material/MaterialLoader.cpp
     Material/Uniforms.cpp
@@ -26,7 +30,11 @@ set(SOURCES
     
 set(HEADERS
     IniFile/IniFile.h
-    IniFile/IniFileLoader.cpp
+    IniFile/IniFileLoader.h
+    Input/InputAction.h
+    Input/InputActionLoader.h
+    Input/InputMap.h
+    Input/InputMapLoader.h
     Material/Material.h
     Material/MaterialLoader.h
     Material/Uniforms.h

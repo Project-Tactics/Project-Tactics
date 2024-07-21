@@ -17,6 +17,7 @@ class EntityComponentSystem;
 class EventsSystem;
 class FileSystem;
 class Fsm;
+class InputSystem;
 class OverlaySystem;
 class RenderSystem;
 class ServiceLocator;
@@ -49,6 +50,7 @@ private:
 	FrameTimer _timer;
 	std::unique_ptr<FileSystem> _fileSystem;
 	std::unique_ptr<resource::ResourceSystem> _resourceSystem;
+	std::unique_ptr<InputSystem> _inputSystem;
 	std::unique_ptr<OverlaySystem> _overlaySystem;
 	std::unique_ptr<RenderSystem> _renderSystem;
 	std::unique_ptr<EventsSystem> _eventsSystem;

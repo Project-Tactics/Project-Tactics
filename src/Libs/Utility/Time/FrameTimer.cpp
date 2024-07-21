@@ -2,9 +2,13 @@
 
 namespace tactics {
 
-void FrameTimer::setFixedDeltaTime(double fixedDeltaTime) noexcept { _fixedDeltaTime = fixedDeltaTime; }
+void FrameTimer::setFixedDeltaTime(double fixedDeltaTime) noexcept {
+	_fixedDeltaTime = fixedDeltaTime;
+}
 
-[[nodiscard]] double FrameTimer::getFixedDeltaTime() const noexcept { return _fixedDeltaTime; }
+[[nodiscard]] double FrameTimer::getFixedDeltaTime() const noexcept {
+	return _fixedDeltaTime;
+}
 
 void FrameTimer::reset(double time) {
 	_currentTime = time;
@@ -21,8 +25,12 @@ void FrameTimer::update(double newTime) {
 	return static_cast<unsigned int>(_timeAccumulation / _fixedDeltaTime);
 }
 
-bool FrameTimer::hasConsumedAllTicks() const noexcept { return _timeAccumulation >= _fixedDeltaTime; }
+bool FrameTimer::hasConsumedAllTicks() const noexcept {
+	return _timeAccumulation >= _fixedDeltaTime;
+}
 
-void FrameTimer::consumeTick() noexcept { _timeAccumulation -= _fixedDeltaTime; }
+void FrameTimer::consumeTick() noexcept {
+	_timeAccumulation -= _fixedDeltaTime;
+}
 
 } // namespace tactics
