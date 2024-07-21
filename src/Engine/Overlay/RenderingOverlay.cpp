@@ -8,6 +8,7 @@
 #include <Libs/Ecs/Component/ViewportComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Rendering/RenderSystem.h>
+#include <Libs/Utility/ImGuiUtilities.h>
 
 #include <string>
 
@@ -51,8 +52,8 @@ void RenderingOverlay::_drawViewportStats() {
 		glm::vec2 topLeft = viewport.topLeft;
 		glm::vec2 size = viewport.size;
 		bool dirty = false;
-		dirty |= _vector2("TopLeft", topLeft);
-		dirty |= _vector2("Size", size);
+		dirty |= vector2("TopLeft", topLeft, 0, 1, _xComponentColor, _yComponentColor);
+		dirty |= vector2("Size", size, 0, 1, _xComponentColor, _yComponentColor);
 		if (dirty) {
 			viewport.topLeft = topLeft;
 			viewport.size = size;
@@ -75,12 +76,12 @@ void RenderingOverlay::_drawCameraStats() {
 	view.each([&](Transform& transform, Frustum& frustum, Camera&) {
 		ImGui::TextColored(_titleColor, "%s", "CAMERA");
 		auto position = transform.getPosition();
-		if (_vector3("Position", position, 0, 0.1f)) {
+		if (vector3("Position", position, 0, 0.1f, _xComponentColor, _yComponentColor, _zComponentColor)) {
 			transform.setPosition(position);
 		}
 
 		glm::vec2 angles = glm::eulerAngles(transform.getRotation());
-		if (_vector2("Rotation", angles, 0, 0.01f)) {
+		if (vector2("Rotation", angles, 0, 0.01f, _xComponentColor, _yComponentColor)) {
 			transform.setRotation(glm::quat(glm::vec3(angles.x, angles.y, 0.f)));
 		}
 		ImGui::Text("Fov: %f", frustum.fov);
@@ -88,64 +89,6 @@ void RenderingOverlay::_drawCameraStats() {
 		ImGui::Text("Far: %f", frustum.far);
 		ImGui::Text("Aspect Ratio: %f", frustum.aspectRatio);
 	});
-}
-
-bool RenderingOverlay::_vector3(const char* label, glm::vec3& vec, float componentWidth, float componentSpeed) {
-	ImGui::AlignTextToFramePadding();
-	ImGui::Text("%s", label);
-	if (componentWidth == 0) {
-		componentWidth =
-			(ImGui::GetContentRegionAvail().x - (ImGui::CalcTextSize(label).x + ImGui::GetStyle().ItemSpacing.x * 4)) /
-			3;
-	}
-	ImGui::BeginGroup();
-	ImGui::SameLine();
-	bool valueChanged = false;
-	valueChanged |=
-		_vecComponent(&vec.x, _xComponentColor, componentWidth, componentSpeed, ("##x" + std::string(label)).c_str());
-	ImGui::SameLine();
-	valueChanged |=
-		_vecComponent(&vec.y, _yComponentColor, componentWidth, componentSpeed, ("##y" + std::string(label)).c_str());
-	ImGui::SameLine();
-	valueChanged |=
-		_vecComponent(&vec.z, _zComponentColor, componentWidth, componentSpeed, ("##z" + std::string(label)).c_str());
-	ImGui::EndGroup();
-	return valueChanged;
-}
-
-bool RenderingOverlay::_vector2(const char* label, glm::vec2& vec, float componentWidth, float componentSpeed) {
-	ImGui::AlignTextToFramePadding();
-	ImGui::Text("%s", label);
-	if (componentWidth == 0) {
-		componentWidth =
-			(ImGui::GetContentRegionAvail().x - (ImGui::CalcTextSize(label).x + ImGui::GetStyle().ItemSpacing.x * 3)) /
-			2;
-	}
-	ImGui::BeginGroup();
-	ImGui::SameLine();
-	bool valueChanged = false;
-	valueChanged |=
-		_vecComponent(&vec.x, _xComponentColor, componentWidth, componentSpeed, ("##x" + std::string(label)).c_str());
-	ImGui::SameLine();
-	valueChanged |=
-		_vecComponent(&vec.y, _yComponentColor, componentWidth, componentSpeed, ("##y" + std::string(label)).c_str());
-	ImGui::EndGroup();
-	return valueChanged;
-}
-
-bool RenderingOverlay::_vecComponent(float* component, const ImVec4& color, float width, float speed, const char* id) {
-	ImVec2 squareSize(2, 23);
-	ImVec2 cursorPos = ImGui::GetCursorScreenPos();
-	ImDrawList* drawList = ImGui::GetWindowDrawList();
-	drawList->AddRectFilled(cursorPos,
-							ImVec2(cursorPos.x + squareSize.x, cursorPos.y + squareSize.y),
-							ImGui::ColorConvertFloat4ToU32(color));
-	auto dummySize = ImVec2(squareSize.x - 12, squareSize.y);
-	ImGui::Dummy(dummySize);
-
-	ImGui::SameLine();
-	ImGui::SetNextItemWidth(width);
-	return ImGui::DragFloat(id, component, speed);
 }
 
 } // namespace tactics

@@ -19,3 +19,6 @@
 [submodule "thirdparty/spdlog"]
 	path = thirdparty/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "thirdparty/magic_enum"]
+	path = thirdparty/magic_enum
+	url = https://github.com/Neargye/magic_enum.git

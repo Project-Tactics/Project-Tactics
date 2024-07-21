@@ -21,6 +21,10 @@ ImVec4 CustomOverlayColors::Colors::SpriteSheetColor;
 ImVec4 CustomOverlayColors::Colors::TextureColor;
 ImVec4 CustomOverlayColors::Colors::InputActionColor;
 ImVec4 CustomOverlayColors::Colors::InputMapColor;
+ImVec4 CustomOverlayColors::Colors::InputChangeColorVeryLow;
+ImVec4 CustomOverlayColors::Colors::InputChangeColorLow;
+ImVec4 CustomOverlayColors::Colors::InputChangeColorMid;
+ImVec4 CustomOverlayColors::Colors::InputChangeColorHigh;
 
 void CustomOverlayColors::initialize(resource::IniFile& configFile) {
 	auto category = "imguiCustomColors";
@@ -39,6 +43,10 @@ void CustomOverlayColors::initialize(resource::IniFile& configFile) {
 	_colors.TextureColor = configFile.get(category, "textureColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.InputActionColor = configFile.get(category, "inputActionColor", ImVec4{1, 0.5f, 0.0f, 1.f});
 	_colors.InputMapColor = configFile.get(category, "inputMapColor", ImVec4{1, 0.0f, 0.5f, 1.f});
+	_colors.InputChangeColorVeryLow = configFile.get(category, "inputChangeColorVeryLow", ImVec4{1, 0.0f, 0.5f, 1.f});
+	_colors.InputChangeColorLow = configFile.get(category, "inputChangeColorLow", ImVec4{1, 0.0f, 0.5f, 1.f});
+	_colors.InputChangeColorMid = configFile.get(category, "inputChangeColorMid", ImVec4{1, 0.0f, 0.5f, 1.f});
+	_colors.InputChangeColorHigh = configFile.get(category, "inputChangeColorHigh", ImVec4{1, 0.0f, 0.5f, 1.f});
 }
 
 const CustomOverlayColors::Colors& CustomOverlayColors::getColors() {

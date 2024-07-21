@@ -20,6 +20,7 @@ void setDeviceChangedCallback(DeviceChangedCallback callback, void* userData);
 
 void clearPlayer(PlayerId playerId);
 unsigned int players();
+Player& player(PlayerId playerId);
 
 /*
  * Device
@@ -49,7 +50,11 @@ const DeviceIdList& keyboards();
 const DeviceIdList& touches();
 
 void holdDevice(PlayerId playerId, DeviceId deviceId);
+bool isHoldingDevice(PlayerId playerId, DeviceType deviceType);
+bool isHoldingDevice(PlayerId playerId, DeviceId deviceId);
 void releaseDevice(PlayerId playerId, DeviceId deviceId);
+
+DeviceType getDeviceTypeFromInputCode(InputCode code);
 
 /*
  * Mapping
@@ -73,7 +78,7 @@ ActionType type(ActionId id);
 unsigned int actions();
 
 /*
- * InputCode
+ * Binding
  */
 
 BindingId bind(MapId inputMapId,
@@ -95,6 +100,7 @@ void unbind(BindingId id);
  */
 
 void processInputEvent(const InputEvent& event);
+const ActionValue& inputValue(InputCode code, PlayerId playerId);
 
 /*
  * Input Processing

@@ -5,6 +5,7 @@ set(SOURCES
     CustomOverlayColors.cpp
     EngineCoreOverlay.cpp
     FsmOverlay.cpp
+    InputOverlay.cpp
     RenderingOverlay.cpp
     ResourceOverlayHelper.cpp
     ResourcesOverlay.cpp)
@@ -13,6 +14,7 @@ set(HEADERS
     CustomOverlayColors.h
     EngineCoreOverlay.h
     FsmOverlay.h
+    InputOverlay.h
     RenderingOverlay.h
     ResourceOverlayHelper.h
     ResourcesOverlay.h)

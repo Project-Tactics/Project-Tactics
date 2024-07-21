@@ -3,6 +3,7 @@
 #include "../Exception.h"
 
 #include <array>
+#include <magic_enum.hpp>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -50,6 +51,34 @@ template<typename T> std::array<T, 4> parseStringToVectorValues(const std::strin
 }
 
 } // namespace tactics
+
+#define STRING_SERIALIZATION(TYPE)                 \
+	namespace tactics {                            \
+	template<> class Str<TYPE> {                   \
+	public:                                        \
+		static std::string to(const TYPE& value);  \
+		static TYPE from(std::string_view string); \
+	};                                             \
+	}                                              \
+	FORMAT_STR(TYPE);
+
+#define STRING_ENUM_SERIALIZATION(TYPE)                                                        \
+	namespace tactics {                                                                        \
+	template<> class Str<TYPE> {                                                               \
+	public:                                                                                    \
+		static std::string to(const TYPE& value) {                                             \
+			return std::string(magic_enum::enum_name(value));                                  \
+		}                                                                                      \
+		static TYPE from(std::string_view string) {                                            \
+			if (auto value = magic_enum::enum_cast<TYPE>(string); value.has_value()) {         \
+				return value.value();                                                          \
+			} else {                                                                           \
+				throw TACTICS_EXCEPTION("Cannot convert string {} to type {}", string, #TYPE); \
+			}                                                                                  \
+		}                                                                                      \
+	};                                                                                         \
+	}                                                                                          \
+	FORMAT_STR(TYPE)
 
 #define FORMAT_STR(TYPE)                                                                        \
 	template<> struct fmt::formatter<TYPE> {                                                    \

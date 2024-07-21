@@ -1,31 +1,16 @@
 #include "InputSerialization.h"
 
 #include <Libs/Utility/Log/Log.h>
+#include <Libs/Utility/String/String.h>
 
 namespace tactics {
-
-std::string Str<click::DeviceType>::to(click::DeviceType deviceType) {
-	switch (deviceType) {
-	case click::DeviceType::Keyboard: return "keyboard";
-	case click::DeviceType::Mouse	: return "mouse";
-	case click::DeviceType::Gamepad : return "gamepad";
-	}
-
-	return "none";
+std::string Str<click::ActionValue>::to(const click::ActionValue& value) {
+	return fmt::format("{:.3f} {:.3f} {:.3f}", value.vec3.x, value.vec3.y, value.vec3.z);
 }
 
-click::DeviceType Str<click::DeviceType>::from(std::string_view str) {
-	if (str == "keyboard") {
-		return click::DeviceType::Keyboard;
-	}
-	if (str == "mouse") {
-		return click::DeviceType::Mouse;
-	}
-	if (str == "gamepad") {
-		return click::DeviceType::Gamepad;
-	}
-
-	return click::DeviceType::None;
+click::ActionValue Str<click::ActionValue>::from(std::string_view string) {
+	auto values = parseStringToVectorValues<float>(std::string(string));
+	return click::ActionValue{.vec3 = {values[0], values[1], values[2]}};
 }
 
 } // namespace tactics
