@@ -18,12 +18,12 @@
 
 namespace tactics {
 
-void OpenTacticaApplication::setupComponentReflections() {
+void SamplesApplication::setupComponentReflections() {
 	using namespace component;
 	defineComponentsReflection<BattleCamera, CharacterFacing, RotateItem, RotateAroundPoint, FreeCamera>();
 }
 
-HashId OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
+HashId SamplesApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 	auto configFile =
 		serviceLocator.getService<resource::ResourceSystem>().getResource<resource::IniFile>("devUserConfigFile"_id);
 	auto state = configFile->getOrCreate("demo", "fsm", std::string("map"));
@@ -37,7 +37,7 @@ HashId OpenTacticaApplication::initialize(ServiceLocator& serviceLocator, FsmBui
 	}
 }
 
-HashId OpenTacticaApplication::_initializeSpriteDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
+HashId SamplesApplication::_initializeSpriteDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 	// clang-format off
 	fsmBuilder
 		.state<LoadState>("Load", serviceLocator, "_demoSprites/resources.json", "demoSprites"_id, "spriteCamera"_id)
@@ -55,7 +55,7 @@ HashId OpenTacticaApplication::_initializeSpriteDemo(ServiceLocator& serviceLoca
 	return "Load"_id;
 }
 
-HashId OpenTacticaApplication::_initializeMapDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
+HashId SamplesApplication::_initializeMapDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 	// clang-format off
 	fsmBuilder
 		.state<LoadState>("Load", serviceLocator, "_demoMaps/resources.lua", "demoMaps"_id, "mapCamera"_id)
@@ -73,7 +73,7 @@ HashId OpenTacticaApplication::_initializeMapDemo(ServiceLocator& serviceLocator
 	return "Load"_id;
 }
 
-HashId OpenTacticaApplication::_initializeSimpleDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
+HashId SamplesApplication::_initializeSimpleDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 	// clang-format off
 	fsmBuilder
 		.state<LoadState>("Load", serviceLocator, "_demoSimple/resources.json", "demoSimple"_id, "rotateAroundCamera"_id)

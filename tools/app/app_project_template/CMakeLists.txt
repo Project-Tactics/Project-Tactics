@@ -2,37 +2,17 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
-    SamplesApplication.cpp
+    ##APP_PROJECT_NAME##Application.cpp
     main.cpp
-    States/DemoMapState.cpp
-    States/DemoSimpleState.cpp
-    States/DemoSpriteState.cpp
-    States/EmptyState.cpp
-    States/LoadState.cpp
-    States/UnloadState.cpp
-    Component/BattleCamera.cpp
-    Component/CharacterFacing.cpp
-    Component/FreeCamera.cpp
-    Component/RotateAroundPoint.cpp
-    Component/RotateItem.cpp)
+    States/EmptyState.cpp)
     
 set(HEADERS
-    SamplesApplication.h
-    States/DemoMapState.h
-    States/DemoSimpleState.h
-    States/DemoSpriteState.h
-    States/EmptyState.h
-    States/LoadState.h
-    States/UnloadState.h
-    Component/BattleCamera.h
-    Component/CharacterFacing.h
-    Component/FreeCamera.h
-    Component/RotateAroundPoint.h
-    Component/RotateItem.h)
+    ##APP_PROJECT_NAME##Application.h
+    States/EmptyState.h)
 
-set(TARGET_NAME Samples)
+set(TARGET_NAME ##APP_PROJECT_NAME##)
 set(POST_BUILD_TARGET_NAME ${TARGET_NAME}PostBuild)
-set(DATA_TARGET_NAME samples_data)
+set(DATA_TARGET_NAME ##DATA_FOLDER_TARGET_NAME##)
 add_executable(${TARGET_NAME} ${SOURCES} ${HEADERS})
 target_link_libraries(${TARGET_NAME} PUBLIC tactics_engine)
 add_to_apps_folder(${TARGET_NAME})

@@ -4,7 +4,7 @@
 
 namespace tactics {
 
-class OpenTacticaApplication : public tactics::Application {
+class SamplesApplication : public tactics::Application {
 public:
 	void setupComponentReflections() override;
 	HashId initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) override;
