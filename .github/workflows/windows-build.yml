@@ -43,7 +43,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: unit-test-build-windows-${{ matrix.configuration }}-${{ matrix.architecture }}
-        path: ${{github.workspace}}/build/${{ matrix.configuration }}/src/Apps/ProjectTactics_UnitTests/
+        path: ${{github.workspace}}/build/${{ matrix.configuration }}/src/Apps/TacticsEngine_UnitTests/
         if-no-files-found: error
         retention-days: 1
 
@@ -61,7 +61,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: unit-test-build-windows-${{ matrix.configuration }}-${{ matrix.architecture }}
-        path:  ${{github.workspace}}/build/${{ matrix.configuration }}/src/Apps/ProjectTactics_UnitTests/
+        path:  ${{github.workspace}}/build/${{ matrix.configuration }}/src/Apps/TacticsEngine_UnitTests/
 
     - name: Run unit tests
-      run: ctest --output-on-failure --test-dir ${{github.workspace}}/build/${{ matrix.configuration }}/src/Apps/ProjectTactics_UnitTests/
+      run: ctest --output-on-failure --test-dir ${{github.workspace}}/build/${{ matrix.configuration }}/src/Apps/TacticsEngine_UnitTests/

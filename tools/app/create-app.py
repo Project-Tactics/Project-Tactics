@@ -87,6 +87,3 @@ replace_strings_in_files(dst_project_folder, replacements)
 replace_strings_in_files(dst_data_folder, replacements)
 update_cmake_project_file("../../src/Apps/CMakeLists.txt", app_project_name)
 update_cmake_project_file("../../resources/CMakeLists.txt", app_project_name)
-
-print(src_project_folder)
-print(dst_project_folder)
