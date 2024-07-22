@@ -1,0 +1,37 @@
+{
+    "currentCamera": {},
+    "transform": {
+        "position": {
+            "x": 5,
+            "y": 5,
+            "z": 0
+        },
+        "rotation": {
+            "fromLookAt": {
+                "from": {
+                    "x": 5,
+                    "y": 5,
+                    "z": 0
+                },
+                "to": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                }
+            }
+        },
+        "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+        }
+    },
+    "camera": {
+        "projectionType": "perspective"
+    },
+    "frustum": {
+        "fov": 60,
+        "near": 1,
+        "far": 1000
+    }
+}

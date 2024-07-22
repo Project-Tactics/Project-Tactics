@@ -1,0 +1,48 @@
+{
+    "currentCamera": {},
+    "transform": {
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 0
+        },
+        "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+        }
+    },
+    "camera": {
+        "projectionType": "orthographic"
+    },
+    "frustum": {
+        "fov": 160,
+        "near": 1,
+        "far": 1000,
+        "orthoSize": 3
+    },
+    "battleCamera": {
+        "rotationSteps": [
+            45,
+            135,
+            225,
+            315
+        ],
+        "rotationSpeed": 2,
+        "rotationTime": 0,
+        "currentStep": 0,
+        "nextStep": 1,
+        "distanceFromOrigin": 10,
+        "offset": {
+            "x": 0,
+            "y": 4.5,
+            "z": 0
+        }
+    }
+}

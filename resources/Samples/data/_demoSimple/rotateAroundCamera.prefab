@@ -1,0 +1,36 @@
+{
+    "currentCamera": {},
+    "transform": {
+        "position": {
+            "x": 0,
+            "y": 40,
+            "z": 100
+        },
+        "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 0
+        },
+        "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+        }
+    },
+    "camera": {
+        "projectionType": "perspective"
+    },
+    "frustum": {
+        "fov": 60,
+        "near": 1,
+        "far": 1000
+    },
+    "freeCamera": {
+        "speed": 5,
+        "sensitivity": 0.5,
+        "moveAction": "cameraMove",
+        "lookAction": "cameraLook",
+        "player": 0
+    }
+}

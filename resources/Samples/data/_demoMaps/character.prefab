@@ -1,0 +1,33 @@
+{
+    "transform": {
+        "position": {
+            "x": -0.28,
+            "y": 0.95,
+            "z": -1.40
+        },
+        "scale": {
+            "x": 0.9,
+            "y": 1.0,
+            "z": 0.9
+        }
+    },
+    "mesh": {
+        "mesh": "quad",
+        "materials": [
+            {
+                "material": "spriteMaterial"
+            }
+        ]
+    },
+    "sprite": {
+        "spriteSheet": "char00",
+        "spriteIndex": 0
+    },
+    "billboard": {},
+    "spriteAnimation": {
+        "currentAnimation": "idleNorth"
+    },
+    "characterFacing": {
+        "facing": "west"
+    }
+}

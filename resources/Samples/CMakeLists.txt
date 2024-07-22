@@ -1,6 +1,9 @@
 # Ensure the minimum required version of CMake is available, otherwise, throw an error
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
-add_subdirectory(OpenTactica)
-add_subdirectory(Samples)
-add_subdirectory(TacticsEngine_UnitTests)
+file(GLOB_RECURSE FILES data/*.*)
+
+add_library(samples_data INTERFACE ${FILES})
+add_to_data_folder(samples_data)
+
+unset(FILES)

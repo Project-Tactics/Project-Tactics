@@ -1,0 +1,150 @@
+{
+    "transform": {
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 0
+        },
+        "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+        }
+    },
+    "mesh": {
+        "mesh": "map04",
+        "materials": [
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_00"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_01"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_02"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_03"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_04"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_05"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_06"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlitWithAlpha",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_07"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_08"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_09"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_10"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_11"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_12"
+                    }
+                }
+            },
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map04_13"
+                    }
+                }
+            },
+            {
+                "material": "coloredUnlit",
+                "uniforms": {
+                    "vectors4": {
+                        "u_Color": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}
