@@ -2,4 +2,5 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 add_subdirectory(OpenTactica)
-add_subdirectory(ProjectTactics_UnitTests)
+add_subdirectory(Samples)
+add_subdirectory(TacticsEngine_UnitTests)
