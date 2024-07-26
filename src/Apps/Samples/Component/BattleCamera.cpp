@@ -16,6 +16,25 @@ void BattleCamera::defineReflection() {
 }
 
 void BattleCameraSystem::update(entt::registry& registry) {
+	_updateInputs(registry);
+	_updateCameras(registry);
+}
+
+void BattleCameraSystem::_updateInputs(entt::registry& registry) {
+	auto view = registry.view<BattleCamera, BattleCameraInput>();
+	for (auto [entity, camera, input] : view.each()) {
+		if (input.moveCamera->isTriggered()) {
+			auto& value = input.moveCamera->getInputValue();
+			if (value.scalar > 0) {
+				camera.rotateToNextStep();
+			} else {
+				camera.rotateToPrevStep();
+			}
+		}
+	}
+}
+
+void BattleCameraSystem::_updateCameras(entt::registry& registry) {
 	auto view = registry.view<BattleCamera, Transform>();
 	for (auto [entity, camera, transform] : view.each()) {
 		if (camera.currentStep != camera.nextStep) {

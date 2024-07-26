@@ -69,6 +69,8 @@ dst_data_folder = "../../resources/" + app_project_name
 rename_dict = {
     'TemplateApplication.cpp': f'{app_project_name}Application.cpp',
     'TemplateApplication.h': f'{app_project_name}Application.h',
+    'States/DefaultState.h': f'States/{app_project_name}State.h',
+    'States/DefaultState.cpp': f'States/{app_project_name}State.cpp',
 }
 replacements = {
     '##APP_NAME##': app_name,

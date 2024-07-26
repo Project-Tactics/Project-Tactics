@@ -20,6 +20,7 @@ private:
 	void _createViewport();
 	void _createCamera();
 	void _setupRenderSteps();
+	void _setupInputMap();
 
 	std::string _resourceDefinitionPath;
 	HashId _resourcePackName;

@@ -73,6 +73,7 @@ ActionId createAction(ActionType type, bool normalized);
 void destroyAction(ActionId actionId);
 
 const ActionState& actionState(ActionId id, PlayerId playerId);
+bool hasAction(ActionId id);
 
 ActionType type(ActionId id);
 unsigned int actions();

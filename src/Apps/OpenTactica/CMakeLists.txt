@@ -4,11 +4,11 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
     OpenTacticaApplication.cpp
     main.cpp
-    States/EmptyState.cpp)
+    States/DefaultState.cpp)
     
 set(HEADERS
     OpenTacticaApplication.h
-    States/EmptyState.h)
+    States/DefaultState.h)
 
 set(TARGET_NAME OpenTactica)
 set(POST_BUILD_TARGET_NAME ${TARGET_NAME}PostBuild)

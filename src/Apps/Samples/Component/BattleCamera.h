@@ -2,6 +2,7 @@
 
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/EntityUtilities.h>
+#include <Libs/Resource/Input/InputAction.h>
 #include <Libs/Utility/Math.h>
 #include <Libs/Utility/Reflection.h>
 
@@ -34,9 +35,17 @@ struct BattleCamera {
 	static void defineReflection();
 };
 
+struct BattleCameraInput {
+	resource::InputAction::Ptr moveCamera;
+};
+
 class BattleCameraSystem {
 public:
 	static void update(entt::registry& registry);
+
+private:
+	static void _updateInputs(entt::registry& registry);
+	static void _updateCameras(entt::registry& registry);
 };
 
 } // namespace tactics::component

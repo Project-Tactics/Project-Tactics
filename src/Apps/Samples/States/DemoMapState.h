@@ -12,8 +12,8 @@ public:
 	void exit() override;
 
 private:
-	FsmEventAction onKeyPress(SDL_KeyboardEvent& event) override;
 	void _createScene();
+	void _setupInput();
 
 	unsigned int _mapIndex{};
 };

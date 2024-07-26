@@ -102,6 +102,84 @@
             "simpleCamera": {
                 "path": "common/prefabs/simpleCamera.prefab"
             }
+        },
+        "inputAction": {
+            "exitFromState": {
+                "type": "scalar"
+            },
+            "goToEmptyState": {
+                "type": "scalar"
+            },
+            "anyKeyPressed": {
+                "type": "scalar"
+            }
+        },
+        "inputMap": {
+            "commonMap": {
+                "bindings": [
+                    {
+                        "action": "exitFromState",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "data": {
+                                        "input": "keyEscape"
+                                    }
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "down",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "action": "goToEmptyState",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "data": {
+                                        "input": "keySpace"
+                                    }
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "down",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "emptyStateMap": {
+                "bindings": [
+                    {
+                        "action": "anyKeyPressed",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "data": {
+                                        "input": "keyAny"
+                                    }
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "press",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
         }
     }
 }

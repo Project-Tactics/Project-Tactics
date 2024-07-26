@@ -14,7 +14,6 @@ public:
 	void exit() override;
 
 private:
-	FsmEventAction onKeyPress(SDL_KeyboardEvent& event) override;
 	void _createCharacters(const glm::vec3& offset, int count);
 };
 

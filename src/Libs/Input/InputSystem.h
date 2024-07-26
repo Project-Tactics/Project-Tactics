@@ -32,8 +32,9 @@ public:
 
 	bool checkAction(const char* inputActionName, click::PlayerId playerId = 0) const;
 
-	void assignInputMap(std::shared_ptr<resource::InputMap> inputMap, click::PlayerId playerId);
-	void assignDevice(click::DeviceType deviceType, unsigned int deviceIndex, click::PlayerId playerId);
+	void assignInputMap(const char* inputMapName, click::PlayerId playerId = 0);
+	void assignInputMap(std::shared_ptr<resource::InputMap> inputMap, click::PlayerId playerId = 0);
+	void assignDevice(click::DeviceType deviceType, unsigned int deviceIndex, click::PlayerId playerId = 0);
 	bool hasDeviceAssigned(click::PlayerId playerId, click::DeviceType deviceType) const;
 
 	click::DeviceId getDeviceId(click::DeviceType deviceType, unsigned int deviceIndex) const;
@@ -41,7 +42,6 @@ public:
 	bool hasDevice(click::DeviceType deviceType, unsigned int deviceIndex) const;
 	const click::ActionState& getActionState(click::ActionId actionId, click::PlayerId playerId = 0) const;
 	const click::ActionValue& getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId = 0) const;
-	bool isInputCodeTriggered(click::InputCode inputCode, click::PlayerId playerId = 0) const;
 
 private:
 	void _updateDeviceAssignment();

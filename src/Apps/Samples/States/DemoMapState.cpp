@@ -15,6 +15,7 @@ namespace tactics {
 
 FsmAction DemoMapState::enter() {
 	_createScene();
+	_setupInput();
 	return FsmAction::none();
 }
 
@@ -25,31 +26,21 @@ FsmAction DemoMapState::update() {
 	RotateItemSystem::update(registry);
 	CharacterFacingSystem::update(registry);
 	BattleCameraSystem::update(registry);
+
+	auto& inputSystem = getService<InputSystem>();
+	if (inputSystem.checkAction("exitFromState")) {
+		return FsmAction::transition("exit"_id);
+	} else if (inputSystem.checkAction("loadNextMap")) {
+		_mapIndex = (_mapIndex + 1) % 5;
+		_createScene();
+	}
+
 	return FsmAction::none();
 }
 
 void DemoMapState::exit() {
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.clearScene();
-}
-
-FsmEventAction DemoMapState::onKeyPress(SDL_KeyboardEvent& event) {
-	if (event.keysym.scancode == SDL_SCANCODE_ESCAPE) {
-		return FsmEventAction::transition("exit"_id);
-	} else if (event.keysym.scancode == SDL_SCANCODE_RETURN) {
-		_mapIndex = (_mapIndex + 1) % 5;
-		_createScene();
-	} else if (event.keysym.scancode == SDL_SCANCODE_LEFT) {
-		auto& sceneSystem = getService<SceneSystem>();
-		auto& battleCamera = sceneSystem.getCurrentCamera().getComponent<component::BattleCamera>();
-		battleCamera.rotateToNextStep();
-	} else if (event.keysym.scancode == SDL_SCANCODE_RIGHT) {
-		auto& sceneSystem = getService<SceneSystem>();
-		auto& battleCamera = sceneSystem.getCurrentCamera().getComponent<component::BattleCamera>();
-		battleCamera.rotateToPrevStep();
-	}
-
-	return FsmEventAction::none();
 }
 
 void DemoMapState::_createScene() {
@@ -81,6 +72,11 @@ void DemoMapState::_createScene() {
 		auto& shadowTransform = shadow.getComponent<Transform>();
 		shadowTransform.translate(pos);
 	}
+}
+
+void DemoMapState::_setupInput() {
+	auto& inputSystem = getService<InputSystem>();
+	inputSystem.assignInputMap("mapDemoInput");
 }
 
 } // namespace tactics

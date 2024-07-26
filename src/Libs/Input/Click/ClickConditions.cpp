@@ -19,6 +19,8 @@ ConditionState update(PressCondition& condition, Binding& binding, float /*delta
 		if (condition.state == ConditionState::Idle) {
 			condition.state = ConditionState::Triggered;
 			return ConditionState::Triggered;
+		} else {
+			return ConditionState::Idle;
 		}
 	}
 

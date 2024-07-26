@@ -335,6 +335,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(InputCode,
 							  {InputCode::KeySoftleft, "keySoftleft"},
 							  {InputCode::KeySoftright, "keySoftright"},
 							  {InputCode::KeyCall, "keyCall"},
-							  {InputCode::KeyEndcall, "keyEndcall"}});
+							  {InputCode::KeyEndcall, "keyEndcall"},
+							  {InputCode::KeyAny, "keyAny"}});
 
 } // namespace click

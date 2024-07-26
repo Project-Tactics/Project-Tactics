@@ -41,6 +41,80 @@ local packs = {
             charShadow = {
                 path = "_demoMaps/charShadow.prefab"
             }
+        },
+        inputAction = {
+            loadNextMap = {
+                type = "scalar"
+            },
+            moveCamera = {
+                type = "scalar"
+            }
+        },
+        inputMap = {
+            mapDemoInput = {
+                bindings = {
+                    {
+                        action = "loadNextMap",
+                        gestures = {
+                            {
+                                gesture = {
+                                    type = "simple",
+                                    data = {
+                                        input = "keyReturn"
+                                    }
+                                },
+                                conditions = {
+                                    {
+                                        type = "press",
+                                        actuationThreshold = 0.5
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        action = "moveCamera",
+                        gestures = {
+                            {
+                                gesture = {
+                                    type = "simple",
+                                    data = {
+                                        input = "keyD"
+                                    }
+                                },
+                                conditions = {
+                                    {
+                                        type = "down",
+                                        actuationThreshold = 0.5
+                                    }
+                                }
+                            },
+                            {
+                                gesture = {
+                                    type = "simple",
+                                    data = {
+                                        input = "keyA"
+                                    }
+                                },
+                                conditions = {
+                                    {
+                                        type = "down",
+                                        actuationThreshold = 0.5
+                                    }
+                                },
+                                modifiers = {
+                                    {
+                                        type = "negate",
+                                        data = {
+                                            axis = "x"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

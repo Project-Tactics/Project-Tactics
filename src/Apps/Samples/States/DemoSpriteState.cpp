@@ -5,6 +5,7 @@
 #include <Engine/Scene/SceneSystem.h>
 
 #include <Libs/Ecs/Component/TransformComponent.h>
+#include <Libs/Input/InputSystem.h>
 
 namespace tactics {
 
@@ -35,30 +36,13 @@ void DemoSpriteState::exit() {
 
 FsmAction DemoSpriteState::update() {
 	component::RotateAroundPointSystem::update(getService<SceneSystem>().getRegistry());
-	return FsmAction::none();
-}
 
-FsmEventAction DemoSpriteState::onKeyPress(SDL_KeyboardEvent& event) {
-	if (event.keysym.sym == SDLK_ESCAPE) {
-		return FsmEventAction::transition("exit"_id);
-	} else if (event.keysym.sym == SDLK_1) {
-		auto& sceneSystem = getService<SceneSystem>();
-		sceneSystem.clearScene();
-		_createCharacters({}, 2);
-		_createCharacters({0.15, 0, -2}, 2);
-		_createCharacters({-1, 0, 2}, 2);
-	} else if (event.keysym.sym == SDLK_2) {
-		auto& sceneSystem = getService<SceneSystem>();
-		sceneSystem.clearScene();
-		_createCharacters({}, 2);
-		_createCharacters({-1, 0, 2}, 2);
-	} else if (event.keysym.sym == SDLK_3) {
-		auto& sceneSystem = getService<SceneSystem>();
-		sceneSystem.clearScene();
-		_createCharacters({0.15, 0, -2}, 2);
-		_createCharacters({-1, 0, 2}, 2);
+	auto& inputSystem = getService<InputSystem>();
+	if (inputSystem.checkAction("exitFromState")) {
+		return FsmAction::transition("exit"_id);
 	}
-	return FsmEventAction::none();
+
+	return FsmAction::none();
 }
 
 } // namespace tactics

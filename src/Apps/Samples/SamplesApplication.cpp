@@ -87,7 +87,7 @@ HashId SamplesApplication::_initializeSimpleDemo(ServiceLocator& serviceLocator,
 		.on("empty").jumpTo("Empty")
 		.onAppExitRequest().jumpTo("Unload")
 
-		.state<EmptyState>("Empty")
+		.state<EmptyState>("Empty", serviceLocator)
 		.on("proceed").jumpTo("Unload")
 		.onAppExitRequest().jumpTo("Unload")
 
@@ -106,11 +106,6 @@ HashId SamplesApplication::_initializeParticlesDemo(ServiceLocator& serviceLocat
 
 		.state<DemoParticlesState>("Particles", serviceLocator)
 		.on("exit").jumpTo("Unload")
-		.on("empty").jumpTo("Empty")
-		.onAppExitRequest().jumpTo("Unload")
-
-		.state<EmptyState>("Empty")
-		.on("proceed").jumpTo("Unload")
 		.onAppExitRequest().jumpTo("Unload")
 
 		.state<UnloadState>("Unload", serviceLocator, "demoParticles"_id)

@@ -339,6 +339,7 @@ enum class InputCode {
 	KeySoftright,
 	KeyCall,
 	KeyEndcall,
+	KeyAny,
 	Count
 };
 

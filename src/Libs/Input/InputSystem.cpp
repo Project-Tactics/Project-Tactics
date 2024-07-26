@@ -72,6 +72,9 @@ void InputSystem::update() {
 		for (click::PlayerId playerIndex = 0u; playerIndex < click::players(); ++playerIndex) {
 			auto& actionState = getActionState(inputAction.actionId, playerIndex);
 			inputAction.states[playerIndex] = actionState;
+			if (actionState.state == click::InputState::Triggered) {
+				LOG_TRACE(Log::Input, "Action triggered: {}", inputAction.name);
+			}
 		}
 	});
 }
@@ -81,6 +84,12 @@ void InputSystem::assignInputMap(std::shared_ptr<resource::InputMap> inputMap, c
 	for (const auto& binding : inputMap->bindings) {
 		click::bind(mapId, binding.action->actionId, binding.gesture, binding.triggers, binding.modifiers);
 	}
+}
+
+void InputSystem::assignInputMap(const char* inputMapName, click::PlayerId playerId) {
+	auto inputMapId = HashId(inputMapName);
+	auto inputMap = _resourceProvider.getResource<resource::InputMap>(inputMapId);
+	assignInputMap(inputMap, playerId);
 }
 
 void InputSystem::assignDevice(click::DeviceType deviceType, unsigned int deviceIndex, click::PlayerId playerId) {
@@ -152,13 +161,10 @@ const click::ActionValue& InputSystem::getInputCodeValue(click::InputCode inputC
 	return click::inputValue(inputCode, playerId);
 }
 
-bool InputSystem::isInputCodeTriggered(click::InputCode inputCode, click::PlayerId playerId) const {
-	return click::_magnitudeSquared(click::inputValue(inputCode, playerId)) != 0;
-}
-
 bool InputSystem::checkAction(const char* inputActionName, click::PlayerId playerId) const {
 	auto actionId = HashId(inputActionName);
-	return getActionState(actionId, playerId).state == click::InputState::Triggered;
+	auto inputAction = _resourceProvider.getResource<resource::InputAction>(actionId);
+	return inputAction->states[playerId].state == click::InputState::Triggered;
 }
 
 } // namespace tactics
