@@ -46,6 +46,14 @@ FsmAction DemoSimpleState::update() {
 	component::RotateItemSystem::update(registry);
 	component::RotateAroundPointSystem::update(registry);
 	component::FreeCameraSystem::update(registry);
+
+	auto& inputSystem = getService<InputSystem>();
+	if (inputSystem.isInputCodeTriggered(click::InputCode::KeyEscape)) {
+		return FsmAction::transition("exit"_id);
+	} else if (inputSystem.isInputCodeTriggered(click::InputCode::KeySpace)) {
+		return FsmAction::transition("empty"_id);
+	}
+
 	return FsmAction::none();
 }
 
@@ -58,16 +66,6 @@ void DemoSimpleState::_setupInputMap() {
 	inputSystem.assignKeyboard(0);
 	inputSystem.assignGamepad(0, 0);
 	inputSystem.assignMouse(0);
-}
-
-FsmEventAction DemoSimpleState::onKeyPress(SDL_KeyboardEvent& event) {
-	if (event.keysym.scancode == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
-		return FsmEventAction::transition("exit"_id);
-	} else if (event.keysym.scancode == SDL_Scancode::SDL_SCANCODE_SPACE) {
-		return FsmEventAction::transition("empty"_id);
-	}
-
-	return FsmEventAction::none();
 }
 
 void DemoSimpleState::_createCrate() {

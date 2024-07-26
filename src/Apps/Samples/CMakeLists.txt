@@ -5,6 +5,7 @@ set(SOURCES
     SamplesApplication.cpp
     main.cpp
     States/DemoMapState.cpp
+    States/DemoParticlesState.cpp
     States/DemoSimpleState.cpp
     States/DemoSpriteState.cpp
     States/EmptyState.cpp
@@ -19,6 +20,7 @@ set(SOURCES
 set(HEADERS
     SamplesApplication.h
     States/DemoMapState.h
+    States/DemoParticlesState.h
     States/DemoSimpleState.h
     States/DemoSpriteState.h
     States/EmptyState.h

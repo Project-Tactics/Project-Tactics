@@ -156,12 +156,16 @@ const click::DeviceData& InputSystem::getDevice(click::DeviceId deviceId) const 
 	return click::device(deviceId);
 }
 
-const click::ActionState& InputSystem::getActionState(click::ActionId actionId, click::PlayerId playerId) {
+const click::ActionState& InputSystem::getActionState(click::ActionId actionId, click::PlayerId playerId) const {
 	return click::actionState(actionId, playerId);
 }
 
-const click::ActionValue& InputSystem::getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId) {
+const click::ActionValue& InputSystem::getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId) const {
 	return click::inputValue(inputCode, playerId);
+}
+
+bool InputSystem::isInputCodeTriggered(click::InputCode inputCode, click::PlayerId playerId) const {
+	return click::_magnitudeSquared(click::inputValue(inputCode, playerId)) != 0;
 }
 
 } // namespace tactics

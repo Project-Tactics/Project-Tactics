@@ -6,6 +6,7 @@
 #include "Component/RotateAroundPoint.h"
 #include "Component/RotateItem.h"
 #include "States/DemoMapState.h"
+#include "States/DemoParticlesState.h"
 #include "States/DemoSimpleState.h"
 #include "States/DemoSpriteState.h"
 #include "States/EmptyState.h"
@@ -32,6 +33,8 @@ HashId SamplesApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder
 		return _initializeSpriteDemo(serviceLocator, fsmBuilder);
 	} else if (state == "map") {
 		return _initializeMapDemo(serviceLocator, fsmBuilder);
+	} else if (state == "particles") {
+		return _initializeParticlesDemo(serviceLocator, fsmBuilder);
 	} else {
 		return _initializeSimpleDemo(serviceLocator, fsmBuilder);
 	}
@@ -89,6 +92,28 @@ HashId SamplesApplication::_initializeSimpleDemo(ServiceLocator& serviceLocator,
 		.onAppExitRequest().jumpTo("Unload")
 
 		.state<UnloadState>("Unload", serviceLocator, "demoSimple"_id)
+		.on("proceed").exitFsm()
+		.onAppExitRequest().exitFsm();
+	// clang-format on
+	return "Load"_id;
+}
+
+HashId SamplesApplication::_initializeParticlesDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
+	// clang-format off
+	fsmBuilder
+		.state<LoadState>("Load", serviceLocator, "_demoParticles/resources.json", "demoParticles"_id, "particlesCamera"_id)
+		.on("proceed").jumpTo("Particles")
+
+		.state<DemoParticlesState>("Particles", serviceLocator)
+		.on("exit").jumpTo("Unload")
+		.on("empty").jumpTo("Empty")
+		.onAppExitRequest().jumpTo("Unload")
+
+		.state<EmptyState>("Empty")
+		.on("proceed").jumpTo("Unload")
+		.onAppExitRequest().jumpTo("Unload")
+
+		.state<UnloadState>("Unload", serviceLocator, "demoParticles"_id)
 		.on("proceed").exitFsm()
 		.onAppExitRequest().exitFsm();
 	// clang-format on

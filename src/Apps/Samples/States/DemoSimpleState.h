@@ -12,7 +12,6 @@ public:
 	void exit() override;
 
 private:
-	FsmEventAction onKeyPress(SDL_KeyboardEvent& event) override;
 	void _createPlane();
 	void _createTeapot();
 	void _createCrate();

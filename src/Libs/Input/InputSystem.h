@@ -39,8 +39,9 @@ public:
 	click::DeviceId getDeviceId(click::DeviceType deviceType, unsigned int deviceIndex) const;
 	const click::DeviceData& getDevice(click::DeviceId deviceId) const;
 	bool hasDevice(click::DeviceType deviceType, unsigned int deviceIndex) const;
-	const click::ActionState& getActionState(click::ActionId actionId, click::PlayerId playerId);
-	const click::ActionValue& getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId);
+	const click::ActionState& getActionState(click::ActionId actionId, click::PlayerId playerId = 0) const;
+	const click::ActionValue& getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId = 0) const;
+	bool isInputCodeTriggered(click::InputCode inputCode, click::PlayerId playerId = 0) const;
 
 private:
 	void _updateDeviceAssignment();
