@@ -48,9 +48,9 @@ FsmAction DemoSimpleState::update() {
 	component::FreeCameraSystem::update(registry);
 
 	auto& inputSystem = getService<InputSystem>();
-	if (inputSystem.isInputCodeTriggered(click::InputCode::KeyEscape)) {
+	if (inputSystem.checkAction("exit")) {
 		return FsmAction::transition("exit"_id);
-	} else if (inputSystem.isInputCodeTriggered(click::InputCode::KeySpace)) {
+	} else if (inputSystem.checkAction("empty")) {
 		return FsmAction::transition("empty"_id);
 	}
 
@@ -63,9 +63,9 @@ void DemoSimpleState::_setupInputMap() {
 
 	auto inputMap = resourceSystem.getResource<resource::InputMap>("defaultInputMap"_id);
 	inputSystem.assignInputMap(inputMap, 0);
-	inputSystem.assignKeyboard(0);
-	inputSystem.assignGamepad(0, 0);
-	inputSystem.assignMouse(0);
+	inputSystem.assignDevice(click::DeviceType::Keyboard, 0, 0);
+	inputSystem.assignDevice(click::DeviceType::Gamepad, 0, 0);
+	inputSystem.assignDevice(click::DeviceType::Mouse, 0, 0);
 }
 
 void DemoSimpleState::_createCrate() {

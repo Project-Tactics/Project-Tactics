@@ -99,18 +99,6 @@ bool InputSystem::hasDeviceAssigned(click::PlayerId playerId, click::DeviceType 
 		   }) > 0;
 }
 
-void InputSystem::assignKeyboard(click::PlayerId playerId) {
-	assignDevice(click::DeviceType::Keyboard, 0, playerId);
-}
-
-void InputSystem::assignMouse(click::PlayerId playerId) {
-	assignDevice(click::DeviceType::Mouse, 0, playerId);
-}
-
-void InputSystem::assignGamepad(click::PlayerId playerId, unsigned int deviceIndex) {
-	assignDevice(click::DeviceType::Gamepad, deviceIndex, playerId);
-}
-
 void InputSystem::_updateDeviceAssignment() {
 	for (const auto& [playerId, devices] : _playerDevices) {
 		for (auto& [deviceType, deviceIndex] : devices) {
@@ -166,6 +154,11 @@ const click::ActionValue& InputSystem::getInputCodeValue(click::InputCode inputC
 
 bool InputSystem::isInputCodeTriggered(click::InputCode inputCode, click::PlayerId playerId) const {
 	return click::_magnitudeSquared(click::inputValue(inputCode, playerId)) != 0;
+}
+
+bool InputSystem::checkAction(const char* inputActionName, click::PlayerId playerId) const {
+	auto actionId = HashId(inputActionName);
+	return getActionState(actionId, playerId).state == click::InputState::Triggered;
 }
 
 } // namespace tactics
