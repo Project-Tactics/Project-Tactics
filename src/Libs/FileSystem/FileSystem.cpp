@@ -20,8 +20,7 @@ std::unique_ptr<FileHandle<std::string>> FileSystem::createStringFileHandle(cons
 	return _fileLoader->createStringFile(_pathHelper->makeAbsolutePath(path));
 }
 
-std::unique_ptr<FileHandle<nlohmann::ordered_json>>
-FileSystem::createJsonFileHandle(const std::filesystem::path& path) {
+std::unique_ptr<FileHandle<ordered_json>> FileSystem::createJsonFileHandle(const std::filesystem::path& path) {
 	return _fileLoader->createJsonFile(_pathHelper->makeAbsolutePath(path));
 }
 

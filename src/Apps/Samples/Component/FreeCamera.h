@@ -15,12 +15,10 @@ struct FreeCamera {
 	float pitch{0.f};
 	float yaw{0.f};
 	unsigned int player{};
-	std::shared_ptr<resource::InputAction> moveAction;
-	std::shared_ptr<resource::InputAction> lookAction;
+	resource::InputAction::Ptr moveAction;
+	resource::InputAction::Ptr lookAction;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(FreeCamera, player, velocity, speed, sensitivity, pitch, yaw);
-	static void defineReflection();
-	void deserialize(const resource::ResourceProvider* resourceProvider, const nlohmann::ordered_json& jsonData);
+	REFLECT(FreeCamera, player, velocity, speed, sensitivity, pitch, yaw, moveAction, lookAction);
 };
 
 class FreeCameraSystem {

@@ -14,7 +14,7 @@ struct SpriteSheetAnimation {
 	std::vector<uint32_t> frames;
 	float duration;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteSheetAnimation, frames, duration)
+	JSON_SERIALIZE(SpriteSheetAnimation, frames, duration)
 };
 
 class SpriteSheet : public Resource<SpriteSheet> {

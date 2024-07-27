@@ -12,7 +12,7 @@ struct MaterialDescriptor {
 	bool alphaBlended{};
 	UniformsDescriptor uniforms;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MaterialDescriptor, shader, alphaBlended, uniforms);
+	JSON_SERIALIZE(MaterialDescriptor, shader, alphaBlended, uniforms);
 };
 
 class MaterialLoader : public ResourceLoader {

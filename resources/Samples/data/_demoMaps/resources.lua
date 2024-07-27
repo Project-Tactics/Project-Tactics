@@ -2,7 +2,7 @@ local json = require "common.scripts.json"
 
 local packs = {
     demoMaps = {
-        texture = {
+        Texture = {
             spriteSheet00 = {
                 path = "_demoMaps/spriteSheet00.png",
                 filter = "nearest"
@@ -11,7 +11,7 @@ local packs = {
                 path = "_demoMaps/charShadow.png"
             }
         },
-        spriteSheet = {
+        SpriteSheet = {
             char00 = {
                 texture = "spriteSheet00",
                 spriteSize = {
@@ -30,8 +30,8 @@ local packs = {
                 }
             }
         },
-        mesh = {},
-        prefab = {
+        Mesh = {},
+        Prefab = {
             mapCamera = {
                 path = "_demoMaps/mapCamera.prefab"
             },
@@ -42,7 +42,7 @@ local packs = {
                 path = "_demoMaps/charShadow.prefab"
             }
         },
-        inputAction = {
+        InputAction = {
             loadNextMap = {
                 type = "scalar"
             },
@@ -50,7 +50,7 @@ local packs = {
                 type = "scalar"
             }
         },
-        inputMap = {
+        InputMap = {
             mapDemoInput = {
                 bindings = {
                     {
@@ -79,12 +79,12 @@ local packs = {
                                 gesture = {
                                     type = "simple",
                                     data = {
-                                        input = "keyD"
+                                        input = "keyA"
                                     }
                                 },
                                 conditions = {
                                     {
-                                        type = "down",
+                                        type = "press",
                                         actuationThreshold = 0.5
                                     }
                                 }
@@ -93,12 +93,12 @@ local packs = {
                                 gesture = {
                                     type = "simple",
                                     data = {
-                                        input = "keyA"
+                                        input = "keyD"
                                     }
                                 },
                                 conditions = {
                                     {
-                                        type = "down",
+                                        type = "press",
                                         actuationThreshold = 0.5
                                     }
                                 },
@@ -124,15 +124,15 @@ for mapIndex = 1, #mapTextureCounts do
     local mapName = string.format("map%02d", mapIndex - 1)
     for i = 1, mapTextureCounts[mapIndex] do
         local textureName = string.format("%s_%02d", mapName, i - 1)
-        packs.demoMaps.texture[textureName] = {
+        packs.demoMaps.Texture[textureName] = {
             path = string.format("_demoMaps/%s/tex%02d.png", mapName, i - 1)
         }
     end
 
-    packs.demoMaps.mesh[mapName] = {
+    packs.demoMaps.Mesh[mapName] = {
         path = string.format("_demoMaps/%s/%s.fbx", mapName, mapName)
     }
-    packs.demoMaps.prefab[mapName] = {
+    packs.demoMaps.Prefab[mapName] = {
         path = string.format("_demoMaps/%s/%s.prefab", mapName, mapName)
     }
 end

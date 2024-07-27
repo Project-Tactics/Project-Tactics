@@ -1,6 +1,6 @@
 {
     "demoParticles": {
-        "prefab": {
+        "Prefab": {
             "particlesCamera": {
                 "path": "_demoParticles/particlesCamera.prefab"
             }

@@ -11,8 +11,7 @@ struct Frustum {
 	float aspectRatio = 1.0f;
 	float orthoSize = 5.0f;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Frustum, fov, near, far, aspectRatio, orthoSize);
-	static void defineReflection();
+	REFLECT(Frustum, fov, near, far, aspectRatio, orthoSize)
 };
 
 } // namespace tactics::component

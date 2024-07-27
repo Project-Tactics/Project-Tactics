@@ -21,7 +21,12 @@ namespace tactics {
 
 void SamplesApplication::setupComponentReflections() {
 	using namespace component;
-	defineComponentsReflection<BattleCamera, CharacterFacing, RotateItem, RotateAroundPoint, FreeCamera>();
+	defineComponentsReflection<BattleCamera,
+							   BattleCameraInput,
+							   CharacterFacing,
+							   RotateItem,
+							   RotateAroundPoint,
+							   FreeCamera>();
 }
 
 HashId SamplesApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {

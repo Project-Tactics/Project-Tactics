@@ -167,7 +167,7 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 	resourceSystem.loadExternalResource("CustomPack"_id, triangleMesh);
 
 	// We can also create a resource by simulating the usual pack loading
-	nlohmann::json descriptor = {{"vertexShader", "common/shaders/default.vert"}, {"fragmentShader", R"(
+	json descriptor = {{"vertexShader", "common/shaders/default.vert"}, {"fragmentShader", R"(
 				#version 330 core
 				layout(location = 0) out vec4 color;
 				uniform vec4 u_Color;

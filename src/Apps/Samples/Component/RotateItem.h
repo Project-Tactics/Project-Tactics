@@ -12,8 +12,7 @@ struct RotateItem {
 	float speed;
 	glm::vec3 axis;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(RotateItem, speed, axis);
-	static void defineReflection();
+	REFLECT(RotateItem, speed, axis);
 };
 
 class RotateItemSystem {

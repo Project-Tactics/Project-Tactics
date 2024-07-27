@@ -24,19 +24,20 @@ struct BattleCamera {
 	void rotateToNextStep();
 	void rotateToPrevStep();
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(BattleCamera,
-												rotationTime,
-												distanceFromOrigin,
-												rotationSpeed,
-												nextStep,
-												currentStep,
-												rotationSteps,
-												offset);
-	static void defineReflection();
+	REFLECT(BattleCamera,
+			rotationTime,
+			distanceFromOrigin,
+			rotationSpeed,
+			nextStep,
+			currentStep,
+			rotationSteps,
+			offset);
 };
 
 struct BattleCameraInput {
 	resource::InputAction::Ptr moveCamera;
+
+	REFLECT(BattleCameraInput, moveCamera);
 };
 
 class BattleCameraSystem {

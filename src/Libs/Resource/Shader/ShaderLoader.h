@@ -12,7 +12,7 @@ struct ShaderDescriptor {
 	std::string vertexShader;
 	std::string fragmentShader;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(ShaderDescriptor, vertexShader, fragmentShader);
+	JSON_SERIALIZE(ShaderDescriptor, vertexShader, fragmentShader);
 };
 
 class ShaderLoader : public ResourceLoader {

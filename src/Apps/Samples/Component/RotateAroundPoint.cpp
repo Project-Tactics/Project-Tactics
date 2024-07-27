@@ -4,17 +4,6 @@
 
 namespace tactics::component {
 
-void RotateAroundPoint::defineReflection() {
-	using namespace entt::literals;
-
-	componentReflection<RotateAroundPoint>("rotateAroundPoint")
-		.data<&RotateAroundPoint::point>("point"_id)
-		.data<&RotateAroundPoint::offset>("offset"_id)
-		.data<&RotateAroundPoint::distanceFromPoint>("distanceFromPoint"_id)
-		.data<&RotateAroundPoint::speed>("speed"_id)
-		.data<&RotateAroundPoint::currentAngle>("currentAngle"_id);
-}
-
 void RotateAroundPointSystem::update(entt::registry& registry) {
 	auto view = registry.view<Transform, RotateAroundPoint>();
 	view.each([](Transform& transform, RotateAroundPoint& rotate) {

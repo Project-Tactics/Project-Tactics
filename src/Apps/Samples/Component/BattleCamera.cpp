@@ -2,18 +2,7 @@
 
 #include <Libs/Utility/Time/EngineTime.h>
 
-#include <iostream>
-
 namespace tactics::component {
-
-void BattleCamera::defineReflection() {
-	componentReflection<BattleCamera>("battleCamera")
-		.data<&BattleCamera::rotationSteps>("rotationSteps"_id)
-		.data<&BattleCamera::rotationTime>("rotationTime"_id)
-		.data<&BattleCamera::rotationSpeed>("rotationSpeed"_id)
-		.data<&BattleCamera::nextStep>("nextStep"_id)
-		.data<&BattleCamera::currentStep>("currentStep"_id);
-}
 
 void BattleCameraSystem::update(entt::registry& registry) {
 	_updateInputs(registry);

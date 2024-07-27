@@ -8,11 +8,11 @@ namespace tactics::component {
 
 struct Mesh {
 	std::shared_ptr<resource::Mesh> mesh;
-	std::vector<std::shared_ptr<resource::Material::Instance>> materials;
+	resource::MaterialInstances materials;
 
-	static void defineReflection();
-	void deserialize(const resource::ResourceProvider* resourceProvider, const nlohmann::ordered_json& jsonData);
 	Mesh clone();
+
+	REFLECT(Mesh, mesh, materials);
 };
 
 } // namespace tactics::component

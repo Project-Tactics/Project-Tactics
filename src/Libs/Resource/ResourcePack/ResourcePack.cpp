@@ -11,7 +11,7 @@ namespace tactics::resource {
 
 /// ResourceInfo
 
-ResourceInfo::ResourceInfo(HashId name, const nlohmann::ordered_json& data) : _name(name), _data(data) {}
+ResourceInfo::ResourceInfo(HashId name, const ordered_json& data) : _name(name), _data(data) {}
 
 ResourceInfo::ResourceInfo(HashId name) : _name(name) {}
 
@@ -41,7 +41,7 @@ void ResourceInfo::unload(BaseResourceManager& manager) {
 	return _name;
 }
 
-[[nodiscard]] const nlohmann::ordered_json& ResourceInfo::getData() const {
+[[nodiscard]] const ordered_json& ResourceInfo::getData() const {
 	return _data;
 }
 
@@ -57,7 +57,7 @@ void ResourceInfo::unload(BaseResourceManager& manager) {
 
 PackGroup::PackGroup(ResourceType type) : _type(type) {}
 
-void PackGroup::addResource(const HashId& name, const nlohmann::ordered_json& data) {
+void PackGroup::addResource(const HashId& name, const ordered_json& data) {
 	_resources.push_back(std::make_unique<ResourceInfo>(name, data));
 }
 
@@ -84,7 +84,7 @@ void PackGroup::loadExternalResource(BaseResourceManager& manager, std::shared_p
 	_resources.push_back(std::make_unique<ResourceInfo>(manager, resource));
 }
 
-void PackGroup::loadExternalResource(BaseResourceManager& manager, const HashId& name, const nlohmann::json& data) {
+void PackGroup::loadExternalResource(BaseResourceManager& manager, const HashId& name, const json& data) {
 	_resources.push_back(std::make_unique<ResourceInfo>(name, data));
 	_resources.back()->load(manager);
 }
@@ -190,7 +190,7 @@ void Pack::loadExternalResource(const ResourceProvider& resourceProvider, std::s
 void Pack::loadExternalResource(const ResourceProvider& resourceProvider,
 								const HashId& name,
 								ResourceType type,
-								const nlohmann::json& data) {
+								const json& data) {
 	if (!isManuallyCreated()) {
 		throw TACTICS_EXCEPTION(
 			"Can't load resource [{}] of type [{}] to pack [{}]. The pack has not been created manually. Descriptor: "

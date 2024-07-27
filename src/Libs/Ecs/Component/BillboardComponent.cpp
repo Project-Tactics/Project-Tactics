@@ -2,10 +2,4 @@
 
 #include <Libs/Utility/Reflection.h>
 
-namespace tactics::component {
-
-void Billboard::defineReflection() {
-	componentReflection<Billboard>("billboard");
-}
-
-} // namespace tactics::component
+namespace tactics::component {} // namespace tactics::component

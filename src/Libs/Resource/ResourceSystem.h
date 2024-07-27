@@ -35,7 +35,7 @@ public:
 	void loadExternalResource(const HashId& packName, std::shared_ptr<BaseResource> resource);
 
 	template<typename TResource>
-	void loadExternalResource(const HashId& packName, const HashId& resourceName, const nlohmann::json& data) {
+	void loadExternalResource(const HashId& packName, const HashId& resourceName, const json& data) {
 		_loadExternalResource(packName, resourceName, TResource::TYPE, data);
 	}
 
@@ -69,7 +69,7 @@ private:
 	void _loadExternalResource(const HashId& packName,
 							   const HashId& resourceName,
 							   ResourceType resourceType,
-							   const nlohmann::json& data);
+							   const json& data);
 
 	template<typename TResource> BaseResourceManager* _getManager() {
 		return _getManager(TResource::TYPE);

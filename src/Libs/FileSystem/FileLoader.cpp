@@ -16,8 +16,7 @@ std::unique_ptr<FileHandle<std::string>> DefaultFileLoader::createStringFile(con
 	return std::make_unique<StringFileHandle>(path);
 }
 
-std::unique_ptr<FileHandle<nlohmann::ordered_json>>
-DefaultFileLoader::createJsonFile(const std::filesystem::path& path) const {
+std::unique_ptr<FileHandle<ordered_json>> DefaultFileLoader::createJsonFile(const std::filesystem::path& path) const {
 	return std::make_unique<JsonFileHandle>(path, _pathHelper);
 }
 

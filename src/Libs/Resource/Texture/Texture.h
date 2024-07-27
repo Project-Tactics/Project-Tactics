@@ -9,11 +9,11 @@ enum class TextureFilter {
 	Nearest
 };
 
-NLOHMANN_JSON_SERIALIZE_ENUM(TextureFilter,
-							 {
-								 {TextureFilter::Linear, "linear"},
-								 {TextureFilter::Nearest, "nearest"},
-							 })
+JSON_ENUM(TextureFilter,
+		  {
+			  {TextureFilter::Linear, "linear"},
+			  {TextureFilter::Nearest, "nearest"},
+		  })
 
 struct TextureInfo {
 	int width;

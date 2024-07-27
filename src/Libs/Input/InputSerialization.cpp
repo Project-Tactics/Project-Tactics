@@ -17,9 +17,9 @@ click::ActionValue Str<click::ActionValue>::from(std::string_view string) {
 
 namespace click {
 
-void to_json(nlohmann::json&, const Condition&) {}
+void to_json(json&, const Condition&) {}
 
-void from_json(const nlohmann::json& json, Condition& trigger) {
+void from_json(const json& json, Condition& trigger) {
 	if (!json.contains("type")) {
 		LOG_ERROR(tactics::Log::Input, "Input Modifier missing [type]");
 		return;
@@ -41,9 +41,9 @@ void from_json(const nlohmann::json& json, Condition& trigger) {
 	}
 }
 
-void to_json(nlohmann::json&, const Modifier&) {}
+void to_json(json&, const Modifier&) {}
 
-void from_json(const nlohmann::json& json, Modifier& modifier) {
+void from_json(const json& json, Modifier& modifier) {
 	if (!json.contains("type")) {
 		LOG_ERROR(tactics::Log::Input, "Input Modifier missing [type]");
 		return;
@@ -63,9 +63,9 @@ void from_json(const nlohmann::json& json, Modifier& modifier) {
 	}
 }
 
-void to_json(nlohmann::json&, const Gesture&) {}
+void to_json(json&, const Gesture&) {}
 
-void from_json(const nlohmann::json& json, Gesture& gesture) {
+void from_json(const json& json, Gesture& gesture) {
 	if (!json.contains("type")) {
 		LOG_ERROR(tactics::Log::Input, "Input Modifier missing [type]");
 		return;

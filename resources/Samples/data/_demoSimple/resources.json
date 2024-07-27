@@ -1,6 +1,6 @@
 {
     "demoSimple": {
-        "texture": {
+        "Texture": {
             "tacticsIcon": {
                 "path": "_demoSimple/tacticsIcon.png"
             },
@@ -11,12 +11,12 @@
                 "path": "_demoSimple/floor.jpg"
             }
         },
-        "mesh": {
+        "Mesh": {
             "teapot": {
                 "path": "_demoSimple/teapot.obj"
             }
         },
-        "prefab": {
+        "Prefab": {
             "plane": {
                 "path": "_demoSimple/testPlane.prefab"
             },
@@ -27,7 +27,7 @@
                 "path": "_demoSimple/rotateAroundCamera.prefab"
             }
         },
-        "inputAction": {
+        "InputAction": {
             "cameraMove": {
                 "type": "axis2d",
                 "normalized": true
@@ -37,7 +37,7 @@
                 "normalized": true
             }
         },
-        "inputMap": {
+        "InputMap": {
             "defaultInputMap": {
                 "bindings": [
                     {

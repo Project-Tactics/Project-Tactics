@@ -5,25 +5,6 @@
 
 namespace tactics::component {
 
-void FreeCamera::deserialize(const resource::ResourceProvider* resourceProvider,
-							 const nlohmann::ordered_json& jsonData) {
-	*this = jsonData;
-	HashId moveActionId = jsonData["moveAction"];
-	HashId lookActionId = jsonData["lookAction"];
-	moveAction = resourceProvider->getResource<resource::InputAction>(moveActionId);
-	lookAction = resourceProvider->getResource<resource::InputAction>(lookActionId);
-}
-
-void FreeCamera::defineReflection() {
-	componentReflection<FreeCamera>("freeCamera")
-		.data<&FreeCamera::velocity>("velocity"_id)
-		.data<&FreeCamera::speed>("speed"_id)
-		.data<&FreeCamera::sensitivity>("sensitivity"_id)
-		.data<&FreeCamera::pitch>("pitch"_id)
-		.data<&FreeCamera::yaw>("yaw"_id)
-		.data<&FreeCamera::player>("player"_id);
-}
-
 void FreeCameraSystem::update(entt::registry& registry) {
 	auto view = registry.view<FreeCamera, Transform>();
 	for (auto [entity, freeCamera, transform] : view.each()) {

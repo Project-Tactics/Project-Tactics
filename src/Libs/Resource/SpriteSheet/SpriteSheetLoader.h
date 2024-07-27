@@ -3,7 +3,7 @@
 #include "../ResourceLoader.h"
 #include "SpriteSheet.h"
 
-#include <Libs/Utility/Json/MathJsonSerializer.h>
+#include <Libs/Utility/Json/JsonSerialization.h>
 
 #include <glm/glm.hpp>
 
@@ -14,7 +14,7 @@ struct SpriteSheetDescriptor {
 	glm::vec2 spriteSize;
 	std::unordered_map<std::string, SpriteSheetAnimation> animations;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteSheetDescriptor, texture, spriteSize, animations)
+	JSON_SERIALIZE(SpriteSheetDescriptor, texture, spriteSize, animations)
 };
 
 class SpriteSheetLoader : public ResourceLoader {

@@ -16,10 +16,10 @@ struct MeshInlineDescriptor {
 	std::string vertices;
 	std::string indices;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(MeshInlineDescriptor, vertices, indices);
+	JSON_SERIALIZE(MeshInlineDescriptor, vertices, indices);
 };
 
-std::shared_ptr<Mesh> MeshLoader::load(const nlohmann::json& descriptor) {
+std::shared_ptr<Mesh> MeshLoader::load(const json& descriptor) {
 	std::shared_ptr<Mesh> mesh;
 	if (!descriptor.contains("path")) {
 		auto meshDescriptor = descriptor.template get<MeshInlineDescriptor>();

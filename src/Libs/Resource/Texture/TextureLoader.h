@@ -11,7 +11,7 @@ struct TextureDescriptor {
 	bool useTransparency = false;
 	TextureFilter filter = TextureFilter::Linear;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(TextureDescriptor, path, useTransparency, filter);
+	JSON_SERIALIZE(TextureDescriptor, path, useTransparency, filter);
 };
 
 class TextureLoader : public ResourceLoader {

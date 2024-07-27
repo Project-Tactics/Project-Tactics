@@ -3,10 +3,11 @@
 #include "FileHandle/FileHandle.h"
 #include "PathHelper.h"
 
+#include <Libs/Utility/Json/Json.h>
+
 #include <filesystem>
 #include <inicpp.h>
 #include <memory>
-#include <nlohmann/json.hpp>
 #include <string_view>
 #include <vector>
 
@@ -19,7 +20,7 @@ public:
 
 	std::unique_ptr<FileHandle<ini::IniFile>> createIniFileHandle(const std::filesystem::path& path);
 	std::unique_ptr<FileHandle<std::string>> createStringFileHandle(const std::filesystem::path& path);
-	std::unique_ptr<FileHandle<nlohmann::ordered_json>> createJsonFileHandle(const std::filesystem::path& path);
+	std::unique_ptr<FileHandle<ordered_json>> createJsonFileHandle(const std::filesystem::path& path);
 
 	const PathHelper& getPathHelper() const;
 

@@ -10,7 +10,7 @@ EntityComponentSystem::EntityComponentSystem() {
 }
 
 Entity EntityComponentSystem::createPrefab(const HashId& name,
-										   const nlohmann::ordered_json& json,
+										   const ordered_json& json,
 										   const resource::ResourceProvider& resourceProvider) {
 	return _prefabManager.createPrefab(name, json, resourceProvider);
 }

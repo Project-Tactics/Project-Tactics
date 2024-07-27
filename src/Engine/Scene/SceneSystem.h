@@ -5,8 +5,6 @@
 #include <Libs/Utility/Color.h>
 #include <Libs/Utility/Math.h>
 
-#include <nlohmann/json.hpp>
-
 namespace tactics {
 namespace resource {
 class ResourceSystem;

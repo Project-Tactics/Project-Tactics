@@ -1,6 +1,6 @@
 {
-    "currentCamera": {},
-    "transform": {
+    "CurrentCamera": {},
+    "Transform": {
         "position": {
             "x": 0,
             "y": 0,
@@ -18,16 +18,16 @@
             "z": 1
         }
     },
-    "camera": {
+    "Camera": {
         "projectionType": "orthographic"
     },
-    "frustum": {
+    "Frustum": {
         "fov": 160,
         "near": 1,
         "far": 1000,
         "orthoSize": 3
     },
-    "battleCamera": {
+    "BattleCamera": {
         "rotationSteps": [
             45,
             135,

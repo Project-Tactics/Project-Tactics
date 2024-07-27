@@ -62,7 +62,7 @@ void ResourcePackManager::loadExternalResource(const HashId& packName, std::shar
 void ResourcePackManager::loadExternalResource(const HashId& packName,
 											   const HashId& resourceName,
 											   ResourceType type,
-											   const nlohmann::json& data) {
+											   const json& data) {
 	auto& pack = _getResourcePack(packName);
 	pack.loadExternalResource(_resourceProvider, resourceName, type, data);
 }
@@ -73,7 +73,7 @@ void ResourcePackManager::forEachPack(const std::function<void(const Pack&)>& ca
 	}
 }
 
-std::unique_ptr<FileHandle<nlohmann::ordered_json>>
+std::unique_ptr<FileHandle<ordered_json>>
 ResourcePackManager::_loadPackDefinition(const std::filesystem::path& packDefinitionPath) {
 	auto jsonFileHandle = _fileSystem.createJsonFileHandle(packDefinitionPath);
 	if (!jsonFileHandle->exists()) {

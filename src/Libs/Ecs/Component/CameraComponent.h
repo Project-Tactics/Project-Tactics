@@ -11,22 +11,19 @@ enum ProjectionType {
 	Orthographic
 };
 
-NLOHMANN_JSON_SERIALIZE_ENUM(ProjectionType,
-							 {{ProjectionType::Perspective, "perspective"},
-							  {ProjectionType::Orthographic, "orthographic"}});
+JSON_ENUM(ProjectionType,
+		  {{ProjectionType::Perspective, "perspective"}, {ProjectionType::Orthographic, "orthographic"}});
 
 struct Camera {
 	ProjectionType projectionType = ProjectionType::Perspective;
 	glm::mat4 projection;
 	glm::mat4 view;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Camera, projectionType, projection, view);
-	static void defineReflection();
-	Camera clone();
+	REFLECT(Camera, projectionType, projection, view)
 };
 
 struct CurrentCamera {
-	static void defineReflection();
+	REFLECT_EMPTY(CurrentCamera);
 };
 
 } // namespace tactics::component

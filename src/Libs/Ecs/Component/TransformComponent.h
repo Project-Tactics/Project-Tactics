@@ -32,9 +32,6 @@ public:
 	const glm::mat4x4& computeMatrix();
 	const glm::mat4x4& getMatrix() const;
 
-	void operator=(const nlohmann::ordered_json& json);
-
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Transform, position, rotation, scale);
-	static void defineReflection();
+	REFLECT(Transform, position, rotation, scale);
 };
 } // namespace tactics::component

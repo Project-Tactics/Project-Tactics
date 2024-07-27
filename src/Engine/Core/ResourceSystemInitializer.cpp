@@ -6,6 +6,7 @@
 #include <Libs/Resource/Material/MaterialLoader.h>
 #include <Libs/Resource/Mesh/MeshLoader.h>
 #include <Libs/Resource/Prefab/PrefabLoader.h>
+#include <Libs/Resource/ResourceSerialization.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/Shader/ShaderLoader.h>
 #include <Libs/Resource/SpriteSheet/SpriteSheetLoader.h>
@@ -24,6 +25,7 @@ std::unique_ptr<resource::ResourceSystem> ResourceSystemInitializer::initialize(
 																				EntityComponentSystem& ecs) {
 	using namespace resource;
 	auto resourceSystem = std::make_unique<resource::ResourceSystem>(fileSystem);
+	setResourceProviderForSerialization(resourceSystem.get());
 	registerManager<IniFile, IniFileLoader>(fileSystem, *resourceSystem);
 	registerManager<InputAction, InputActionLoader>(fileSystem, *resourceSystem);
 	registerManager<InputMap, InputMapLoader>(fileSystem, *resourceSystem);

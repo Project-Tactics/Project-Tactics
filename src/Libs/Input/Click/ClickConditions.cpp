@@ -15,17 +15,25 @@ ConditionState update(DownCondition& condition, Binding& binding, float /*deltaT
 }
 
 ConditionState update(PressCondition& condition, Binding& binding, float /*deltaTime*/) {
-	if (_isOverActuationThreshold(condition.actuationThreshold, binding.value)) {
-		if (condition.state == ConditionState::Idle) {
-			condition.state = ConditionState::Triggered;
-			return ConditionState::Triggered;
-		} else {
-			return ConditionState::Idle;
+	switch (condition.state) {
+	case ConditionState::Idle: {
+		if (!_isOverActuationThreshold(condition.actuationThreshold, binding.value)) {
+			condition.state = ConditionState::Ongoing;
 		}
+		break;
+	}
+	case ConditionState::Ongoing: {
+		if (_isOverActuationThreshold(condition.actuationThreshold, binding.value)) {
+			condition.state = ConditionState::Triggered;
+		}
+		break;
+	}
+	case ConditionState::Triggered: {
+		condition.state = ConditionState::Idle;
+	}
 	}
 
-	condition.state = ConditionState::Idle;
-	return ConditionState::Idle;
+	return condition.state;
 }
 
 ConditionState update(ReleaseCondition& condition, Binding& binding, float /*deltaTime*/) {

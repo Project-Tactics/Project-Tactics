@@ -1,5 +1,5 @@
 {
-    "transform": {
+    "Transform": {
         "position": {
             "x": 0,
             "y": 0,
@@ -21,7 +21,7 @@
             "z": 200
         }
     },
-    "mesh": {
+    "Mesh": {
         "mesh": "quad",
         "materials": [
             {

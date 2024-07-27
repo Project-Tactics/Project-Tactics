@@ -14,8 +14,7 @@ struct Sprite {
 	unsigned int spriteIndex;
 	glm::vec2 uvFlip = Vector2::one;
 
-	void deserialize(const resource::ResourceProvider* resourceProvider, const nlohmann::ordered_json& jsonData);
-	static void defineReflection();
+	REFLECT(Sprite, spriteSheet, spriteIndex, uvFlip)
 };
 
 struct SpriteAnimation {
@@ -24,8 +23,7 @@ struct SpriteAnimation {
 
 	void startAnimation(const HashId& animation);
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(SpriteAnimation, currentTime, currentAnimation);
-	static void defineReflection();
+	REFLECT(SpriteAnimation, currentTime, currentAnimation)
 };
 
 } // namespace tactics::component

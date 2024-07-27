@@ -54,7 +54,7 @@ void Engine::_run(Application& application) {
 		LOG_TRACE(Log::Engine, "Engine Shutdown Ended");
 	} catch (Exception& exception) {
 		LOG_EXCEPTION(exception);
-	} catch (nlohmann::detail::exception& exception) {
+	} catch (json_exception& exception) {
 		LOG_EXCEPTION(exception);
 	} catch (std::exception& exception) {
 		LOG_EXCEPTION(exception);

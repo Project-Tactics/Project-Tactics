@@ -1,6 +1,6 @@
 {
     "common": {
-        "shader": {
+        "Shader": {
             "texturedUnlit": {
                 "vertexShader": "common/shaders/default.vert",
                 "fragmentShader": "common/shaders/texturedUnlit.frag"
@@ -14,12 +14,12 @@
                 "fragmentShader": "common/shaders/spriteUnlit.frag"
             }
         },
-        "texture": {
+        "Texture": {
             "none": {
                 "path": "common/textures/none.png"
             }
         },
-        "material": {
+        "Material": {
             "texturedUnlit": {
                 "shader": "texturedUnlit",
                 "uniforms": {
@@ -98,12 +98,12 @@
                 }
             }
         },
-        "prefab": {
+        "Prefab": {
             "simpleCamera": {
                 "path": "common/prefabs/simpleCamera.prefab"
             }
         },
-        "inputAction": {
+        "InputAction": {
             "exitFromState": {
                 "type": "scalar"
             },
@@ -114,7 +114,7 @@
                 "type": "scalar"
             }
         },
-        "inputMap": {
+        "InputMap": {
             "commonMap": {
                 "bindings": [
                     {
@@ -148,7 +148,7 @@
                                 },
                                 "conditions": [
                                     {
-                                        "type": "down",
+                                        "type": "press",
                                         "actuationThreshold": 0.5
                                     }
                                 ]

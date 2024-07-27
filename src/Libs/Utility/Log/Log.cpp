@@ -109,7 +109,7 @@ void Log::exception(const std::exception& exception) {
 	critical(Log::Engine, "Exception: {}", exception.what());
 }
 
-void Log::exception(const nlohmann::detail::exception& exception) {
+void Log::exception(const json_exception& exception) {
 	critical(Log::Engine, "Exception: {}", exception.what());
 }
 
