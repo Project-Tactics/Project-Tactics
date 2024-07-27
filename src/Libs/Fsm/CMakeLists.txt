@@ -3,14 +3,12 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
         Fsm.cpp
         FsmAction.cpp
-        FsmBuilder.cpp
-        FsmEventListener.cpp)
+        FsmBuilder.cpp)
 
 set(HEADERS
         Fsm.h
         FsmAction.h
         FsmBuilder.h
-        FsmEventListener.h
         FsmExternalController.h
         FsmState.h
         FsmStateWithServices.h

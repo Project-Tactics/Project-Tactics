@@ -11,7 +11,7 @@ namespace tactics {
 
 class FsmExternalController;
 
-class Fsm : public EventsListener {
+class Fsm {
 public:
 	Fsm(FsmStateEntries states, const HashId& startStateName, FsmExternalController* externalController);
 
@@ -32,9 +32,6 @@ public:
 	static const HashId exitState;
 
 private:
-	// FsmEventHandler implementation
-	[[nodiscard]] bool onEvent(SDL_Event& event) override;
-
 	void _goToState(const HashId& stateName);
 	void _executeTransition(const HashId& transition);
 	[[nodiscard]] FsmStateEntry* _getStateByName(const HashId& stateName);
@@ -51,13 +48,14 @@ private:
 
 	/**
 	 * The External Controller is mostly meant to control the transition of the fsm by requesting them during the
-	 * update() method Its main purpose is to allow debug or external control of the Fsm in dev mode. It doesn't replace
+	 * update() method. Its main purpose is to allow debug or external control of the Fsm. It doesn't replace
 	 * the Fsm/FsmState logic and shouldn't be used for domain logic reason.
 	 */
 	FsmExternalController* _externalController{};
 
 	bool _hasReachedExitState{};
 	HashId _startStateName;
+	HashId _scheduledTransition;
 };
 
 } // namespace tactics

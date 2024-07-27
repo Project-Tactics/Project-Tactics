@@ -1,9 +1,6 @@
 #pragma once
 
 #include "FsmAction.h"
-#include "FsmEventListener.h"
-
-#include <string_view>
 
 /**
  * @brief Implement this abstract class to create a new State that can be added to an Fsm.
@@ -12,7 +9,7 @@
  */
 namespace tactics {
 
-class FsmState : public FsmEventListener {
+class FsmState {
 public:
 	virtual ~FsmState() = default;
 

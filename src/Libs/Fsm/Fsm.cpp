@@ -115,13 +115,4 @@ FsmStateEntry* Fsm::_getStateByName(const HashId& stateName) {
 	return nullptr;
 }
 
-bool Fsm::onEvent(SDL_Event& event) {
-	if (_currentState) {
-		auto action = _currentState->state->onEvent(event);
-		_performAction<FsmEventAction>(action);
-		return action.wantsToCaptureInput();
-	}
-	return false;
-}
-
 } // namespace tactics
