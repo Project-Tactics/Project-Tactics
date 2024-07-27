@@ -103,7 +103,7 @@ public:
 
 	void givenDefaultPackDefinition() {
 		_jsonPackFileHandle->setData({{"mainPackage",
-									   {{"shader",
+									   {{"Shader",
 										 {{"MyResourceName1", {{"testResource", "testResourceData"}}},
 										  {"MyResourceName2", {{"testResource", "testResourceData"}}},
 										  {"MyResourceName3", {{"testResource", "testResourceData"}}}}}}}});
