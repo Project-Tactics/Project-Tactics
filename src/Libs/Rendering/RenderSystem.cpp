@@ -51,17 +51,17 @@ void RenderSystem::_setupGlAttributes() {
 }
 
 void RenderSystem::_createWindow() {
-	auto windowSize = _getConfigValue("windowSize", glm::u32vec2{1280, 720});
-	auto windowPosition = _getConfigValue("windowPosition", glm::u32vec2{100, 100});
+	auto size = _getConfigValue("windowSize", glm::u32vec2{1280, 720});
+	auto position = _getConfigValue("windowPosition", glm::u32vec2{100, 100});
 	auto windowTitle = _getConfigValue("windowTitle", std::string("Project-Tactics-Sample"));
 	auto fullscreen = _getConfigValue("fullscreen", false);
-	_window = SDL_CreateWindow(windowTitle.c_str(),
-							   windowPosition.x,
-							   windowPosition.y,
-							   windowSize.x,
-							   windowSize.y,
-							   SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0));
-	LOG_TRACE(Log::Rendering, "Window Created {}x{}", windowSize.x, windowSize.y);
+	auto resize = _getConfigValue("windowResize", false);
+	Uint32 flags = SDL_WINDOW_OPENGL;
+	flags |= resize ? SDL_WINDOW_RESIZABLE : 0u;
+	flags |= fullscreen ? SDL_WINDOW_FULLSCREEN : 0u;
+
+	_window = SDL_CreateWindow(windowTitle.c_str(), position.x, position.y, size.x, size.y, flags);
+	LOG_TRACE(Log::Rendering, "Window Created {}x{}", size.x, size.y);
 	if (_window == nullptr) {
 		throw TACTICS_EXCEPTION("Failed to open window: %s\n", SDL_GetError());
 	}

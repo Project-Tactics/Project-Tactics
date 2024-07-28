@@ -122,10 +122,10 @@ for mapIndex = 1, #mapTextureCounts do
     end
 
     packs.demoMap.Mesh[mapName] = {
-        path = string.format("_demoMaps/%s/%s.fbx", mapName, mapName)
+        path = string.format("_demoMap/%s/%s.fbx", mapName, mapName)
     }
     packs.demoMap.Prefab[mapName] = {
-        path = string.format("_demoMaps/%s/%s.prefab", mapName, mapName)
+        path = string.format("_demoMap/%s/%s.prefab", mapName, mapName)
     }
 end
 
