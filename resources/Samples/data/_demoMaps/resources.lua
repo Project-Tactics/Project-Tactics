@@ -59,9 +59,7 @@ local packs = {
                             {
                                 gesture = {
                                     type = "simple",
-                                    data = {
-                                        input = "KeyReturn"
-                                    }
+                                    input = "KeyReturn"
                                 },
                                 conditions = {
                                     {
@@ -78,9 +76,7 @@ local packs = {
                             {
                                 gesture = {
                                     type = "simple",
-                                    data = {
-                                        input = "KeyA"
-                                    }
+                                    input = "KeyA"
                                 },
                                 conditions = {
                                     {
@@ -92,9 +88,7 @@ local packs = {
                             {
                                 gesture = {
                                     type = "simple",
-                                    data = {
-                                        input = "KeyD"
-                                    }
+                                    input = "KeyD"
                                 },
                                 conditions = {
                                     {
@@ -105,9 +99,7 @@ local packs = {
                                 modifiers = {
                                     {
                                         type = "negate",
-                                        data = {
-                                            axis = "X"
-                                        }
+                                        axis = "X"
                                     }
                                 }
                             }

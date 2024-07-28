@@ -37,15 +37,9 @@ void from_json(const json& json, Modifier& modifier) {
 		return;
 	}
 
-	if (!json.contains("data")) {
-		LOG_ERROR(tactics::Log::Input, "Input Modifier missing field [data]");
-		return;
-	}
-
 	std::string type = json["type"];
-	auto& data = json["data"];
 	if (type == "negate") {
-		modifier = data.get<NegateModifier>();
+		modifier = json.get<NegateModifier>();
 	} else {
 		LOG_ERROR(tactics::Log::Input, "Unknown modifier type: {}", type);
 	}
@@ -59,23 +53,17 @@ void from_json(const json& json, Gesture& gesture) {
 		return;
 	}
 
-	if (!json.contains("data")) {
-		LOG_ERROR(tactics::Log::Input, "Input Modifier missing field [data]");
-		return;
-	}
-
 	std::string type = json["type"];
-	auto& data = json["data"];
 	if (type == "simple") {
-		gesture = data.get<GestureSimple>();
+		gesture = json.get<GestureSimple>();
 	} else if (type == "2d") {
-		gesture = data.get<Gesture2D>();
+		gesture = json.get<Gesture2D>();
 	} else if (type == "3d") {
-		gesture = data.get<Gesture3D>();
+		gesture = json.get<Gesture3D>();
 	} else if (type == "dir2D") {
-		gesture = data.get<GestureDirectional2D>();
+		gesture = json.get<GestureDirectional2D>();
 	} else if (type == "dir3D") {
-		gesture = data.get<GestureDirectional3D>();
+		gesture = json.get<GestureDirectional3D>();
 	} else {
 		LOG_ERROR(tactics::Log::Input, "Unknown gesture type: {}", type);
 	}

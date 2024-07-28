@@ -123,9 +123,7 @@
                             {
                                 "gesture": {
                                     "type": "simple",
-                                    "data": {
-                                        "input": "KeyEscape"
-                                    }
+                                    "input": "KeyEscape"
                                 },
                                 "conditions": [
                                     {
@@ -142,9 +140,7 @@
                             {
                                 "gesture": {
                                     "type": "simple",
-                                    "data": {
-                                        "input": "KeySpace"
-                                    }
+                                    "input": "KeySpace"
                                 },
                                 "conditions": [
                                     {
@@ -165,9 +161,7 @@
                             {
                                 "gesture": {
                                     "type": "simple",
-                                    "data": {
-                                        "input": "KeyAny"
-                                    }
+                                    "input": "KeyAny"
                                 },
                                 "conditions": [
                                     {

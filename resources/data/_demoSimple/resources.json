@@ -46,14 +46,12 @@
                             {
                                 "gesture": {
                                     "type": "dir3D",
-                                    "data": {
-                                        "left": "KeyA",
-                                        "right": "KeyD",
-                                        "forward": "KeyW",
-                                        "back": "KeyS",
-                                        "up": "KeyE",
-                                        "down": "KeyQ"
-                                    }
+                                    "left": "KeyA",
+                                    "right": "KeyD",
+                                    "forward": "KeyW",
+                                    "back": "KeyS",
+                                    "up": "KeyE",
+                                    "down": "KeyQ"
                                 },
                                 "conditions": [
                                     {
@@ -66,10 +64,8 @@
                             {
                                 "gesture": {
                                     "type": "3d",
-                                    "data": {
-                                        "x": "AxisLeftX",
-                                        "z": "AxisLeftY"
-                                    }
+                                    "x": "AxisLeftX",
+                                    "z": "AxisLeftY"
                                 },
                                 "conditions": [
                                     {
@@ -80,18 +76,14 @@
                                 "modifiers": [
                                     {
                                         "type": "negate",
-                                        "data": {
-                                            "axis": "Z"
-                                        }
+                                        "axis": "Z"
                                     }
                                 ]
                             },
                             {
                                 "gesture": {
                                     "type": "2d",
-                                    "data": {
-                                        "y": "AxisTriggerLeft"
-                                    }
+                                    "y": "AxisTriggerLeft"
                                 },
                                 "conditions": [
                                     {
@@ -102,18 +94,14 @@
                                 "modifiers": [
                                     {
                                         "type": "negate",
-                                        "data": {
-                                            "axis": "Y"
-                                        }
+                                        "axis": "Y"
                                     }
                                 ]
                             },
                             {
                                 "gesture": {
                                     "type": "2d",
-                                    "data": {
-                                        "y": "AxisTriggerRight"
-                                    }
+                                    "y": "AxisTriggerRight"
                                 },
                                 "conditions": [
                                     {
@@ -131,9 +119,7 @@
                             {
                                 "gesture": {
                                     "type": "simple",
-                                    "data": {
-                                        "input": "MouseXY"
-                                    }
+                                    "input": "MouseXY"
                                 },
                                 "modifiers": [],
                                 "conditions": [
@@ -146,9 +132,7 @@
                             {
                                 "gesture": {
                                     "type": "simple",
-                                    "data": {
-                                        "input": "AxisRightXY"
-                                    }
+                                    "input": "AxisRightXY"
                                 },
                                 "modifiers": [],
                                 "conditions": [
