@@ -1,14 +1,14 @@
 local json = require "common.scripts.json"
 
 local packs = {
-    demoMaps = {
+    demoMap = {
         Texture = {
             spriteSheet00 = {
-                path = "_demoMaps/spriteSheet00.png",
+                path = "_demoMap/spriteSheet00.png",
                 filter = "Nearest"
             },
             charShadow = {
-                path = "_demoMaps/charShadow.png"
+                path = "_demoMap/charShadow.png"
             }
         },
         SpriteSheet = {
@@ -33,13 +33,13 @@ local packs = {
         Mesh = {},
         Prefab = {
             mapCamera = {
-                path = "_demoMaps/mapCamera.prefab"
+                path = "_demoMap/mapCamera.prefab"
             },
             character = {
-                path = "_demoMaps/character.prefab"
+                path = "_demoMap/character.prefab"
             },
             charShadow = {
-                path = "_demoMaps/charShadow.prefab"
+                path = "_demoMap/charShadow.prefab"
             }
         },
         InputAction = {
@@ -116,15 +116,15 @@ for mapIndex = 1, #mapTextureCounts do
     local mapName = string.format("map%02d", mapIndex - 1)
     for i = 1, mapTextureCounts[mapIndex] do
         local textureName = string.format("%s_%02d", mapName, i - 1)
-        packs.demoMaps.Texture[textureName] = {
-            path = string.format("_demoMaps/%s/tex%02d.png", mapName, i - 1)
+        packs.demoMap.Texture[textureName] = {
+            path = string.format("_demoMap/%s/tex%02d.png", mapName, i - 1)
         }
     end
 
-    packs.demoMaps.Mesh[mapName] = {
+    packs.demoMap.Mesh[mapName] = {
         path = string.format("_demoMaps/%s/%s.fbx", mapName, mapName)
     }
-    packs.demoMaps.Prefab[mapName] = {
+    packs.demoMap.Prefab[mapName] = {
         path = string.format("_demoMaps/%s/%s.prefab", mapName, mapName)
     }
 end

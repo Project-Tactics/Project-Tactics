@@ -2,7 +2,7 @@
     "demoSprites": {
         "Texture": {
             "spriteSheet00": {
-                "path": "_demoSprites/spriteSheet00.png",
+                "path": "_demoSprite/spriteSheet00.png",
                 "filter": "Nearest"
             }
         },
@@ -32,10 +32,10 @@
         },
         "Prefab": {
             "character": {
-                "path": "_demoSprites/character.prefab"
+                "path": "_demoSprite/character.prefab"
             },
             "spriteCamera": {
-                "path": "_demoSprites/spriteCamera.prefab"
+                "path": "_demoSprite/spriteCamera.prefab"
             }
         }
     }
