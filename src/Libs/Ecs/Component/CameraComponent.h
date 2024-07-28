@@ -11,8 +11,7 @@ enum ProjectionType {
 	Orthographic
 };
 
-JSON_ENUM(ProjectionType,
-		  {{ProjectionType::Perspective, "perspective"}, {ProjectionType::Orthographic, "orthographic"}});
+JSON_ENUM(ProjectionType)
 
 struct Camera {
 	ProjectionType projectionType = ProjectionType::Perspective;
@@ -27,3 +26,4 @@ struct CurrentCamera {
 };
 
 } // namespace tactics::component
+

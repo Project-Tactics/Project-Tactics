@@ -30,11 +30,6 @@ macro(core_dependencies)
 
     FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
     FetchContent_MakeAvailable(json)
-    if(CMAKE_BUILD_TYPE STREQUAL Debug)
-        set(JSON_DIAGNOSTICS ON CACHE BOOL "" FORCE)
-    else()
-        set(JSON_DIAGNOSTICS OFF CACHE BOOL "" FORCE)
-    endif()
     add_library(json_wrapper INTERFACE)
     target_link_libraries(json_wrapper INTERFACE nlohmann_json::nlohmann_json)
 

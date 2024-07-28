@@ -19,7 +19,7 @@
         }
     },
     "Camera": {
-        "projectionType": "orthographic"
+        "projectionType": "Orthographic"
     },
     "Frustum": {
         "fov": 160,

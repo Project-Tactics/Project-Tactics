@@ -27,7 +27,7 @@
         }
     },
     "Camera": {
-        "projectionType": "perspective"
+        "projectionType": "Perspective"
     },
     "Frustum": {
         "fov": 60,

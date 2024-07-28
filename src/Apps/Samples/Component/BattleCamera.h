@@ -3,10 +3,7 @@
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/EntityUtilities.h>
 #include <Libs/Resource/Input/InputAction.h>
-#include <Libs/Utility/Math.h>
 #include <Libs/Utility/Reflection.h>
-
-#include <array>
 
 namespace tactics::component {
 

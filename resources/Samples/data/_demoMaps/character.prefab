@@ -28,6 +28,6 @@
         "currentAnimation": "idleNorth"
     },
     "CharacterFacing": {
-        "facing": "west"
+        "facing": "West"
     }
 }

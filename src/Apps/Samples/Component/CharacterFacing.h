@@ -13,7 +13,7 @@ enum class Facing {
 	West
 };
 
-JSON_ENUM(Facing, {{Facing::North, "north"}, {Facing::South, "south"}, {Facing::East, "east"}, {Facing::West, "west"}});
+JSON_ENUM(Facing);
 
 struct CharacterFacing {
 	Facing facing = Facing::South;

@@ -119,8 +119,8 @@ public:
 			throw TACTICS_EXCEPTION(
 				"Attempt to register a resource of the wrong type. Resource Type: {} - Expected Type: {} - Name: {} - "
 				"ID: {}",
-				toString(resource->type),
-				toString(TResource::TYPE),
+				resource->type,
+				TResource::TYPE,
 				resource->name,
 				resource->id);
 		}

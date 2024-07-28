@@ -85,7 +85,7 @@ private:
 
 	const BaseResourceManager* _getManager(ResourceType resourceType) const {
 		if (!_resourceManagers.contains(resourceType)) {
-			throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", toString(resourceType));
+			throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", resourceType);
 		}
 		return _resourceManagers.at(resourceType).get();
 	}

@@ -3,18 +3,6 @@
 #include <Libs/Utility/Log/Log.h>
 #include <Libs/Utility/String/String.h>
 
-namespace tactics {
-std::string Str<click::ActionValue>::to(const click::ActionValue& value) {
-	return fmt::format("{:.3f} {:.3f} {:.3f}", value.vec3.x, value.vec3.y, value.vec3.z);
-}
-
-click::ActionValue Str<click::ActionValue>::from(std::string_view string) {
-	auto values = parseStringToVectorValues<float>(std::string(string));
-	return click::ActionValue{.vec3 = {values[0], values[1], values[2]}};
-}
-
-} // namespace tactics
-
 namespace click {
 
 void to_json(json&, const Condition&) {}
@@ -94,3 +82,4 @@ void from_json(const json& json, Gesture& gesture) {
 }
 
 } // namespace click
+

@@ -5,7 +5,7 @@ local packs = {
         Texture = {
             spriteSheet00 = {
                 path = "_demoMaps/spriteSheet00.png",
-                filter = "nearest"
+                filter = "Nearest"
             },
             charShadow = {
                 path = "_demoMaps/charShadow.png"
@@ -44,10 +44,10 @@ local packs = {
         },
         InputAction = {
             loadNextMap = {
-                type = "scalar"
+                type = "Scalar"
             },
             moveCamera = {
-                type = "scalar"
+                type = "Scalar"
             }
         },
         InputMap = {
@@ -60,7 +60,7 @@ local packs = {
                                 gesture = {
                                     type = "simple",
                                     data = {
-                                        input = "keyReturn"
+                                        input = "KeyReturn"
                                     }
                                 },
                                 conditions = {
@@ -79,7 +79,7 @@ local packs = {
                                 gesture = {
                                     type = "simple",
                                     data = {
-                                        input = "keyA"
+                                        input = "KeyA"
                                     }
                                 },
                                 conditions = {
@@ -93,7 +93,7 @@ local packs = {
                                 gesture = {
                                     type = "simple",
                                     data = {
-                                        input = "keyD"
+                                        input = "KeyD"
                                     }
                                 },
                                 conditions = {
@@ -106,7 +106,7 @@ local packs = {
                                     {
                                         type = "negate",
                                         data = {
-                                            axis = "x"
+                                            axis = "X"
                                         }
                                     }
                                 }

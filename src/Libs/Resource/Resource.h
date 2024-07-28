@@ -23,7 +23,7 @@ enum class ResourceType {
 
 } // namespace tactics::resource
 
-STRING_ENUM_SERIALIZATION(tactics::resource::ResourceType);
+FORMAT_STR(tactics::resource::ResourceType);
 
 namespace tactics::resource {
 

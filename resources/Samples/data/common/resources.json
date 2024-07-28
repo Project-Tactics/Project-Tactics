@@ -105,13 +105,13 @@
         },
         "InputAction": {
             "exitFromState": {
-                "type": "scalar"
+                "type": "Scalar"
             },
             "goToEmptyState": {
-                "type": "scalar"
+                "type": "Scalar"
             },
             "anyKeyPressed": {
-                "type": "scalar"
+                "type": "Scalar"
             }
         },
         "InputMap": {
@@ -124,7 +124,7 @@
                                 "gesture": {
                                     "type": "simple",
                                     "data": {
-                                        "input": "keyEscape"
+                                        "input": "KeyEscape"
                                     }
                                 },
                                 "conditions": [
@@ -143,7 +143,7 @@
                                 "gesture": {
                                     "type": "simple",
                                     "data": {
-                                        "input": "keySpace"
+                                        "input": "KeySpace"
                                     }
                                 },
                                 "conditions": [
@@ -166,7 +166,7 @@
                                 "gesture": {
                                     "type": "simple",
                                     "data": {
-                                        "input": "keyAny"
+                                        "input": "KeyAny"
                                     }
                                 },
                                 "conditions": [

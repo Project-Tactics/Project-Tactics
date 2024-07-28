@@ -29,11 +29,11 @@
         },
         "InputAction": {
             "cameraMove": {
-                "type": "axis2d",
+                "type": "Axis2D",
                 "normalized": true
             },
             "cameraLook": {
-                "type": "axis2d",
+                "type": "Axis2D",
                 "normalized": true
             }
         },
@@ -47,12 +47,12 @@
                                 "gesture": {
                                     "type": "dir3D",
                                     "data": {
-                                        "left": "keyA",
-                                        "right": "keyD",
-                                        "forward": "keyW",
-                                        "back": "keyS",
-                                        "up": "keyE",
-                                        "down": "keyQ"
+                                        "left": "KeyA",
+                                        "right": "KeyD",
+                                        "forward": "KeyW",
+                                        "back": "KeyS",
+                                        "up": "KeyE",
+                                        "down": "KeyQ"
                                     }
                                 },
                                 "conditions": [
@@ -67,8 +67,8 @@
                                 "gesture": {
                                     "type": "3d",
                                     "data": {
-                                        "x": "axisLeftX",
-                                        "z": "axisLeftY"
+                                        "x": "AxisLeftX",
+                                        "z": "AxisLeftY"
                                     }
                                 },
                                 "conditions": [
@@ -81,7 +81,7 @@
                                     {
                                         "type": "negate",
                                         "data": {
-                                            "axis": "z"
+                                            "axis": "Z"
                                         }
                                     }
                                 ]
@@ -90,7 +90,7 @@
                                 "gesture": {
                                     "type": "2d",
                                     "data": {
-                                        "y": "axisTriggerLeft"
+                                        "y": "AxisTriggerLeft"
                                     }
                                 },
                                 "conditions": [
@@ -103,7 +103,7 @@
                                     {
                                         "type": "negate",
                                         "data": {
-                                            "axis": "y"
+                                            "axis": "Y"
                                         }
                                     }
                                 ]
@@ -112,7 +112,7 @@
                                 "gesture": {
                                     "type": "2d",
                                     "data": {
-                                        "y": "axisTriggerRight"
+                                        "y": "AxisTriggerRight"
                                     }
                                 },
                                 "conditions": [
@@ -132,7 +132,7 @@
                                 "gesture": {
                                     "type": "simple",
                                     "data": {
-                                        "input": "mouseXY"
+                                        "input": "MouseXY"
                                     }
                                 },
                                 "modifiers": [],
@@ -147,7 +147,7 @@
                                 "gesture": {
                                     "type": "simple",
                                     "data": {
-                                        "input": "axisRightXY"
+                                        "input": "AxisRightXY"
                                     }
                                 },
                                 "modifiers": [],

@@ -9,11 +9,7 @@ enum class TextureFilter {
 	Nearest
 };
 
-JSON_ENUM(TextureFilter,
-		  {
-			  {TextureFilter::Linear, "linear"},
-			  {TextureFilter::Nearest, "nearest"},
-		  })
+JSON_ENUM(TextureFilter);
 
 struct TextureInfo {
 	int width;

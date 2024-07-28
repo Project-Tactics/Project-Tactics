@@ -3,7 +3,7 @@
         "Texture": {
             "spriteSheet00": {
                 "path": "_demoSprites/spriteSheet00.png",
-                "filter": "nearest"
+                "filter": "Nearest"
             }
         },
         "SpriteSheet": {

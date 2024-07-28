@@ -5,6 +5,7 @@
 #include <Libs/Ecs/Entity.h>
 #include <Libs/Resource/ResourceProvider.h>
 #include <Libs/Resource/ResourceSerialization.h>
+#include <Libs/Utility/String/String.h>
 
 namespace tactics {
 
