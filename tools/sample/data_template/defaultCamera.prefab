@@ -1,0 +1,52 @@
+{
+    "CurrentCamera": {},
+    "Transform": {
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": -5
+        },
+        "rotation": {
+            "fromLookAt": {
+                "from": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "to": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 4
+                }
+            }
+        },
+        "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+        }
+    },
+    "Camera": {
+        "projectionType": "Perspective"
+    },
+    "Frustum": {
+        "fov": 60,
+        "near": 1,
+        "far": 1000
+    },
+    "RotateAroundPoint": {
+        "speed": 0.75,
+        "distanceFromPoint": 3,
+        "currentAngle": 0,
+        "point": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "offset": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        }
+    }
+}

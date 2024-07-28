@@ -12,6 +12,7 @@
 #include "States/EmptyState.h"
 #include "States/SampleSelectionState.h"
 #include "States/SetupState.h"
+// ADD INCLUDE SAMPLES HERE
 
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/ResourceSystem.h>
@@ -24,7 +25,7 @@ SamplesApplication::SamplesApplication() {
 	_addSampleFlow<DemoMapState>("map", "Map", ".lua");
 	_addSampleFlow<DemoParticlesState>("particles", "Particles");
 	_addSampleFlow<DemoSimpleState>("simple", "Simple");
-	// ADD SAMPLES HERE
+	// ADD FLOW SAMPLES HERE
 }
 
 void SamplesApplication::setupComponentReflections() {

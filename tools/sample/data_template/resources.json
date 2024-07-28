@@ -1,0 +1,17 @@
+{
+    "demo##SAMPLE_NAME##": {
+        "Texture": {
+            "boxTexture": {
+                "path": "_demo##SAMPLE_NAME##/texture.jpg"
+            }
+        },
+        "Prefab": {
+            "defaultCamera": {
+                "path": "_demo##SAMPLE_NAME##/defaultCamera.prefab"
+            },
+            "defaultCube": {
+                "path": "_demo##SAMPLE_NAME##/defaultCube.prefab"
+            }
+        }
+    }
+}
