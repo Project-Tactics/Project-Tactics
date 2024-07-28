@@ -24,6 +24,10 @@ void ResourceSystem::unloadPack(const HashId& packName) {
 	_resourcePackManager->unloadPack(packName);
 }
 
+void ResourceSystem::removePack(const HashId& packName) {
+	_resourcePackManager->removePack(packName);
+}
+
 void ResourceSystem::createManualPack(const HashId& packName) {
 	_resourcePackManager->createPack(packName, true);
 }

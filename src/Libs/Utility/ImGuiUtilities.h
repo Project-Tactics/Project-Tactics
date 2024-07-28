@@ -25,4 +25,7 @@ bool vector2(const char* label,
 			 const ImVec4& yColor);
 bool vecComponent(float* component, const ImVec4& color, float width, float speed, const char* id);
 
+bool CenteredButton(const char* label, const ImVec2& size = ImVec2(0, 0));
+bool CenteredTextColored(const ImVec4& color, const char* text);
+
 } // namespace tactics

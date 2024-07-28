@@ -11,6 +11,7 @@
 #include "States/DemoSpriteState.h"
 #include "States/EmptyState.h"
 #include "States/SampleSelectionState.h"
+#include "States/SetupState.h"
 
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/ResourceSystem.h>
@@ -19,10 +20,10 @@
 namespace tactics {
 
 SamplesApplication::SamplesApplication() {
-	_addSampleFlow<DemoSpriteState>("sprite", "Sprite", "spriteCamera");
-	_addSampleFlow<DemoMapState>("map", "Map", "mapCamera", ".lua");
-	_addSampleFlow<DemoParticlesState>("particles", "Particles", "particlesCamera");
-	_addSampleFlow<DemoSimpleState>("simple", "Simple", "rotateAroundCamera");
+	_addSampleFlow<DemoSpriteState>("sprite", "Sprite");
+	_addSampleFlow<DemoMapState>("map", "Map", ".lua");
+	_addSampleFlow<DemoParticlesState>("particles", "Particles");
+	_addSampleFlow<DemoSimpleState>("simple", "Simple");
 	// ADD SAMPLES HERE
 }
 
@@ -39,28 +40,35 @@ void SamplesApplication::setupComponentReflections() {
 HashId SamplesApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 	auto& resourceSystem = serviceLocator.getService<resource::ResourceSystem>();
 	auto configFile = resourceSystem.getResource<resource::IniFile>("devUserConfigFile"_id);
-	auto defaultState = HashId(configFile->getOrCreate("demo", "fsm", std::string("none")));
+	auto defaultState = configFile->getOrCreate("demo", "fsm", std::string("none"));
+
+	auto transitionToTrigger = HashId::none;
+	if (_sampleFlows.contains(defaultState)) {
+		transitionToTrigger = HashId(defaultState);
+	}
 
 	// clang-format off
 	fsmBuilder
-		.state<SampleSelectionState>("Selection", serviceLocator)
-			.on("exit").exitFsm()
-			.onAppExitRequest().exitFsm();
+		.state<LoadState>("LoadCommon", serviceLocator, "common/resources.json", "common"_id)
+            .on("proceed").jumpTo("Setup")
+		.state<SetupState>("Setup", serviceLocator)
+            .on("proceed").jumpTo("Selection")
+		.state<UnloadState>("Unload", serviceLocator, "common"_id)
+            .on("proceed").exitFsm()
+		.state<SampleSelectionState>("Selection", serviceLocator, transitionToTrigger, _sampleFlows)
+			.on("exit").jumpTo("Unload")
+			.onAppExitRequest().jumpTo("Unload");
 	
-	for (auto& [sampleName, sampleFlow] : _sampleFlows) {
-		fsmBuilder.on(sampleFlow->sampleName).jumpTo(sampleFlow->loadState);
+	for (auto& [sampleKey, sampleFlow] : _sampleFlows) {
+		fsmBuilder.on(sampleKey).jumpTo(sampleFlow->loadState);
 	}
 	// clang-format on
 
-	auto startingState = "Selection"_id;
 	for (auto& [sampleKey, sampleFlow] : _sampleFlows) {
 		sampleFlow->addFlowToFsm(serviceLocator, fsmBuilder);
-		if (sampleKey == defaultState) {
-			startingState = HashId(fmt::format("Load{}", sampleFlow->sampleName));
-		}
 	}
 
-	return startingState;
+	return "LoadCommon"_id;
 }
 
 } // namespace tactics

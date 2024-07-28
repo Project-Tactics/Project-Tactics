@@ -8,6 +8,7 @@ set(SOURCES
     Component/RotateAroundPoint.cpp
     Component/RotateItem.cpp
     main.cpp
+    Overlay/SampleSelectionOverlay.cpp
     SamplesApplication.cpp
     States/DemoMapState.cpp
     States/DemoParticlesState.cpp
@@ -16,6 +17,7 @@ set(SOURCES
     States/EmptyState.cpp
     States/LoadState.cpp
     States/SampleSelectionState.cpp
+    States/SetupState.cpp
     States/UnloadState.cpp)
     
 set(HEADERS
@@ -24,6 +26,7 @@ set(HEADERS
     Component/FreeCamera.h
     Component/RotateAroundPoint.h
     Component/RotateItem.h
+    Overlay/SampleSelectionOverlay.h
     SamplesApplication.h
     SamplesUtils.h
     States/DemoMapState.h
@@ -33,6 +36,7 @@ set(HEADERS
     States/EmptyState.h
     States/LoadState.h
     States/SampleSelectionState.h
+    States/SetupState.h
     States/UnloadState.h)
 
 set(TARGET_NAME Samples)

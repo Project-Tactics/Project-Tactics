@@ -30,6 +30,7 @@ public:
 	void loadPackDefinition(const std::filesystem::path& definitionPath);
 	void loadPack(const HashId& packName);
 	void unloadPack(const HashId& packName);
+	void removePack(const HashId& packName);
 	void createManualPack(const HashId& packName);
 
 	void loadExternalResource(const HashId& packName, std::shared_ptr<BaseResource> resource);

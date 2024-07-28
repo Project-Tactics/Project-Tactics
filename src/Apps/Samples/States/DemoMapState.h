@@ -1,12 +1,12 @@
 #pragma once
 
-#include <Libs/Fsm/FsmStateWithServices.h>
+#include "../SamplesUtils.h"
 
 namespace tactics {
 
-class DemoMapState : public FsmStateWithServices {
+class DemoMapState : public SampleState {
 public:
-	using FsmStateWithServices::FsmStateWithServices;
+	using SampleState::SampleState;
 	FsmAction enter() override;
 	FsmAction update() override;
 	void exit() override;

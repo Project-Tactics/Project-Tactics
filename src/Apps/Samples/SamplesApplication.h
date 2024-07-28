@@ -18,13 +18,11 @@ private:
 	template<typename TSampleState>
 	void _addSampleFlow(std::string_view key,
 						std::string_view sampleName,
-						std::string_view cameraName,
 						std::string_view resourceFileExtension = ".json") {
-		_sampleFlows[HashId(key)] =
-			std::make_unique<TSampleFlow<TSampleState>>(sampleName, cameraName, resourceFileExtension);
+		_sampleFlows[std::string(key)] = std::make_unique<TSampleFlow<TSampleState>>(sampleName, resourceFileExtension);
 	}
 
-	std::unordered_map<HashId, std::unique_ptr<SampleFlow>> _sampleFlows;
+	SampleFlows _sampleFlows;
 };
 
 } // namespace tactics

@@ -127,7 +127,7 @@
                                 },
                                 "conditions": [
                                     {
-                                        "type": "down",
+                                        "type": "press",
                                         "actuationThreshold": 0.5
                                     }
                                 ]
@@ -144,7 +144,7 @@
                                 },
                                 "conditions": [
                                     {
-                                        "type": "down",
+                                        "type": "press",
                                         "actuationThreshold": 0.5
                                     }
                                 ]

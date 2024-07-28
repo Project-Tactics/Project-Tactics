@@ -23,6 +23,26 @@ void BattleCameraSystem::_updateInputs(entt::registry& registry) {
 	}
 }
 
+void BattleCameraSystem::init(entt::registry& registry) {
+	registry.on_construct<BattleCamera>().connect<&BattleCameraSystem::_onBattleCameraCreated>();
+}
+
+void BattleCameraSystem::uninit(entt::registry& registry) {
+	registry.on_construct<BattleCamera>().disconnect<&BattleCameraSystem::_onBattleCameraCreated>();
+}
+
+void BattleCameraSystem::_onBattleCameraCreated(entt::registry& registry, entt::entity e) {
+	auto entity = Entity::create(e, &registry);
+	auto& camera = entity.getComponent<BattleCamera>();
+	auto& transform = entity.getComponent<Transform>();
+	camera.currentStep = camera.nextStep;
+	float rotation = glm::radians(camera.rotationSteps[camera.currentStep]);
+	float distance = camera.distanceFromOrigin;
+	glm::vec3 position = glm::vec3(distance * glm::cos(rotation), 0.0f, distance * glm::sin(rotation));
+	transform.setPosition(position + camera.offset);
+	transform.lookAt(Vector3::zero, Vector3::up);
+}
+
 void BattleCameraSystem::_updateCameras(entt::registry& registry) {
 	auto view = registry.view<BattleCamera, Transform>();
 	for (auto [entity, camera, transform] : view.each()) {
