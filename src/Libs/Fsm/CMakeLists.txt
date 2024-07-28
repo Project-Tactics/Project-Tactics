@@ -15,7 +15,7 @@ set(HEADERS
         FsmTypes.h)
 
 add_library(libs_fsm STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_fsm PUBLIC libs_event libs_utility)
+target_link_libraries(libs_fsm PUBLIC libs_utility)
 add_to_libs_folder(libs_fsm)
 
 set(TEST_SOURCES Tests/Test_Fsm.cpp)
