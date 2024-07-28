@@ -26,12 +26,6 @@ void from_json(const json& json, Modifier& modifier);
 void to_json(json&, const Gesture&);
 void from_json(const json& json, Gesture& gesture);
 
-JSON_ENUM(Axis)
-JSON_ENUM(ActionType)
-JSON_ENUM(InputCode)
-JSON_ENUM(DeviceType)
-JSON_ENUM(InputState)
-
 JSON_SERIALIZE_EXT(GestureSimple, input);
 JSON_SERIALIZE_EXT(Gesture2D, x, y);
 JSON_SERIALIZE_EXT(Gesture3D, x, y, z);

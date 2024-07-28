@@ -9,31 +9,25 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-template<typename BasicJsonType, typename EnumType>
-inline void enum_from_json(const BasicJsonType& json, EnumType& value) {
-	std::string str = json.get<std::string>();
-	value = fromString<EnumType>(str);
-}
-
-template<typename BasicJsonType, typename EnumType>
-inline void enum_to_json(BasicJsonType& json, const EnumType& value) {
-	json = toString(value);
-}
-
 #define JSON_SERIALIZE(Type, ...)	  NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(Type, __VA_ARGS__)
 #define JSON_SERIALIZE_EXT(Type, ...) NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE_WITH_DEFAULT(Type, __VA_ARGS__)
-#define JSON_ENUM(ENUM_TYPE)                                                                              \
-	template<typename BasicJsonType> inline void to_json(BasicJsonType& json, const ENUM_TYPE& value) {   \
-		static_assert(std::is_enum<ENUM_TYPE>::value, #ENUM_TYPE " must be an enum!");                    \
-		enum_to_json(json, value);                                                                        \
-	}                                                                                                     \
-                                                                                                          \
-	template<typename BasicJsonType> inline void from_json(const BasicJsonType& json, ENUM_TYPE& value) { \
-		static_assert(std::is_enum<ENUM_TYPE>::value, #ENUM_TYPE " must be an enum!");                    \
-		enum_from_json(json, value);                                                                      \
-	}
 
 namespace nlohmann {
+
+template<typename T>
+concept is_enum = std::is_enum_v<T>;
+
+template<is_enum EnumType> struct adl_serializer<EnumType> {
+	static void to_json(json& json, const EnumType& value) {
+		json = toString(value);
+	}
+
+	static void from_json(const json& json, EnumType& value) {
+		std::string str = json.get<std::string>();
+		value = fromString<EnumType>(str);
+	}
+};
+
 template<> struct adl_serializer<tactics::HashId> {
 	static void to_json(json& j, const tactics::HashId& value);
 	static void from_json(const json& j, tactics::HashId& value);

@@ -11,8 +11,6 @@ enum ProjectionType {
 	Orthographic
 };
 
-JSON_ENUM(ProjectionType)
-
 struct Camera {
 	ProjectionType projectionType = ProjectionType::Perspective;
 	glm::mat4 projection;
