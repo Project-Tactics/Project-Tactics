@@ -28,6 +28,7 @@ target_link_libraries(engine_overlay
     libs_overlay
     libs_utility
     libs_fsm
+    libs_event
     glm)
 add_to_engine_folder(engine_overlay)
 

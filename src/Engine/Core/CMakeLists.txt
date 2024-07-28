@@ -24,6 +24,7 @@ target_link_libraries(engine_core
     PUBLIC
     libs_fsm
     libs_resource
+    sdl2_wrapper
     PRIVATE 
     engine_overlay
     libs_rendering

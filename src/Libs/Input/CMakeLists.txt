@@ -21,7 +21,7 @@ set(HEADERS
         InputSystem.h)
 
 add_library(libs_input STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_input PRIVATE libs_event libs_utility sdl2_wrapper)
+target_link_libraries(libs_input PRIVATE libs_utility sdl2_wrapper)
 add_to_libs_folder(libs_input)
 
 unset(SOURCES)
