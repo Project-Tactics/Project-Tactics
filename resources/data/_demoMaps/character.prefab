@@ -1,5 +1,5 @@
 {
-    "transform": {
+    "Transform": {
         "position": {
             "x": -0.28,
             "y": 0.95,
@@ -11,7 +11,7 @@
             "z": 0.9
         }
     },
-    "mesh": {
+    "Mesh": {
         "mesh": "quad",
         "materials": [
             {
@@ -19,15 +19,15 @@
             }
         ]
     },
-    "sprite": {
+    "Sprite": {
         "spriteSheet": "char00",
         "spriteIndex": 0
     },
-    "billboard": {},
-    "spriteAnimation": {
+    "Billboard": {},
+    "SpriteAnimation": {
         "currentAnimation": "idleNorth"
     },
-    "characterFacing": {
+    "CharacterFacing": {
         "facing": "west"
     }
 }

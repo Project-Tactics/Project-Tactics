@@ -22,7 +22,7 @@ public:
 
 	virtual ResourceType getType() const = 0;
 	virtual void unload(ResourceId resourceId) = 0;
-	virtual std::shared_ptr<BaseResource> load(HashId name, const nlohmann::json& data) = 0;
+	virtual std::shared_ptr<BaseResource> load(HashId name, const json& data) = 0;
 	virtual std::shared_ptr<BaseResource> getResource(HashId name) = 0;
 	virtual std::shared_ptr<BaseResource> getResource(ResourceId id) = 0;
 	virtual std::shared_ptr<BaseResource> getResource(HashId name) const = 0;
@@ -79,10 +79,10 @@ public:
 		return TResource::TYPE;
 	}
 
-	std::shared_ptr<BaseResource> load(HashId name, const nlohmann::json& data) override final {
+	std::shared_ptr<BaseResource> load(HashId name, const json& data) override final {
 		std::shared_ptr<TResource> resource;
 		LOG_TRACE(Log::Resource, "Loading [{}]", name);
-		if constexpr (has_method<TResourceLoader, std::shared_ptr<TResource>, const nlohmann::json&>) {
+		if constexpr (has_method<TResourceLoader, std::shared_ptr<TResource>, const json&>) {
 			resource = _loader->load(data);
 			resource->name = name;
 		} else {
@@ -119,8 +119,8 @@ public:
 			throw TACTICS_EXCEPTION(
 				"Attempt to register a resource of the wrong type. Resource Type: {} - Expected Type: {} - Name: {} - "
 				"ID: {}",
-				toString(resource->type),
-				toString(TResource::TYPE),
+				resource->type,
+				TResource::TYPE,
 				resource->name,
 				resource->id);
 		}

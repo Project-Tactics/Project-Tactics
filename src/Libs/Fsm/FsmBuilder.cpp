@@ -6,6 +6,8 @@
 
 namespace tactics {
 
+const HashId FsmBuilder::appExitRequestTransition = "_appExitRequest"_id;
+
 FsmBuilder& FsmBuilder::state(std::string_view stateName, std::unique_ptr<FsmState> state) {
 	auto hashedStateName = HashId(stateName);
 	if (_states.contains(hashedStateName)) {
@@ -43,7 +45,7 @@ FsmBuilder& FsmBuilder::_on(const HashId& transitionName) {
 }
 
 FsmBuilder& FsmBuilder::onAppExitRequest() {
-	return _on(FsmEventListener::appExitRequestTransition);
+	return _on(appExitRequestTransition);
 }
 
 FsmBuilder& FsmBuilder::jumpTo(std::string_view targetState) {

@@ -30,17 +30,18 @@ public:
 	void processEvents(SDL_Event& event);
 	void update();
 
-	void assignInputMap(std::shared_ptr<resource::InputMap> inputMap, click::PlayerId playerId);
-	void assignDevice(click::DeviceType deviceType, unsigned int deviceIndex, click::PlayerId playerId);
-	void assignKeyboard(click::PlayerId playerId);
-	void assignMouse(click::PlayerId playerId);
+	bool checkAction(const char* inputActionName, click::PlayerId playerId = 0) const;
+
+	void assignInputMap(const char* inputMapName, click::PlayerId playerId = 0);
+	void assignInputMap(std::shared_ptr<resource::InputMap> inputMap, click::PlayerId playerId = 0);
+	void assignDevice(click::DeviceType deviceType, unsigned int deviceIndex, click::PlayerId playerId = 0);
 	bool hasDeviceAssigned(click::PlayerId playerId, click::DeviceType deviceType) const;
-	void assignGamepad(click::PlayerId playerId, unsigned int deviceIndex);
+
 	click::DeviceId getDeviceId(click::DeviceType deviceType, unsigned int deviceIndex) const;
 	const click::DeviceData& getDevice(click::DeviceId deviceId) const;
 	bool hasDevice(click::DeviceType deviceType, unsigned int deviceIndex) const;
-	const click::ActionState& getActionState(click::ActionId actionId, click::PlayerId playerId);
-	const click::ActionValue& getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId);
+	const click::ActionState& getActionState(click::ActionId actionId, click::PlayerId playerId = 0) const;
+	const click::ActionValue& getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId = 0) const;
 
 private:
 	void _updateDeviceAssignment();

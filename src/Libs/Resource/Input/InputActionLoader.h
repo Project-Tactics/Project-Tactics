@@ -11,7 +11,7 @@ struct InputActionDescriptor {
 	click::ActionType type = click::ActionType::Scalar;
 	bool normalized = false;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(InputActionDescriptor, type, normalized)
+	JSON_SERIALIZE(InputActionDescriptor, type, normalized)
 };
 
 class InputActionLoader : public ResourceLoader {

@@ -302,7 +302,8 @@ std::array keyboardInputCode = {InputCode::KeyReturn,
 								InputCode::KeySoftleft,
 								InputCode::KeySoftright,
 								InputCode::KeyCall,
-								InputCode::KeyEndcall};
+								InputCode::KeyEndcall,
+								InputCode::KeyAny};
 
 auto _isValueZero(const ActionValue& value) {
 	return value.vec3.x == 0.0f && value.vec3.y == 0.0f && value.vec3.z == 0.0f;
@@ -767,6 +768,10 @@ const ActionState& actionState(ActionId actionId, PlayerId playerId) {
 	return state;
 }
 
+bool hasAction(ActionId id) {
+	return id < ctx->actions.size();
+}
+
 /*
  * InputCode
  */
@@ -891,6 +896,10 @@ void processInputEvent(const InputEvent& event) {
 		}
 
 		player.inputValues[static_cast<unsigned int>(event.inputCode)] = event.value;
+
+		if (getDeviceTypeFromInputCode(event.inputCode) == DeviceType::Keyboard) {
+			player.inputValues[static_cast<unsigned int>(InputCode::KeyAny)] = event.value;
+		}
 	}
 }
 

@@ -1,6 +1,6 @@
 {
-    "currentCamera": {},
-    "transform": {
+    "CurrentCamera": {},
+    "Transform": {
         "position": {
             "x": 0,
             "y": 40,
@@ -18,15 +18,15 @@
             "z": 1
         }
     },
-    "camera": {
-        "projectionType": "perspective"
+    "Camera": {
+        "projectionType": "Perspective"
     },
-    "frustum": {
+    "Frustum": {
         "fov": 60,
         "near": 1,
         "far": 1000
     },
-    "freeCamera": {
+    "FreeCamera": {
         "speed": 5,
         "sensitivity": 0.5,
         "moveAction": "cameraMove",

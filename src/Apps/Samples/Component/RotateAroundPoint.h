@@ -13,13 +13,7 @@ struct RotateAroundPoint {
 	glm::vec3 offset = Vector3::zero;
 	glm::vec3 point = Vector3::zero;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(RotateAroundPoint,
-												speed,
-												currentAngle,
-												distanceFromPoint,
-												offset,
-												point);
-	static void defineReflection();
+	REFLECT(RotateAroundPoint, speed, currentAngle, distanceFromPoint, offset, point);
 };
 
 struct RotateAroundPointSystem {

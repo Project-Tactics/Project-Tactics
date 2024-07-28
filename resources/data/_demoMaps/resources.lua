@@ -5,7 +5,7 @@ local packs = {
         texture = {
             spriteSheet00 = {
                 path = "_demoMaps/spriteSheet00.png",
-                filter = "nearest"
+                filter = "Nearest"
             },
             charShadow = {
                 path = "_demoMaps/charShadow.png"

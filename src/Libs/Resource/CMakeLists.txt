@@ -20,6 +20,7 @@ set(SOURCES
     ResourceManager.cpp
     ResourcePack/ResourcePackManager.cpp
     ResourcePack/ResourcePack.cpp
+    ResourceSerialization.cpp
     ResourceSystem.cpp
     Shader/Shader.cpp
     Shader/ShaderLoader.cpp
@@ -48,6 +49,7 @@ set(HEADERS
     ResourcePack/ResourcePackManager.h
     ResourcePack/ResourcePack.h
     ResourceProvider.h
+    ResourceSerialization.h
     ResourceSystem.h
     SpriteSheet/SpriteSheet.h
     SpriteSheet/SpriteSheetLoader.h

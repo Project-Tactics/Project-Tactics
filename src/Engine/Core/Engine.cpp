@@ -54,7 +54,7 @@ void Engine::_run(Application& application) {
 		LOG_TRACE(Log::Engine, "Engine Shutdown Ended");
 	} catch (Exception& exception) {
 		LOG_EXCEPTION(exception);
-	} catch (nlohmann::detail::exception& exception) {
+	} catch (json_exception& exception) {
 		LOG_EXCEPTION(exception);
 	} catch (std::exception& exception) {
 		LOG_EXCEPTION(exception);
@@ -114,9 +114,9 @@ void Engine::_internalRun() {
 	while (!_fsm->hasReachedExitState()) {
 		_timer.update(TimeUtility::nowInSeconds());
 		_eventsSystem->update();
-		_inputSystem->update();
 
 		while (_timer.hasConsumedAllTicks()) {
+			_inputSystem->update();
 			_fsm->update();
 			_updateCommonComponentSystems();
 			_timer.consumeTick();
@@ -128,7 +128,7 @@ void Engine::_internalRun() {
 
 void Engine::_shutdown() {
 	_unregisterOverlays();
-	_eventsSystem->unregisterEventsListener(_fsm.get());
+	_eventsSystem->unregisterEventsListener(_fsmExternalController.get());
 	_renderSystem.reset();
 	_overlaySystem.reset();
 	_ecs->clearPrefabsRegistry();
@@ -207,7 +207,7 @@ void Engine::_setupFsm(Application& application) {
 
 	_fsmExternalController = std::make_unique<DefaultFsmExternalController>();
 	std::tie(_fsm, _fsmInfo) = builder.build(fsmStartingStateName, _fsmExternalController.get());
-	_eventsSystem->registerEventsListener(_fsm.get());
+	_eventsSystem->registerEventsListener(_fsmExternalController.get());
 }
 
 void Engine::_setupServiceLocator() {

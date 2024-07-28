@@ -14,19 +14,19 @@ class ResourceProvider;
  */
 class ResourceInfo {
 public:
-	ResourceInfo(HashId name, const nlohmann::ordered_json& data);
+	ResourceInfo(HashId name, const ordered_json& data);
 	ResourceInfo(HashId name);
 	ResourceInfo(BaseResourceManager& manager, std::shared_ptr<BaseResource> resource);
 	void load(BaseResourceManager& manager);
 	void unload(BaseResourceManager& manager);
 	[[nodiscard]] const HashId& getName() const;
-	[[nodiscard]] const nlohmann::ordered_json& getData() const;
+	[[nodiscard]] const ordered_json& getData() const;
 	[[nodiscard]] std::shared_ptr<BaseResource> getResource() const;
 	[[nodiscard]] bool isLoaded() const;
 
 private:
 	HashId _name;
-	nlohmann::ordered_json _data;
+	ordered_json _data;
 	// If the _resource is nullptr it means the resource has not been loaded
 	std::shared_ptr<BaseResource> _resource;
 };
@@ -39,14 +39,14 @@ private:
 class PackGroup {
 public:
 	PackGroup(ResourceType type);
-	void addResource(const HashId& name, const nlohmann::ordered_json& data);
+	void addResource(const HashId& name, const ordered_json& data);
 	[[nodiscard]] ResourceType getType() const;
 	void load(BaseResourceManager& manager);
 	void unload(BaseResourceManager& manager);
 
 	// If the Pack of this group has been manually created the resources can be loaded through these methods
 	void loadExternalResource(BaseResourceManager& manager, std::shared_ptr<BaseResource> resource);
-	void loadExternalResource(BaseResourceManager& manager, const HashId& name, const nlohmann::json& data);
+	void loadExternalResource(BaseResourceManager& manager, const HashId& name, const json& data);
 
 	void forEachResource(const std::function<void(const ResourceInfo&)>& callback) const;
 
@@ -79,7 +79,7 @@ public:
 	void loadExternalResource(const ResourceProvider& resourceProvider,
 							  const HashId& name,
 							  ResourceType type,
-							  const nlohmann::json& data);
+							  const json& data);
 
 	void forEachResource(const std::function<void(const Pack&, const PackGroup&, const ResourceInfo&)>& callback) const;
 	void forEachGroup(const std::function<void(const PackGroup&)>& callback) const;

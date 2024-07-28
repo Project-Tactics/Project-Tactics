@@ -7,8 +7,10 @@
 
 #include <Libs/Ecs/Component/ViewportComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
+#include <Libs/Input/InputSystem.h>
 #include <Libs/Rendering/RenderQueue.h>
 #include <Libs/Rendering/RenderSystem.h>
+#include <Libs/Resource/Input/InputMap.h>
 #include <Libs/Resource/ResourceSystem.h>
 
 namespace tactics {
@@ -27,6 +29,7 @@ FsmAction LoadState::enter() {
 	_createViewport();
 	_createCamera();
 	_setupRenderSteps();
+	_setupInputMap();
 	return FsmAction::transition("proceed"_id);
 }
 
@@ -65,6 +68,17 @@ void LoadState::_setupRenderSteps() {
 	mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithoutAlphaBlend);
 	mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithAlphaBlend);
 	mainRenderQueue.addStep<ImGuiRender>(getService<OverlaySystem>());
+}
+
+void LoadState::_setupInputMap() {
+	auto& inputSystem = getService<InputSystem>();
+	auto& resourceSystem = getService<resource::ResourceSystem>();
+
+	auto inputMap = resourceSystem.getResource<resource::InputMap>("commonMap"_id);
+	inputSystem.assignInputMap(inputMap, 0);
+	inputSystem.assignDevice(click::DeviceType::Keyboard, 0, 0);
+	inputSystem.assignDevice(click::DeviceType::Gamepad, 0, 0);
+	inputSystem.assignDevice(click::DeviceType::Mouse, 0, 0);
 }
 
 } // namespace tactics

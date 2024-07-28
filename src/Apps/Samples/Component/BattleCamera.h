@@ -2,10 +2,8 @@
 
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/EntityUtilities.h>
-#include <Libs/Utility/Math.h>
+#include <Libs/Resource/Input/InputAction.h>
 #include <Libs/Utility/Reflection.h>
-
-#include <array>
 
 namespace tactics::component {
 
@@ -23,20 +21,29 @@ struct BattleCamera {
 	void rotateToNextStep();
 	void rotateToPrevStep();
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(BattleCamera,
-												rotationTime,
-												distanceFromOrigin,
-												rotationSpeed,
-												nextStep,
-												currentStep,
-												rotationSteps,
-												offset);
-	static void defineReflection();
+	REFLECT(BattleCamera,
+			rotationTime,
+			distanceFromOrigin,
+			rotationSpeed,
+			nextStep,
+			currentStep,
+			rotationSteps,
+			offset);
+};
+
+struct BattleCameraInput {
+	resource::InputAction::Ptr moveCamera;
+
+	REFLECT(BattleCameraInput, moveCamera);
 };
 
 class BattleCameraSystem {
 public:
 	static void update(entt::registry& registry);
+
+private:
+	static void _updateInputs(entt::registry& registry);
+	static void _updateCameras(entt::registry& registry);
 };
 
 } // namespace tactics::component

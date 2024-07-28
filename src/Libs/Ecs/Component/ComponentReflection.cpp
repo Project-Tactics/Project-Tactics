@@ -8,20 +8,20 @@
 #include "SpriteComponent.h"
 #include "TransformComponent.h"
 
-#include <Libs/Utility/Json/MathJsonSerializer.h>
+#include <Libs/Utility/Json/Json.h>
 #include <Libs/Utility/Reflection.h>
 
 #include <entt/entt.hpp>
 
 namespace tactics {
 
-void serializeFromAngleAxis(glm::quat& quat, const nlohmann::ordered_json& jsonData) {
+void serializeFromAngleAxis(glm::quat& quat, const ordered_json& jsonData) {
 	glm::vec3 axis = jsonData.at("axis");
 	float angle = jsonData.at("angle");
 	quat = glm::angleAxis(glm::radians(angle), axis);
 }
 
-void serializeFromLookAt(glm::quat& quat, const nlohmann::ordered_json& jsonData) {
+void serializeFromLookAt(glm::quat& quat, const ordered_json& jsonData) {
 	glm::vec3 from = jsonData.at("from");
 	glm::vec3 to = jsonData.at("to");
 	quat = glm::quatLookAt(glm::normalize(to - from), Vector3::up);

@@ -10,7 +10,7 @@ struct IniFileLoadDescriptor {
 	std::string path;
 	std::string pathToDefault;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(IniFileLoadDescriptor, path, pathToDefault);
+	JSON_SERIALIZE(IniFileLoadDescriptor, path, pathToDefault);
 };
 
 class IniFileLoader : public ResourceLoader {

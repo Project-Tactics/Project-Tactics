@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Libs/Utility/Json/MathJsonSerializer.h>
+#include <Libs/Utility/Json/Json.h>
+#include <Libs/Utility/Json/JsonSerialization.h>
 
 #include <glm/glm.hpp>
-#include <nlohmann/json.hpp>
 #include <string>
 #include <unordered_map>
 
@@ -23,13 +23,7 @@ struct UniformsDescriptor {
 	std::unordered_map<std::string, glm::vec3> vectors3;
 	std::unordered_map<std::string, glm::vec4> vectors4;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(UniformsDescriptor,
-												textures,
-												vectors4,
-												vectors3,
-												vectors2,
-												floats,
-												ints);
+	JSON_SERIALIZE(UniformsDescriptor, textures, vectors4, vectors3, vectors2, floats, ints);
 
 	static void fillUniformsInstance(const UniformsDescriptor& descriptor,
 									 resource::Uniforms& uniforms,

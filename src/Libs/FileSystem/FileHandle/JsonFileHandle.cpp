@@ -80,8 +80,8 @@ void JsonFileHandle::_loadFromLua() {
 
 void JsonFileHandle::_load(std::istream& stream) {
 	try {
-		_setContent(nlohmann::ordered_json::parse(stream));
-	} catch (nlohmann::json::parse_error& error) {
+		_setContent(ordered_json::parse(stream));
+	} catch (json::parse_error& error) {
 		throw TACTICS_EXCEPTION("Failed to parse json file [{}]. Error: {}", _path.string(), error.what());
 	}
 }

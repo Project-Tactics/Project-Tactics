@@ -30,14 +30,14 @@ public:
 class MockShaderLoader : public ResourceLoader {
 public:
 	using ResourceLoader::ResourceLoader;
-	MOCK_METHOD(std::shared_ptr<MockShaderResource>, load, (const HashId&, const nlohmann::ordered_json&));
+	MOCK_METHOD(std::shared_ptr<MockShaderResource>, load, (const HashId&, const ordered_json&));
 };
 
 class MockTextureLoader : public ResourceLoader {
 public:
 	using ResourceLoader::ResourceLoader;
 
-	std::shared_ptr<MockTextureResource> load(const nlohmann::ordered_json&) {
+	std::shared_ptr<MockTextureResource> load(const ordered_json&) {
 		return nullptr;
 	}
 };
@@ -51,20 +51,20 @@ public:
 				createStringFile,
 				(const std::filesystem::path&),
 				(const override));
-	MOCK_METHOD(std::unique_ptr<FileHandle<nlohmann::ordered_json>>,
+	MOCK_METHOD(std::unique_ptr<FileHandle<ordered_json>>,
 				createJsonFile,
 				(const std::filesystem::path&),
 				(const override));
 	MOCK_METHOD(std::unique_ptr<FileHandle<ini::IniFile>>, createIni, (const std::filesystem::path&), (const override));
 };
 
-class MockJsonFileHandle : public FileHandle<nlohmann::ordered_json> {
+class MockJsonFileHandle : public FileHandle<ordered_json> {
 public:
 	MOCK_METHOD(bool, exists, (), (const override));
 	MOCK_METHOD(void, save, (), (override));
 	MOCK_METHOD(void, load, (), (override));
 
-	void setData(const nlohmann::ordered_json& data) {
+	void setData(const ordered_json& data) {
 		_setContent(data);
 	}
 };
@@ -103,7 +103,7 @@ public:
 
 	void givenDefaultPackDefinition() {
 		_jsonPackFileHandle->setData({{"mainPackage",
-									   {{"shader",
+									   {{"Shader",
 										 {{"MyResourceName1", {{"testResource", "testResourceData"}}},
 										  {"MyResourceName2", {{"testResource", "testResourceData"}}},
 										  {"MyResourceName3", {{"testResource", "testResourceData"}}}}}}}});
@@ -120,7 +120,7 @@ public:
 
 	void givenValidManagerRegistered() {
 		auto loader = std::make_unique<MockShaderLoader>(*_fileSystem, *_resourceSystem);
-		EXPECT_CALL(*loader, load(_, _)).WillRepeatedly([](const HashId& name, const nlohmann::ordered_json&) {
+		EXPECT_CALL(*loader, load(_, _)).WillRepeatedly([](const HashId& name, const ordered_json&) {
 			auto res = std::make_shared<MockShaderResource>(name);
 			return res;
 		});

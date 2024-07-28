@@ -4,16 +4,6 @@
 
 namespace tactics::component {
 
-void CharacterFacing::defineReflection() {
-	entt::meta<Facing>()
-		.data<Facing::North>("north"_id)
-		.data<Facing::South>("south"_id)
-		.data<Facing::East>("east"_id)
-		.data<Facing::West>("west"_id);
-
-	componentReflection<CharacterFacing>("characterFacing").data<&CharacterFacing::facing>("facing"_id);
-}
-
 const std::array<std::array<Facing, 4>, 4> facingTransforms = {{
 	{Facing::South, Facing::North, Facing::West, Facing::East},
 	{Facing::East, Facing::West, Facing::South, Facing::North},

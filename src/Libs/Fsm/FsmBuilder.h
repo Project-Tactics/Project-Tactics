@@ -49,6 +49,8 @@ public:
 	std::tuple<std::unique_ptr<Fsm>, std::unique_ptr<FsmInfo>> build(const HashId& startStateName,
 																	 FsmExternalController* externalController);
 
+	static const HashId appExitRequestTransition;
+
 private:
 	FsmBuilder& _jumpTo(std::function<bool()> condition, const HashId& targetState);
 	FsmBuilder& _on(const HashId& transitionName);

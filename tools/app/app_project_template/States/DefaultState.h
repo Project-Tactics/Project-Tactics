@@ -1,17 +1,15 @@
 #pragma once
 
-#include <Libs/Fsm/FsmState.h>
+#include <Libs/Fsm/FsmStateWithServices.h>
 
 namespace tactics {
 
-class EmptyState : public FsmState {
+class ##APP_NAME##State : public FsmStateWithServices {
 public:
+	using FsmStateWithServices::FsmStateWithServices;
 	FsmAction enter() override;
 	FsmAction update() override;
 	void exit() override;
-
-private:
-	FsmEventAction onKeyPress(SDL_KeyboardEvent& event) override;
 };
 
 } // namespace tactics

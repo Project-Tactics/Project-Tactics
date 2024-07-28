@@ -4,11 +4,11 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
     ##APP_PROJECT_NAME##Application.cpp
     main.cpp
-    States/EmptyState.cpp)
+    States/##APP_PROJECT_NAME##State.cpp)
     
 set(HEADERS
     ##APP_PROJECT_NAME##Application.h
-    States/EmptyState.h)
+    States/##APP_PROJECT_NAME##State.h)
 
 set(TARGET_NAME ##APP_PROJECT_NAME##)
 set(POST_BUILD_TARGET_NAME ${TARGET_NAME}PostBuild)

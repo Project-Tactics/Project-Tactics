@@ -1,0 +1,9 @@
+{
+    "demoParticles": {
+        "Prefab": {
+            "particlesCamera": {
+                "path": "_demoParticles/particlesCamera.prefab"
+            }
+        }
+    }
+}

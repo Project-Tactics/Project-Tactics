@@ -1,6 +1,6 @@
 {
     "demoSimple": {
-        "texture": {
+        "Texture": {
             "tacticsIcon": {
                 "path": "_demoSimple/tacticsIcon.png"
             },
@@ -11,12 +11,12 @@
                 "path": "_demoSimple/floor.jpg"
             }
         },
-        "mesh": {
+        "Mesh": {
             "teapot": {
                 "path": "_demoSimple/teapot.obj"
             }
         },
-        "prefab": {
+        "Prefab": {
             "plane": {
                 "path": "_demoSimple/testPlane.prefab"
             },
@@ -27,17 +27,17 @@
                 "path": "_demoSimple/rotateAroundCamera.prefab"
             }
         },
-        "inputAction": {
+        "InputAction": {
             "cameraMove": {
-                "type": "axis2d",
+                "type": "Axis2D",
                 "normalized": true
             },
             "cameraLook": {
-                "type": "axis2d",
+                "type": "Axis2D",
                 "normalized": true
             }
         },
-        "inputMap": {
+        "InputMap": {
             "defaultInputMap": {
                 "bindings": [
                     {
@@ -46,14 +46,12 @@
                             {
                                 "gesture": {
                                     "type": "dir3D",
-                                    "data": {
-                                        "left": "keyA",
-                                        "right": "keyD",
-                                        "forward": "keyW",
-                                        "back": "keyS",
-                                        "up": "keyE",
-                                        "down": "keyQ"
-                                    }
+                                    "left": "KeyA",
+                                    "right": "KeyD",
+                                    "forward": "KeyW",
+                                    "back": "KeyS",
+                                    "up": "KeyE",
+                                    "down": "KeyQ"
                                 },
                                 "conditions": [
                                     {
@@ -66,10 +64,8 @@
                             {
                                 "gesture": {
                                     "type": "3d",
-                                    "data": {
-                                        "x": "axisLeftX",
-                                        "z": "axisLeftY"
-                                    }
+                                    "x": "AxisLeftX",
+                                    "z": "AxisLeftY"
                                 },
                                 "conditions": [
                                     {
@@ -80,18 +76,14 @@
                                 "modifiers": [
                                     {
                                         "type": "negate",
-                                        "data": {
-                                            "axis": "z"
-                                        }
+                                        "axis": "Z"
                                     }
                                 ]
                             },
                             {
                                 "gesture": {
                                     "type": "2d",
-                                    "data": {
-                                        "y": "axisTriggerLeft"
-                                    }
+                                    "y": "AxisTriggerLeft"
                                 },
                                 "conditions": [
                                     {
@@ -102,18 +94,14 @@
                                 "modifiers": [
                                     {
                                         "type": "negate",
-                                        "data": {
-                                            "axis": "y"
-                                        }
+                                        "axis": "Y"
                                     }
                                 ]
                             },
                             {
                                 "gesture": {
                                     "type": "2d",
-                                    "data": {
-                                        "y": "axisTriggerRight"
-                                    }
+                                    "y": "AxisTriggerRight"
                                 },
                                 "conditions": [
                                     {
@@ -131,9 +119,7 @@
                             {
                                 "gesture": {
                                     "type": "simple",
-                                    "data": {
-                                        "input": "mouseXY"
-                                    }
+                                    "input": "MouseXY"
                                 },
                                 "modifiers": [],
                                 "conditions": [
@@ -146,9 +132,7 @@
                             {
                                 "gesture": {
                                     "type": "simple",
-                                    "data": {
-                                        "input": "axisRightXY"
-                                    }
+                                    "input": "AxisRightXY"
                                 },
                                 "modifiers": [],
                                 "conditions": [

@@ -13,6 +13,7 @@ private:
 	HashId _initializeSpriteDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder);
 	HashId _initializeMapDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder);
 	HashId _initializeSimpleDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder);
+	HashId _initializeParticlesDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder);
 };
 
 } // namespace tactics

@@ -1,6 +1,6 @@
 {
     "common": {
-        "shader": {
+        "Shader": {
             "texturedUnlit": {
                 "vertexShader": "common/shaders/default.vert",
                 "fragmentShader": "common/shaders/texturedUnlit.frag"
@@ -14,12 +14,12 @@
                 "fragmentShader": "common/shaders/spriteUnlit.frag"
             }
         },
-        "texture": {
+        "Texture": {
             "none": {
                 "path": "common/textures/none.png"
             }
         },
-        "material": {
+        "Material": {
             "texturedUnlit": {
                 "shader": "texturedUnlit",
                 "uniforms": {
@@ -98,9 +98,81 @@
                 }
             }
         },
-        "prefab": {
+        "Prefab": {
             "simpleCamera": {
                 "path": "common/prefabs/simpleCamera.prefab"
+            }
+        },
+        "InputAction": {
+            "exitFromState": {
+                "type": "Scalar"
+            },
+            "goToEmptyState": {
+                "type": "Scalar"
+            },
+            "anyKeyPressed": {
+                "type": "Scalar"
+            }
+        },
+        "InputMap": {
+            "commonMap": {
+                "bindings": [
+                    {
+                        "action": "exitFromState",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyEscape"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "down",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "action": "goToEmptyState",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeySpace"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "down",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "emptyStateMap": {
+                "bindings": [
+                    {
+                        "action": "anyKeyPressed",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyAny"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "press",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
             }
         }
     }

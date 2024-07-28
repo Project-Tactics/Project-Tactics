@@ -35,7 +35,7 @@ PrefabManager::clonePrefabToRegistry(const HashId& name, const Entity& prefabEnt
 }
 
 Entity PrefabManager::createPrefab(const HashId& name,
-								   const nlohmann::ordered_json& json,
+								   const ordered_json& json,
 								   const resource::ResourceProvider& resourceProvider) {
 	auto entity = Entity::create(name, &_registry);
 	auto& prefab = entity.addComponent<component::Prefab>();

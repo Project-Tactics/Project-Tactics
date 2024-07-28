@@ -46,6 +46,14 @@ FsmAction DemoSimpleState::update() {
 	component::RotateItemSystem::update(registry);
 	component::RotateAroundPointSystem::update(registry);
 	component::FreeCameraSystem::update(registry);
+
+	auto& inputSystem = getService<InputSystem>();
+	if (inputSystem.checkAction("exitFromState")) {
+		return FsmAction::transition("exit"_id);
+	} else if (inputSystem.checkAction("goToEmptyState")) {
+		return FsmAction::transition("empty"_id);
+	}
+
 	return FsmAction::none();
 }
 
@@ -55,19 +63,6 @@ void DemoSimpleState::_setupInputMap() {
 
 	auto inputMap = resourceSystem.getResource<resource::InputMap>("defaultInputMap"_id);
 	inputSystem.assignInputMap(inputMap, 0);
-	inputSystem.assignKeyboard(0);
-	inputSystem.assignGamepad(0, 0);
-	inputSystem.assignMouse(0);
-}
-
-FsmEventAction DemoSimpleState::onKeyPress(SDL_KeyboardEvent& event) {
-	if (event.keysym.scancode == SDL_Scancode::SDL_SCANCODE_ESCAPE) {
-		return FsmEventAction::transition("exit"_id);
-	} else if (event.keysym.scancode == SDL_Scancode::SDL_SCANCODE_SPACE) {
-		return FsmEventAction::transition("empty"_id);
-	}
-
-	return FsmEventAction::none();
 }
 
 void DemoSimpleState::_createCrate() {
@@ -172,7 +167,7 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 	resourceSystem.loadExternalResource("CustomPack"_id, triangleMesh);
 
 	// We can also create a resource by simulating the usual pack loading
-	nlohmann::json descriptor = {{"vertexShader", "common/shaders/default.vert"}, {"fragmentShader", R"(
+	json descriptor = {{"vertexShader", "common/shaders/default.vert"}, {"fragmentShader", R"(
 				#version 330 core
 				layout(location = 0) out vec4 color;
 				uniform vec4 u_Color;

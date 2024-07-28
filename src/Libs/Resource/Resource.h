@@ -1,11 +1,10 @@
 #pragma once
 
 #include <Libs/Utility/HashId.h>
+#include <Libs/Utility/Json/JsonSerialization.h>
 #include <Libs/Utility/String/String.h>
 
-#include <nlohmann/json.hpp>
 #include <stdint.h>
-#include <string>
 
 namespace tactics::resource {
 
@@ -22,15 +21,21 @@ enum class ResourceType {
 	Unkwown
 };
 
-const std::array<ResourceType, 9> resourceTypeLoadingOrder = {ResourceType::IniFile,
-															  ResourceType::InputAction,
-															  ResourceType::InputMap,
-															  ResourceType::Shader,
-															  ResourceType::Texture,
-															  ResourceType::Material,
-															  ResourceType::Mesh,
-															  ResourceType::SpriteSheet,
-															  ResourceType::Prefab};
+} // namespace tactics::resource
+
+FORMAT_STR(tactics::resource::ResourceType);
+
+namespace tactics::resource {
+
+const std::array resourceTypeLoadingOrder = {ResourceType::IniFile,
+											 ResourceType::InputAction,
+											 ResourceType::InputMap,
+											 ResourceType::Shader,
+											 ResourceType::Texture,
+											 ResourceType::Material,
+											 ResourceType::Mesh,
+											 ResourceType::SpriteSheet,
+											 ResourceType::Prefab};
 
 using ResourceId = uint64_t;
 
@@ -63,28 +68,10 @@ public:
 struct FileDescriptor {
 	std::string path;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(FileDescriptor, path);
+	JSON_SERIALIZE(FileDescriptor, path);
 };
+
+template<typename T>
+concept IsResource = std::derived_from<T, Resource<T>> && !std::same_as<T, Resource<T>>;
 
 } // namespace tactics::resource
-
-namespace tactics {
-
-template<> class Str<resource::ResourceType> {
-public:
-	static std::string to(resource::ResourceType resourceType);
-	static resource::ResourceType from(std::string_view string);
-};
-
-} // namespace tactics
-
-template<> struct fmt::formatter<tactics::resource::ResourceType> {
-public:
-	constexpr auto parse(format_parse_context& ctx) {
-		return ctx.begin();
-	}
-
-	template<typename Context> constexpr auto format(tactics::resource::ResourceType const& obj, Context& ctx) const {
-		return fmt::format_to(ctx.out(), "{}", tactics::Str<tactics::resource::ResourceType>::to(obj));
-	}
-};

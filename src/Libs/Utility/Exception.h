@@ -15,6 +15,6 @@ public:
 		: cpptrace::exception_with_message(fmt::format(formatString, std::forward<Args>(args)...).c_str()) {}
 };
 
-#define TACTICS_EXCEPTION(...) Exception(__VA_ARGS__)
-
 } // namespace tactics
+
+#define TACTICS_EXCEPTION(...) tactics::Exception(__VA_ARGS__)

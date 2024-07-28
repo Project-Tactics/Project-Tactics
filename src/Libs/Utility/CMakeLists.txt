@@ -8,7 +8,7 @@ set(HEADERS
     HashId.h
     ImGuiUtilities.h
     Ini/IniMathConverter.h
-    Json/MathJsonSerializer.h
+    Json/Json.h
     Json/JsonSerialization.h
     Log/Log.h
     Math.h
@@ -29,8 +29,8 @@ set(SOURCES
     HashId.cpp
     ImGuiUtilities.cpp
     Ini/IniMathConverter.cpp
+    Json/Json.cpp
     Json/JsonSerialization.cpp
-    Json/MathJsonSerializer.cpp
     Log/Log.cpp
     Math.cpp
     String/String.cpp

@@ -22,7 +22,8 @@ set(HEADERS
     VertexAttributes.h
     RenderStep/RenderStep.h)
 
-set(PUBLIC_LIBS
+set(LIB_DEPEDENCIES
+    PUBLIC
     glad
     glm
     PRIVATE
@@ -32,11 +33,11 @@ set(PUBLIC_LIBS
     sdl2_wrapper)
 
 add_library(libs_rendering STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_rendering PUBLIC ${PUBLIC_LIBS})
+target_link_libraries(libs_rendering ${LIB_DEPEDENCIES})
 add_to_libs_folder(libs_rendering)
 
 add_library(libs_rendering_headless STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_rendering_headless PUBLIC ${PUBLIC_LIBS})
+target_link_libraries(libs_rendering_headless ${LIB_DEPEDENCIES})
 target_compile_definitions(libs_rendering_headless PRIVATE TACTICS_HEADLESS)
 add_to_libs_folder(libs_rendering_headless)
 

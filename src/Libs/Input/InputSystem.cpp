@@ -72,6 +72,9 @@ void InputSystem::update() {
 		for (click::PlayerId playerIndex = 0u; playerIndex < click::players(); ++playerIndex) {
 			auto& actionState = getActionState(inputAction.actionId, playerIndex);
 			inputAction.states[playerIndex] = actionState;
+			if (actionState.state == click::InputState::Triggered) {
+				LOG_TRACE(Log::Input, "Action triggered: {}", inputAction.name);
+			}
 		}
 	});
 }
@@ -81,6 +84,12 @@ void InputSystem::assignInputMap(std::shared_ptr<resource::InputMap> inputMap, c
 	for (const auto& binding : inputMap->bindings) {
 		click::bind(mapId, binding.action->actionId, binding.gesture, binding.triggers, binding.modifiers);
 	}
+}
+
+void InputSystem::assignInputMap(const char* inputMapName, click::PlayerId playerId) {
+	auto inputMapId = HashId(inputMapName);
+	auto inputMap = _resourceProvider.getResource<resource::InputMap>(inputMapId);
+	assignInputMap(inputMap, playerId);
 }
 
 void InputSystem::assignDevice(click::DeviceType deviceType, unsigned int deviceIndex, click::PlayerId playerId) {
@@ -97,18 +106,6 @@ bool InputSystem::hasDeviceAssigned(click::PlayerId playerId, click::DeviceType 
 	return std::count_if(it->second.begin(), it->second.end(), [&](const auto& device) {
 			   return std::get<0>(device) == deviceType;
 		   }) > 0;
-}
-
-void InputSystem::assignKeyboard(click::PlayerId playerId) {
-	assignDevice(click::DeviceType::Keyboard, 0, playerId);
-}
-
-void InputSystem::assignMouse(click::PlayerId playerId) {
-	assignDevice(click::DeviceType::Mouse, 0, playerId);
-}
-
-void InputSystem::assignGamepad(click::PlayerId playerId, unsigned int deviceIndex) {
-	assignDevice(click::DeviceType::Gamepad, deviceIndex, playerId);
 }
 
 void InputSystem::_updateDeviceAssignment() {
@@ -156,12 +153,18 @@ const click::DeviceData& InputSystem::getDevice(click::DeviceId deviceId) const 
 	return click::device(deviceId);
 }
 
-const click::ActionState& InputSystem::getActionState(click::ActionId actionId, click::PlayerId playerId) {
+const click::ActionState& InputSystem::getActionState(click::ActionId actionId, click::PlayerId playerId) const {
 	return click::actionState(actionId, playerId);
 }
 
-const click::ActionValue& InputSystem::getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId) {
+const click::ActionValue& InputSystem::getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId) const {
 	return click::inputValue(inputCode, playerId);
+}
+
+bool InputSystem::checkAction(const char* inputActionName, click::PlayerId playerId) const {
+	auto actionId = HashId(inputActionName);
+	auto inputAction = _resourceProvider.getResource<resource::InputAction>(actionId);
+	return inputAction->states[playerId].state == click::InputState::Triggered;
 }
 
 } // namespace tactics

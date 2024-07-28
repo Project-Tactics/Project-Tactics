@@ -94,7 +94,7 @@ void ResourceSystem::loadExternalResource(const HashId& packName, std::shared_pt
 void ResourceSystem::_loadExternalResource(const HashId& packName,
 										   const HashId& resourceName,
 										   ResourceType resourceType,
-										   const nlohmann::json& data) {
+										   const json& data) {
 	_resourcePackManager->loadExternalResource(packName, resourceName, resourceType, data);
 }
 

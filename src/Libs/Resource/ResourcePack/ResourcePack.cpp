@@ -11,7 +11,7 @@ namespace tactics::resource {
 
 /// ResourceInfo
 
-ResourceInfo::ResourceInfo(HashId name, const nlohmann::ordered_json& data) : _name(name), _data(data) {}
+ResourceInfo::ResourceInfo(HashId name, const ordered_json& data) : _name(name), _data(data) {}
 
 ResourceInfo::ResourceInfo(HashId name) : _name(name) {}
 
@@ -23,14 +23,14 @@ ResourceInfo::ResourceInfo(BaseResourceManager& manager, std::shared_ptr<BaseRes
 
 void ResourceInfo::load(BaseResourceManager& manager) {
 	if (isLoaded()) {
-		throw TACTICS_EXCEPTION("Resource [{}] is already loaded. Can't load again.", toString(_name));
+		throw TACTICS_EXCEPTION("Resource [{}] is already loaded. Can't load again.", _name);
 	}
 	_resource = manager.load(_name, _data);
 }
 
 void ResourceInfo::unload(BaseResourceManager& manager) {
 	if (!isLoaded()) {
-		throw TACTICS_EXCEPTION("Can't unload Resource [{}] because it is not loaded.", toString(_name));
+		throw TACTICS_EXCEPTION("Can't unload Resource [{}] because it is not loaded.", _name);
 	}
 	auto id = _resource->id;
 	_resource = nullptr;
@@ -41,7 +41,7 @@ void ResourceInfo::unload(BaseResourceManager& manager) {
 	return _name;
 }
 
-[[nodiscard]] const nlohmann::ordered_json& ResourceInfo::getData() const {
+[[nodiscard]] const ordered_json& ResourceInfo::getData() const {
 	return _data;
 }
 
@@ -57,7 +57,7 @@ void ResourceInfo::unload(BaseResourceManager& manager) {
 
 PackGroup::PackGroup(ResourceType type) : _type(type) {}
 
-void PackGroup::addResource(const HashId& name, const nlohmann::ordered_json& data) {
+void PackGroup::addResource(const HashId& name, const ordered_json& data) {
 	_resources.push_back(std::make_unique<ResourceInfo>(name, data));
 }
 
@@ -66,7 +66,7 @@ void PackGroup::addResource(const HashId& name, const nlohmann::ordered_json& da
 }
 
 void PackGroup::load(BaseResourceManager& manager) {
-	LOG_TRACE(Log::Resource, "Loading resources of type [{}]...", toString(_type));
+	LOG_TRACE(Log::Resource, "Loading resources of type [{}]...", _type);
 	for (auto&& resourceInfo : _resources) {
 		resourceInfo->load(manager);
 	}
@@ -84,7 +84,7 @@ void PackGroup::loadExternalResource(BaseResourceManager& manager, std::shared_p
 	_resources.push_back(std::make_unique<ResourceInfo>(manager, resource));
 }
 
-void PackGroup::loadExternalResource(BaseResourceManager& manager, const HashId& name, const nlohmann::json& data) {
+void PackGroup::loadExternalResource(BaseResourceManager& manager, const HashId& name, const json& data) {
 	_resources.push_back(std::make_unique<ResourceInfo>(name, data));
 	_resources.back()->load(manager);
 }
@@ -178,7 +178,7 @@ void Pack::loadExternalResource(const ResourceProvider& resourceProvider, std::s
 		throw TACTICS_EXCEPTION(
 			"Can't register manual resource [{}] of type [{}] to pack [{}]. The pack is not manually created.",
 			resource->name,
-			toString(resource->type),
+			resource->type,
 			_name);
 	}
 
@@ -190,14 +190,14 @@ void Pack::loadExternalResource(const ResourceProvider& resourceProvider, std::s
 void Pack::loadExternalResource(const ResourceProvider& resourceProvider,
 								const HashId& name,
 								ResourceType type,
-								const nlohmann::json& data) {
+								const json& data) {
 	if (!isManuallyCreated()) {
 		throw TACTICS_EXCEPTION(
 			"Can't load resource [{}] of type [{}] to pack [{}]. The pack has not been created manually. Descriptor: "
 			"{}",
 			name,
-			toString(type),
-			toString(_name),
+			type,
+			_name,
 			data.dump());
 	}
 	auto& group = getOrCreatePackGroup(type);

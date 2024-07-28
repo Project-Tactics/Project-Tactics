@@ -2,20 +2,28 @@
 
 #include <Libs/Utility/Time/EngineTime.h>
 
-#include <iostream>
-
 namespace tactics::component {
 
-void BattleCamera::defineReflection() {
-	componentReflection<BattleCamera>("battleCamera")
-		.data<&BattleCamera::rotationSteps>("rotationSteps"_id)
-		.data<&BattleCamera::rotationTime>("rotationTime"_id)
-		.data<&BattleCamera::rotationSpeed>("rotationSpeed"_id)
-		.data<&BattleCamera::nextStep>("nextStep"_id)
-		.data<&BattleCamera::currentStep>("currentStep"_id);
+void BattleCameraSystem::update(entt::registry& registry) {
+	_updateInputs(registry);
+	_updateCameras(registry);
 }
 
-void BattleCameraSystem::update(entt::registry& registry) {
+void BattleCameraSystem::_updateInputs(entt::registry& registry) {
+	auto view = registry.view<BattleCamera, BattleCameraInput>();
+	for (auto [entity, camera, input] : view.each()) {
+		if (input.moveCamera->isTriggered()) {
+			auto& value = input.moveCamera->getInputValue();
+			if (value.scalar > 0) {
+				camera.rotateToNextStep();
+			} else {
+				camera.rotateToPrevStep();
+			}
+		}
+	}
+}
+
+void BattleCameraSystem::_updateCameras(entt::registry& registry) {
 	auto view = registry.view<BattleCamera, Transform>();
 	for (auto [entity, camera, transform] : view.each()) {
 		if (camera.currentStep != camera.nextStep) {

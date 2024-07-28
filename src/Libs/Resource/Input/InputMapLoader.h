@@ -13,21 +13,21 @@ struct InputMapBindingGestureDescriptor {
 	std::vector<click::Condition> conditions;
 	std::vector<click::Modifier> modifiers;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(InputMapBindingGestureDescriptor, gesture, conditions, modifiers);
+	JSON_SERIALIZE(InputMapBindingGestureDescriptor, gesture, conditions, modifiers);
 };
 
 struct InputMapBindingDescriptor {
 	HashId action;
 	std::vector<InputMapBindingGestureDescriptor> gestures;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(InputMapBindingDescriptor, action, gestures);
+	JSON_SERIALIZE(InputMapBindingDescriptor, action, gestures);
 };
 
 struct InputMapDescriptor {
 	unsigned int player;
 	std::vector<InputMapBindingDescriptor> bindings;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(InputMapDescriptor, player, bindings);
+	JSON_SERIALIZE(InputMapDescriptor, player, bindings);
 };
 
 class InputMapLoader : public ResourceLoader {

@@ -43,4 +43,6 @@ public:
 	std::shared_ptr<Shader> shader;
 };
 
+using MaterialInstances = std::vector<std::shared_ptr<tactics::resource::Material::Instance>>;
+
 } // namespace tactics::resource
