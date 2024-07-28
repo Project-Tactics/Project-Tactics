@@ -10,14 +10,23 @@
 #include "States/DemoSimpleState.h"
 #include "States/DemoSpriteState.h"
 #include "States/EmptyState.h"
-#include "States/LoadState.h"
-#include "States/UnloadState.h"
+#include "States/SampleSelectionState.h"
+#include "States/SetupState.h"
+// ADD INCLUDE SAMPLES HERE
 
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Utility/Reflection.h>
 
 namespace tactics {
+
+SamplesApplication::SamplesApplication() {
+	_addSampleFlow<DemoSpriteState>("sprite", "Sprite");
+	_addSampleFlow<DemoMapState>("map", "Map", ".lua");
+	_addSampleFlow<DemoParticlesState>("particles", "Particles");
+	_addSampleFlow<DemoSimpleState>("simple", "Simple");
+	// ADD FLOW SAMPLES HERE
+}
 
 void SamplesApplication::setupComponentReflections() {
 	using namespace component;
@@ -30,94 +39,37 @@ void SamplesApplication::setupComponentReflections() {
 }
 
 HashId SamplesApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
-	auto configFile =
-		serviceLocator.getService<resource::ResourceSystem>().getResource<resource::IniFile>("devUserConfigFile"_id);
-	auto state = configFile->getOrCreate("demo", "fsm", std::string("map"));
+	auto& resourceSystem = serviceLocator.getService<resource::ResourceSystem>();
+	auto configFile = resourceSystem.getResource<resource::IniFile>("devUserConfigFile"_id);
+	auto defaultState = configFile->getOrCreate("demo", "fsm", std::string("none"));
 
-	if (state == "sprite") {
-		return _initializeSpriteDemo(serviceLocator, fsmBuilder);
-	} else if (state == "map") {
-		return _initializeMapDemo(serviceLocator, fsmBuilder);
-	} else if (state == "particles") {
-		return _initializeParticlesDemo(serviceLocator, fsmBuilder);
-	} else {
-		return _initializeSimpleDemo(serviceLocator, fsmBuilder);
+	auto transitionToTrigger = HashId::none;
+	if (_sampleFlows.contains(defaultState)) {
+		transitionToTrigger = HashId(defaultState);
 	}
-}
 
-HashId SamplesApplication::_initializeSpriteDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 	// clang-format off
 	fsmBuilder
-		.state<LoadState>("Load", serviceLocator, "_demoSprites/resources.json", "demoSprites"_id, "spriteCamera"_id)
-		.on("proceed").jumpTo("Sprites")
-		.onAppExitRequest().jumpTo("Unload")
-
-		.state<DemoSpriteState>("Sprites", serviceLocator)
-		.on("exit").jumpTo("Unload")
-		.onAppExitRequest().jumpTo("Unload")
-
-		.state<UnloadState>("Unload", serviceLocator, "demoSprites"_id)
-		.on("proceed").exitFsm()
-		.onAppExitRequest().exitFsm();
+		.state<LoadState>("LoadCommon", serviceLocator, "common/resources.json", "common"_id)
+            .on("proceed").jumpTo("Setup")
+		.state<SetupState>("Setup", serviceLocator)
+            .on("proceed").jumpTo("Selection")
+		.state<UnloadState>("Unload", serviceLocator, "common"_id)
+            .on("proceed").exitFsm()
+		.state<SampleSelectionState>("Selection", serviceLocator, transitionToTrigger, _sampleFlows)
+			.on("exit").jumpTo("Unload")
+			.onAppExitRequest().jumpTo("Unload");
+	
+	for (auto& [sampleKey, sampleFlow] : _sampleFlows) {
+		fsmBuilder.on(sampleKey).jumpTo(sampleFlow->loadState);
+	}
 	// clang-format on
-	return "Load"_id;
-}
 
-HashId SamplesApplication::_initializeMapDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
-	// clang-format off
-	fsmBuilder
-		.state<LoadState>("Load", serviceLocator, "_demoMaps/resources.lua", "demoMaps"_id, "mapCamera"_id)
-		.on("proceed").jumpTo("Map")
-		.onAppExitRequest().jumpTo("Unload")
+	for (auto& [sampleKey, sampleFlow] : _sampleFlows) {
+		sampleFlow->addFlowToFsm(serviceLocator, fsmBuilder);
+	}
 
-		.state<DemoMapState>("Map", serviceLocator)
-		.on("exit").jumpTo("Unload")
-		.onAppExitRequest().jumpTo("Unload")
-
-		.state<UnloadState>("Unload", serviceLocator, "demoMaps"_id)
-		.on("proceed").exitFsm()
-		.onAppExitRequest().exitFsm();
-	// clang-format on
-	return "Load"_id;
-}
-
-HashId SamplesApplication::_initializeSimpleDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
-	// clang-format off
-	fsmBuilder
-		.state<LoadState>("Load", serviceLocator, "_demoSimple/resources.json", "demoSimple"_id, "rotateAroundCamera"_id)
-		.on("proceed").jumpTo("DemoScene")
-
-		.state<DemoSimpleState>("DemoScene", serviceLocator)
-		.on("exit").jumpTo("Unload")
-		.on("empty").jumpTo("Empty")
-		.onAppExitRequest().jumpTo("Unload")
-
-		.state<EmptyState>("Empty", serviceLocator)
-		.on("proceed").jumpTo("Unload")
-		.onAppExitRequest().jumpTo("Unload")
-
-		.state<UnloadState>("Unload", serviceLocator, "demoSimple"_id)
-		.on("proceed").exitFsm()
-		.onAppExitRequest().exitFsm();
-	// clang-format on
-	return "Load"_id;
-}
-
-HashId SamplesApplication::_initializeParticlesDemo(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
-	// clang-format off
-	fsmBuilder
-		.state<LoadState>("Load", serviceLocator, "_demoParticles/resources.json", "demoParticles"_id, "particlesCamera"_id)
-		.on("proceed").jumpTo("Particles")
-
-		.state<DemoParticlesState>("Particles", serviceLocator)
-		.on("exit").jumpTo("Unload")
-		.onAppExitRequest().jumpTo("Unload")
-
-		.state<UnloadState>("Unload", serviceLocator, "demoParticles"_id)
-		.on("proceed").exitFsm()
-		.onAppExitRequest().exitFsm();
-	// clang-format on
-	return "Load"_id;
+	return "LoadCommon"_id;
 }
 
 } // namespace tactics

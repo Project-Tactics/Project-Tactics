@@ -76,4 +76,36 @@ bool vecComponent(float* component, const ImVec4& color, float width, float spee
 	return ImGui::DragFloat(id, component, speed);
 }
 
+bool CenteredButton(const char* label, const ImVec2& buttonSize) {
+	float alignment = 0.5f;
+	ImGuiStyle& style = ImGui::GetStyle();
+
+	auto size = ImGui::CalcTextSize(label).x + style.FramePadding.x * 2.0f;
+	if (size < buttonSize.x) {
+		size = buttonSize.x;
+	}
+
+	float avail = ImGui::GetContentRegionAvail().x;
+	float off = (avail - size) * alignment;
+	if (off > 0.0f) {
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
+	}
+
+	return ImGui::Button(label, buttonSize);
+}
+
+bool CenteredTextColored(const ImVec4& color, const char* text) {
+	float alignment = 0.5f;
+
+	auto size = ImGui::CalcTextSize(text).x;
+	float avail = ImGui::GetContentRegionAvail().x;
+	float off = (avail - size) * alignment;
+	if (off > 0.0f) {
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
+	}
+	ImGui::AlignTextToFramePadding();
+	ImGui::TextColored(color, "%s", text);
+	return true;
+}
+
 } // namespace tactics

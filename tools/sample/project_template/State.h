@@ -4,7 +4,7 @@
 
 namespace tactics {
 
-class DemoParticlesState : public SampleState {
+class Demo##SAMPLE_NAME##State : public SampleState {
 public:
 	using SampleState::SampleState;
 	FsmAction enter() override;

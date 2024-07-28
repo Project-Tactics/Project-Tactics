@@ -39,9 +39,12 @@ struct BattleCameraInput {
 
 class BattleCameraSystem {
 public:
+	static void init(entt::registry& registry);
+	static void uninit(entt::registry& registry);
 	static void update(entt::registry& registry);
 
 private:
+	static void _onBattleCameraCreated(entt::registry& registry, entt::entity e);
 	static void _updateInputs(entt::registry& registry);
 	static void _updateCameras(entt::registry& registry);
 };

@@ -23,6 +23,7 @@
 namespace tactics {
 
 FsmAction DemoSimpleState::enter() {
+	_createCamera("rotateAroundCamera"_id);
 	_createPlane();
 	_createTeapot();
 	_createCrate();
@@ -50,8 +51,6 @@ FsmAction DemoSimpleState::update() {
 	auto& inputSystem = getService<InputSystem>();
 	if (inputSystem.checkAction("exitFromState")) {
 		return FsmAction::transition("exit"_id);
-	} else if (inputSystem.checkAction("goToEmptyState")) {
-		return FsmAction::transition("empty"_id);
 	}
 
 	return FsmAction::none();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <imgui.h>
+#include <optional>
 
 namespace tactics {
 
@@ -20,6 +21,8 @@ enum class OverlayType {
 struct OverlayConfig {
 	ImVec2 position{};
 	ImVec2 size{};
+	ImGuiWindowFlags windowFlags{};
+	std::optional<ImGuiCond_> windowSaveFlags{};
 	bool isMenuBarButton{};
 };
 

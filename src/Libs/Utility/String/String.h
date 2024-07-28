@@ -41,6 +41,10 @@ namespace tactics {
 
 char tolower(char c);
 char toupper(char c);
+void tolower(std::string& str);
+void toupper(std::string& str);
+void tolower(char* str);
+void toupper(char* str);
 
 template<typename T> std::array<T, 4> parseStringToVectorValues(const std::string& str) {
 	std::array<T, 4> result = {};

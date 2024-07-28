@@ -126,7 +126,7 @@ bool ResourcesOverlay::_drawResourceTypeCollapsingHeader(const HashId& id,
 														 unsigned int count,
 														 float colorMultiplier) {
 	auto resourceTypeString = toString(resourceType);
-	std::transform(resourceTypeString.begin(), resourceTypeString.end(), resourceTypeString.begin(), tactics::toupper);
+	toupper(resourceTypeString);
 	auto groupHeader = fmt::format("{} [{}]##{}", resourceTypeString, count, id);
 
 	ImGui::PushStyleColor(ImGuiCol_Header, ResourceOverlayHelper::toColor(resourceType, 0.5f * colorMultiplier));

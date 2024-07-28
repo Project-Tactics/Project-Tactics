@@ -72,9 +72,6 @@ void InputSystem::update() {
 		for (click::PlayerId playerIndex = 0u; playerIndex < click::players(); ++playerIndex) {
 			auto& actionState = getActionState(inputAction.actionId, playerIndex);
 			inputAction.states[playerIndex] = actionState;
-			if (actionState.state == click::InputState::Triggered) {
-				LOG_TRACE(Log::Input, "Action triggered: {}", inputAction.name);
-			}
 		}
 	});
 }

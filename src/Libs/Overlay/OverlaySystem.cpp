@@ -56,9 +56,11 @@ void OverlaySystem::update() {
 			switch (overlayItem.type) {
 			case OverlayType::Window: {
 				bool enabled = overlayItem.enabled;
-				ImGui::SetNextWindowPos(overlayItem.config.position, ImGuiCond_FirstUseEver);
-				ImGui::SetNextWindowSize(overlayItem.config.size, ImGuiCond_FirstUseEver);
-				if (ImGui::Begin(name.data(), &enabled)) {
+				auto& windowSaveFlags = overlayItem.config.windowSaveFlags;
+				ImGuiCond_ saveFlags = windowSaveFlags ? *windowSaveFlags : ImGuiCond_FirstUseEver;
+				ImGui::SetNextWindowPos(overlayItem.config.position, saveFlags);
+				ImGui::SetNextWindowSize(overlayItem.config.size, saveFlags);
+				if (ImGui::Begin(name.data(), &enabled, overlayItem.config.windowFlags)) {
 					overlayItem.overlay->update();
 				}
 				ImGui::End();

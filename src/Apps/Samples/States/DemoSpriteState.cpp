@@ -10,6 +10,7 @@
 namespace tactics {
 
 FsmAction DemoSpriteState::enter() {
+	_createCamera("spriteCamera"_id);
 	_createCharacters({0, 0, 0}, 1);
 	_createCharacters({0, 0, -0.5}, 1);
 	_createCharacters({0, 0, 0.5}, 1);

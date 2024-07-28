@@ -16,7 +16,7 @@ FsmAction UnloadState::enter() {
 
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 	resourceSystem.unloadPack(_packageName);
-	resourceSystem.unloadPack("common"_id);
+	resourceSystem.removePack(_packageName);
 	return FsmAction::transition("proceed"_id);
 }
 

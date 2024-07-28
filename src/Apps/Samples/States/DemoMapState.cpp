@@ -41,12 +41,18 @@ FsmAction DemoMapState::update() {
 void DemoMapState::exit() {
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.clearScene();
+
+	component::BattleCameraSystem::uninit(sceneSystem.getRegistry());
 }
 
 void DemoMapState::_createScene() {
 	using namespace component;
 
 	auto& sceneSystem = getService<SceneSystem>();
+	BattleCameraSystem::init(sceneSystem.getRegistry());
+
+	_createCamera("mapCamera"_id);
+
 	sceneSystem.clearScene();
 	auto mapName = fmt::format("map{:02d}", _mapIndex);
 	sceneSystem.createEntity("map"_id, HashId(mapName));

@@ -37,6 +37,15 @@ void ResourcePackManager::unloadPack(const HashId& packName) {
 	pack.unload(_resourceProvider);
 }
 
+void ResourcePackManager::removePack(const HashId& packName) {
+	auto& pack = _getResourcePack(packName);
+	if (pack.isLoaded()) {
+		throw TACTICS_EXCEPTION("Can't remove pack [{}]. The pack is still loaded", packName);
+	}
+
+	_packs.erase(packName);
+}
+
 Pack& ResourcePackManager::createPack(const HashId& packName, bool isManuallyCreated) {
 	if (_packs.contains(packName)) {
 		throw TACTICS_EXCEPTION("Can't create custom pack [{}]. A pack with the same name already exists.", packName);

@@ -25,6 +25,7 @@ public:
 
 	void loadPack(const HashId& packName);
 	void unloadPack(const HashId& packName);
+	void removePack(const HashId& packName);
 	Pack& createPack(const HashId& packName, bool manuallyCreated);
 
 	void loadExternalResource(const HashId& packName, std::shared_ptr<BaseResource> resource);
