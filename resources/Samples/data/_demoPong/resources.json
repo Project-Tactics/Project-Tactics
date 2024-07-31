@@ -1,0 +1,89 @@
+{
+    "demoPong": {
+        "Texture": {
+            "spritePlayer": {
+                "path": "_demoPong/Player.png",
+                "filter": "Nearest"
+            },
+            "spriteBall": {
+                "path": "_demoPong/Ball.png",
+                "filter": "Nearest"
+            }
+        },
+        "SpriteSheet": {
+            "player00": {
+                "texture": "spritePlayer",
+                "spriteSize": {
+                    "x": 17,
+                    "y": 120
+                }
+            },
+            "ball00": {
+                "texture": "spriteBall",
+                "spriteSize": {
+                    "x": 30,
+                    "y": 30
+                }
+            }
+        },
+        "Prefab": {
+            "defaultCamera": {
+                "path": "_demoPong/defaultCamera.prefab"
+            },
+            "player": {
+                "path": "_demoPong/player.prefab"
+            },
+            "ball": {
+                "path": "_demoPong/ball.prefab"
+            }
+        },
+        "InputAction": {
+            "playerMovement": {
+                "type": "Scalar",
+                "normalized": true
+            }
+        },
+        "InputMap": {
+            "pongMapping": {
+                "bindings": [
+                    {
+                        "action": "playerMovement",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyW"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "down",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": []
+                            },
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyS"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "down",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": [
+                                    {
+                                        "type": "negate",
+                                        "axis": "X"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}
