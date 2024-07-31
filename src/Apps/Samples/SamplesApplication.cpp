@@ -1,12 +1,18 @@
 #include "SamplesApplication.h"
 
+#include "Component/BallBouncing.h"
+#include "Component/BallMovement.h"
 #include "Component/BattleCamera.h"
 #include "Component/CharacterFacing.h"
 #include "Component/FreeCamera.h"
+#include "Component/PlayerMovement.h"
+#include "Component/Rectangle2DCollider.h"
 #include "Component/RotateAroundPoint.h"
 #include "Component/RotateItem.h"
+#include "Component/TranslateItem.h"
 #include "States/DemoMapState.h"
 #include "States/DemoParticlesState.h"
+#include "States/DemoPongState.h"
 #include "States/DemoSimpleState.h"
 #include "States/DemoSpriteState.h"
 #include "States/EmptyState.h"
@@ -25,6 +31,7 @@ SamplesApplication::SamplesApplication() {
 	_addSampleFlow<DemoMapState>("map", "Map", ".lua");
 	_addSampleFlow<DemoParticlesState>("particles", "Particles");
 	_addSampleFlow<DemoSimpleState>("simple", "Simple");
+	_addSampleFlow<DemoPongState>("pong", "Pong");
 	// ADD FLOW SAMPLES HERE
 }
 
@@ -35,7 +42,12 @@ void SamplesApplication::setupComponentReflections() {
 							   CharacterFacing,
 							   RotateItem,
 							   RotateAroundPoint,
-							   FreeCamera>();
+							   FreeCamera,
+							   TranslateItem,
+							   BallMovement,
+							   BallBouncing,
+							   Rectangle2DCollider,
+							   PlayerMovement>();
 }
 
 HashId SamplesApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {

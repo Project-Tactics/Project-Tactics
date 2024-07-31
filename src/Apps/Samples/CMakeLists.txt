@@ -2,11 +2,17 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
+    Component/BallBouncing.cpp
+    Component/BallMovement.cpp
     Component/BattleCamera.cpp
     Component/CharacterFacing.cpp
     Component/FreeCamera.cpp
+    Component/PlayerMovement.cpp
+    Component/Rectangle2DCollider.cpp
     Component/RotateAroundPoint.cpp
     Component/RotateItem.cpp
+    Component/TranslateItem.cpp
+    States/DemoPongState.cpp
     main.cpp
     Overlay/SampleSelectionOverlay.cpp
     SamplesApplication.cpp
@@ -21,13 +27,19 @@ set(SOURCES
     States/UnloadState.cpp)
     
 set(HEADERS
+    Component/BallBouncing.h
+    Component/BallMovement.h
     Component/BattleCamera.h
     Component/CharacterFacing.h
     Component/FreeCamera.h
+    Component/PlayerMovement.cpp
+    Component/Rectangle2DCollider.cpp
     Component/RotateAroundPoint.h
     Component/RotateItem.h
+    Component/TranslateItem.h
     Overlay/SampleSelectionOverlay.h
     SamplesApplication.h
+    States/DemoPongState.h
     SamplesUtils.h
     States/DemoMapState.h
     States/DemoParticlesState.h
