@@ -2,6 +2,8 @@
 
 #include <Libs/Fsm/FsmBuilder.h>
 
+#include <SDL_events.h>
+
 namespace tactics {
 
 FsmAction DefaultFsmExternalController::update(const HashId& currentStateName) {

@@ -3,7 +3,9 @@
 #include "../Component/CameraComponent.h"
 #include "../Component/FrustumComponent.h"
 #include "../Component/TransformComponent.h"
-#include "../Component/ViewportComponent.h"
+
+#include <Libs/Rendering/RenderSystem.h>
+#include <Libs/Rendering/Viewport.h>
 
 namespace tactics::component {
 
@@ -31,18 +33,16 @@ void CameraSystem::updateCameraMatrices(entt::registry& registry) {
 	});
 }
 
-void CameraSystem::updateCameraAspectRatios(entt::registry& registry) {
-	// TODO(Gerark) We assume we always have one current viewport and current camera. We might change this rule in the
-	// future and this code has to change accordingly.
+void CameraSystem::updateCameraAspectRatios(RenderSystem& renderSystem, entt::registry& registry) {
+	auto& viewport = renderSystem.getViewport();
 	auto currentCameraView = registry.view<Frustum, CurrentCamera>();
 	if (currentCameraView.size_hint() == 0) {
 		return;
 	}
 
-	auto currentViewportView = registry.view<Viewport, CurrentViewport>();
-	auto&& [entityViewport, viewport] = *currentViewportView.each().begin();
 	auto&& [entityCamera, frustum] = *currentCameraView.each().begin();
-	frustum.aspectRatio = static_cast<float>(viewport.size.x) / viewport.size.y;
+	auto windowSize = renderSystem.getWindowSize();
+	frustum.aspectRatio = static_cast<float>(viewport.size.x * windowSize.x) / (viewport.size.y * windowSize.y);
 }
 
 } // namespace tactics::component

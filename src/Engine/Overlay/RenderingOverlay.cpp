@@ -5,7 +5,6 @@
 #include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/FrustumComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
-#include <Libs/Ecs/Component/ViewportComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Utility/ImGuiUtilities.h>
@@ -46,28 +45,25 @@ void RenderingOverlay::_drawRenderStats() {
 
 void RenderingOverlay::_drawViewportStats() {
 	using namespace component;
-	auto view = _ecs.sceneRegistry().view<Viewport>();
-	view.each([&](Viewport& viewport) {
-		ImGui::TextColored(_titleColor, "%s", "VIEWPORT");
-		glm::vec2 topLeft = viewport.topLeft;
-		glm::vec2 size = viewport.size;
-		bool dirty = false;
-		dirty |= vector2("TopLeft", topLeft, 0, 1, _xComponentColor, _yComponentColor);
-		dirty |= vector2("Size", size, 0, 1, _xComponentColor, _yComponentColor);
-		if (dirty) {
-			viewport.topLeft = topLeft;
-			viewport.size = size;
-		}
+	auto& viewport = _renderSystem.getViewport();
+	ImGui::TextColored(_titleColor, "%s", "VIEWPORT");
+	glm::vec2 position = viewport.position;
+	glm::vec2 size = viewport.size;
+	auto clearColor = viewport.clearColor;
+	bool dirty = false;
+	dirty |= vector2("TopLeft", position, 0, 1, _xComponentColor, _yComponentColor);
+	dirty |= vector2("Size", size, 0, 1, _xComponentColor, _yComponentColor);
+	if (dirty) {
+		_renderSystem.setViewport(position, size, clearColor);
+	}
 
-		ImGui::AlignTextToFramePadding();
-		ImGui::Text("%s", "Clear Color");
-		auto clearColor = viewport.clearColor;
-		ImGui::SameLine();
-		ImVec4 color = ImVec4(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
-		if (ImGui::ColorEdit3("##clear-color", (float*)&color)) {
-			viewport.clearColor = glm::vec4(color.x, color.y, color.z, clearColor.w);
-		}
-	});
+	ImGui::AlignTextToFramePadding();
+	ImGui::Text("%s", "Clear Color");
+	ImGui::SameLine();
+	ImVec4 color = ImVec4(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+	if (ImGui::ColorEdit3("##clear-color", (float*)&color)) {
+		_renderSystem.setViewport(position, size, clearColor);
+	}
 }
 
 void RenderingOverlay::_drawCameraStats() {

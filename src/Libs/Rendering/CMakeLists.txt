@@ -7,8 +7,8 @@ set(SOURCES
     RenderCalls/RenderCalls.cpp
     RenderQueue.cpp
     RenderSystem.cpp
-    VertexAttributes.cpp
-    RenderStep/RenderStep.cpp)
+    RenderStep/RenderStep.cpp
+    VertexAttributes.cpp)
     
 set(HEADERS    
     BaseBuffer.h
@@ -18,9 +18,10 @@ set(HEADERS
     RenderCalls/RenderCalls.h
     RenderQueue.h
     RenderSystem.h
+    RenderStep/RenderStep.h
     VertexBuffer.h
     VertexAttributes.h
-    RenderStep/RenderStep.h)
+    Viewport.h)
 
 set(LIB_DEPEDENCIES
     PUBLIC
@@ -29,6 +30,7 @@ set(LIB_DEPEDENCIES
     PRIVATE
     libs_utility
     libs_resource
+    libs_event
     imgui
     sdl2_wrapper)
 

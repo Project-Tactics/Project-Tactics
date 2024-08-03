@@ -7,7 +7,6 @@
 #include <Libs/Ecs/Component/NameComponent.h>
 #include <Libs/Ecs/Component/SpriteComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
-#include <Libs/Ecs/Component/ViewportComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/System/CameraSystem.h>
 #include <Libs/Resource/Material/Material.h>
@@ -29,7 +28,6 @@ SceneSystem::SceneSystem(EntityComponentSystem& ecs, resource::ResourceSystem& r
 	registry.on_construct<Mesh>().connect<&SceneSystem::_onMeshConstructed>(this);
 	registry.on_update<Mesh>().connect<&SceneSystem::_onMeshUpdated>(this);
 	registry.on_construct<CurrentCamera>().connect<&SceneSystem::_onCurrentCameraConstructed>(this);
-	registry.on_construct<CurrentViewport>().connect<&SceneSystem::_onCurrentViewportConstructed>(this);
 	registry.on_construct<SpriteAnimation>().connect<&SceneSystem::_onSpriteAnimationConstructed>(this);
 	registry.on_update<SpriteAnimation>().connect<&SceneSystem::_onSpriteAnimationUpdated>(this);
 }
@@ -71,15 +69,6 @@ void SceneSystem::_onCurrentCameraConstructed(entt::registry&, entt::entity curr
 	_ecs.sceneRegistry().view<CurrentCamera>().each([this, currentCameraEntity](auto entity) {
 		if (currentCameraEntity != entity) {
 			_ecs.sceneRegistry().remove<CurrentCamera>(entity);
-		}
-	});
-}
-
-void SceneSystem::_onCurrentViewportConstructed(entt::registry&, entt::entity currentViewportEntity) {
-	using namespace component;
-	_ecs.sceneRegistry().view<CurrentViewport>().each([this, currentViewportEntity](auto entity) {
-		if (currentViewportEntity != entity) {
-			_ecs.sceneRegistry().remove<CurrentViewport>(entity);
 		}
 	});
 }
@@ -132,12 +121,6 @@ void SceneSystem::_updateAlphaBlendFlags(entt::registry& registry, entt::entity 
 	} else if (isMixedAlphaBlended) {
 		registry.emplace<AlphaBlended>(entity);
 	}
-}
-
-Entity SceneSystem::createViewport(const glm::vec2& topLeft, const glm::vec2& size, const glm::vec4& clearColor) {
-	auto entity = Entity::create("viewport"_id, &_ecs.sceneRegistry());
-	entity.addComponent<component::Viewport>(topLeft, size, clearColor);
-	return entity;
 }
 
 Entity SceneSystem::createCamera(const HashId& name,

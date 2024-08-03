@@ -29,7 +29,6 @@ set(HEADERS
     Component/PrefabComponent.h
     Component/SpriteComponent.h 
     Component/TransformComponent.h
-    Component/ViewportComponent.h
     Entity.h
     Entity.inl
     EntityComponentSystem.h

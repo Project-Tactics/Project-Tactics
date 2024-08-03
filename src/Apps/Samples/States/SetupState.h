@@ -13,7 +13,6 @@ public:
 	void exit() override;
 
 private:
-	void _createViewport();
 	void _setupRenderSteps();
 	void _setupInputMap();
 };

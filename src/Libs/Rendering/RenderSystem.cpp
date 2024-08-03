@@ -81,7 +81,7 @@ void RenderSystem::_initializeGlContext() {
 }
 
 void RenderSystem::render() {
-	RenderStepInfo renderInfo{};
+	RenderStepInfo renderInfo{_viewport, getWindowSize()};
 
 	for (auto& renderQueue : _renderQueues) {
 		renderQueue->execute(renderInfo);
@@ -159,6 +159,16 @@ glm::vec2 RenderSystem::getWindowSize() const {
 	int width, height;
 	SDL_GetWindowSize(_window, &width, &height);
 	return {width, height};
+}
+
+void RenderSystem::setViewport(const glm::vec2& position, const glm::vec2& size, glm::vec4 clearColor) {
+	_viewport.position = position;
+	_viewport.size = size;
+	_viewport.clearColor = clearColor;
+}
+
+const Viewport& RenderSystem::getViewport() const {
+	return _viewport;
 }
 
 } // namespace tactics

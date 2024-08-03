@@ -13,7 +13,8 @@ public:
 						   const SampleFlows& sampleFlows,
 						   std::function<void(const std::string&)> onSampleSelected);
 	void update() override;
-	OverlayConfig getConfig() override;
+
+	static const auto TYPE = OverlayType::Custom;
 
 private:
 	RenderSystem& _renderSystem;

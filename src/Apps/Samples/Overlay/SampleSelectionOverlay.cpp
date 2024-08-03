@@ -15,24 +15,27 @@ SampleSelectionOverlay::SampleSelectionOverlay(RenderSystem& renderSystem,
 	, _onSampleSelected(onSampleSelected) {}
 
 void SampleSelectionOverlay::update() {
-	CenteredTextColored(CustomOverlayColors::Colors::TitleTextColor, "Select Sample");
-
-	for (const auto& [key, flow] : _sampleFlows) {
-		if (CenteredButton(key.c_str(), {200, 25})) {
-			_onSampleSelected(key);
-		}
-	}
-}
-
-OverlayConfig SampleSelectionOverlay::getConfig() {
-	OverlayConfig config;
+	ImGuiCond_ saveFlags = ImGuiCond_Always;
 	auto windowSize = _renderSystem.getWindowSize();
 	auto borders = ImVec2{windowSize.x * 0.35f, windowSize.y * 0.1f};
-	config.position = {borders.x, borders.y};
-	config.size = {windowSize.x - borders.x * 2, windowSize.y - borders.y * 2};
-	config.windowFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar;
-	config.windowSaveFlags = ImGuiCond_Always;
-	return config;
+	auto position = ImVec2{borders.x, borders.y};
+	auto size = ImVec2{windowSize.x - borders.x * 2, windowSize.y - borders.y * 2};
+	ImGui::SetNextWindowPos(position, saveFlags);
+	ImGui::SetNextWindowSize(size, saveFlags);
+	bool enabled = true;
+	if (ImGui::Begin("SampleSelection",
+					 &enabled,
+					 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar)) {
+		CenteredTextColored(CustomOverlayColors::Colors::TitleTextColor, "Select Sample");
+
+		for (const auto& [key, flow] : _sampleFlows) {
+			if (CenteredButton(key.c_str(), {200, 25})) {
+				_onSampleSelected(key);
+			}
+		}
+	}
+
+	ImGui::End();
 }
 
 } // namespace tactics

@@ -1,10 +1,15 @@
 #pragma once
 
+#include "../Viewport.h"
+
 namespace tactics {
 
 // TODO(Gerark): The step info can be renamed into some sort of context object
 // where the RenderSteps can set information like current camera or other rendering information
-struct RenderStepInfo {};
+struct RenderStepInfo {
+	const Viewport& viewport;
+	glm::vec2 windowSize;
+};
 
 /**
  * @brief Interface implemented to handle rendering operations such as drawing meshes, setting clear color, applying

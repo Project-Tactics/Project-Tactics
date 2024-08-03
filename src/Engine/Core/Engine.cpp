@@ -88,6 +88,7 @@ void Engine::_initialize(Application& application) {
 	LOG_TRACE(Log::Engine, "Load Engine Resources");
 	auto configFile = _resourceSystem->getResource<resource::IniFile>("configFile"_id);
 	_renderSystem = std::make_unique<RenderSystem>(configFile);
+	_renderSystem->setViewport({0, 0}, {1, 1}, Color::black);
 	_resourceSystem->loadPack("builtinMeshes"_id);
 	_resourceSystem->createManualPack("_internalCustomPack"_id);
 	_resourceSystem->loadExternalResource("_internalCustomPack"_id, resource::Texture::createNullTexture());
@@ -228,7 +229,7 @@ void Engine::_updateCommonComponentSystems() {
 	auto& registry = _ecs->sceneRegistry();
 	SpriteAnimationSystem::update(registry);
 	SpriteSystem::update(registry);
-	CameraSystem::updateCameraAspectRatios(registry);
+	CameraSystem::updateCameraAspectRatios(*_renderSystem, registry);
 	CameraSystem::updateCameraMatrices(registry);
 	BillboardSystem::update(registry);
 	TransformSystem::updateTransformMatrices(registry);

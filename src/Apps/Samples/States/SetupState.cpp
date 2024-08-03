@@ -5,7 +5,6 @@
 #include <Engine/Core/RenderSteps/PrepareViewportRenderStep.h>
 #include <Engine/Scene/SceneSystem.h>
 
-#include <Libs/Ecs/Component/ViewportComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Input/InputSystem.h>
 #include <Libs/Rendering/RenderQueue.h>
@@ -18,7 +17,6 @@ namespace tactics {
 SetupState::SetupState(ServiceLocator& services) : FsmStateWithServices(services) {}
 
 FsmAction SetupState::enter() {
-	_createViewport();
 	_setupRenderSteps();
 	_setupInputMap();
 	return FsmAction::transition("proceed"_id);
@@ -28,13 +26,6 @@ void SetupState::exit() {}
 
 FsmAction SetupState::update() {
 	return FsmAction::none();
-}
-
-void SetupState::_createViewport() {
-	auto& renderSystem = getService<RenderSystem>();
-	auto& sceneSystem = getService<SceneSystem>();
-	auto mainViewport = sceneSystem.createViewport({0, 0}, renderSystem.getWindowSize());
-	mainViewport.addComponent<component::CurrentViewport>();
 }
 
 void SetupState::_setupRenderSteps() {

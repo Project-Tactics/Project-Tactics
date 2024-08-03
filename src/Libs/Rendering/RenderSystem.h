@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Viewport.h"
+
 #include <Libs/Resource/IniFile/IniFile.h>
 
 #include <glm/glm.hpp>
@@ -15,6 +17,7 @@ class IniFile;
 
 class DebugMessageHandler;
 class RenderQueue;
+struct Viewport;
 
 class RenderSystem {
 public:
@@ -26,6 +29,9 @@ public:
 	void render();
 
 	glm::vec2 getWindowSize() const;
+
+	void setViewport(const glm::vec2& position, const glm::vec2& size, glm::vec4 clearColor);
+	const Viewport& getViewport() const;
 
 private:
 	void _createWindow();
@@ -50,5 +56,6 @@ private:
 	std::unique_ptr<DebugMessageHandler> _debugMessageHandler;
 	std::vector<std::unique_ptr<RenderQueue>> _renderQueues;
 	std::shared_ptr<resource::IniFile> _configFile;
+	Viewport _viewport;
 };
 } // namespace tactics
