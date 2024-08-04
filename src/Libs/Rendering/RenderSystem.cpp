@@ -65,6 +65,8 @@ void RenderSystem::_createWindow() {
 	if (_window == nullptr) {
 		throw TACTICS_EXCEPTION("Failed to open window: %s\n", SDL_GetError());
 	}
+
+	_windowSize = {size.x, size.y};
 }
 
 void RenderSystem::_initializeGlContext() {
@@ -155,10 +157,8 @@ void RenderSystem::_setupDoubleBuffer() {
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, enableDoubleBuffer ? 1 : 0);
 }
 
-glm::vec2 RenderSystem::getWindowSize() const {
-	int width, height;
-	SDL_GetWindowSize(_window, &width, &height);
-	return {width, height};
+const glm::u32vec2& RenderSystem::getWindowSize() const {
+	return _windowSize;
 }
 
 void RenderSystem::setViewport(const glm::vec2& position, const glm::vec2& size, glm::vec4 clearColor) {
@@ -169,6 +169,18 @@ void RenderSystem::setViewport(const glm::vec2& position, const glm::vec2& size,
 
 const Viewport& RenderSystem::getViewport() const {
 	return _viewport;
+}
+
+bool RenderSystem::onEvent(const SDL_Event& event) {
+	switch (event.type) {
+	case SDL_WINDOWEVENT: {
+		if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+			_windowSize = {event.window.data1, event.window.data2};
+		}
+		break;
+	}
+	}
+	return false;
 }
 
 } // namespace tactics

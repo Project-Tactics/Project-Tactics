@@ -8,7 +8,7 @@ namespace tactics {
 // where the RenderSteps can set information like current camera or other rendering information
 struct RenderStepInfo {
 	const Viewport& viewport;
-	glm::vec2 windowSize;
+	const glm::vec2& windowSize;
 };
 
 /**

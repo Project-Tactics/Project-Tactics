@@ -11,7 +11,7 @@ public:
 	void setNextTransition(const HashId& nextTransition);
 	const HashId& getCurrentStateName() const;
 
-	bool onEvent(SDL_Event& event) override;
+	bool onEvent(const SDL_Event& event) override;
 
 private:
 	FsmAction _nextTransition;

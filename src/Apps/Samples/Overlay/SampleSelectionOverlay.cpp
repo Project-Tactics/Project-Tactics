@@ -16,7 +16,7 @@ SampleSelectionOverlay::SampleSelectionOverlay(RenderSystem& renderSystem,
 
 void SampleSelectionOverlay::update() {
 	ImGuiCond_ saveFlags = ImGuiCond_Always;
-	auto windowSize = _renderSystem.getWindowSize();
+	auto& windowSize = _renderSystem.getWindowSize();
 	auto borders = ImVec2{windowSize.x * 0.35f, windowSize.y * 0.1f};
 	auto position = ImVec2{borders.x, borders.y};
 	auto size = ImVec2{windowSize.x - borders.x * 2, windowSize.y - borders.y * 2};

@@ -19,7 +19,7 @@ const HashId& DefaultFsmExternalController::getCurrentStateName() const {
 	return _currentStateName;
 }
 
-bool DefaultFsmExternalController::onEvent(SDL_Event& event) {
+bool DefaultFsmExternalController::onEvent(const SDL_Event& event) {
 	if (event.type == SDL_QUIT) {
 		_nextTransition = FsmAction::transition(FsmBuilder::appExitRequestTransition);
 	}

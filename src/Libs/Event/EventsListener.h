@@ -13,7 +13,7 @@ namespace tactics {
 class EventsListener {
 public:
 	virtual ~EventsListener() = default;
-	virtual bool onEvent(SDL_Event& event) = 0;
+	virtual [[nodiscard]] bool onEvent(const SDL_Event& event) = 0;
 };
 
 } // namespace tactics

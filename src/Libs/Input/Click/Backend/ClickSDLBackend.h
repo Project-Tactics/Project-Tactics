@@ -1,12 +1,12 @@
 #pragma once
 
-#include <SDL.h>
+union SDL_Event;
 
 namespace click {
 
 void initSdlBackend();
 void shutdownSdlBackend();
-void processSdlEvents(SDL_Event& event);
+void processSdlEvents(const SDL_Event& event);
 void updateSdlBackend();
 
 } // namespace click

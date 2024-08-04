@@ -98,6 +98,7 @@ void Engine::_initialize(Application& application) {
 
 	LOG_TRACE(Log::Engine, "EventSystem Initialization");
 	_eventsSystem = std::make_unique<EventsSystem>(*_inputSystem);
+	_eventsSystem->registerEventsListener(_renderSystem.get());
 
 	LOG_TRACE(Log::Engine, "EventSystem SceneSystem");
 	_sceneSystem = std::make_unique<SceneSystem>(*_ecs, *_resourceSystem);
@@ -130,6 +131,7 @@ void Engine::_internalRun() {
 void Engine::_shutdown() {
 	_unregisterOverlays();
 	_eventsSystem->unregisterEventsListener(_fsmExternalController.get());
+	_eventsSystem->unregisterEventsListener(_renderSystem.get());
 	_renderSystem.reset();
 	_overlaySystem.reset();
 	_ecs->clearPrefabsRegistry();

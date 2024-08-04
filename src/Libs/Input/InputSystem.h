@@ -27,7 +27,7 @@ public:
 	const click::Player& getPlayer(click::PlayerId playerId) const;
 
 	void changeScreenSize(const glm::vec2& screenSize);
-	void processEvents(SDL_Event& event);
+	void processEvents(const SDL_Event& event);
 	void update();
 
 	bool checkAction(const char* inputActionName, click::PlayerId playerId = 0) const;

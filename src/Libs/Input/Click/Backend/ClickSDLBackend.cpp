@@ -2,6 +2,7 @@
 
 #include "../Click.h"
 
+#include <SDL.h>
 #include <optional>
 
 namespace click {
@@ -283,20 +284,6 @@ static InputCode _toGamepadInputCode(SDL_GameControllerButton sdlGamepadButton) 
 	}
 }
 
-/*
-static InputCode _toGamepadInputCode(SDL_GameControllerAxis sdlAxis) {
-	switch (sdlAxis) {
-	case SDL_CONTROLLER_AXIS_LEFTX		 : return InputCode::AxisLeftX;
-	case SDL_CONTROLLER_AXIS_LEFTY		 : return InputCode::AxisLeftY;
-	case SDL_CONTROLLER_AXIS_RIGHTX		 : return InputCode::AxisRightX;
-	case SDL_CONTROLLER_AXIS_RIGHTY		 : return InputCode::AxisRightY;
-	case SDL_CONTROLLER_AXIS_TRIGGERLEFT : return InputCode::AxisTriggerLeft;
-	case SDL_CONTROLLER_AXIS_TRIGGERRIGHT: return InputCode::AxisTriggerRight;
-	default								 : return InputCode::Unknown;
-	}
-}
-*/
-
 static InputCode _toMouseInputCode(Uint8 sdlButton) {
 	switch (sdlButton) {
 	case SDL_BUTTON_LEFT  : return InputCode::LeftButton;
@@ -363,7 +350,7 @@ void _processKeyboardButtonEvent(float axisValue, SDL_Keycode keyCode, Uint8 rep
 	}
 }
 
-void processSdlEvents(SDL_Event& event) {
+void processSdlEvents(const SDL_Event& event) {
 	switch (event.type) {
 	case SDL_JOYDEVICEADDED: {
 		SDL_GameController* gameController = SDL_GameControllerOpen(event.jdevice.which);
