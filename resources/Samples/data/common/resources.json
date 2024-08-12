@@ -12,11 +12,18 @@
             "spriteUnlit": {
                 "vertexShader": "common/shaders/default.vert",
                 "fragmentShader": "common/shaders/spriteUnlit.frag"
+            },
+            "particles": {
+                "vertexShader": "common/shaders/particles.vert",
+                "fragmentShader": "common/shaders/particles.frag"
             }
         },
         "Texture": {
             "none": {
                 "path": "common/textures/none.png"
+            },
+            "particle": {
+                "path": "common/textures/particle00.png"
             }
         },
         "Material": {

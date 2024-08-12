@@ -5,6 +5,7 @@
 #include "CameraComponent.h"
 #include "FrustumComponent.h"
 #include "MeshComponent.h"
+#include "ParticleEmitterComponent.h"
 #include "SpriteComponent.h"
 #include "TransformComponent.h"
 
@@ -45,7 +46,15 @@ void ComponentReflection::initializeBasicTypes() {
 
 void ComponentReflection::initializeCommonComponents() {
 	using namespace component;
-	defineComponentsReflection<Billboard, Camera, CurrentCamera, Frustum, Mesh, Sprite, SpriteAnimation, Transform>();
+	defineComponentsReflection<Billboard,
+							   Camera,
+							   CurrentCamera,
+							   Frustum,
+							   Mesh,
+							   Sprite,
+							   SpriteAnimation,
+							   Transform,
+							   ParticleEmitter>();
 }
 
 } // namespace tactics

@@ -26,6 +26,20 @@ void from_json(const json& json, Modifier& modifier);
 void to_json(json&, const Gesture&);
 void from_json(const json& json, Gesture& gesture);
 
+JSON_VARIANT_NAME(GestureSimple, "simple");
+JSON_VARIANT_NAME(Gesture2D, "2d");
+JSON_VARIANT_NAME(Gesture3D, "3d");
+JSON_VARIANT_NAME(GestureDirectional2D, "dir2d");
+JSON_VARIANT_NAME(GestureDirectional3D, "dir3d");
+
+JSON_VARIANT_NAME(DownCondition, "down");
+JSON_VARIANT_NAME(PressCondition, "press");
+JSON_VARIANT_NAME(ReleaseCondition, "release");
+JSON_VARIANT_NAME(HoldCondition, "hold");
+JSON_VARIANT_NAME(ContinuousCondition, "continuous");
+
+JSON_VARIANT_NAME(NegateModifier, "negate");
+
 JSON_SERIALIZE_EXT(GestureSimple, input);
 JSON_SERIALIZE_EXT(Gesture2D, x, y);
 JSON_SERIALIZE_EXT(Gesture3D, x, y, z);

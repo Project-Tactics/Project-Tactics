@@ -45,7 +45,7 @@
                         "gestures": [
                             {
                                 "gesture": {
-                                    "type": "dir3D",
+                                    "type": "dir3d",
                                     "left": "KeyA",
                                     "right": "KeyD",
                                     "forward": "KeyW",

@@ -5,6 +5,7 @@
 #include <Libs/Ecs/Component/FrustumComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/NameComponent.h>
+#include <Libs/Ecs/Component/ParticleEmitterComponent.h>
 #include <Libs/Ecs/Component/SpriteComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
@@ -49,6 +50,9 @@ void SceneSystem::clearScene(bool clearCameras) {
 
 	auto spriteView = registry.view<component::Sprite>();
 	registry.destroy(spriteView.begin(), spriteView.end());
+
+	auto particleView = registry.view<component::ParticleEmitter>();
+	registry.destroy(particleView.begin(), particleView.end());
 
 	if (clearCameras) {
 		auto cameraView = registry.view<component::Camera>();

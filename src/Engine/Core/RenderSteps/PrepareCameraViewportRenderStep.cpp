@@ -1,4 +1,4 @@
-#include "PrepareViewportRenderStep.h"
+#include "PrepareCameraViewportRenderStep.h"
 
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Utility/Exception.h>
@@ -7,9 +7,11 @@
 
 namespace tactics::renderstep {
 
-PrepareViewport::PrepareViewport(EntityComponentSystem& ecs) : _ecs(ecs) {}
+PrepareCameraViewport::PrepareCameraViewport(EntityComponentSystem& ecs) : _ecs(ecs) {}
 
-void PrepareViewport::execute(RenderStepInfo& info) {
+void PrepareCameraViewport::execute(RenderStepInfo& info) {
+	using namespace component;
+
 	auto& color = info.viewport.clearColor;
 	auto& size = info.viewport.size;
 	auto& pos = info.viewport.position;
@@ -21,6 +23,18 @@ void PrepareViewport::execute(RenderStepInfo& info) {
 	glScissor(x, y, width, height);
 	glClearColor(color.r, color.g, color.b, color.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	const auto& registry = _ecs.sceneRegistry();
+	auto view = registry.view<Camera, Transform, CurrentCamera>();
+	if (view.size_hint() == 0) {
+		return;
+	}
+
+	auto&& [cameraEntity, camera, cameraTransform] = *view.each().begin();
+	info.projection = camera.projection;
+	info.view = camera.view;
+	info.viewProjection = info.projection * info.view;
+	info.cameraPosition = cameraTransform.getPosition();
 }
 
 } // namespace tactics::renderstep

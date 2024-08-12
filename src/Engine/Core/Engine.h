@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Libs/Utility/Random.h>
 #include <Libs/Utility/Time/FrameTimer.h>
 
 #include <memory>
@@ -19,6 +20,7 @@ class FileSystem;
 class Fsm;
 class InputSystem;
 class OverlaySystem;
+class ParticleSystem;
 class RenderSystem;
 class ServiceLocator;
 class SceneSystem;
@@ -48,11 +50,13 @@ private:
 	void _updateCommonComponentSystems();
 
 	FrameTimer _timer;
+	Random _random;
 	std::unique_ptr<FileSystem> _fileSystem;
 	std::unique_ptr<resource::ResourceSystem> _resourceSystem;
 	std::unique_ptr<InputSystem> _inputSystem;
 	std::unique_ptr<OverlaySystem> _overlaySystem;
 	std::unique_ptr<RenderSystem> _renderSystem;
+	std::unique_ptr<ParticleSystem> _particleSystem;
 	std::unique_ptr<EventsSystem> _eventsSystem;
 	std::unique_ptr<EntityComponentSystem> _ecs;
 	std::unique_ptr<SceneSystem> _sceneSystem;

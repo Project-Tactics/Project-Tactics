@@ -12,6 +12,7 @@ set(HEADERS
     Json/JsonSerialization.h
     Log/Log.h
     Math.h
+    Random.h
     Reflection.h
     Service/ServiceLocator.h
     String/Math.h
@@ -33,6 +34,7 @@ set(SOURCES
     Json/JsonSerialization.cpp
     Log/Log.cpp
     Math.cpp
+    Random.cpp
     String/String.cpp
     Time/EngineTime.cpp
     Time/FrameTimer.cpp

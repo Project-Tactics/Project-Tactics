@@ -60,9 +60,9 @@ void from_json(const json& json, Gesture& gesture) {
 		gesture = json.get<Gesture2D>();
 	} else if (type == "3d") {
 		gesture = json.get<Gesture3D>();
-	} else if (type == "dir2D") {
+	} else if (type == "dir2d") {
 		gesture = json.get<GestureDirectional2D>();
-	} else if (type == "dir3D") {
+	} else if (type == "dir3d") {
 		gesture = json.get<GestureDirectional3D>();
 	} else {
 		LOG_ERROR(tactics::Log::Input, "Unknown gesture type: {}", type);

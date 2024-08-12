@@ -21,7 +21,7 @@ RenderSystem::RenderSystem(std::shared_ptr<resource::IniFile> configFile) : _con
 	_initializeGlContext();
 	_initializeImGui();
 
-	auto useDebugMessages = _getConfigValue("useDebugMessages", false);
+	auto useDebugMessages = _getConfigValue("enableDebugMessages", false);
 	if (useDebugMessages) {
 		_debugMessageHandler = std::make_unique<DebugMessageHandler>();
 	}

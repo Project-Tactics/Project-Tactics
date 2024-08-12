@@ -14,6 +14,7 @@ enum class ResourceType {
 	InputMap,
 	Material,
 	Mesh,
+	ParticleEffect,
 	Prefab,
 	Shader,
 	SpriteSheet,
@@ -35,6 +36,7 @@ const std::array resourceTypeLoadingOrder = {ResourceType::IniFile,
 											 ResourceType::Material,
 											 ResourceType::Mesh,
 											 ResourceType::SpriteSheet,
+											 ResourceType::ParticleEffect,
 											 ResourceType::Prefab};
 
 using ResourceId = uint64_t;

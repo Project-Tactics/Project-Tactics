@@ -3,6 +3,58 @@
         "Prefab": {
             "particlesCamera": {
                 "path": "_demoParticles/particlesCamera.prefab"
+            },
+            "defaultGameObject": {
+                "path": "_demoParticles/defaultGameObject.prefab"
+            }
+        },
+        "ParticleEffect": {
+            "fireEffect": {
+                "config": {
+                    "spawnPosition": {
+                        "type": "circle",
+                        "position": {
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "radius": 5
+                    },
+                    "color": {
+                        "x": 1,
+                        "y": 0.5,
+                        "z": 0.1,
+                        "w": 1
+                    },
+                    "modifiers": [
+                        {
+                            "type": "colorOverLifetime",
+                            "startColor": {
+                                "x": 1,
+                                "y": 0.5,
+                                "z": 0.1,
+                                "w": 1
+                            },
+                            "endColor": {
+                                "x": 1,
+                                "y": 0,
+                                "z": 0,
+                                "w": 0
+                            }
+                        },
+                        {
+                            "type": "sizeOverLifetime",
+                            "startSize": 2,
+                            "endSize": 0.1
+                        }
+                    ],
+                    "lifetime": 2,
+                    "speed": 0.025,
+                    "size": 0.5,
+                    "emitRate": 0.001
+                },
+                "shader": "particles",
+                "texture": "particle"
             }
         }
     }

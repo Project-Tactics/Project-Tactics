@@ -6,8 +6,9 @@ set(SOURCES
     DefaultFsmExternalController.cpp
     Engine.cpp
     ResourceSystemInitializer.cpp
-    RenderSteps/PrepareViewportRenderStep.cpp
+    RenderSteps/PrepareCameraViewportRenderStep.cpp
     RenderSteps/DrawMeshesRenderStep.cpp
+    RenderSteps/DrawParticlesRenderStep.cpp
     RenderSteps/ImGuiRenderSteps.cpp)
     
 set(HEADERS
@@ -15,8 +16,9 @@ set(HEADERS
     DefaultFsmExternalController.h
     Engine.h
     ResourceSystemInitializer.h
-    RenderSteps/PrepareViewportRenderStep.h
+    RenderSteps/PrepareCameraViewportRenderStep.h
     RenderSteps/DrawMeshesRenderStep.h
+    RenderSteps/DrawParticlesRenderStep.h
     RenderSteps/ImGuiRenderSteps.h)
 
 add_library(engine_core ${SOURCES} ${HEADERS})

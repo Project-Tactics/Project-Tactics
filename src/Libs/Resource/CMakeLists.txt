@@ -13,6 +13,8 @@ set(SOURCES
     Material/Uniforms.cpp
     Mesh/Mesh.cpp
     Mesh/MeshLoader.cpp
+    ParticleEffect/ParticleEffect.cpp
+    ParticleEffect/ParticleEffectLoader.cpp
     Prefab/Prefab.cpp
     Prefab/PrefabLoader.cpp
     Resource.cpp
@@ -41,6 +43,8 @@ set(HEADERS
     Material/Uniforms.h
     Mesh/Mesh.h
     Mesh/MeshLoader.h
+    ParticleEffect/ParticleEffect.h
+    ParticleEffect/ParticleEffectLoader.h
     Prefab/Prefab.h
     Prefab/PrefabLoader.h
     Resource.h

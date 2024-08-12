@@ -21,21 +21,13 @@ DrawMeshes::DrawMeshes(EntityComponentSystem& ecs, AlphaBlendedFlag alphaBlended
 	: _ecs(ecs)
 	, _alphaBlendedFlag(alphaBlendedFlag) {}
 
-void DrawMeshes::execute(RenderStepInfo&) {
+void DrawMeshes::execute(RenderStepInfo& info) {
 	using namespace component;
 
-	auto& registry = _ecs.sceneRegistry();
-
 	if (_alphaBlendedFlag == AlphaBlendedFlag::WithoutAlphaBlend) {
-		registry.view<Camera, CurrentCamera>().each([this](auto& camera) {
-			auto viewProjectionMatrix = camera.projection * camera.view;
-			_drawOpaqueGeometry(viewProjectionMatrix);
-		});
+		_drawOpaqueGeometry(info.viewProjection);
 	} else {
-		registry.view<Camera, Transform, CurrentCamera>().each([this](auto& camera, auto& transform) {
-			auto viewProjectionMatrix = camera.projection * camera.view;
-			_drawAlphaBlendedGeometry(viewProjectionMatrix, transform);
-		});
+		_drawAlphaBlendedGeometry(info.viewProjection, info.cameraPosition);
 	}
 
 	// Unbind any shader
@@ -53,7 +45,7 @@ void DrawMeshes::_drawOpaqueGeometry(const glm::mat4x4& viewProjection) {
 	}
 }
 
-void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, component::Transform& cameraTransform) {
+void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, const glm::vec3& cameraPosition) {
 	using namespace component;
 
 	glEnable(GL_BLEND);
@@ -62,9 +54,9 @@ void DrawMeshes::_drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, co
 	glDepthMask(GL_FALSE);
 
 	auto& registry = _ecs.sceneRegistry();
-	registry.sort<AlphaBlended>([&registry, &cameraTransform](const entt::entity lhs, const entt::entity rhs) {
-		auto diff1 = registry.get<Transform>(lhs).getPosition() - cameraTransform.getPosition();
-		auto diff2 = registry.get<Transform>(rhs).getPosition() - cameraTransform.getPosition();
+	registry.sort<AlphaBlended>([&registry, &cameraPosition](const entt::entity lhs, const entt::entity rhs) {
+		auto diff1 = registry.get<Transform>(lhs).getPosition() - cameraPosition;
+		auto diff2 = registry.get<Transform>(rhs).getPosition() - cameraPosition;
 		return glm::length2(diff1) > glm::length2(diff2);
 	});
 	auto view = registry.view<AlphaBlended, Transform, Mesh>();

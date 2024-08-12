@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 set(SOURCES
     DebugMessageHandler.cpp
     GeometryBuilder.cpp
+    Particle/Particles.cpp
+    Particle/ParticlesModifier.cpp
+    Particle/ParticleSystem.cpp
     RenderCalls/RenderCalls.cpp
     RenderQueue.cpp
     RenderSystem.cpp
@@ -15,6 +18,11 @@ set(HEADERS
     DebugMessageHandler.h
     GeometryBuilder.h
     IndexBuffer.h
+    Particle/Particles.h
+    Particle/ParticlesModifier.h
+    Particle/ParticlesSerialization.h
+    Particle/ParticlesTypes.h
+    Particle/ParticleSystem.h
     RenderCalls/RenderCalls.h
     RenderQueue.h
     RenderSystem.h
