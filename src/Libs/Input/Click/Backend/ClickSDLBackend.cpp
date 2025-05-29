@@ -404,7 +404,11 @@ void updateSdlBackend() {
 		auto yRel{0};
 		SDL_GetMouseState(&x, &y);
 		SDL_GetRelativeMouseState(&xRel, &yRel);
-		click::updateMouse(_mouseDeviceId(), static_cast<float>(x), static_cast<float>(y), static_cast<float>(xRel), static_cast<float>(yRel));
+		click::updateMouse(_mouseDeviceId(),
+						   static_cast<float>(x),
+						   static_cast<float>(y),
+						   static_cast<float>(xRel),
+						   static_cast<float>(yRel));
 	}
 
 	for (auto& gamepadDeviceId : click::gamepads()) {
