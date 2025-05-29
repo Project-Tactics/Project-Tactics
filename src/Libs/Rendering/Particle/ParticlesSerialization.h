@@ -23,6 +23,14 @@ JSON_SERIALIZE_EXT(firebolt::SizeOverLifetime, startSize, endSize);
 JSON_SERIALIZE_EXT(firebolt::FixedValue, value);
 JSON_SERIALIZE_EXT(firebolt::RandomRange, min, max);
 
-JSON_SERIALIZE_EXT(firebolt::EffectConfig, emitShape, startLifetime, startSpeed, startSize, startRotation, color, emitRate, updaters);
+JSON_SERIALIZE_EXT(firebolt::EffectConfig,
+				   emitShape,
+				   startLifetime,
+				   startSpeed,
+				   startSize,
+				   startRotation,
+				   color,
+				   emitRate,
+				   updaters);
 
 } // namespace firebolt

@@ -1,14 +1,14 @@
 #include "ParticlesUpdater.h"
 
-#include <Libs/Utility/Random.h>
-
 #include "Particles.h"
+
+#include <Libs/Utility/Random.h>
 
 namespace firebolt {
 
 /*
-* Updaters
-*/
+ * Updaters
+ */
 void updateParticle(const ColorOverLifetime& modifier, Particle& particle, float lifetime) {
 	particle.color = glm::mix(modifier.startColor, modifier.endColor, lifetime);
 }
@@ -18,8 +18,8 @@ void updateParticle(const SizeOverLifetime& modifier, Particle& particle, float 
 }
 
 /*
-* Value
-*/
+ * Value
+ */
 
 float getConfigValue(const Value& value) {
 	return std::visit([&](auto&& arg) { return getConfigValue(arg); }, value);
@@ -34,8 +34,8 @@ float getConfigValue(const RandomRange& randomRange) {
 }
 
 /*
-* Spawn Position
-*/
+ * Spawn Position
+ */
 
 std::tuple<glm::vec3, glm::vec3> getEmitShapeInfo(const EmitShape& shape) {
 	return std::visit([](auto&& arg) { return getEmitShapeInfo(arg); }, shape);

@@ -17,8 +17,8 @@ struct FixedValue {
 };
 
 /*
-* Updaters
-*/
+ * Updaters
+ */
 
 struct ColorOverLifetime {
 	glm::vec4 startColor{1, 1, 1, 1};
@@ -36,8 +36,8 @@ void updateParticle(const ColorOverLifetime& modifier, Particle& particle, float
 void updateParticle(const SizeOverLifetime& modifier, Particle& particle, float lifetime);
 
 /*
-* Value
-*/
+ * Value
+ */
 
 using Value = std::variant<FixedValue, RandomRange>;
 
@@ -46,8 +46,8 @@ float getConfigValue(const FixedValue& fixedValue);
 float getConfigValue(const RandomRange& randomRange);
 
 /*
-* Spawn Position
-*/
+ * Spawn Position
+ */
 
 struct SphereEmitShape {
 	glm::vec3 position{0, 0, 0};
