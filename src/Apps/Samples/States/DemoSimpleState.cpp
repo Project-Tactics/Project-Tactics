@@ -230,7 +230,7 @@ void DemoSimpleState::_createParticleEffect() {
 		particleSystem.updateEffectConfig(*effectId, copiedConfig);
 	};
 
-	for (auto color : colors) {
+	for (const auto& color : colors) {
 		position.x += 20;
 		createParticleEffect("fire"_id, "fireEffect"_id, position, color);
 		createParticleEffect("ember"_id, "emberEffect"_id, position, color);
