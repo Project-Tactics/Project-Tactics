@@ -5,7 +5,7 @@ set(SOURCES
     DebugMessageHandler.cpp
     GeometryBuilder.cpp
     Particle/Particles.cpp
-    Particle/ParticlesModifier.cpp
+    Particle/ParticlesUpdater.cpp
     Particle/ParticleSystem.cpp
     RenderCalls/RenderCalls.cpp
     RenderQueue.cpp
@@ -19,7 +19,7 @@ set(HEADERS
     GeometryBuilder.h
     IndexBuffer.h
     Particle/Particles.h
-    Particle/ParticlesModifier.h
+    Particle/ParticlesUpdater.h
     Particle/ParticlesSerialization.h
     Particle/ParticlesTypes.h
     Particle/ParticleSystem.h

@@ -1,6 +1,9 @@
 #include "Particles.h"
 
 #include <Libs/Utility/Random.h>
+#include <Libs/Utility/Log/Log.h>
+
+#include <iostream>
 
 namespace firebolt {
 
@@ -19,10 +22,22 @@ void shutdown() {
 
 void _resetEffectData(Effect& effect, EffectConfig& config) {
 	effect.nextParticle = 0;
-	effect.timeToNextEmit = config.emitRate;
+	effect.timeToNextEmit = 1 / config.emitRate;
 	for (Particle& particle : effect.particles) {
 		particle.life = 0;
 	}
+}
+
+bool isEffectValid(EffectId effectId) {
+	return effectId < data->effects.size();
+}
+
+const EffectConfig& getConfig(EffectId effectId) {
+	return data->configs[effectId];
+}
+
+void updateConfig(EffectId effectId, const EffectConfig& config) {
+	data->configs[effectId] = config;
 }
 
 EffectId createEffect(const EffectConfig& config) {
@@ -46,30 +61,37 @@ EffectId createEffect(const EffectConfig& config) {
 	return effectId;
 }
 
+void _updateParticle(Particle& particle, const EffectConfig& config, float deltaTime) {
+	particle.position += particle.velocity * deltaTime;
+	particle.velocity += particle.acceleration * deltaTime;
+	particle.life -= deltaTime;
+
+	// calculate normalized value of lifetime
+	float lifetime = 1.0f - particle.life / particle.maxLife;
+	for (auto& updater : config.updaters) {
+		std::visit([&](auto&& arg) { updateParticle(arg, particle, lifetime); }, updater);
+	}
+}
+
 void update(float deltaTime) {
-	unsigned int effectIndex = 0;
-	for (auto& effect : data->effects) {
+	for (auto effectIndex = 0; effectIndex < data->effects.size(); ++effectIndex) {
 		auto& config = data->configs[effectIndex];
+		auto& effect = data->effects[effectIndex];
 		for (Particle& particle : effect.particles) {
 			if (particle.life > 0) {
-				particle.position += particle.velocity;
-				particle.velocity += particle.acceleration;
-				particle.life -= deltaTime;
-
-				// calculate normalized value of lifetime
-				float lifetime = 1.0f - particle.life / config.lifetime;
-				for (auto& modifier : config.modifiers) {
-					std::visit([&](auto&& arg) { updateParticle(arg, particle, lifetime); }, modifier);
-				}
+				_updateParticle(particle, config, deltaTime);
 			}
 		}
 	}
 
-	for (auto& effect : data->effects) {
+	for (auto effectIndex = 0; effectIndex < data->effects.size(); ++effectIndex) {
+		auto& effect = data->effects[effectIndex];
 		effect.timeToNextEmit -= deltaTime;
 		if (effect.timeToNextEmit <= 0) {
-			emitParticle(effect, data->configs[effectIndex]);
-			effect.timeToNextEmit = data->configs[effectIndex].emitRate;
+			do {
+				emitParticle(effect, data->configs[effectIndex]);
+				effect.timeToNextEmit += 1 / data->configs[effectIndex].emitRate;
+			} while (effect.timeToNextEmit <= 0);
 		}
 	}
 }
@@ -77,32 +99,16 @@ void update(float deltaTime) {
 void emitParticle(Effect& effect, const EffectConfig& config) {
 	auto& particle = effect.particles[effect.nextParticle];
 
-	auto [startPosition, direction] = std::visit(
-		[&particle](auto&& arg) -> std::tuple<glm::vec3, glm::vec3> {
-			using T = std::decay_t<decltype(arg)>;
-			if constexpr (std::is_same_v<T, PointSpawnPosition>) {
-				return {arg.position, tactics::Vector3::zero};
-			} else if constexpr (std::is_same_v<T, CircleSpawnPosition>) {
-				auto direction = tactics::Random::range3D(-1, 1);
-				direction = glm::normalize(direction);
-				// direction *= tactics::Random::range(0, arg.radius);
-				return {{0, 0, 0}, direction};
-			} else if constexpr (std::is_same_v<T, ConeSpawnPosition>) {
-				float angle = tactics::Random::range(0.0f, glm::two_pi<float>());
-				float radius = tactics::Random::range(0.0f, arg.radius);
-				float height = tactics::Random::range(0.0f, arg.radius * glm::tan(arg.angle));
-				return {arg.position + glm::vec3(radius * glm::cos(angle), height, radius * glm::sin(angle)),
-						tactics::Vector3::zero};
-			}
-		},
-		config.spawnPosition);
+	auto [startPosition, startDirection] = getEmitShapeInfo(config.emitShape);
+	particle.life = particle.maxLife = getConfigValue(config.startLifetime);
+	particle.size = getConfigValue(config.startSize);
 
-	particle.position = effect.position + startPosition;
-	particle.velocity = direction * config.speed;
+	particle.rotation = getConfigValue(config.startRotation);
+	particle.position = startPosition;
+	particle.velocity = startDirection * getConfigValue(config.startSpeed);
 	particle.acceleration = glm::vec3(0, 0, 0);
-	particle.life = config.lifetime;
-	particle.size = config.size;
 	particle.color = config.color;
+	_updateParticle(particle, config, 0);
 
 	effect.nextParticle = (effect.nextParticle + 1) % effect.particles.size();
 }

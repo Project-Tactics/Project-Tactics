@@ -163,6 +163,16 @@ const click::ActionValue& InputSystem::getInputCodeValue(click::InputCode inputC
 	return click::inputValue(inputCode, playerId);
 }
 
+void InputSystem::lockMouseToWindow(bool lock) {
+	if (lock) {
+		SDL_ShowCursor(SDL_DISABLE);
+		SDL_SetRelativeMouseMode(SDL_TRUE);
+	} else {
+		SDL_ShowCursor(SDL_ENABLE);
+		SDL_SetRelativeMouseMode(SDL_FALSE);
+	}
+}
+
 bool InputSystem::checkAction(const char* inputActionName, click::PlayerId playerId) const {
 	auto actionId = HashId(inputActionName);
 	auto inputAction = _resourceProvider.getResource<resource::InputAction>(actionId);

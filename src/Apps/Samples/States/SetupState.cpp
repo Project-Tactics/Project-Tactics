@@ -35,9 +35,8 @@ void SetupState::_setupRenderSteps() {
 	auto& ecs = getService<EntityComponentSystem>();
 	auto& mainRenderQueue = getService<RenderSystem>().createRenderQueue();
 	mainRenderQueue.addStep<PrepareCameraViewport>(ecs);
-	mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithoutAlphaBlend);
-	mainRenderQueue.addStep<DrawParticles>(ecs, particleSystem);
-	mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithAlphaBlend);
+	mainRenderQueue.addStep<DrawMeshes>(ecs, particleSystem, AlphaBlendedFlag::WithoutAlphaBlend);
+	mainRenderQueue.addStep<DrawMeshes>(ecs, particleSystem, AlphaBlendedFlag::WithAlphaBlend);
 	mainRenderQueue.addStep<ImGuiRender>(getService<OverlaySystem>());
 }
 

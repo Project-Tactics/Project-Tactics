@@ -6,6 +6,7 @@
 #include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/NameComponent.h>
 #include <Libs/Ecs/Component/ParticleEmitterComponent.h>
+#include <Libs/Ecs/Component/RenderableComponent.h>
 #include <Libs/Ecs/Component/SpriteComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
@@ -27,7 +28,9 @@ SceneSystem::SceneSystem(EntityComponentSystem& ecs, resource::ResourceSystem& r
 	auto& registry = _ecs.sceneRegistry();
 
 	registry.on_construct<Mesh>().connect<&SceneSystem::_onMeshConstructed>(this);
-	registry.on_update<Mesh>().connect<&SceneSystem::_onMeshUpdated>(this);
+	registry.on_destroy<Mesh>().connect<&SceneSystem::_onMeshDestroyed>(this);
+	registry.on_construct<Renderable>().connect<&SceneSystem::_onRenderableConstructed>(this);
+	registry.on_update<Renderable>().connect<&SceneSystem::_onRenderableUpdated>(this);
 	registry.on_construct<CurrentCamera>().connect<&SceneSystem::_onCurrentCameraConstructed>(this);
 	registry.on_construct<SpriteAnimation>().connect<&SceneSystem::_onSpriteAnimationConstructed>(this);
 	registry.on_update<SpriteAnimation>().connect<&SceneSystem::_onSpriteAnimationUpdated>(this);
@@ -78,10 +81,18 @@ void SceneSystem::_onCurrentCameraConstructed(entt::registry&, entt::entity curr
 }
 
 void SceneSystem::_onMeshConstructed(entt::registry& registry, entt::entity entity) {
+	registry.emplace<component::Renderable>(entity, component::RenderType::Mesh);
+}
+
+void SceneSystem::_onMeshDestroyed(entt::registry& registry, entt::entity entity) {
+	registry.erase<component::Renderable>(entity);
+}
+
+void SceneSystem::_onRenderableConstructed(entt::registry& registry, entt::entity entity) {
 	_updateAlphaBlendFlags(registry, entity);
 }
 
-void SceneSystem::_onMeshUpdated(entt::registry& registry, entt::entity entity) {
+void SceneSystem::_onRenderableUpdated(entt::registry& registry, entt::entity entity) {
 	_updateAlphaBlendFlags(registry, entity);
 }
 
@@ -107,13 +118,26 @@ void SceneSystem::_onSpriteAnimationConstructed(entt::registry& registry, entt::
 void SceneSystem::_updateAlphaBlendFlags(entt::registry& registry, entt::entity entity) {
 	using namespace component;
 
-	auto& mesh = registry.get<Mesh>(entity);
-
 	auto isFullyTransparent = true;
 	auto isMixedAlphaBlended = false;
-	for (auto& material : mesh.materials) {
-		isMixedAlphaBlended |= material->parent->hasAlphaBlend;
-		isFullyTransparent &= material->parent->hasAlphaBlend;
+
+	auto& renderable = registry.get<Renderable>(entity);
+	switch (renderable.type) {
+	case RenderType::Mesh: {
+		auto& mesh = registry.get<Mesh>(entity);
+
+		for (auto& material : mesh.materials) {
+			isMixedAlphaBlended |= material->parent->hasAlphaBlend;
+			isFullyTransparent &= material->parent->hasAlphaBlend;
+		}
+		break;
+	}
+	case RenderType::Particle: {
+		// TODO(Gerark) For now we assume that all particles are alpha blended
+		isMixedAlphaBlended = true;
+		isFullyTransparent = true;
+		break;
+	}
 	}
 
 	registry.remove<AlphaBlended>(entity);

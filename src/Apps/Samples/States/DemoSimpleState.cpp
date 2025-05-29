@@ -23,14 +23,19 @@
 namespace tactics {
 
 FsmAction DemoSimpleState::enter() {
-	_createCamera("rotateAroundCamera"_id);
+	_createCamera("freeCamera"_id);
 	_createPlane();
 	_createTeapot();
 	_createCrate();
 	_createQuads();
 	_createExtraRotatingQuads();
 	_createCustomQuadWithCustomResources();
+	_createParticleEffect();
 	_setupInputMap();
+
+	auto& inputSystem = getService<InputSystem>();
+	inputSystem.lockMouseToWindow(true);
+
 	return FsmAction::none();
 }
 
@@ -40,6 +45,10 @@ void DemoSimpleState::exit() {
 
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 	resourceSystem.unloadPack("CustomPack"_id);
+	resourceSystem.removePack("CustomPack"_id);
+
+	auto& inputSystem = getService<InputSystem>();
+	inputSystem.lockMouseToWindow(false);
 }
 
 FsmAction DemoSimpleState::update() {
@@ -186,6 +195,16 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 	auto customQuad =
 		sceneSystem.createEntity("customQuad"_id, {0.0f, 40.0f, 0.0f}, "customQuadMesh"_id, {"colorOnly"_id});
 	customQuad.addComponent<component::RotateItem>(5.f, Vector3::forward);
+}
+
+void DemoSimpleState::_createParticleEffect() {
+	auto& sceneSystem = getService<SceneSystem>();
+	auto particleEffect = sceneSystem.createEntity("fire"_id, "fireEffect"_id);
+	particleEffect.getComponent<component::Transform>().setPosition({-50.0f, 5.0f, -50.0f});
+	particleEffect.getComponent<component::Transform>().setScale(10);
+	particleEffect = sceneSystem.createEntity("ember"_id, "emberEffect"_id);
+	particleEffect.getComponent<component::Transform>().setPosition({-50.0f, 5.0f, -50.0f});
+	particleEffect.getComponent<component::Transform>().setScale(10);
 }
 
 } // namespace tactics

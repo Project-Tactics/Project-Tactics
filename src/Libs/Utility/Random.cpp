@@ -67,4 +67,10 @@ glm::vec3 Random::random3D(const glm::vec3& min, const glm::vec3& max) {
 	return glm::vec3(range(min.x, max.x), range(min.y, max.y), range(min.z, max.z));
 }
 
+glm::vec2 Random::randomPointOnCircle(float radius) {
+	auto angle = tactics::Random::random() * 2 * Math::PI;
+	radius *= glm::sqrt(tactics::Random::random()); // uniform distribution in a circle
+	return {radius * std::cos(angle), radius * std::sin(angle)};
+}
+
 } // namespace tactics

@@ -1,6 +1,9 @@
 #pragma once
 
+#include <Libs/Rendering/IndexBuffer.h>
 #include <Libs/Rendering/RenderStep/RenderStep.h>
+#include <Libs/Rendering/VertexAttributes.h>
+#include <Libs/Rendering/VertexBuffer.h>
 #include <Libs/Resource/Material/Material.h>
 
 #include <glm/glm.hpp>
@@ -10,6 +13,7 @@ namespace tactics {
 namespace component {
 struct Camera;
 struct Mesh;
+struct ParticleEmitter;
 struct Transform;
 } // namespace component
 
@@ -19,6 +23,8 @@ class SubMesh;
 } // namespace resource
 
 class EntityComponentSystem;
+class ParticleSystem;
+
 } // namespace tactics
 
 namespace tactics::renderstep {
@@ -30,7 +36,7 @@ enum class AlphaBlendedFlag {
 
 class DrawMeshes : public RenderStep {
 public:
-	DrawMeshes(EntityComponentSystem& ecs, AlphaBlendedFlag drawAlphaBlendedMeshes);
+	DrawMeshes(EntityComponentSystem& ecs, ParticleSystem& particleSystem, AlphaBlendedFlag drawAlphaBlendedMeshes);
 	void execute(RenderStepInfo& renderInfo) override;
 
 private:
@@ -39,11 +45,22 @@ private:
 				   const component::Mesh& mesh,
 				   bool filterTransparent);
 	void _drawGeometry(const resource::SubMesh& mesh);
-	void _drawOpaqueGeometry(const glm::mat4x4& viewProjection);
-	void _drawAlphaBlendedGeometry(const glm::mat4x4& viewProjection, const glm::vec3& cameraPosition);
+	void _drawOpaqueGeometry(const RenderStepInfo& renderInfo);
+	void _drawAlphaBlendedGeometry(const RenderStepInfo& renderInfo);
+	void _drawParticles(const RenderStepInfo& renderStepInfo,
+						component::Transform& transform,
+						component::ParticleEmitter& emitter);
 
 	EntityComponentSystem& _ecs;
 	AlphaBlendedFlag _alphaBlendedFlag{};
+	ParticleSystem& _particleSystem;
+
+	/*
+	 * Quad variables for Particle System
+	 */
+	VertexBuffer _quadVB;
+	IndexBuffer _quadIB;
+	std::unique_ptr<VertexAttributes> _quadVA;
 };
 
 } // namespace tactics::renderstep

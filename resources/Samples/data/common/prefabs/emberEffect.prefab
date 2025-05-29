@@ -11,8 +11,9 @@
             "z": 1
         }
     },
+    "Billboard": {},
     "ParticleEmitter": {
-        "effectResource": "fireEffect",
+        "effectResource": "emberEffect",
         "isEmittingParticles": true
     }
 }

@@ -24,6 +24,7 @@ public:
 	static glm::vec4 range4D(const glm::vec4& min, const glm::vec4& max);
 	static glm::vec2 random2D(const glm::vec2& min, const glm::vec2& max);
 	static glm::vec3 random3D(const glm::vec3& min, const glm::vec3& max);
+	static glm::vec2 randomPointOnCircle(float radius);
 
 private:
 	std::mt19937 generator;

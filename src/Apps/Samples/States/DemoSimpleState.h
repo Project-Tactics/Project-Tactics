@@ -18,6 +18,7 @@ private:
 	void _createQuads();
 	void _createExtraRotatingQuads();
 	void _createCustomQuadWithCustomResources();
+	void _createParticleEffect();
 	void _setupInputMap();
 };
 

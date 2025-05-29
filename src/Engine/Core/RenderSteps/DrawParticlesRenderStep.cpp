@@ -6,6 +6,8 @@
 
 #include <glad/gl.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/norm.inl>
 
@@ -40,13 +42,13 @@ void DrawParticles::execute(RenderStepInfo& renderInfo) {
 	glDepthMask(GL_FALSE);
 
 	auto& registry = _ecs.sceneRegistry();
-	auto view = registry.view<Transform, ParticleEmitter, ParticleEmitterPlaying>();
 	registry.sort<ParticleEmitterPlaying>([&registry, &renderInfo](const entt::entity lhs, const entt::entity rhs) {
 		auto diff1 = registry.get<Transform>(lhs).getPosition() - renderInfo.cameraPosition;
 		auto diff2 = registry.get<Transform>(rhs).getPosition() - renderInfo.cameraPosition;
 		return glm::length2(diff1) > glm::length2(diff2);
 	});
 
+	auto view = registry.view<ParticleEmitterPlaying, Transform, ParticleEmitter>();
 	for (auto&& [entity, transform, emitter] : view.each()) {
 		auto& effect = _particleSystem.getEffectById(*emitter.maybeEffectId);
 
@@ -57,12 +59,39 @@ void DrawParticles::execute(RenderStepInfo& renderInfo) {
 
 		auto& shader = emitter.effectResource->shader;
 		shader->bind();
+
+		// Billboard rotation: inverse of the camera's rotation part
+		glm::mat4 viewRotationOnly = glm::mat4(glm::mat3(renderInfo.view));
+		glm::mat4 billboardMatrix = glm::inverse(viewRotationOnly);
+
+		// TODO(Gerark) Performance - This a quick solution just to put something in motion. We should
+		// batch/gpu-instance or use point based particles on the shader side instead of doing all of this in the CPU.
 		for (auto i = effect.particles.size(); i > 0; --i) {
 			auto& particle = effect.particles[i - 1];
 			if (particle.life > 0) {
-				auto particleTransform = glm::translate(glm::mat4(1.0f), particle.position);
-				particleTransform = glm::scale(particleTransform, {particle.size, particle.size, particle.size});
-				glm::mat4 mvp = renderInfo.viewProjection * particleTransform;
+				// Transform particle.position to world space using effect.transform
+				glm::vec4 worldPos = transform.getMatrix() * glm::vec4(particle.position, 1.0f);
+
+				// Particle rotation around Z (e.g., spinning effect)
+				glm::mat4 rotationMatrix =
+					glm::rotate(glm::mat4(1.0f), glm::radians(particle.rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+
+				// Build final transform matrix
+				glm::mat4 transformMatrix =
+					glm::translate(glm::mat4(1.0f), glm::vec3(worldPos)) * billboardMatrix * rotationMatrix;
+
+				glm::vec3 scale{glm::length(glm::vec3(transform.getMatrix()[0])),
+								glm::length(glm::vec3(transform.getMatrix()[1])),
+								glm::length(glm::vec3(transform.getMatrix()[2]))};
+
+				transformMatrix = glm::scale(transformMatrix, glm::vec3(particle.size) * scale);
+
+				// TODO(Gerark) for now we always assume the pivot for particles is always centered on the texture
+				transformMatrix = glm::translate(transformMatrix, glm::vec3(-0.5f, -0.5f, 0.0f));
+
+				// Final MVP
+				glm::mat4 mvp = renderInfo.viewProjection * transformMatrix;
+
 				shader->setUniform("u_ModelViewProjection", mvp);
 				shader->setUniform("u_Color", particle.color);
 				shader->setUniform("u_Texture", 0);

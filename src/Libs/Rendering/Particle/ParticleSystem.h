@@ -26,9 +26,15 @@ public:
 	[[nodiscard]] const firebolt::Effect& getEffectByIndex(unsigned int index) const;
 	[[nodiscard]] const firebolt::Effect& getEffectById(firebolt::EffectId effectId) const;
 
+	void updateEffectConfig(firebolt::EffectId effectId, const firebolt::EffectConfig& config);
+	const firebolt::EffectConfig& getEffectConfig(firebolt::EffectId effectId) const;
+
 private:
 	void _updateEffectsPosition(entt::registry& registry);
 	void _updateEffectsState(entt::registry& registry);
+
+	void _onEmitterCreated(entt::registry& registry, entt::entity entity);
+	void _onEmitterDestroyed(entt::registry& registry, entt::entity entity);
 
 	std::vector<firebolt::EffectId> _effects;
 	resource::ResourceProvider& _resourceSystem;
