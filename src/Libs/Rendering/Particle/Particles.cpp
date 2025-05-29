@@ -74,7 +74,7 @@ void _updateParticle(Particle& particle, const EffectConfig& config, float delta
 }
 
 void update(float deltaTime) {
-	for (auto effectIndex = 0; effectIndex < data->effects.size(); ++effectIndex) {
+	for (size_t effectIndex = 0; effectIndex < data->effects.size(); ++effectIndex) {
 		auto& config = data->configs[effectIndex];
 		auto& effect = data->effects[effectIndex];
 		for (Particle& particle : effect.particles) {
@@ -84,7 +84,7 @@ void update(float deltaTime) {
 		}
 	}
 
-	for (auto effectIndex = 0; effectIndex < data->effects.size(); ++effectIndex) {
+	for (size_t effectIndex = 0; effectIndex < data->effects.size(); ++effectIndex) {
 		auto& effect = data->effects[effectIndex];
 		effect.timeToNextEmit -= deltaTime;
 		if (effect.timeToNextEmit <= 0) {
