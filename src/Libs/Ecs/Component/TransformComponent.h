@@ -27,6 +27,7 @@ public:
 	void lookAt(const glm::vec3& target, const glm::vec3& up);
 	void rotate(float radians, const glm::vec3& axis);
 	void setScale(const glm::vec3& newScale);
+	void setScale(float newScale);
 	const glm::vec3& getPosition() const;
 	const glm::quat& getRotation() const;
 	const glm::mat4x4& computeMatrix();

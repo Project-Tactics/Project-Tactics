@@ -4,6 +4,8 @@
             "particlesCamera": {
                 "path": "_demoParticles/particlesCamera.prefab"
             }
+        },
+        "ParticleEffect": {
         }
     }
 }

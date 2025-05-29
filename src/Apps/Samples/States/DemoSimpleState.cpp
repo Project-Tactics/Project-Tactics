@@ -8,29 +8,37 @@
 
 #include <Libs/Ecs/Component/CameraComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
+#include <Libs/Ecs/Component/ParticleEmitterComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Input/InputSystem.h>
 #include <Libs/Rendering/GeometryBuilder.h>
+#include <Libs/Rendering/Particle/ParticleSystem.h>
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/Input/InputMap.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Utility/Math.h>
 #include <Libs/Utility/Time/EngineTime.h>
 
+#include <array>
 #include <glm/glm.hpp>
 
 namespace tactics {
 
 FsmAction DemoSimpleState::enter() {
-	_createCamera("rotateAroundCamera"_id);
+	_createCamera("freeCamera"_id);
 	_createPlane();
 	_createTeapot();
 	_createCrate();
 	_createQuads();
 	_createExtraRotatingQuads();
 	_createCustomQuadWithCustomResources();
+	_createParticleEffect();
 	_setupInputMap();
+
+	auto& inputSystem = getService<InputSystem>();
+	inputSystem.lockMouseToWindow(true);
+
 	return FsmAction::none();
 }
 
@@ -40,6 +48,10 @@ void DemoSimpleState::exit() {
 
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 	resourceSystem.unloadPack("CustomPack"_id);
+	resourceSystem.removePack("CustomPack"_id);
+
+	auto& inputSystem = getService<InputSystem>();
+	inputSystem.lockMouseToWindow(false);
 }
 
 FsmAction DemoSimpleState::update() {
@@ -186,6 +198,43 @@ void DemoSimpleState::_createCustomQuadWithCustomResources() {
 	auto customQuad =
 		sceneSystem.createEntity("customQuad"_id, {0.0f, 40.0f, 0.0f}, "customQuadMesh"_id, {"colorOnly"_id});
 	customQuad.addComponent<component::RotateItem>(5.f, Vector3::forward);
+}
+
+void DemoSimpleState::_createParticleEffect() {
+	auto& sceneSystem = getService<SceneSystem>();
+	auto& particleSystem = getService<ParticleSystem>();
+	auto position = glm::vec3{-90.0f, 5.0f, -60.0f};
+
+	// Use colors of the raimbow to define the next array
+	const std::array colors = std::to_array<glm::vec4>({
+		glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), // Red
+		glm::vec4(1.0f, 0.5f, 0.0f, 1.0f), // Orange
+		glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), // Yellow
+		glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), // Green
+		glm::vec4(0.0f, 0.5f, 1.0f, 1.0f), // Cyan
+		glm::vec4(0.5f, 0.0f, 1.0f, 1.0f), // Blue
+		glm::vec4(1.0f, 0.0f, 1.0f, 1.0f)  // Magenta
+	});
+
+	auto createParticleEffect = [&sceneSystem,
+								 &particleSystem](auto&& name, auto&& prefab, auto&& position, auto&& color) {
+		auto particleEffect = sceneSystem.createEntity(name, prefab);
+		auto transform = &particleEffect.getComponent<component::Transform>();
+		transform->setPosition(position);
+		transform->setScale(10);
+		auto effectId = particleEffect.getComponent<component::ParticleEmitter>().maybeEffectId;
+		auto copiedConfig = particleSystem.getEffectConfig(*effectId);
+		auto& colorOverLifetime = std::get<firebolt::ColorOverLifetime>(copiedConfig.updaters[0]);
+		// change start color from blue to red based on x coordinate
+		colorOverLifetime.startColor = color;
+		particleSystem.updateEffectConfig(*effectId, copiedConfig);
+	};
+
+	for (const auto& color : colors) {
+		position.x += 20;
+		createParticleEffect("fire"_id, "fireEffect"_id, position, color);
+		createParticleEffect("ember"_id, "emberEffect"_id, position, color);
+	}
 }
 
 } // namespace tactics

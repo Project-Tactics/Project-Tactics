@@ -1,8 +1,9 @@
 #include "SetupState.h"
 
 #include <Engine/Core/RenderSteps/DrawMeshesRenderStep.h>
+#include <Engine/Core/RenderSteps/DrawParticlesRenderStep.h>
 #include <Engine/Core/RenderSteps/ImGuiRenderSteps.h>
-#include <Engine/Core/RenderSteps/PrepareViewportRenderStep.h>
+#include <Engine/Core/RenderSteps/PrepareCameraViewportRenderStep.h>
 #include <Engine/Scene/SceneSystem.h>
 
 #include <Libs/Ecs/EntityComponentSystem.h>
@@ -30,12 +31,12 @@ FsmAction SetupState::update() {
 
 void SetupState::_setupRenderSteps() {
 	using namespace renderstep;
-	auto& renderSystem = getService<RenderSystem>();
-	auto& mainRenderQueue = renderSystem.createRenderQueue();
+	auto& particleSystem = getService<ParticleSystem>();
 	auto& ecs = getService<EntityComponentSystem>();
-	mainRenderQueue.addStep<PrepareViewport>(ecs);
-	mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithoutAlphaBlend);
-	mainRenderQueue.addStep<DrawMeshes>(ecs, AlphaBlendedFlag::WithAlphaBlend);
+	auto& mainRenderQueue = getService<RenderSystem>().createRenderQueue();
+	mainRenderQueue.addStep<PrepareCameraViewport>(ecs);
+	mainRenderQueue.addStep<DrawMeshes>(ecs, particleSystem, AlphaBlendedFlag::WithoutAlphaBlend);
+	mainRenderQueue.addStep<DrawMeshes>(ecs, particleSystem, AlphaBlendedFlag::WithAlphaBlend);
 	mainRenderQueue.addStep<ImGuiRender>(getService<OverlaySystem>());
 }
 

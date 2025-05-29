@@ -8,9 +8,9 @@ class EntityComponentSystem;
 
 namespace tactics::renderstep {
 
-class PrepareViewport : public RenderStep {
+class PrepareCameraViewport : public RenderStep {
 public:
-	PrepareViewport(EntityComponentSystem& ecs);
+	PrepareCameraViewport(EntityComponentSystem& ecs);
 	void execute(RenderStepInfo& renderInfo) override;
 
 private:

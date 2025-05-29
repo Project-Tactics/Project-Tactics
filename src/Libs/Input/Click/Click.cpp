@@ -864,11 +864,11 @@ void unbind(BindingId id) {
  * Input & Event Processing
  */
 
-void updateMouse(DeviceId mouseId, float x, float y) {
+void updateMouse(DeviceId mouseId, float x, float y, float xRel, float yRel) {
 	x /= ctx->_screenWidth;
 	y /= ctx->_screenHeight;
-	auto xRel = x - ctx->mouseState.x;
-	auto yRel = y - ctx->mouseState.y;
+	xRel /= ctx->_screenWidth;
+	yRel /= ctx->_screenHeight;
 	ctx->mouseState.x = x;
 	ctx->mouseState.y = y;
 

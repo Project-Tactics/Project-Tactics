@@ -12,11 +12,21 @@
             "spriteUnlit": {
                 "vertexShader": "common/shaders/default.vert",
                 "fragmentShader": "common/shaders/spriteUnlit.frag"
+            },
+            "particles": {
+                "vertexShader": "common/shaders/particles.vert",
+                "fragmentShader": "common/shaders/particles.frag"
             }
         },
         "Texture": {
             "none": {
                 "path": "common/textures/none.png"
+            },
+            "particle": {
+                "path": "common/textures/particle00.png"
+            },
+            "fireParticle": {
+                "path": "common/textures/fireParticle.png"
             }
         },
         "Material": {
@@ -101,6 +111,12 @@
         "Prefab": {
             "simpleCamera": {
                 "path": "common/prefabs/simpleCamera.prefab"
+            },
+            "fireEffect": {
+                "path": "common/prefabs/fireEffect.prefab"
+            },
+            "emberEffect": {
+                "path": "common/prefabs/emberEffect.prefab"
             }
         },
         "InputAction": {
@@ -112,6 +128,121 @@
             },
             "anyKeyPressed": {
                 "type": "Scalar"
+            }
+        },
+        "ParticleEffect": {
+            "fireEffect": {
+                "config": {
+                    "emitRate": 80,
+                    "emitShape": {
+                        "type": "cone",
+                        "position": {
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "radius": 0.5
+                    },
+                    "color": {
+                        "x": 1,
+                        "y": 0.5,
+                        "z": 0.1,
+                        "w": 1
+                    },
+                    "startLifetime": {
+                        "type": "randomRange",
+                        "min": 0.8,
+                        "max": 2.3
+                    },
+                    "startSize": {
+                        "type": "randomRange",
+                        "min": 0.8,
+                        "max": 2.3
+                    },
+                    "startSpeed": {
+                        "type": "randomRange",
+                        "min": 1,
+                        "max": 3
+                    },
+                    "startRotation": {
+                        "type": "randomRange",
+                        "min": 0,
+                        "max": 360
+                    },
+                    "updaters": [
+                        {
+                            "type": "colorOverLifetime",
+                            "startColor": {
+                                "x": 1,
+                                "y": 0.5,
+                                "z": 0.1,
+                                "w": 1
+                            },
+                            "endColor": {
+                                "x": 0,
+                                "y": 0,
+                                "z": 0,
+                                "w": 0
+                            }
+                        }
+                    ]
+                },
+                "shader": "particles",
+                "texture": "fireParticle"
+            },
+            "emberEffect": {
+                "config": {
+                    "emitRate": 20,
+                    "emitShape": {
+                        "type": "cone",
+                        "position": {
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "radius": 1
+                    },
+                    "color": {
+                        "x": 1,
+                        "y": 0.5,
+                        "z": 0.1,
+                        "w": 1
+                    },
+                    "startLifetime": {
+                        "type": "randomRange",
+                        "min": 4,
+                        "max": 5
+                    },
+                    "startSize": {
+                        "type": "randomRange",
+                        "min": 0.25,
+                        "max": 0.3
+                    },
+                    "startSpeed": {
+                        "type": "randomRange",
+                        "min": 1,
+                        "max": 1.5
+                    },
+                    "updaters": [
+                        {
+                            "type": "colorOverLifetime",
+                            "startColor": {
+                                "x": 1,
+                                "y": 0.5,
+                                "z": 0.1,
+                                "w": 1
+                            },
+                            "endColor": {
+                                "x": 0,
+                                "y": 0,
+                                "z": 0,
+                                "w": 0
+                            }
+                        }
+                    ]
+                },
+                "shader": "particles",
+                "texture": "particle"
             }
         },
         "InputMap": {

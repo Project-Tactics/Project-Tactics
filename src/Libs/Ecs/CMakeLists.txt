@@ -6,7 +6,9 @@ set(SOURCES
     Component/ComponentReflection.cpp
     Component/FrustumComponent.cpp
     Component/MeshComponent.cpp
+    Component/ParticleEmitterComponent.cpp
     Component/PrefabComponent.cpp
+    Component/RenderableComponent.cpp
     Component/SpriteComponent.cpp
     Component/TransformComponent.cpp
     Entity.cpp
@@ -26,7 +28,9 @@ set(HEADERS
     Component/FrustumComponent.h
     Component/MeshComponent.h
     Component/NameComponent.h
+    Component/ParticleEmitterComponent.h
     Component/PrefabComponent.h
+    Component/RenderableComponent.h
     Component/SpriteComponent.h 
     Component/TransformComponent.h
     Entity.h

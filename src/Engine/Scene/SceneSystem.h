@@ -45,7 +45,9 @@ public:
 
 private:
 	void _onMeshConstructed(entt::registry& registry, entt::entity entity);
-	void _onMeshUpdated(entt::registry& registry, entt::entity entity);
+	void _onMeshDestroyed(entt::registry& registry, entt::entity entity);
+	void _onRenderableConstructed(entt::registry& registry, entt::entity entity);
+	void _onRenderableUpdated(entt::registry& registry, entt::entity entity);
 	void _onSpriteAnimationConstructed(entt::registry& registry, entt::entity entity);
 	void _onSpriteAnimationUpdated(entt::registry& registry, entt::entity entity);
 	void _updateAlphaBlendFlags(entt::registry& registry, entt::entity entity);

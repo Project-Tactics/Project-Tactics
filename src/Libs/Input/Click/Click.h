@@ -106,7 +106,7 @@ const ActionValue& inputValue(InputCode code, PlayerId playerId);
 /*
  * Input Processing
  */
-void updateMouse(DeviceId mouseId, float x, float y);
+void updateMouse(DeviceId mouseId, float x, float y, float xRel, float yRel);
 void updateGamepadAxis(DeviceId gamepadId, InputCode axis, const ActionValue& value);
 
 } // namespace click

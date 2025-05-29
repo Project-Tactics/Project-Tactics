@@ -398,10 +398,17 @@ void processSdlEvents(const SDL_Event& event) {
 
 void updateSdlBackend() {
 	{
-		auto x = 0;
-		auto y = 0;
+		auto x{0};
+		auto y{0};
+		auto xRel{0};
+		auto yRel{0};
 		SDL_GetMouseState(&x, &y);
-		click::updateMouse(_mouseDeviceId(), static_cast<float>(x), static_cast<float>(y));
+		SDL_GetRelativeMouseState(&xRel, &yRel);
+		click::updateMouse(_mouseDeviceId(),
+						   static_cast<float>(x),
+						   static_cast<float>(y),
+						   static_cast<float>(xRel),
+						   static_cast<float>(yRel));
 	}
 
 	for (auto& gamepadDeviceId : click::gamepads()) {

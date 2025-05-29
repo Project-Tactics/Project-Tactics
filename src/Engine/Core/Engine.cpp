@@ -25,6 +25,7 @@
 #include <Libs/Overlay/ExampleOverlay.h>
 #include <Libs/Overlay/MainOverlay.h>
 #include <Libs/Overlay/OverlaySystem.h>
+#include <Libs/Rendering/Particle/ParticleSystem.h>
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/ResourceSystem.h>
@@ -64,6 +65,7 @@ void Engine::_run(Application& application) {
 void Engine::_initialize(Application& application) {
 	_initializeSDL();
 
+	Random::setInstance(&_random);
 	_timer.setFixedDeltaTime(1.0 / 60.0);
 	EngineTime::setFrameTime(&_timer);
 
@@ -89,6 +91,9 @@ void Engine::_initialize(Application& application) {
 	auto configFile = _resourceSystem->getResource<resource::IniFile>("configFile"_id);
 	_renderSystem = std::make_unique<RenderSystem>(configFile);
 	_renderSystem->setViewport({0, 0}, {1, 1}, Color::black);
+
+	_particleSystem = std::make_unique<ParticleSystem>(*_resourceSystem, *_ecs);
+
 	_resourceSystem->loadPack("builtinMeshes"_id);
 	_resourceSystem->createManualPack("_internalCustomPack"_id);
 	_resourceSystem->loadExternalResource("_internalCustomPack"_id, resource::Texture::createNullTexture());
@@ -100,7 +105,7 @@ void Engine::_initialize(Application& application) {
 	_eventsSystem = std::make_unique<EventsSystem>(*_inputSystem);
 	_eventsSystem->registerEventsListener(_renderSystem.get());
 
-	LOG_TRACE(Log::Engine, "EventSystem SceneSystem");
+	LOG_TRACE(Log::Engine, "SceneSystem Initialization");
 	_sceneSystem = std::make_unique<SceneSystem>(*_ecs, *_resourceSystem);
 
 	_setupServiceLocator();
@@ -133,6 +138,7 @@ void Engine::_shutdown() {
 	_eventsSystem->unregisterEventsListener(_fsmExternalController.get());
 	_eventsSystem->unregisterEventsListener(_renderSystem.get());
 	_renderSystem.reset();
+	_particleSystem.reset();
 	_overlaySystem.reset();
 	_ecs->clearPrefabsRegistry();
 	LOG_TRACE(Log::Engine, "Unload Engine Resources");
@@ -219,6 +225,7 @@ void Engine::_setupServiceLocator() {
 	_serviceLocator->addService(_resourceSystem.get());
 	_serviceLocator->addService(_overlaySystem.get());
 	_serviceLocator->addService(_renderSystem.get());
+	_serviceLocator->addService(_particleSystem.get());
 	_serviceLocator->addService(_eventsSystem.get());
 	_serviceLocator->addService(_ecs.get());
 	_serviceLocator->addService(_sceneSystem.get());
@@ -233,6 +240,7 @@ void Engine::_updateCommonComponentSystems() {
 	SpriteSystem::update(registry);
 	CameraSystem::updateCameraAspectRatios(*_renderSystem, registry);
 	CameraSystem::updateCameraMatrices(registry);
+	_particleSystem->update(registry);
 	BillboardSystem::update(registry);
 	TransformSystem::updateTransformMatrices(registry);
 }

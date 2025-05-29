@@ -43,6 +43,8 @@ public:
 	const click::ActionState& getActionState(click::ActionId actionId, click::PlayerId playerId = 0) const;
 	const click::ActionValue& getInputCodeValue(click::InputCode inputCode, click::PlayerId playerId = 0) const;
 
+	void lockMouseToWindow(bool lock);
+
 private:
 	void _updateDeviceAssignment();
 	static void _onDeviceChanged(click::DeviceId id, click::DeviceType type, click::DeviceEvent event, void* userData);

@@ -4,19 +4,19 @@
         "position": {
             "x": 0,
             "y": 0,
-            "z": -5
+            "z": 10
         },
         "rotation": {
             "fromLookAt": {
                 "from": {
                     "x": 0,
                     "y": 0,
-                    "z": 0
+                    "z": 10
                 },
                 "to": {
                     "x": 0,
                     "y": 0,
-                    "z": 4
+                    "z": 0
                 }
             }
         },
@@ -35,8 +35,8 @@
         "far": 1000
     },
     "RotateAroundPoint": {
-        "speed": 0.75,
-        "distanceFromPoint": 3,
+        "speed": 0.35,
+        "distanceFromPoint": 10,
         "currentAngle": 0,
         "point": {
             "x": 0,

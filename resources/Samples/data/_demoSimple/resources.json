@@ -23,8 +23,8 @@
             "simpleRotatingQuad": {
                 "path": "_demoSimple/simpleRotatingQuad.prefab"
             },
-            "rotateAroundCamera": {
-                "path": "_demoSimple/rotateAroundCamera.prefab"
+            "freeCamera": {
+                "path": "_demoSimple/freeCamera.prefab"
             }
         },
         "InputAction": {
@@ -45,7 +45,7 @@
                         "gestures": [
                             {
                                 "gesture": {
-                                    "type": "dir3D",
+                                    "type": "dir3d",
                                     "left": "KeyA",
                                     "right": "KeyD",
                                     "forward": "KeyW",
