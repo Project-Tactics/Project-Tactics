@@ -6,11 +6,8 @@ namespace tactics::renderstep {
 
 struct UiRenderCommand {};
 
-DrawUi::DrawUi(jab::UiSystem& uiSystem)
-	: _uiSystem(uiSystem) {
-}
+DrawUi::DrawUi(jab::UiSystem& uiSystem) : _uiSystem(uiSystem) {}
 
-void DrawUi::execute(RenderStepInfo&) {
-}
+void DrawUi::execute(RenderStepInfo&) {}
 
 } // namespace tactics::renderstep

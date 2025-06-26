@@ -15,10 +15,10 @@
 #include "States/DemoPongState.h"
 #include "States/DemoSimpleState.h"
 #include "States/DemoSpriteState.h"
+#include "States/DemoUserInterfaceState.h"
 #include "States/EmptyState.h"
 #include "States/SampleSelectionState.h"
 #include "States/SetupState.h"
-#include "States/DemoUserInterfaceState.h"
 // ADD INCLUDE SAMPLES HERE
 
 #include <Libs/Resource/IniFile/IniFile.h>
