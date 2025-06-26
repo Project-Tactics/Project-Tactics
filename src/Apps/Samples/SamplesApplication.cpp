@@ -15,6 +15,7 @@
 #include "States/DemoPongState.h"
 #include "States/DemoSimpleState.h"
 #include "States/DemoSpriteState.h"
+#include "States/DemoUserInterfaceState.h"
 #include "States/EmptyState.h"
 #include "States/SampleSelectionState.h"
 #include "States/SetupState.h"
@@ -32,6 +33,7 @@ SamplesApplication::SamplesApplication() {
 	_addSampleFlow<DemoParticlesState>("particles", "Particles");
 	_addSampleFlow<DemoSimpleState>("simple", "Simple");
 	_addSampleFlow<DemoPongState>("pong", "Pong");
+	_addSampleFlow<DemoUserInterfaceState>("userinterface", "UserInterface");
 	// ADD FLOW SAMPLES HERE
 }
 

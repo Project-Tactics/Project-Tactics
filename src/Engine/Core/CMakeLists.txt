@@ -8,7 +8,7 @@ set(SOURCES
     ResourceSystemInitializer.cpp
     RenderSteps/PrepareCameraViewportRenderStep.cpp
     RenderSteps/DrawMeshesRenderStep.cpp
-    RenderSteps/DrawParticlesRenderStep.cpp
+    RenderSteps/DrawUiRenderStep.cpp
     RenderSteps/ImGuiRenderSteps.cpp)
     
 set(HEADERS
@@ -18,7 +18,7 @@ set(HEADERS
     ResourceSystemInitializer.h
     RenderSteps/PrepareCameraViewportRenderStep.h
     RenderSteps/DrawMeshesRenderStep.h
-    RenderSteps/DrawParticlesRenderStep.h
+    RenderSteps/DrawUiRenderStep.h
     RenderSteps/ImGuiRenderSteps.h)
 
 add_library(engine_core ${SOURCES} ${HEADERS})
@@ -35,7 +35,8 @@ target_link_libraries(engine_core
     libs_ecs
     libs_utility
     libs_filesystem
-    libs_input)
+    libs_input
+    libs_ui)
 add_to_engine_folder(engine_core)
 
 unset(SOURCES)

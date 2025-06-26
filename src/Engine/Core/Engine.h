@@ -7,6 +7,10 @@
 
 struct SDL_Window;
 
+namespace jab {
+class UiSystem;
+}
+
 namespace tactics {
 namespace resource {
 class ResourceSystem;
@@ -24,6 +28,7 @@ class ParticleSystem;
 class RenderSystem;
 class ServiceLocator;
 class SceneSystem;
+
 struct FsmInfo;
 
 class Engine {
@@ -60,6 +65,7 @@ private:
 	std::unique_ptr<EventsSystem> _eventsSystem;
 	std::unique_ptr<EntityComponentSystem> _ecs;
 	std::unique_ptr<SceneSystem> _sceneSystem;
+	std::unique_ptr<jab::UiSystem> _uiSystem;
 	std::unique_ptr<Fsm> _fsm;
 	std::unique_ptr<FsmInfo> _fsmInfo;
 	std::unique_ptr<ServiceLocator> _serviceLocator;

@@ -24,21 +24,7 @@ DrawMeshes::DrawMeshes(EntityComponentSystem& ecs, ParticleSystem& particleSyste
 	: _ecs(ecs)
 	, _particleSystem(particleSystem)
 	, _alphaBlendedFlag(alphaBlendedFlag) {
-	_quadVB.setData(
-		{
-			0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-		},
-		rp::StaticDraw::value);
-	_quadIB.setData({0, 1, 2, 2, 3, 0}, rp::StaticDraw::value);
-	_quadVB.bind();
-
-	VertexAttributes::Builder builder;
-	builder.attributef(3);
-	builder.attributef(2);
-	_quadVA = builder.create();
-
-	_quadVB.unbind();
+	_quadBuffers.build();
 }
 
 void DrawMeshes::execute(RenderStepInfo& info) {
@@ -164,9 +150,7 @@ void DrawMeshes::_drawParticles(const RenderStepInfo& info,
 								component::ParticleEmitter& emitter) {
 	auto& effect = _particleSystem.getEffectById(*emitter.maybeEffectId);
 
-	_quadVA->bind();
-	_quadVB.bind();
-	_quadIB.bind();
+	_quadBuffers.bind();
 	emitter.effectResource->texture->bind(0);
 
 	auto& shader = emitter.effectResource->shader;
@@ -209,13 +193,11 @@ void DrawMeshes::_drawParticles(const RenderStepInfo& info,
 			shader->setUniform("u_Color", particle.color);
 			shader->setUniform("u_Texture", 0);
 
-			glDrawElements(GL_TRIANGLES, _quadIB.getSize(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, _quadBuffers.indexBuffer.getSize(), GL_UNSIGNED_INT, nullptr);
 		}
 	}
 
-	_quadIB.unbind();
-	_quadVB.unbind();
-	_quadVA->unbind();
+	_quadBuffers.unbind();
 }
 
 } // namespace tactics::renderstep

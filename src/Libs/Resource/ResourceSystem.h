@@ -61,9 +61,9 @@ public:
 		_unregisterManager(manager);
 	}
 
-	void forEachResource(const std::function<void(const Pack&, const PackGroup&, const ResourceInfo&)>& callback);
-	void forEachManager(const std::function<void(const BaseResourceManager&)>& callback);
-	void forEachPack(const std::function<void(const Pack&)>& callback);
+	void forEachResource(std::function<void(const Pack&, const PackGroup&, const ResourceInfo&)> callback);
+	void forEachManager(std::function<void(const BaseResourceManager&)> callback);
+	void forEachPack(std::function<void(const Pack&)> callback);
 
 private:
 	void _unregisterManager(std::unique_ptr<BaseResourceManager> resourceManager);

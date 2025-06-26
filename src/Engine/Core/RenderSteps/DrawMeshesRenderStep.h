@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Libs/Rendering/IndexBuffer.h>
+#include <Libs/Rendering/QuadBuffers.h>
 #include <Libs/Rendering/RenderStep/RenderStep.h>
 #include <Libs/Rendering/VertexAttributes.h>
 #include <Libs/Rendering/VertexBuffer.h>
@@ -58,9 +59,7 @@ private:
 	/*
 	 * Quad variables for Particle System
 	 */
-	VertexBuffer _quadVB;
-	IndexBuffer _quadIB;
-	std::unique_ptr<VertexAttributes> _quadVA;
+	QuadBuffers _quadBuffers;
 };
 
 } // namespace tactics::renderstep
