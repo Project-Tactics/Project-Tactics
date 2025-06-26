@@ -25,6 +25,11 @@ public:
 
 private:
 	std::uint32_t _id{};
+
+	// We keep a std::string to improve the debugging experience
+#ifdef _DEBUG
+	std::string _debugName;
+#endif
 };
 
 [[nodiscard]] HashId operator"" _id(const char* value, size_t);

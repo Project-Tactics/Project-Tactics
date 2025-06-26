@@ -32,19 +32,18 @@ void ResourceSystem::createManualPack(const HashId& packName) {
 	_resourcePackManager->createPack(packName, true);
 }
 
-void ResourceSystem::forEachManager(const std::function<void(const BaseResourceManager&)>& callback) {
+void ResourceSystem::forEachManager(std::function<void(const BaseResourceManager&)> callback) {
 	for (auto&& [type, manager] : _resourceManagers) {
 		callback(*manager);
 	}
 }
 
-void ResourceSystem::forEachResource(
-	const std::function<void(const Pack&, const PackGroup&, const ResourceInfo&)>& callback) {
+void ResourceSystem::forEachResource(std::function<void(const Pack&, const PackGroup&, const ResourceInfo&)> callback) {
 	_resourcePackManager->forEachPack([&](const Pack& pack) { pack.forEachResource(callback); });
 }
 
-void ResourceSystem::forEachPack(const std::function<void(const Pack&)>& callback) {
-	_resourcePackManager->forEachPack(callback);
+void ResourceSystem::forEachPack(std::function<void(const Pack&)> callback) {
+	_resourcePackManager->forEachPack(std::move(callback));
 }
 
 void ResourceSystem::registerManager(std::unique_ptr<BaseResourceManager> resourceManager) {

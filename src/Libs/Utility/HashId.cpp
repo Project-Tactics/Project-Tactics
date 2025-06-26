@@ -31,6 +31,7 @@ HashId::HashId(const char* str) {
 	}
 	map[hash] = str;
 	_id = hash;
+	_debugName = str;
 }
 
 HashId::HashId(const std::string& str) : HashId(str.c_str()) {}

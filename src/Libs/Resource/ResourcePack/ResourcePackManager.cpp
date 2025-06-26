@@ -76,7 +76,7 @@ void ResourcePackManager::loadExternalResource(const HashId& packName,
 	pack.loadExternalResource(_resourceProvider, resourceName, type, data);
 }
 
-void ResourcePackManager::forEachPack(const std::function<void(const Pack&)>& callback) {
+void ResourcePackManager::forEachPack(std::function<void(const Pack&)> callback) {
 	for (auto&& [packName, pack] : _packs) {
 		callback(*pack);
 	}

@@ -30,6 +30,7 @@
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/Texture/Texture.h>
+#include <Libs/UI/UISystem.h>
 #include <Libs/Utility/Exception.h>
 #include <Libs/Utility/Log/Log.h>
 #include <Libs/Utility/Math.h>
@@ -108,6 +109,9 @@ void Engine::_initialize(Application& application) {
 	LOG_TRACE(Log::Engine, "SceneSystem Initialization");
 	_sceneSystem = std::make_unique<SceneSystem>(*_ecs, *_resourceSystem);
 
+	LOG_TRACE(Log::Engine, "UiSystem Initialization");
+	_uiSystem = std::make_unique<jab::UiSystem>();
+
 	_setupServiceLocator();
 
 	application.setupComponentReflections();
@@ -140,6 +144,7 @@ void Engine::_shutdown() {
 	_renderSystem.reset();
 	_particleSystem.reset();
 	_overlaySystem.reset();
+	_uiSystem.reset();
 	_ecs->clearPrefabsRegistry();
 	LOG_TRACE(Log::Engine, "Unload Engine Resources");
 	_resourceSystem->unloadPack("initialization"_id);
@@ -230,6 +235,7 @@ void Engine::_setupServiceLocator() {
 	_serviceLocator->addService(_ecs.get());
 	_serviceLocator->addService(_sceneSystem.get());
 	_serviceLocator->addService(_fileSystem.get());
+	_serviceLocator->addService(_uiSystem.get());
 }
 
 void Engine::_updateCommonComponentSystems() {

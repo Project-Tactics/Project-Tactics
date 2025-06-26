@@ -31,7 +31,7 @@ public:
 	void loadExternalResource(const HashId& packName, std::shared_ptr<BaseResource> resource);
 	void loadExternalResource(const HashId& packName, const HashId& resourceName, ResourceType type, const json& data);
 
-	void forEachPack(const std::function<void(const Pack&)>& callback);
+	void forEachPack(std::function<void(const Pack&)> callback);
 
 private:
 	[[nodiscard]] Pack& _getResourcePack(const HashId& packName);

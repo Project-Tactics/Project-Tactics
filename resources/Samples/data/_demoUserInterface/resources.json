@@ -1,0 +1,9 @@
+{
+    "demoUserInterface": {
+        "Prefab": {
+            "defaultCamera": {
+                "path": "_demoUserInterface/defaultCamera.prefab"
+            }
+        }
+    }
+}
