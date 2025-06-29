@@ -27,7 +27,7 @@ DrawDebug::DrawDebug(EntityComponentSystem& ecs, resource::Shader::Ptr shader) :
 void DrawDebug::execute(RenderStepInfo& renderInfo) {
 	using namespace component;
 
-	auto vertexCount = 0;
+	auto vertexCount = 0u;
 
 	// Fill Vertex Info for Lines
 	{
@@ -38,7 +38,7 @@ void DrawDebug::execute(RenderStepInfo& renderInfo) {
 			_vertices[vertexCount + 1] = {line.end, line.color};
 			vertexCount += 2;
 
-			if (vertexCount + 2 >= _vertices.size()) {
+			if (vertexCount + 2u >= _vertices.size()) {
 				break;
 			}
 		}
@@ -53,7 +53,7 @@ void DrawDebug::execute(RenderStepInfo& renderInfo) {
 					glm::vec3 a = sphere.position + start * sphere.radius;
 					glm::vec3 b = sphere.position + end * sphere.radius;
 
-					if (vertexCount + 2 >= _vertices.size()) {
+					if (vertexCount + 2u >= _vertices.size()) {
 						break;
 					}
 
@@ -76,7 +76,7 @@ void DrawDebug::execute(RenderStepInfo& renderInfo) {
 				for (auto& [start, end] : _unitBoxLines) {
 					glm::vec3 a = box.position + start * box.size;
 					glm::vec3 b = box.position + end * box.size;
-					if (vertexCount + 2 >= _vertices.size()) {
+					if (vertexCount + 2u >= _vertices.size()) {
 						break;
 					}
 					_vertices[vertexCount++] = {a, box.color};
@@ -89,7 +89,7 @@ void DrawDebug::execute(RenderStepInfo& renderInfo) {
 		}
 	}
 
-	if (vertexCount <= 0) {
+	if (vertexCount == 0u) {
 		return;
 	}
 
