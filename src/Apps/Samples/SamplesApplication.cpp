@@ -10,6 +10,7 @@
 #include "Component/RotateAroundPoint.h"
 #include "Component/RotateItem.h"
 #include "Component/TranslateItem.h"
+#include "States/DemoDebugDrawingState.h"
 #include "States/DemoMapState.h"
 #include "States/DemoParticlesState.h"
 #include "States/DemoPongState.h"
@@ -19,7 +20,6 @@
 #include "States/EmptyState.h"
 #include "States/SampleSelectionState.h"
 #include "States/SetupState.h"
-#include "States/DemoDebugDrawingState.h"
 // ADD INCLUDE SAMPLES HERE
 
 #include <Libs/Resource/IniFile/IniFile.h>
