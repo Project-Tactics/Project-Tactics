@@ -1,5 +1,6 @@
 #include "ResourceSystemInitializer.h"
 
+#include <Libs/Resource/DataSet/DataSetLoader.h>
 #include <Libs/Resource/IniFile/IniFileLoader.h>
 #include <Libs/Resource/Input/InputActionLoader.h>
 #include <Libs/Resource/Input/InputMapLoader.h>
@@ -37,6 +38,7 @@ std::unique_ptr<resource::ResourceSystem> ResourceSystemInitializer::initialize(
 	registerManager<SpriteSheet, SpriteSheetLoader>(fileSystem, *resourceSystem);
 	registerManager<Prefab, PrefabLoader>(fileSystem, *resourceSystem, ecs);
 	registerManager<ParticleEffect, ParticleEffectLoader>(fileSystem, *resourceSystem);
+	registerManager<BaseDataSet, DataSetLoader>(fileSystem, *resourceSystem);
 
 	resourceSystem->loadPackDefinition("engine_data.json");
 	resourceSystem->loadPack("initialization"_id);

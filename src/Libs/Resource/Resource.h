@@ -9,6 +9,7 @@
 namespace tactics::resource {
 
 enum class ResourceType {
+	DataSet,
 	IniFile,
 	InputAction,
 	InputMap,
@@ -37,7 +38,8 @@ const std::array resourceTypeLoadingOrder = {ResourceType::IniFile,
 											 ResourceType::Mesh,
 											 ResourceType::SpriteSheet,
 											 ResourceType::ParticleEffect,
-											 ResourceType::Prefab};
+											 ResourceType::Prefab,
+											 ResourceType::DataSet};
 
 using ResourceId = uint64_t;
 

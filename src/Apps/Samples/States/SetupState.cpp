@@ -1,5 +1,6 @@
 #include "SetupState.h"
 
+#include <Engine/Core/RenderSteps/DrawDebugRenderStep.h>
 #include <Engine/Core/RenderSteps/DrawMeshesRenderStep.h>
 #include <Engine/Core/RenderSteps/DrawUiRenderStep.h>
 #include <Engine/Core/RenderSteps/ImGuiRenderSteps.h>
@@ -34,14 +35,12 @@ void SetupState::_setupRenderSteps() {
 	auto& particleSystem = getService<ParticleSystem>();
 	auto& ecs = getService<EntityComponentSystem>();
 	auto& mainRenderQueue = getService<RenderSystem>().createRenderQueue();
-	// auto& uiSystem = getService<jab::UiSystem>();
-	// auto& resourceSystem = getService<resource::ResourceSystem>();
-	// auto shader = resourceSystem.getResource<resource::Shader>("uiShader"_id);
+	auto& resourceSystem = getService<resource::ResourceSystem>();
 
 	mainRenderQueue.addStep<PrepareCameraViewport>(ecs);
 	mainRenderQueue.addStep<DrawMeshes>(ecs, particleSystem, AlphaBlendedFlag::WithoutAlphaBlend);
 	mainRenderQueue.addStep<DrawMeshes>(ecs, particleSystem, AlphaBlendedFlag::WithAlphaBlend);
-	// mainRenderQueue.addStep<DrawUi>(uiSystem, shader);
+	mainRenderQueue.addStep<DrawDebug>(ecs, resourceSystem.getResource<resource::Shader>("debug"_id));
 	mainRenderQueue.addStep<ImGuiRender>(getService<OverlaySystem>());
 }
 

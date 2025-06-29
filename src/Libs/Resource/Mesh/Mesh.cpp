@@ -20,46 +20,29 @@ unsigned int Mesh::getTotalTrisCount() const {
 	return trisCount;
 }
 
-SubMesh::SubMesh(unsigned int index,
-				 std::unique_ptr<VertexBuffer> vb,
-				 std::unique_ptr<IndexBuffer> ib,
-				 std::unique_ptr<VertexAttributes> vao)
-	: vertexBuffer(std::move(vb))
-	, indexBuffer(std::move(ib))
-	, vertexAttributes(std::move(vao)) {
-	if (vertexBuffer->getSize() == 0) {
+SubMesh::SubMesh(unsigned int index, VertexBuffer&& vb, IndexBuffer&& ib, VertexAttributes&& vao)
+	: _vertexBuffer(std::move(vb))
+	, _indexBuffer(std::move(ib))
+	, _vertexAttributes(std::move(vao)) {
+	if (_vertexBuffer.getSize() == 0) {
 		throw TACTICS_EXCEPTION("Vertex buffer must not be empty, SubMesh: {}", index);
 	}
 
-	if (indexBuffer->getSize() == 0) {
+	if (_indexBuffer.getSize() == 0) {
 		throw TACTICS_EXCEPTION("Index buffer must not be empty, SubMesh: {}", index);
 	}
 
-	if (indexBuffer->getSize() % 3 != 0) {
+	if (_indexBuffer.getSize() % 3 != 0) {
 		throw TACTICS_EXCEPTION("Index buffer size must be a multiple of 3, SubMesh: {}", index);
 	}
 }
 
-SubMesh::~SubMesh() {
-	if (indexBuffer) {
-		indexBuffer->release();
-	}
-
-	if (vertexBuffer) {
-		vertexBuffer->release();
-	}
-
-	if (vertexAttributes) {
-		vertexAttributes->release();
-	}
-}
-
 unsigned int SubMesh::getVertexCount() const {
-	return vertexAttributes->getVerticesCount(*vertexBuffer);
+	return _vertexAttributes.getVerticesCount(_vertexBuffer);
 }
 
 unsigned int SubMesh::getTrisCount() const {
-	return indexBuffer->getSize() / 3;
+	return _indexBuffer.getSize() / 3;
 }
 
 } // namespace tactics::resource

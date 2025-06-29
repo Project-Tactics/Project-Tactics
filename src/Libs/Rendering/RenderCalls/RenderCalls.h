@@ -157,6 +157,7 @@ void deleteBuffers(unsigned int count, unsigned int* buffers);
 void bindBuffer(unsigned int target, unsigned int buffer);
 void unbindBuffer(unsigned int target);
 void bufferData(unsigned int target, unsigned int size, const void* data, unsigned int usage);
+void bufferSubData(unsigned int target, unsigned int offset, unsigned int size, const void* data);
 
 template<BufferType bufferType> void bindBuffer(unsigned int buffer) {
 	bindBuffer(BufferTypeValue<bufferType>::value, buffer);

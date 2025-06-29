@@ -19,6 +19,7 @@ public:
 	void setUniform(std::string_view uniformName, const glm::vec3& value);
 	void setUniform(std::string_view uniformName, const glm::vec4& value);
 	void setUniform(std::string_view uniformName, const glm::mat4& value);
+	bool hasUniform(std::string_view uniformName) const;
 
 	unsigned int rendererId;
 	std::string fragmentSource;

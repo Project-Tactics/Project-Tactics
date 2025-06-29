@@ -14,7 +14,7 @@ struct Sprite {
 	unsigned int spriteIndex;
 	glm::vec2 uvFlip = Vector2::one;
 
-	REFLECT(Sprite, spriteSheet, spriteIndex, uvFlip)
+	COMPONENT(Sprite, spriteSheet, spriteIndex, uvFlip)
 };
 
 struct SpriteAnimation {
@@ -23,7 +23,7 @@ struct SpriteAnimation {
 
 	void startAnimation(const HashId& animation);
 
-	REFLECT(SpriteAnimation, currentTime, currentAnimation)
+	COMPONENT(SpriteAnimation, currentTime, currentAnimation)
 };
 
 } // namespace tactics::component

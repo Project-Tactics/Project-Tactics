@@ -8,8 +8,6 @@ namespace tactics::component {
 void FreeCameraSystem::update(entt::registry& registry) {
 	auto view = registry.view<FreeCamera, Transform>();
 	for (auto [entity, freeCamera, transform] : view.each()) {
-		auto sensitivity = freeCamera.sensitivity * EngineTime::fixedDeltaTime<float>();
-
 		auto forward = transform.getRotation() * Vector3::forward;
 		auto right = transform.getRotation() * Vector3::right;
 
@@ -24,12 +22,15 @@ void FreeCameraSystem::update(entt::registry& registry) {
 		auto& look = state.value.vec3;
 
 		if (look.x != 0.f || look.y != 0.f || look.z != 0.f) {
-			freeCamera.pitch += -look.x * sensitivity;
-			freeCamera.yaw += -look.y * sensitivity;
-			transform.setRotation(glm::quat(glm::vec3(freeCamera.yaw, freeCamera.pitch, 0)));
+			freeCamera.pitch += -look.y;
+			freeCamera.yaw += -look.x;
 		}
 
-		transform.translate(freeCamera.velocity * freeCamera.speed * EngineTime::fixedDeltaTime<float>());
+		float dt = EngineTime::fixedDeltaTime<float>();
+		glm::quat qPitch = glm::angleAxis(freeCamera.pitch * freeCamera.lookSensitivity * dt, Vector3::right);
+		glm::quat qYaw = glm::angleAxis(freeCamera.yaw * freeCamera.lookSensitivity * dt, Vector3::up);
+		transform.setRotation(glm::lerp(transform.getRotation(), qYaw * qPitch, dt * freeCamera.lookSpeed));
+		transform.translate(freeCamera.velocity * freeCamera.moveSpeed * dt);
 		freeCamera.velocity *= 0.9f;
 	}
 }

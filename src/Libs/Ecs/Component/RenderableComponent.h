@@ -13,6 +13,6 @@ struct Renderable {
 public:
 	RenderType type;
 
-	REFLECT(Renderable, type);
+	COMPONENT(Renderable, type);
 };
 } // namespace tactics::component

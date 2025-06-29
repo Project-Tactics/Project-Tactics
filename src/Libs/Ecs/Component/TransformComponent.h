@@ -26,6 +26,7 @@ public:
 	void translate(const glm::vec3& translation);
 	void lookAt(const glm::vec3& target, const glm::vec3& up);
 	void rotate(float radians, const glm::vec3& axis);
+	void rotate(const glm::quat& rotation);
 	void setScale(const glm::vec3& newScale);
 	void setScale(float newScale);
 	const glm::vec3& getPosition() const;
@@ -33,6 +34,6 @@ public:
 	const glm::mat4x4& computeMatrix();
 	const glm::mat4x4& getMatrix() const;
 
-	REFLECT(Transform, position, rotation, scale);
+	COMPONENT(Transform, position, rotation, scale);
 };
 } // namespace tactics::component

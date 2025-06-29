@@ -12,10 +12,9 @@ namespace tactics::resource {
 class SubMesh {
 public:
 	SubMesh(unsigned int index,
-			std::unique_ptr<VertexBuffer> vertexBuffer,
-			std::unique_ptr<IndexBuffer> indexBuffer,
-			std::unique_ptr<VertexAttributes> vertexAttributes);
-	~SubMesh();
+			VertexBuffer&& vertexBuffer,
+			IndexBuffer&& indexBuffer,
+			VertexAttributes&& vertexAttributes);
 	SubMesh(const SubMesh&) = delete;
 	SubMesh& operator=(const SubMesh&) = delete;
 	SubMesh(SubMesh&&) = default;
@@ -23,10 +22,27 @@ public:
 	unsigned int getVertexCount() const;
 	unsigned int getTrisCount() const;
 
-	unsigned int index;
-	std::unique_ptr<VertexBuffer> vertexBuffer;
-	std::unique_ptr<IndexBuffer> indexBuffer;
-	std::unique_ptr<VertexAttributes> vertexAttributes;
+	const auto& vb() const {
+		return _vertexBuffer;
+	}
+
+	const auto& ib() const {
+		return _indexBuffer;
+	}
+
+	const auto& va() const {
+		return _vertexAttributes;
+	}
+
+	unsigned int getIndex() const {
+		return _index;
+	}
+
+private:
+	unsigned int _index{};
+	VertexBuffer _vertexBuffer;
+	IndexBuffer _indexBuffer;
+	VertexAttributes _vertexAttributes;
 };
 
 class Mesh : public Resource<Mesh> {

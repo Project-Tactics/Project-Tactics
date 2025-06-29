@@ -7,6 +7,7 @@ set(SOURCES
     Engine.cpp
     ResourceSystemInitializer.cpp
     RenderSteps/PrepareCameraViewportRenderStep.cpp
+    RenderSteps/DrawDebugRenderStep.cpp
     RenderSteps/DrawMeshesRenderStep.cpp
     RenderSteps/DrawUiRenderStep.cpp
     RenderSteps/ImGuiRenderSteps.cpp)
@@ -17,6 +18,7 @@ set(HEADERS
     Engine.h
     ResourceSystemInitializer.h
     RenderSteps/PrepareCameraViewportRenderStep.h
+    RenderSteps/DrawDebugRenderStep.h
     RenderSteps/DrawMeshesRenderStep.h
     RenderSteps/DrawUiRenderStep.h
     RenderSteps/ImGuiRenderSteps.h)

@@ -55,15 +55,15 @@ std::shared_ptr<resource::Mesh> GeometryBuilder::build(const HashId& name) {
 			throw TACTICS_EXCEPTION("GeometryBuilder: Can't build mesh. SubMesh has no indices.");
 		}
 
-		auto vbo = std::make_unique<VertexBuffer>(subMesh.vertices, rp::StaticDraw::value);
-		auto ibo = std::make_unique<IndexBuffer>(subMesh.indices, rp::StaticDraw::value);
-		vbo->bind();
+		auto vbo = VertexBuffer(subMesh.vertices, rp::StaticDraw::value);
+		auto ibo = IndexBuffer(subMesh.indices, rp::StaticDraw::value);
+		vbo.bind();
 		auto builder = VertexAttributes::Builder();
 		for (auto& attribute : _attributes) {
 			builder.attributef(attribute.size);
 		}
 		auto vao = builder.create();
-		vbo->unbind();
+		vbo.unbind();
 
 		mesh->subMeshes.emplace_back(static_cast<unsigned int>(mesh->subMeshes.size()),
 									 std::move(vbo),

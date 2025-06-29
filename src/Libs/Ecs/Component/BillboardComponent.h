@@ -5,7 +5,7 @@
 namespace tactics::component {
 
 struct Billboard {
-	REFLECT_EMPTY(Billboard)
+	COMPONENT_TAG(Billboard)
 };
 
 } // namespace tactics::component

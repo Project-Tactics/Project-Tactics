@@ -15,7 +15,7 @@ struct PlayerMovement {
 	SDL_KeyCode keyCodeUp;
 	SDL_KeyCode keyCodeDown;
 
-	REFLECT(PlayerMovement, active)
+	COMPONENT(PlayerMovement, active)
 };
 
 class PlayerMovementSystem {

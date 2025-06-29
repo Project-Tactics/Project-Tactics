@@ -8,7 +8,6 @@ namespace tactics {
 
 /*
  * @brief A group of utils used to work with std::string_view and std containers
- * look at: https://shorturl.at/lmUW7
  */
 
 class TransparentString : public std::string {

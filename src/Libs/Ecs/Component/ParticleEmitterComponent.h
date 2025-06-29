@@ -12,7 +12,7 @@ struct ParticleEmitter {
 	std::optional<firebolt::EffectId> maybeEffectId;
 	bool isEmittingParticles{false};
 
-	REFLECT(ParticleEmitter, effectResource, isEmittingParticles)
+	COMPONENT(ParticleEmitter, effectResource, isEmittingParticles)
 };
 
 struct ParticleEmitterPlaying {};

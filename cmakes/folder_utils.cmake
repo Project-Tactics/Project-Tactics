@@ -19,7 +19,7 @@ macro(add_to_apps_folder TARGET_NAME)
 endmacro()
 
 macro(add_to_folder TARGET_NAME FOLDER_NAME)
-    # TODO(Gerarky) it's not ideal to guess the source files like this. They should be passed in as arguments
+    # TODO(Gerark) it's not ideal to guess the source files like this. They should be passed in as arguments
     source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES} ${HEADERS} ${TEST_SOURCES} ${FILES})
     source_group("_dev" FILES CMakeLists.txt)
     set_property(TARGET ${TARGET_NAME} PROPERTY FOLDER ${FOLDER_NAME})

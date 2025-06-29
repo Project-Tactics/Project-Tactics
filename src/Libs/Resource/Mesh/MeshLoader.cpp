@@ -56,15 +56,15 @@ std::vector<unsigned int> MeshLoader::_parseIndices(const std::string& strIndice
 
 std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& strVertices, const std::string& strIndices) {
 	// TODO(Gerark) Using dynamic draw as usage but it should be best to receive this as a parameter
-	auto meshVertices = std::make_unique<VertexBuffer>(_parseVertices(strVertices), rp::DynamicDraw::value);
-	meshVertices->bind();
+	auto meshVertices = VertexBuffer(_parseVertices(strVertices), rp::DynamicDraw::value);
+	meshVertices.bind();
 	auto vertexAttributes = _createDefaultVertexAttributes();
-	meshVertices->unbind();
+	meshVertices.unbind();
 
 	auto mesh = std::make_shared<Mesh>(""_id);
 	mesh->subMeshes.emplace_back(0,
 								 std::move(meshVertices),
-								 std::make_unique<IndexBuffer>(_parseIndices(strIndices), rp::DynamicDraw::value),
+								 IndexBuffer(_parseIndices(strIndices), rp::DynamicDraw::value),
 								 std::move(vertexAttributes));
 	return mesh;
 }
@@ -112,25 +112,24 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 		}
 
 		// TODO(Gerark) Using dynamic draw is just temporary, we should have a way to define this through the descriptor
-		auto meshVertices = std::make_unique<VertexBuffer>(vertices, rp::DynamicDraw::value);
-		meshVertices->bind();
+		auto meshVertices = VertexBuffer(vertices, rp::DynamicDraw::value);
+		meshVertices.bind();
 		auto vertexAttributes = _createDefaultVertexAttributes();
-		meshVertices->unbind();
+		meshVertices.unbind();
 
 		meshResource->subMeshes.emplace_back(meshIndex,
 											 std::move(meshVertices),
-											 std::make_unique<IndexBuffer>(indices, rp::DynamicDraw::value),
+											 IndexBuffer(indices, rp::DynamicDraw::value),
 											 std::move(vertexAttributes));
 	}
 	return meshResource;
 }
 
-std::unique_ptr<VertexAttributes> MeshLoader::_createDefaultVertexAttributes() {
+VertexAttributes MeshLoader::_createDefaultVertexAttributes() {
 	auto builder = VertexAttributes::Builder();
 	builder.attributef(3); // position
 	builder.attributef(2); // uv
-	auto attributes = builder.create();
-	return attributes;
+	return builder.create();
 }
 
 } // namespace tactics::resource

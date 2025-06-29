@@ -16,11 +16,11 @@ struct Camera {
 	glm::mat4 projection;
 	glm::mat4 view;
 
-	REFLECT(Camera, projectionType, projection, view)
+	COMPONENT(Camera, projectionType, projection, view)
 };
 
 struct CurrentCamera {
-	REFLECT_EMPTY(CurrentCamera);
+	COMPONENT_TAG(CurrentCamera);
 };
 
 } // namespace tactics::component

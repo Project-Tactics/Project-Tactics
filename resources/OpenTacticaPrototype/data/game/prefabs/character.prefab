@@ -1,0 +1,50 @@
+{
+    "Transform": {
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "scale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+        }
+    },
+    "Mesh": {
+        "mesh": "quad",
+        "materials": [
+            {
+                "material": "spriteMaterial"
+            }
+        ]
+    },
+    "Sprite": {
+        "spriteSheet": "char00",
+        "spriteIndex": 0
+    },
+    "Billboard": {},
+    "SpriteAnimation": {
+        "currentAnimation": "idleSouth"
+    },
+    "CharStats": {
+        "hp": 100,
+        "maxHp": 100,
+        "mp": 50,
+        "maxMp": 50,
+        "level": 1,
+        "xp": 0,
+        "move": 5,
+        "jump": 3
+    },
+    "CharName": {
+        "name": "Default Character"
+    },
+    "CharAvatar": {
+        "textureId": "character00"
+    },
+    "ChargeTime": {
+        "chargeTime": 0.0,
+        "speed": 1.0
+    }
+}

@@ -87,6 +87,10 @@ void bufferData(unsigned int target, unsigned int size, const void* data, unsign
 	glBufferData(target, size, data, usage);
 }
 
+void bufferSubData(unsigned int target, unsigned int offset, unsigned int size, const void* data) {
+	glBufferSubData(target, offset, size, data);
+}
+
 void generateTextures(unsigned int count, unsigned int* textures) {
 	glGenTextures(count, textures);
 }

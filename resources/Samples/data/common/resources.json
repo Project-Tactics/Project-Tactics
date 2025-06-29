@@ -16,6 +16,10 @@
             "particles": {
                 "vertexShader": "common/shaders/particles.vert",
                 "fragmentShader": "common/shaders/particles.frag"
+            },
+            "debug": {
+                "vertexShader": "common/shaders/debug.vert",
+                "fragmentShader": "common/shaders/debug.frag"
             }
         },
         "Texture": {

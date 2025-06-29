@@ -15,6 +15,7 @@
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Ecs/System/BillboardSystem.h>
 #include <Libs/Ecs/System/CameraSystem.h>
+#include <Libs/Ecs/System/DebugDrawingSystem.h>
 #include <Libs/Ecs/System/SpriteSystem.h>
 #include <Libs/Ecs/System/TransformSystem.h>
 #include <Libs/Event/EventsSystem.h>
@@ -27,6 +28,7 @@
 #include <Libs/Overlay/OverlaySystem.h>
 #include <Libs/Rendering/Particle/ParticleSystem.h>
 #include <Libs/Rendering/RenderSystem.h>
+#include <Libs/Resource/DataSet/DataSetSystem.h>
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/Texture/Texture.h>
@@ -80,6 +82,7 @@ void Engine::_initialize(Application& application) {
 
 	LOG_TRACE(Log::Engine, "ResourceSystem Initialization");
 	_resourceSystem = ResourceSystemInitializer::initialize(*_fileSystem, *_ecs);
+	_dataSetSystem = std::make_unique<resource::DataSetSystem>(*_resourceSystem);
 
 	LOG_TRACE(Log::Engine, "OverlaySystem Initialization");
 	auto devUserConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile"_id);
@@ -126,11 +129,22 @@ void Engine::_internalRun() {
 		_timer.update(TimeUtility::nowInSeconds());
 		_eventsSystem->update();
 
-		while (_timer.hasConsumedAllTicks()) {
+		int ticksProcessed = 0;
+		const int maxTicksPerFrame = 20;
+
+		while (_timer.hasConsumedAllTicks() && ticksProcessed < maxTicksPerFrame) {
 			_inputSystem->update();
 			_fsm->update();
 			_updateCommonComponentSystems();
 			_timer.consumeTick();
+			++ticksProcessed;
+		}
+
+		if (ticksProcessed >= maxTicksPerFrame) {
+			LOG_DEBUG(Log::Engine,
+					  "Tick cap hit ({} ticks processed). This may be caused by a long frame, a debugging pause, or "
+					  "performance issues causing the simulation to fall behind.",
+					  ticksProcessed);
 		}
 
 		_renderSystem->render();
@@ -236,6 +250,7 @@ void Engine::_setupServiceLocator() {
 	_serviceLocator->addService(_sceneSystem.get());
 	_serviceLocator->addService(_fileSystem.get());
 	_serviceLocator->addService(_uiSystem.get());
+	_serviceLocator->addService(_dataSetSystem.get());
 }
 
 void Engine::_updateCommonComponentSystems() {
@@ -249,6 +264,7 @@ void Engine::_updateCommonComponentSystems() {
 	_particleSystem->update(registry);
 	BillboardSystem::update(registry);
 	TransformSystem::updateTransformMatrices(registry);
+	DebugDrawingSystem::update(registry);
 }
 
 } // namespace tactics

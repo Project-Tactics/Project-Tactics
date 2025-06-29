@@ -2,6 +2,9 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 set(SOURCES
+    DataSet/DataSet.cpp
+    DataSet/DataSetLoader.cpp
+    DataSet/DataSetSystem.cpp
     IniFile/IniFile.cpp
     IniFile/IniFileLoader.cpp
     Input/InputAction.cpp
@@ -32,6 +35,10 @@ set(SOURCES
     Texture/TextureLoader.cpp)
     
 set(HEADERS
+    DataSet/DataSet.h
+    DataSet/DataSetLoader.h
+    DataSet/DataSetReflection.h
+    DataSet/DataSetSystem.h
     IniFile/IniFile.h
     IniFile/IniFileLoader.h
     Input/InputAction.h

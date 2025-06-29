@@ -2,6 +2,7 @@
 
 #include "CustomOverlayColors.h"
 
+#include <Libs/Resource/DataSet/DataSet.h>
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/Material/Material.h>
 #include <Libs/Resource/Mesh/Mesh.h>
@@ -50,6 +51,10 @@ void ResourceOverlayHelper::drawResource(const resource::ResourceInfo& resourceI
 			}
 			case ResourceType::Texture: {
 				drawTResource<Texture>(resource);
+				break;
+			}
+			case ResourceType::DataSet: {
+				drawTResource<BaseDataSet>(resource);
 				break;
 			}
 			}
@@ -161,6 +166,13 @@ void ResourceOverlayHelper::drawResource(const resource::Shader& shader) {
 	ImGui::Separator();
 	ImGui::TextColored(toColor(ResourceType::Shader), "Fragment Shader");
 	ImGui::TextWrapped("%s", shader.fragmentSource.c_str());
+}
+
+void ResourceOverlayHelper::drawResource(const resource::BaseDataSet& dataSet) {
+	using namespace resource;
+	ImGui::TextColored(toColor(ResourceType::DataSet), "Data Set");
+	ImGui::Separator();
+	ImGui::TextWrapped("%s", dataSet.name.str());
 }
 
 void ResourceOverlayHelper::drawResource(const resource::SpriteSheet& spriteSheet) {

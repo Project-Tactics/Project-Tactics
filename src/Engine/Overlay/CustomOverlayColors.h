@@ -25,6 +25,7 @@ public:
 		static ImVec4 ShaderColor;
 		static ImVec4 SpriteSheetColor;
 		static ImVec4 TextureColor;
+		static ImVec4 DataSetColor;
 		static ImVec4 InputMapColor;
 		static ImVec4 InputActionColor;
 		static ImVec4 InputChangeColorVeryLow;

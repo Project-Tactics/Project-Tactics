@@ -9,10 +9,6 @@ enum class TextureFilter {
 	Nearest
 };
 
-/*
-JSON_ENUM(TextureFilter);
-*/
-
 struct TextureInfo {
 	int width;
 	int height;

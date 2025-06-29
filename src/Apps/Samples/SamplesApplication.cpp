@@ -19,6 +19,7 @@
 #include "States/EmptyState.h"
 #include "States/SampleSelectionState.h"
 #include "States/SetupState.h"
+#include "States/DemoDebugDrawingState.h"
 // ADD INCLUDE SAMPLES HERE
 
 #include <Libs/Resource/IniFile/IniFile.h>
@@ -34,22 +35,23 @@ SamplesApplication::SamplesApplication() {
 	_addSampleFlow<DemoSimpleState>("simple", "Simple");
 	_addSampleFlow<DemoPongState>("pong", "Pong");
 	_addSampleFlow<DemoUserInterfaceState>("userinterface", "UserInterface");
+	_addSampleFlow<DemoDebugDrawingState>("debugdrawing", "DebugDrawing");
 	// ADD FLOW SAMPLES HERE
 }
 
 void SamplesApplication::setupComponentReflections() {
 	using namespace component;
-	defineComponentsReflection<BattleCamera,
-							   BattleCameraInput,
-							   CharacterFacing,
-							   RotateItem,
-							   RotateAroundPoint,
-							   FreeCamera,
-							   TranslateItem,
-							   BallMovement,
-							   BallBouncing,
-							   Rectangle2DCollider,
-							   PlayerMovement>();
+	defineReflection<BattleCamera,
+					 BattleCameraInput,
+					 CharacterFacing,
+					 RotateItem,
+					 RotateAroundPoint,
+					 FreeCamera,
+					 TranslateItem,
+					 BallMovement,
+					 BallBouncing,
+					 Rectangle2DCollider,
+					 PlayerMovement>();
 }
 
 HashId SamplesApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
@@ -68,7 +70,7 @@ HashId SamplesApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder
             .on("proceed").jumpTo("Setup")
 		.state<SetupState>("Setup", serviceLocator)
             .on("proceed").jumpTo("Selection")
-		.state<UnloadState>("Unload", serviceLocator, "common"_id)
+		.state<UnloadState>("Unload", serviceLocator, "common"_id, true)
             .on("proceed").exitFsm()
 		.state<SampleSelectionState>("Selection", serviceLocator, transitionToTrigger, _sampleFlows)
 			.on("exit").jumpTo("Unload")

@@ -28,6 +28,7 @@ namespace tactics {
 FsmAction DemoSimpleState::enter() {
 	_createCamera("freeCamera"_id);
 	_createPlane();
+	//_createGrid();
 	_createTeapot();
 	_createCrate();
 	_createQuads();
@@ -38,6 +39,13 @@ FsmAction DemoSimpleState::enter() {
 
 	auto& inputSystem = getService<InputSystem>();
 	inputSystem.lockMouseToWindow(true);
+
+	// Draw 4 green lines for 5 seconds
+	auto& sceneSystem = getService<SceneSystem>();
+	sceneSystem.drawLine({-20, 50, -50}, {20, 50, -50}, Color::green, 5);
+	sceneSystem.drawLine({-20, 70, -50}, {20, 70, -50}, Color::green, 5);
+	sceneSystem.drawLine({-20, 50, -50}, {-20, 70, -50}, Color::green, 5);
+	sceneSystem.drawLine({20, 50, -50}, {20, 70, -50}, Color::green, 5);
 
 	return FsmAction::none();
 }
@@ -64,6 +72,18 @@ FsmAction DemoSimpleState::update() {
 	if (inputSystem.checkAction("exitFromState")) {
 		return FsmAction::transition("exit"_id);
 	}
+
+	// Some examples of how to draw debug shapes
+	auto& sceneSystem = getService<SceneSystem>();
+	_timer += EngineTime::fixedDeltaTime<float>();
+	auto maxLimit = 20.f;
+	for (auto i = 0; i < 10; ++i) {
+		sceneSystem.drawLine({glm::cos(_timer + i * 2) * maxLimit, 50, -50},
+							 {glm::sin(_timer + i * 2) * maxLimit, 70, -50},
+							 {(glm::sin(_timer + i * 2) + 1) / 2, (glm::cos(_timer + i * 2) + 1) / 2, 0, 1});
+	}
+	sceneSystem.drawSphere({-50, 60, -50}, 10, Color::cyan);
+	sceneSystem.drawBox({50, 60, -50}, {10, 10, 10}, Color::red);
 
 	return FsmAction::none();
 }
@@ -100,6 +120,11 @@ void DemoSimpleState::_createTeapot() {
 void DemoSimpleState::_createPlane() {
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.createEntity("plane"_id, "plane"_id);
+}
+
+void DemoSimpleState::_createGrid() {
+	auto& sceneSystem = getService<SceneSystem>();
+	sceneSystem.createEntity("grid"_id, "grid"_id);
 }
 
 void DemoSimpleState::_createQuads() {

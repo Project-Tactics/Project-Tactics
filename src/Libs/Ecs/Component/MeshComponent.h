@@ -12,7 +12,7 @@ struct Mesh {
 
 	Mesh clone();
 
-	REFLECT(Mesh, mesh, materials);
+	COMPONENT(Mesh, mesh, materials);
 };
 
 } // namespace tactics::component

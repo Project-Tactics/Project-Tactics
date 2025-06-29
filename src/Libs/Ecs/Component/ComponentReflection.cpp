@@ -46,7 +46,7 @@ void ComponentReflection::initializeBasicTypes() {
 
 void ComponentReflection::initializeCommonComponents() {
 	using namespace component;
-	defineComponentsReflection<Billboard,
+	defineReflection<Billboard,
 							   Camera,
 							   CurrentCamera,
 							   Frustum,

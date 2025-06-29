@@ -38,7 +38,7 @@ void OverlaySystem::_addOverlay(std::string_view name,
 
 	enabled = _getOrCreateOverlayStoredEnableValue(name, enabled);
 	auto config = overlay->getConfig();
-	_overlays.insert({name, OverlayItem{std::move(overlay), config, type, enabled}});
+	_overlays.insert({name, OverlayItem{std::move(overlay), std::move(config), type, enabled}});
 }
 
 void OverlaySystem::removeOverlay(std::string_view name) {

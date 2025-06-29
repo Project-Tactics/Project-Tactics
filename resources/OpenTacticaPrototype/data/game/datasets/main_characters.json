@@ -1,0 +1,46 @@
+[
+    {
+        "name": "Tronton",
+        "avatarId": "character00",
+        "hp": 120,
+        "mp": 60,
+        "level": 5,
+        "xp": 1200,
+        "move": 4,
+        "jump": 2,
+        "speed": 25
+    },
+    {
+        "name": "Marella",
+        "avatarId": "character01",
+        "hp": 80,
+        "mp": 100,
+        "level": 6,
+        "xp": 1750,
+        "move": 5,
+        "jump": 3,
+        "speed": 30
+    },
+    {
+        "name": "Karn",
+        "avatarId": "character02",
+        "hp": 150,
+        "mp": 30,
+        "level": 7,
+        "xp": 2300,
+        "move": 3,
+        "jump": 4,
+        "speed": 20
+    },
+    {
+        "name": "Zephyra",
+        "avatarId": "character03",
+        "hp": 75,
+        "mp": 120,
+        "level": 8,
+        "xp": 3100,
+        "move": 6,
+        "jump": 2,
+        "speed": 35
+    }
+]

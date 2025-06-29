@@ -14,7 +14,7 @@ struct BallMovement {
 	float speed;
 	glm::vec3 axis;
 
-	REFLECT(BallMovement, speed, axis)
+	COMPONENT(BallMovement, speed, axis)
 };
 
 class BallMovementSystem {
