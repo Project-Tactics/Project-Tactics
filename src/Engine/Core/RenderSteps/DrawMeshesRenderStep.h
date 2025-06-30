@@ -41,7 +41,7 @@ public:
 	void execute(RenderStepInfo& renderInfo) override;
 
 private:
-	void _drawMesh(const glm::mat4x4& viewProjection,
+	void _drawMesh(const RenderStepInfo& renderInfo,
 				   component::Transform& transform,
 				   const component::Mesh& mesh,
 				   bool filterTransparent);

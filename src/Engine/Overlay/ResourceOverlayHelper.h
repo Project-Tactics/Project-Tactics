@@ -8,6 +8,7 @@
 namespace tactics {
 namespace resource {
 class BaseResource;
+class BaseDataSet;
 class IniFile;
 class Mesh;
 class Material;
@@ -19,6 +20,7 @@ class Texture;
 
 class ResourceOverlayHelper {
 public:
+	static void drawResource(const resource::BaseDataSet& dataSet);
 	static void drawResource(const resource::ResourceInfo& resourceInfo, resource::ResourceType resourceType);
 	static void drawResource(const resource::IniFile& ini);
 	static void drawResource(const resource::Material& material);

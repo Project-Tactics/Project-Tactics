@@ -46,15 +46,15 @@ void ComponentReflection::initializeBasicTypes() {
 
 void ComponentReflection::initializeCommonComponents() {
 	using namespace component;
-	defineComponentsReflection<Billboard,
-							   Camera,
-							   CurrentCamera,
-							   Frustum,
-							   Mesh,
-							   Sprite,
-							   SpriteAnimation,
-							   Transform,
-							   ParticleEmitter>();
+	defineReflection<Billboard,
+					 Camera,
+					 CurrentCamera,
+					 Frustum,
+					 Mesh,
+					 Sprite,
+					 SpriteAnimation,
+					 Transform,
+					 ParticleEmitter>();
 }
 
 } // namespace tactics

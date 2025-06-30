@@ -10,7 +10,7 @@
             "x": 0,
             "y": 0,
             "z": 0,
-            "w": 0
+            "w": 1
         },
         "scale": {
             "x": 1,
@@ -27,8 +27,9 @@
         "far": 1000
     },
     "FreeCamera": {
-        "speed": 10,
-        "sensitivity": 1.5,
+        "moveSpeed": 10,
+        "lookSpeed": 20,
+        "lookSensitivity": 2,
         "moveAction": "cameraMove",
         "lookAction": "cameraLook",
         "player": 0

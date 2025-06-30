@@ -13,8 +13,9 @@ class UiSystem;
 
 namespace tactics {
 namespace resource {
+class DataSetSystem;
 class ResourceSystem;
-}
+} // namespace resource
 
 class Application;
 class DefaultFsmExternalController;
@@ -66,6 +67,7 @@ private:
 	std::unique_ptr<EntityComponentSystem> _ecs;
 	std::unique_ptr<SceneSystem> _sceneSystem;
 	std::unique_ptr<jab::UiSystem> _uiSystem;
+	std::unique_ptr<resource::DataSetSystem> _dataSetSystem;
 	std::unique_ptr<Fsm> _fsm;
 	std::unique_ptr<FsmInfo> _fsmInfo;
 	std::unique_ptr<ServiceLocator> _serviceLocator;

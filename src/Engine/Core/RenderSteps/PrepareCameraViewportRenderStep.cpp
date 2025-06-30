@@ -35,6 +35,8 @@ void PrepareCameraViewport::execute(RenderStepInfo& info) {
 	info.view = camera.view;
 	info.viewProjection = info.projection * info.view;
 	info.cameraPosition = cameraTransform.getPosition();
+	info.cameraForward = cameraTransform.getRotation() * Vector3::forward;
+	info.cameraForward = glm::normalize(info.cameraForward);
 }
 
 } // namespace tactics::renderstep

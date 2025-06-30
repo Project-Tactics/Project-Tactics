@@ -11,7 +11,7 @@ struct TranslateItem {
 	float speed;
 	glm::vec3 axis;
 
-	REFLECT(TranslateItem, speed, axis);
+	COMPONENT(TranslateItem, speed, axis);
 };
 
 class TranslateItemSystem {

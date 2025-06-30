@@ -21,20 +21,20 @@ struct BattleCamera {
 	void rotateToNextStep();
 	void rotateToPrevStep();
 
-	REFLECT(BattleCamera,
-			rotationTime,
-			distanceFromOrigin,
-			rotationSpeed,
-			nextStep,
-			currentStep,
-			rotationSteps,
-			offset);
+	COMPONENT(BattleCamera,
+			  rotationTime,
+			  distanceFromOrigin,
+			  rotationSpeed,
+			  nextStep,
+			  currentStep,
+			  rotationSteps,
+			  offset);
 };
 
 struct BattleCameraInput {
 	resource::InputAction::Ptr moveCamera;
 
-	REFLECT(BattleCameraInput, moveCamera);
+	COMPONENT(BattleCameraInput, moveCamera);
 };
 
 class BattleCameraSystem {

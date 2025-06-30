@@ -13,7 +13,7 @@ struct RotateAroundPoint {
 	glm::vec3 offset = Vector3::zero;
 	glm::vec3 point = Vector3::zero;
 
-	REFLECT(RotateAroundPoint, speed, currentAngle, distanceFromPoint, offset, point);
+	COMPONENT(RotateAroundPoint, speed, currentAngle, distanceFromPoint, offset, point);
 };
 
 struct RotateAroundPointSystem {

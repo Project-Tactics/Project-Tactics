@@ -12,7 +12,7 @@ struct RotateItem {
 	float speed;
 	glm::vec3 axis;
 
-	REFLECT(RotateItem, speed, axis);
+	COMPONENT(RotateItem, speed, axis);
 };
 
 class RotateItemSystem {

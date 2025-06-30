@@ -11,7 +11,7 @@ struct Frustum {
 	float aspectRatio = 1.0f;
 	float orthoSize = 5.0f;
 
-	REFLECT(Frustum, fov, near, far, aspectRatio, orthoSize)
+	COMPONENT(Frustum, fov, near, far, aspectRatio, orthoSize)
 };
 
 } // namespace tactics::component

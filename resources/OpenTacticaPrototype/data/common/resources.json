@@ -1,0 +1,179 @@
+{
+    "common": {
+        "Shader": {
+            "texturedUnlit": {
+                "vertexShader": "common/shaders/default.vert",
+                "fragmentShader": "common/shaders/texturedUnlit.frag"
+            },
+            "coloredUnlit": {
+                "vertexShader": "common/shaders/default.vert",
+                "fragmentShader": "common/shaders/coloredUnlit.frag"
+            },
+            "spriteUnlit": {
+                "vertexShader": "common/shaders/default.vert",
+                "fragmentShader": "common/shaders/spriteUnlit.frag"
+            }
+        },
+        "Texture": {
+            "none": {
+                "path": "common/textures/none.png"
+            }
+        },
+        "Material": {
+            "texturedUnlit": {
+                "shader": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "none"
+                    },
+                    "vectors4": {
+                        "u_Color": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0,
+                            "w": 1.0
+                        }
+                    }
+                }
+            },
+            "texturedUnlitWithAlpha": {
+                "shader": "texturedUnlit",
+                "alphaBlended": true,
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "none"
+                    },
+                    "vectors4": {
+                        "u_Color": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0,
+                            "w": 1.0
+                        }
+                    }
+                }
+            },
+            "spriteMaterial": {
+                "shader": "spriteUnlit",
+                "alphaBlended": true,
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "none"
+                    },
+                    "vectors2": {
+                        "u_SpriteUV": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "u_SpriteSize": {
+                            "x": 1.0,
+                            "y": 1.0
+                        },
+                        "u_FlipUV": {
+                            "x": 1.0,
+                            "y": 1.0
+                        }
+                    },
+                    "vectors4": {
+                        "u_Color": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0,
+                            "w": 1.0
+                        }
+                    }
+                }
+            },
+            "coloredUnlit": {
+                "shader": "coloredUnlit",
+                "uniforms": {
+                    "vectors4": {
+                        "u_Color": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0,
+                            "w": 1.0
+                        }
+                    }
+                }
+            }
+        },
+        "Prefab": {
+            "simpleCamera": {
+                "path": "common/prefabs/simpleCamera.prefab"
+            }
+        },
+        "InputAction": {
+            "exitFromState": {
+                "type": "Scalar"
+            },
+            "goToEmptyState": {
+                "type": "Scalar"
+            },
+            "anyKeyPressed": {
+                "type": "Scalar"
+            }
+        },
+        "InputMap": {
+            "commonMap": {
+                "bindings": [
+                    {
+                        "action": "exitFromState",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyEscape"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "press",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "action": "goToEmptyState",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeySpace"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "press",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "emptyStateMap": {
+                "bindings": [
+                    {
+                        "action": "anyKeyPressed",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyAny"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "press",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

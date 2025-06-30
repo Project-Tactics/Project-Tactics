@@ -46,6 +46,11 @@ void Transform::rotate(float radians, const glm::vec3& axis) {
 	_dirty = true;
 }
 
+void Transform::rotate(const glm::quat& amountToRotate) {
+	rotation *= amountToRotate;
+	_dirty = true;
+}
+
 void Transform::setScale(const glm::vec3& newScale) {
 	scale = newScale;
 	transformMatrix = glm::scale(transformMatrix, scale);

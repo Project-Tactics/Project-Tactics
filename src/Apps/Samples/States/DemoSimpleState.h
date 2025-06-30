@@ -13,6 +13,7 @@ public:
 
 private:
 	void _createPlane();
+	void _createGrid();
 	void _createTeapot();
 	void _createCrate();
 	void _createQuads();
@@ -20,6 +21,8 @@ private:
 	void _createCustomQuadWithCustomResources();
 	void _createParticleEffect();
 	void _setupInputMap();
+
+	float _timer{0.f};
 };
 
 } // namespace tactics

@@ -1,0 +1,9 @@
+{
+    "demoDebugDrawing": {
+        "Prefab": {
+            "defaultCamera": {
+                "path": "_demoDebugDrawing/defaultCamera.prefab"
+            }
+        }
+    }
+}

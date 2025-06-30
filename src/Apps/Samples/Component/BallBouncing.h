@@ -11,7 +11,7 @@ struct BallBouncing {
 	float speed;
 	glm::vec3 axis;
 
-	REFLECT(BallBouncing, speed, axis)
+	COMPONENT(BallBouncing, speed, axis)
 };
 
 class BallBouncingSystem {

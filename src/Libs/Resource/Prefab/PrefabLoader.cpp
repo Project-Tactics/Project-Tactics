@@ -8,11 +8,6 @@
 
 #include <cereal/archives/json.hpp>
 
-// TODO(Gerark) These are totally temporary functions, should be moved or removed entirely
-void epilogue(cereal::JSONInputArchive&, const tactics::component::Transform&) {}
-
-void prologue(cereal::JSONInputArchive&, const tactics::component::Transform&) {}
-
 namespace tactics::resource {
 
 PrefabLoader::PrefabLoader(FileSystem& fileSystem, const ResourceProvider& resourceProvider, EntityComponentSystem& ecs)

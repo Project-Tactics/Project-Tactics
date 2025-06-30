@@ -2,6 +2,7 @@
 
 #include <Libs/Ecs/Component/AlphaBlendedComponent.h>
 #include <Libs/Ecs/Component/CameraComponent.h>
+#include <Libs/Ecs/Component/DebugDrawingComponent.h>
 #include <Libs/Ecs/Component/FrustumComponent.h>
 #include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/NameComponent.h>
@@ -140,14 +141,15 @@ void SceneSystem::_updateAlphaBlendFlags(entt::registry& registry, entt::entity 
 	}
 	}
 
-	registry.remove<AlphaBlended>(entity);
-	registry.remove<FullyAlphaBlended>(entity);
-
 	if (isFullyTransparent) {
-		registry.emplace<FullyAlphaBlended>(entity);
-		registry.emplace<AlphaBlended>(entity);
+		registry.emplace_or_replace<FullyAlphaBlended>(entity);
+		registry.emplace_or_replace<AlphaBlended>(entity);
 	} else if (isMixedAlphaBlended) {
-		registry.emplace<AlphaBlended>(entity);
+		registry.remove<FullyAlphaBlended>(entity);
+		registry.emplace_or_replace<AlphaBlended>(entity);
+	} else {
+		registry.remove<FullyAlphaBlended>(entity);
+		registry.remove<AlphaBlended>(entity);
 	}
 }
 
@@ -197,6 +199,27 @@ Entity SceneSystem::createEntity(const HashId& name, const HashId& prefabName) {
 	auto prefab = _resourceSystem.getResource<resource::Prefab>(prefabName);
 	auto entity = _ecs.createEntityFromPrefab(name, prefab->entity);
 	return entity;
+}
+
+void SceneSystem::drawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color, float lifetime) {
+	using namespace component;
+	auto entity = Entity::create("DebugLine"_id, &_ecs.sceneRegistry());
+	entity.addComponent<DebugLine>(start, end, color);
+	entity.addComponent<DebugDrawingLifetime>(lifetime);
+}
+
+void SceneSystem::drawBox(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color, float lifetime) {
+	using namespace component;
+	auto entity = Entity::create("DebugBox"_id, &_ecs.sceneRegistry());
+	entity.addComponent<DebugBox>(position, size, color);
+	entity.addComponent<DebugDrawingLifetime>(lifetime);
+}
+
+void SceneSystem::drawSphere(const glm::vec3& position, float radius, const glm::vec4& color, float lifetime) {
+	using namespace component;
+	auto entity = Entity::create("DebugSphere"_id, &_ecs.sceneRegistry());
+	entity.addComponent<DebugSphere>(position, radius, color);
+	entity.addComponent<DebugDrawingLifetime>(lifetime);
 }
 
 Entity SceneSystem::getEntityByName(const HashId& name) {

@@ -9,14 +9,14 @@
 
 namespace tactics {
 
-template<typename TComponent>
-void defaultJsonDeserializer(TComponent& component,
+template<typename TType>
+void defaultJsonDeserializer(TType& object,
 							 const resource::ResourceProvider* /*resourceProvider*/,
 							 const nlohmann::ordered_json& json) {
-	if constexpr (sizeof(TComponent) == 1u) {
+	if constexpr (sizeof(TType) == 1u) {
 		// This is a struct with no members, so we don't need to do anything
 	} else {
-		from_json(json, component);
+		from_json(json, object);
 	}
 }
 
@@ -25,7 +25,7 @@ concept HasDeserialize = requires(T obj, resource::ResourceProvider* provider, c
 	{ obj.deserialize(provider, json) };
 };
 
-template<typename... TArgs> void defineComponentsReflection() {
+template<typename... TArgs> void defineReflection() {
 	(TArgs::defineReflection(), ...);
 }
 
@@ -91,12 +91,12 @@ entt::meta_factory<TComponent> componentReflection(const char* name) {
 				  ...)  \
 	NAME
 
-#define REFLECT_EMPTY(TYPE)               \
+#define COMPONENT_TAG(TYPE)               \
 	static void defineReflection() {      \
 		componentReflection<TYPE>(#TYPE); \
 	}
 
-#define REFLECT(TYPE, ...)                                                       \
+#define COMPONENT(TYPE, ...)                                                     \
 	JSON_SERIALIZE(TYPE, __VA_ARGS__);                                           \
                                                                                  \
 	static void defineReflection() {                                             \

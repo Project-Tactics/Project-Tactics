@@ -44,6 +44,10 @@ RenderQueue& RenderSystem::createRenderQueue() {
 	return *_renderQueues.back().get();
 }
 
+void RenderSystem::destroyRenderQueues() {
+	_renderQueues.clear();
+}
+
 void RenderSystem::_setupGlAttributes() {
 	_setupDoubleBuffer();
 	_setupOglVersion();

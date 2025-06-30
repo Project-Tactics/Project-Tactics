@@ -16,7 +16,7 @@ enum class Facing {
 struct CharacterFacing {
 	Facing facing = Facing::South;
 
-	REFLECT(CharacterFacing, facing);
+	COMPONENT(CharacterFacing, facing);
 };
 
 class CharacterFacingSystem {

@@ -27,6 +27,7 @@ public:
 	~RenderSystem();
 
 	RenderQueue& createRenderQueue();
+	void destroyRenderQueues();
 
 	void render();
 

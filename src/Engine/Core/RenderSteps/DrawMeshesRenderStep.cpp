@@ -23,9 +23,7 @@ namespace tactics::renderstep {
 DrawMeshes::DrawMeshes(EntityComponentSystem& ecs, ParticleSystem& particleSystem, AlphaBlendedFlag alphaBlendedFlag)
 	: _ecs(ecs)
 	, _particleSystem(particleSystem)
-	, _alphaBlendedFlag(alphaBlendedFlag) {
-	_quadBuffers.build();
-}
+	, _alphaBlendedFlag(alphaBlendedFlag) {}
 
 void DrawMeshes::execute(RenderStepInfo& info) {
 	using namespace component;
@@ -50,7 +48,7 @@ void DrawMeshes::_drawOpaqueGeometry(const RenderStepInfo& info) {
 	 */
 	auto view = _ecs.sceneRegistry().view<Transform, Mesh>(entt::exclude<FullyAlphaBlended>);
 	for (auto&& [entity, transform, mesh] : view.each()) {
-		_drawMesh(info.viewProjection, transform, mesh, false);
+		_drawMesh(info, transform, mesh, false);
 	}
 }
 
@@ -66,30 +64,29 @@ void DrawMeshes::_drawAlphaBlendedGeometry(const RenderStepInfo& info) {
 	 * Transparent Geometry need to be sorted back to front to be rendered properly.
 	 */
 	auto& registry = _ecs.sceneRegistry();
-	registry.sort<AlphaBlended>(
-		[&registry, &cameraPosition = info.cameraPosition](const entt::entity lhs, const entt::entity rhs) {
-			auto diff1 = registry.get<Transform>(lhs).getPosition() - cameraPosition;
-			auto diff2 = registry.get<Transform>(rhs).getPosition() - cameraPosition;
-			return glm::length2(diff1) > glm::length2(diff2);
-		});
+	registry.sort<AlphaBlended>([&registry, &info](const entt::entity lhs, const entt::entity rhs) {
+		const auto& t1 = registry.get<Transform>(lhs);
+		const auto& t2 = registry.get<Transform>(rhs);
+		float d1 = glm::dot(t1.getPosition() - info.cameraPosition, info.cameraForward);
+		float d2 = glm::dot(t2.getPosition() - info.cameraPosition, info.cameraForward);
+		return d1 > d2; // back to front
+	});
 
 	auto view = registry.view<AlphaBlended, Transform, Renderable>();
 	for (auto&& [entity, transform, renderable] : view.each()) {
 		switch (renderable.type) {
 		case RenderType::Mesh: {
 			auto& mesh = registry.get<Mesh>(entity);
-			_drawMesh(info.viewProjection, transform, mesh, true);
+			_drawMesh(info, transform, mesh, true);
 			break;
 		}
 		case RenderType::Particle: {
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-			glBlendEquation(GL_FUNC_ADD);
 			if (registry.all_of<ParticleEmitterPlaying>(entity)) {
 				auto& emitter = registry.get<ParticleEmitter>(entity);
 				_drawParticles(info, transform, emitter);
 			}
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBlendEquation(GL_FUNC_ADD);
 			break;
 		}
 		}
@@ -99,7 +96,7 @@ void DrawMeshes::_drawAlphaBlendedGeometry(const RenderStepInfo& info) {
 	glDisable(GL_BLEND);
 }
 
-void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection,
+void DrawMeshes::_drawMesh(const RenderStepInfo& renderInfo,
 						   component::Transform& transform,
 						   const component::Mesh& inMesh,
 						   bool filterTransparent) {
@@ -116,16 +113,19 @@ void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection,
 
 		auto& shader = material->parent->shader;
 
-		subMesh.vertexAttributes->bind();
+		subMesh.va().bind();
 
 		// TODO(Gerark) Optimization: Group Shader/Materials instead of constantly binding and unbinding
 		shader->bind();
 		material->updateShaderUniforms();
 
-		// TODO(Gerark) Need to add way more than just the ModelViewProjection matrix as standard uniform but we
-		// should parse the shader to check what are the standard uniforms it's requiring
-		glm::mat4 mvp = viewProjection * transform.getMatrix();
+		// TODO(Gerark) Need to add way more than just the ModelViewProjection matrix and Resolution as standard uniform
+		// but we should parse the shader to check what are the standard uniforms it's requiring
+		glm::mat4 mvp = renderInfo.viewProjection * transform.getMatrix();
 		shader->setUniform("u_ModelViewProjection", mvp);
+		if (shader->hasUniform("u_Resolution")) {
+			shader->setUniform("u_Resolution", renderInfo.windowSize);
+		}
 
 		_drawGeometry(subMesh);
 
@@ -134,15 +134,15 @@ void DrawMeshes::_drawMesh(const glm::mat4x4& viewProjection,
 }
 
 void DrawMeshes::_drawGeometry(const resource::SubMesh& mesh) {
-	mesh.vertexBuffer->bind();
-	if (mesh.indexBuffer->getSize() > 0) {
-		mesh.indexBuffer->bind();
-		glDrawElements(GL_TRIANGLES, mesh.indexBuffer->getSize(), GL_UNSIGNED_INT, nullptr);
+	mesh.vb().bind();
+	if (mesh.ib().getSize() > 0) {
+		mesh.ib().bind();
+		glDrawElements(GL_TRIANGLES, mesh.ib().getSize(), GL_UNSIGNED_INT, nullptr);
 	} else {
-		glDrawArrays(GL_TRIANGLES, 0, mesh.vertexBuffer->getSize());
+		glDrawArrays(GL_TRIANGLES, 0, mesh.vb().getSize());
 	}
-	mesh.vertexAttributes->unbind();
-	mesh.vertexBuffer->unbind();
+	mesh.va().unbind();
+	mesh.vb().unbind();
 }
 
 void DrawMeshes::_drawParticles(const RenderStepInfo& info,
@@ -193,7 +193,7 @@ void DrawMeshes::_drawParticles(const RenderStepInfo& info,
 			shader->setUniform("u_Color", particle.color);
 			shader->setUniform("u_Texture", 0);
 
-			glDrawElements(GL_TRIANGLES, _quadBuffers.indexBuffer.getSize(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, _quadBuffers._indexBuffer.getSize(), GL_UNSIGNED_INT, nullptr);
 		}
 	}
 

@@ -16,7 +16,7 @@ private:
 	static std::vector<unsigned int> _parseIndices(const std::string& strIndices);
 	std::shared_ptr<Mesh> _loadMesh(const std::string& path);
 	std::shared_ptr<Mesh> _loadMesh(const std::string& strVertices, const std::string& strIndices);
-	std::unique_ptr<VertexAttributes> _createDefaultVertexAttributes();
+	VertexAttributes _createDefaultVertexAttributes();
 };
 
 } // namespace tactics::resource

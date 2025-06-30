@@ -14,6 +14,7 @@ set(SOURCES
     Component/TranslateItem.cpp
     States/DemoPongState.cpp
     States/DemoUserInterfaceState.cpp
+    States/DemoDebugDrawingState.cpp
     main.cpp
     Overlay/SampleSelectionOverlay.cpp
     SamplesApplication.cpp
@@ -42,6 +43,7 @@ set(HEADERS
     SamplesApplication.h
     States/DemoPongState.h
     States/DemoUserInterfaceState.h
+    States/DemoDebugDrawingState.h
     SamplesUtils.h
     States/DemoMapState.h
     States/DemoParticlesState.h

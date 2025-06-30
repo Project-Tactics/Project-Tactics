@@ -19,6 +19,7 @@ ImVec4 CustomOverlayColors::Colors::ResourceColor;
 ImVec4 CustomOverlayColors::Colors::ShaderColor;
 ImVec4 CustomOverlayColors::Colors::SpriteSheetColor;
 ImVec4 CustomOverlayColors::Colors::TextureColor;
+ImVec4 CustomOverlayColors::Colors::DataSetColor;
 ImVec4 CustomOverlayColors::Colors::InputActionColor;
 ImVec4 CustomOverlayColors::Colors::InputMapColor;
 ImVec4 CustomOverlayColors::Colors::InputChangeColorVeryLow;
@@ -41,6 +42,7 @@ void CustomOverlayColors::initialize(resource::IniFile& configFile) {
 	_colors.ShaderColor = configFile.get(category, "shaderColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.SpriteSheetColor = configFile.get(category, "spriteSheetColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.TextureColor = configFile.get(category, "textureColor", ImVec4{1, 0.5f, 0.5f, 1.f});
+	_colors.DataSetColor = configFile.get(category, "textureColor", ImVec4{1, 0.5f, 0.5f, 1.f});
 	_colors.InputActionColor = configFile.get(category, "inputActionColor", ImVec4{1, 0.5f, 0.0f, 1.f});
 	_colors.InputMapColor = configFile.get(category, "inputMapColor", ImVec4{1, 0.0f, 0.5f, 1.f});
 	_colors.InputChangeColorVeryLow = configFile.get(category, "inputChangeColorVeryLow", ImVec4{1, 0.0f, 0.5f, 1.f});
@@ -81,6 +83,9 @@ const ImVec4& CustomOverlayColors::getResourceTypeColor(resource::ResourceType t
 	}
 	case resource::ResourceType::Texture: {
 		return _colors.TextureColor;
+	}
+	case resource::ResourceType::DataSet: {
+		return _colors.DataSetColor;
 	}
 	}
 

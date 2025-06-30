@@ -14,6 +14,7 @@ struct RenderStepInfo {
 	glm::mat4 view;
 	glm::mat4 viewProjection;
 	glm::vec3 cameraPosition;
+	glm::vec3 cameraForward;
 };
 
 /**
