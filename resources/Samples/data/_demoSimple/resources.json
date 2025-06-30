@@ -1,11 +1,5 @@
 {
     "demoSimple": {
-        "Shader": {
-            "grid": {
-                "vertexShader": "common/shaders/default.vert",
-                "fragmentShader": "common/shaders/grid.frag"
-            }
-        },
         "Texture": {
             "tacticsIcon": {
                 "path": "_demoSimple/tacticsIcon.png"
@@ -15,12 +9,6 @@
             },
             "floor": {
                 "path": "_demoSimple/floor.jpg"
-            }
-        },
-        "Material": {
-            "grid": {
-                "shader": "grid",
-                "alphaBlended": true
             }
         },
         "Mesh": {
@@ -37,9 +25,6 @@
             },
             "freeCamera": {
                 "path": "_demoSimple/freeCamera.prefab"
-            },
-            "grid": {
-                "path": "_demoSimple/grid.prefab"
             }
         },
         "InputAction": {

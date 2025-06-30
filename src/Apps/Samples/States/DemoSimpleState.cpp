@@ -121,11 +121,6 @@ void DemoSimpleState::_createPlane() {
 	sceneSystem.createEntity("plane"_id, "plane"_id);
 }
 
-void DemoSimpleState::_createGrid() {
-	auto& sceneSystem = getService<SceneSystem>();
-	sceneSystem.createEntity("grid"_id, "grid"_id);
-}
-
 void DemoSimpleState::_createQuads() {
 	auto& sceneSystem = getService<SceneSystem>();
 	auto& resourceSystem = getService<resource::ResourceSystem>();
