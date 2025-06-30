@@ -28,6 +28,7 @@ namespace tactics {
 FsmAction DemoSimpleState::enter() {
 	_createCamera("freeCamera"_id);
 	_createPlane();
+	//_createGrid();
 	_createTeapot();
 	_createCrate();
 	_createQuads();
@@ -118,6 +119,11 @@ void DemoSimpleState::_createTeapot() {
 void DemoSimpleState::_createPlane() {
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.createEntity("plane"_id, "plane"_id);
+}
+
+void DemoSimpleState::_createGrid() {
+	auto& sceneSystem = getService<SceneSystem>();
+	sceneSystem.createEntity("grid"_id, "grid"_id);
 }
 
 void DemoSimpleState::_createQuads() {

@@ -13,6 +13,7 @@ public:
 
 private:
 	void _createPlane();
+	void _createGrid();
 	void _createTeapot();
 	void _createCrate();
 	void _createQuads();
