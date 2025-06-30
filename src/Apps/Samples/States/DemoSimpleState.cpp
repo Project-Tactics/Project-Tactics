@@ -17,7 +17,7 @@
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/Input/InputMap.h>
 #include <Libs/Resource/ResourceSystem.h>
-#include <Libs/Utility/Math.h>
+#include <Libs/Utility/String/Math.h>
 #include <Libs/Utility/Time/EngineTime.h>
 
 #include <array>
@@ -28,7 +28,6 @@ namespace tactics {
 FsmAction DemoSimpleState::enter() {
 	_createCamera("freeCamera"_id);
 	_createPlane();
-	//_createGrid();
 	_createTeapot();
 	_createCrate();
 	_createQuads();
@@ -84,7 +83,6 @@ FsmAction DemoSimpleState::update() {
 	}
 	sceneSystem.drawSphere({-50, 60, -50}, 10, Color::cyan);
 	sceneSystem.drawBox({50, 60, -50}, {10, 10, 10}, Color::red);
-
 	return FsmAction::none();
 }
 
@@ -122,20 +120,15 @@ void DemoSimpleState::_createPlane() {
 	sceneSystem.createEntity("plane"_id, "plane"_id);
 }
 
-void DemoSimpleState::_createGrid() {
-	auto& sceneSystem = getService<SceneSystem>();
-	sceneSystem.createEntity("grid"_id, "grid"_id);
-}
-
 void DemoSimpleState::_createQuads() {
 	auto& sceneSystem = getService<SceneSystem>();
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 
 	const int width = 4;
 	const int height = 4;
-	for (auto x = -width / 2; x < width / 2; ++x) {
-		for (auto y = -height / 2; y < height / 2; ++y) {
-			auto quad = sceneSystem.createEntity(HashId::none,
+	for (auto x = -width / 2.f; x < width / 2.f; x += 1.f) {
+		for (auto y = -height / 2.f; y < height / 2.f; y += 1.f) {
+			auto quad = sceneSystem.createEntity("quadTest"_id,
 												 {-50.0f + y * 20.f, 10.0f, x * 10.f},
 												 "quad"_id,
 												 {"texturedUnlitWithAlpha"_id});

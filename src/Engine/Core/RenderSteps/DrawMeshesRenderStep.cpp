@@ -62,14 +62,16 @@ void DrawMeshes::_drawAlphaBlendedGeometry(const RenderStepInfo& info) {
 
 	/*
 	 * Transparent Geometry need to be sorted back to front to be rendered properly.
+	 * Sorting for alpha blended geometry is not trivial. Right now we're doing the most simple thing.
+	 * We check distances from camera to the objects and sort them based on that.
 	 */
 	auto& registry = _ecs.sceneRegistry();
 	registry.sort<AlphaBlended>([&registry, &info](const entt::entity lhs, const entt::entity rhs) {
 		const auto& t1 = registry.get<Transform>(lhs);
 		const auto& t2 = registry.get<Transform>(rhs);
-		float d1 = glm::dot(t1.getPosition() - info.cameraPosition, info.cameraForward);
-		float d2 = glm::dot(t2.getPosition() - info.cameraPosition, info.cameraForward);
-		return d1 > d2; // back to front
+		auto t1Lenght = glm::length2(t1.getPosition() - info.cameraPosition);
+		auto t2Lenght = glm::length2(t2.getPosition() - info.cameraPosition);
+		return t1Lenght > t2Lenght; // back to front
 	});
 
 	auto view = registry.view<AlphaBlended, Transform, Renderable>();
