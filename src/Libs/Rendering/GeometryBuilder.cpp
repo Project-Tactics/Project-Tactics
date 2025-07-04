@@ -41,8 +41,7 @@ void GeometryBuilder::addIndices(std::vector<unsigned int> indices) {
 
 std::shared_ptr<resource::Mesh> GeometryBuilder::build(const HashId& name) {
 	if (_currentSubMesh) {
-		TACTICS_EXCEPTION(
-			"GeometryBuilder: Can't build mesh. SubMesh is still active. Remember to call endSubMesh.");
+		TACTICS_EXCEPTION("GeometryBuilder: Can't build mesh. SubMesh is still active. Remember to call endSubMesh.");
 	}
 
 	auto mesh = std::make_shared<resource::Mesh>(name);

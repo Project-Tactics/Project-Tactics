@@ -30,13 +30,13 @@ FsmBuilder& FsmBuilder::_on(const HashId& transitionName) {
 	_latestOnTransition = HashId::none;
 	if (!_latestState) {
 		TACTICS_EXCEPTION("Can't create a transition with name [{}]. No state has been setup in the FsmBuilder",
-								transitionName);
+						  transitionName);
 	}
 
 	if (_latestState->transitions.contains(transitionName)) {
 		TACTICS_EXCEPTION("Can't create a transition with the same name [{}]. State [{}]",
-								transitionName,
-								_latestState->name);
+						  transitionName,
+						  _latestState->name);
 	}
 
 	_latestState->transitions.insert({transitionName, {}});

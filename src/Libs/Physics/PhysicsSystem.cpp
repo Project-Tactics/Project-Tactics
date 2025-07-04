@@ -6,6 +6,8 @@
 #include <Libs/Ecs/Component/PhysicsComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
 
+#include <Jolt/Physics/Collision/Shape/BoxShape.h>
+
 JPH_SUPPRESS_WARNING_PUSH
 
 namespace tactics {

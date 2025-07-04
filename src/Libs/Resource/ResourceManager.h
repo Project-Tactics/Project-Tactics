@@ -90,8 +90,8 @@ public:
 		}
 		if (!resource) {
 			TACTICS_EXCEPTION("Failed to load resource from descriptor. Resource Type: {} - Descriptor: {}",
-									toString(TResource::TYPE),
-									data.dump());
+							  toString(TResource::TYPE),
+							  data.dump());
 		}
 		_registerResource(resource);
 		return resource;
@@ -170,8 +170,8 @@ private:
 
 		if (itr == _resources.end()) {
 			TACTICS_EXCEPTION("Resource with name [{}] does not exist. Can't find resource in [{}] manager.",
-									name,
-									toString(getType()));
+							  name,
+							  toString(getType()));
 		}
 
 		return itr->second;
@@ -179,11 +179,10 @@ private:
 
 	void _registerResource(std::shared_ptr<TResource> resource) {
 		if (_resources.contains(resource->id)) {
-			TACTICS_EXCEPTION(
-				"Attempt to register a resource with the same id. Resource Id: {} - Name: {} - Type: {}",
-				resource->id,
-				resource->name,
-				toString(resource->type));
+			TACTICS_EXCEPTION("Attempt to register a resource with the same id. Resource Id: {} - Name: {} - Type: {}",
+							  resource->id,
+							  resource->name,
+							  toString(resource->type));
 		}
 
 		auto itr = std::ranges::find_if(_resources,

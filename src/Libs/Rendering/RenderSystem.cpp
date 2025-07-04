@@ -135,9 +135,8 @@ void RenderSystem::_setupVSync() {
 	} else if (enableVSyncStr == "adaptive") {
 		swapInterval = -1;
 	} else {
-		TACTICS_EXCEPTION(
-			"Invalid value for enableVSync in the config file. Expected 'true/false/adaptive', got %s",
-			enableVSyncStr.c_str());
+		TACTICS_EXCEPTION("Invalid value for enableVSync in the config file. Expected 'true/false/adaptive', got %s",
+						  enableVSyncStr.c_str());
 	}
 	SDL_GL_SetSwapInterval(swapInterval);
 }
@@ -152,7 +151,7 @@ void RenderSystem::_setupOglContextProfile() {
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 	} else {
 		TACTICS_EXCEPTION("Invalid rendering context profile provided: %s, check your ini config file.",
-								contextProfile);
+						  contextProfile);
 	}
 }
 

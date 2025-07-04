@@ -15,9 +15,9 @@ PrefabManager::clonePrefabToRegistry(const HashId& name, const Entity& prefabEnt
 		auto type = entt::resolve(componentType);
 		if (!type) {
 			TACTICS_EXCEPTION("Can't create entity [{}]. Component type [{}] not found while cloning: [{}]",
-									name,
-									toString(componentType),
-									toString(prefabEntity.getName()));
+							  name,
+							  toString(componentType),
+							  toString(prefabEntity.getName()));
 		}
 
 		if (auto cloneFunction = type.func("clone"_id)) {
