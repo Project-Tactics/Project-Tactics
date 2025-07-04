@@ -21,6 +21,22 @@ class PhysicsSystemPimpl : public JPH::BodyActivationListener,
 						   public JPH::ObjectVsBroadPhaseLayerFilter,
 						   public JPH::ObjectLayerPairFilter {
 public:
+	template<typename TShape, typename... TShapeArgs>
+	std::uint32_t createAndAddBody(const JPH::RVec3& pos,
+								   const JPH::Quat& rotation,
+								   JPH::EMotionType motionType,
+								   JPH::ObjectLayer layer,
+								   TShapeArgs&&... args) {
+		JPH::BodyCreationSettings bodySettings(new TShape(std::forward<TShapeArgs>(args)...),
+											   pos,
+											   rotation,
+											   motionType,
+											   layer);
+		return joltPhysicsSystem->GetBodyInterface()
+			.CreateAndAddBody(bodySettings, JPH::EActivation::Activate)
+			.GetIndexAndSequenceNumber();
+	}
+
 	JPH::ValidateResult OnContactValidate(const JPH::Body& inBody1,
 										  const JPH::Body& inBody2,
 										  JPH::RVec3Arg inBaseOffset,
