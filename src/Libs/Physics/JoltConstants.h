@@ -41,10 +41,4 @@ static constexpr JPH::uint BPLayerCount{2};
 static constexpr std::array<JPH::BroadPhaseLayer, physics::LayerCount> LayerConversionTable = {BPLayerStatic,
 																							   BPLayerDynamic};
 
-#ifdef JPH_ENABLE_ASSERTS
-static constexpr bool joltAssertEnabled = true;
-#else
-static constexpr bool joltAssertEnabled = false;
-#endif
-
 } // namespace tactics::physics

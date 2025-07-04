@@ -33,9 +33,9 @@ PhysicsSystem::~PhysicsSystem() {
 
 void PhysicsSystem::_installTraceAndAssertCallbacks() {
 	JPH::Trace = joltTrace;
-	if constexpr (physics::joltAssertEnabled) {
-		JPH::AssertFailed = joltAssert;
-	}
+#ifdef JPH_ENABLE_ASSERTS
+	JPH::AssertFailed = joltAssert;
+#endif
 }
 
 void PhysicsSystem::update(float fixedDeltaTime, entt::registry& /*registry*/) {
