@@ -17,10 +17,12 @@ static void joltTrace(const char* format, ...) {
 	LOG_TRACE(Log::Physics, "{}", buffer);
 }
 
+#ifdef JPH_ENABLE_ASSERTS
 // Callback for asserts, connect this to your own assert handler if you have one
 static bool joltAssert(const char* inExpression, const char* inMessage, const char* inFile, JPH::uint inLine) {
 	TACTICS_EXCEPTION("{}:{}: ({}) {}", inFile, inLine, inExpression, (inMessage != nullptr ? inMessage : ""));
 	return true;
 };
+#endif
 
 } // namespace tactics
