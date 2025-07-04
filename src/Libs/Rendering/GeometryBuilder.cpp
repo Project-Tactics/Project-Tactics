@@ -17,7 +17,7 @@ void GeometryBuilder::endSubMesh() {
 
 void GeometryBuilder::addVertex(std::vector<float> vertex) {
 	if (!_currentSubMesh) {
-		throw TACTICS_EXCEPTION(
+		TACTICS_EXCEPTION(
 			"GeometryBuilder: Can't addVertex. No SubMesh currently active. Remember to call beginSubMesh.");
 	}
 	_currentSubMesh->vertices.insert(_currentSubMesh->vertices.end(), vertex.begin(), vertex.end());
@@ -25,7 +25,7 @@ void GeometryBuilder::addVertex(std::vector<float> vertex) {
 
 void GeometryBuilder::addIndex(unsigned int index) {
 	if (!_currentSubMesh) {
-		throw TACTICS_EXCEPTION(
+		TACTICS_EXCEPTION(
 			"GeometryBuilder: Can't addIndex. No SubMesh currently active. Remember to call beginSubMesh.");
 	}
 	_currentSubMesh->indices.push_back(index);
@@ -33,7 +33,7 @@ void GeometryBuilder::addIndex(unsigned int index) {
 
 void GeometryBuilder::addIndices(std::vector<unsigned int> indices) {
 	if (!_currentSubMesh) {
-		throw TACTICS_EXCEPTION(
+		TACTICS_EXCEPTION(
 			"GeometryBuilder: Can't addIndices. No SubMesh currently active. Remember to call beginSubMesh.");
 	}
 	_currentSubMesh->indices.insert(_currentSubMesh->indices.end(), indices.begin(), indices.end());
@@ -41,18 +41,17 @@ void GeometryBuilder::addIndices(std::vector<unsigned int> indices) {
 
 std::shared_ptr<resource::Mesh> GeometryBuilder::build(const HashId& name) {
 	if (_currentSubMesh) {
-		throw TACTICS_EXCEPTION(
-			"GeometryBuilder: Can't build mesh. SubMesh is still active. Remember to call endSubMesh.");
+		TACTICS_EXCEPTION("GeometryBuilder: Can't build mesh. SubMesh is still active. Remember to call endSubMesh.");
 	}
 
 	auto mesh = std::make_shared<resource::Mesh>(name);
 
 	for (auto& subMesh : _subMeshes) {
 		if (subMesh.vertices.empty()) {
-			throw TACTICS_EXCEPTION("GeometryBuilder: Can't build mesh. SubMesh has no vertices.");
+			TACTICS_EXCEPTION("GeometryBuilder: Can't build mesh. SubMesh has no vertices.");
 		}
 		if (subMesh.indices.empty()) {
-			throw TACTICS_EXCEPTION("GeometryBuilder: Can't build mesh. SubMesh has no indices.");
+			TACTICS_EXCEPTION("GeometryBuilder: Can't build mesh. SubMesh has no indices.");
 		}
 
 		auto vbo = VertexBuffer(subMesh.vertices, rp::StaticDraw::value);

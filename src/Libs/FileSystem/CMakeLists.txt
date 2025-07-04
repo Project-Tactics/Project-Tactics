@@ -18,7 +18,7 @@ set(HEADERS
         PathHelper.h)
 
 add_library(libs_filesystem STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_filesystem PUBLIC libs_utility inicpp PRIVATE lua_wrapper)
+target_link_libraries(libs_filesystem PUBLIC libs_utility inicpp)
 add_to_libs_folder(libs_filesystem)
 
 unset(SOURCES)

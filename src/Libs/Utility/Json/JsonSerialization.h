@@ -115,14 +115,14 @@ template<typename... Ts> struct adl_serializer<std::variant<Ts...>> {
 
 	static void from_json(const json& j, std::variant<Ts...>& value) {
 		if (!j.contains("type")) {
-			throw TACTICS_EXCEPTION("Failed to deserialize variant type, no [type] field");
+			TACTICS_EXCEPTION("Failed to deserialize variant type, no [type] field");
 		}
 
 		auto type = j["type"].get<std::string>();
 
 		auto success = visit_types<std::variant<Ts...>>([&value, &j]<typename T>() { value = j.get<T>(); }, type);
 		if (!success) {
-			throw TACTICS_EXCEPTION("Failed to deserialize variant type, {}", type);
+			TACTICS_EXCEPTION("Failed to deserialize variant type, {}", type);
 		}
 	}
 };

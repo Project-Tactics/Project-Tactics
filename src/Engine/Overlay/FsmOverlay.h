@@ -2,6 +2,7 @@
 
 #include <Libs/Ecs/EntityUtilities.h>
 #include <Libs/Overlay/Overlay.h>
+#include <Libs/Utility/HashId.h>
 
 #include <optional>
 #include <string>

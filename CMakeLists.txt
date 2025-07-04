@@ -12,6 +12,12 @@ set(CMAKE_CXX_STANDARD 23)
 # Generate an error if C++23 support is not available
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDebug")
+else()
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
+endif()
+
 # Avoid conflicts with <Windows.h> min-max functions
 add_compile_definitions(NOMINMAX)
 
@@ -53,6 +59,6 @@ add_subdirectory(resources)
 core_dependencies()
 
 # Set OpenTactica as the default startup project for the generated Visual Studio solution
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT OpenTactica)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Samples)
 # Set a custom folder for the predefined targets in the generated Visual Studio solution
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_cmakeAndPostBuild")

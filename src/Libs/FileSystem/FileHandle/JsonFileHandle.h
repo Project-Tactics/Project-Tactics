@@ -16,7 +16,6 @@ public:
 	void load() override;
 
 private:
-	void _loadFromLua();
 	void _loadFromJson();
 	void _load(std::istream& stream);
 

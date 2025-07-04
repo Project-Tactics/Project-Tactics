@@ -71,11 +71,11 @@ void ResourceSystem::_unregisterManager(std::unique_ptr<BaseResourceManager> res
 }
 
 BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) const {
-	if (auto itr = _resourceManagers.find(resourceType); itr != _resourceManagers.end()) {
-		return *itr->second;
+	auto itr = _resourceManagers.find(resourceType);
+	if (itr == _resourceManagers.end()) {
+		TACTICS_EXCEPTION("Can't find manager for resource type: {}", resourceType);
 	}
-
-	throw TACTICS_EXCEPTION("Can't find manager for resource type: {}", resourceType);
+	return *itr->second;
 }
 
 BaseResourceManager& ResourceSystem::getManager(ResourceType resourceType) {

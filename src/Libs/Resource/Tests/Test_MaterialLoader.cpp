@@ -16,7 +16,7 @@ TEST_F(ResourceTest, LoadEmptyMaterialDescriptor) {
 	MaterialLoader loader(*_fileSystem, mockProvider);
 
 	MaterialDescriptor desc;
-	EXPECT_THROW([[maybe_unused]] auto material = loader.load(desc), Exception);
+	EXPECT_DEATH([[maybe_unused]] auto material = loader.load(desc), ".*");
 }
 
 TEST_F(ResourceTest, LoadMaterialWithValidShader) {

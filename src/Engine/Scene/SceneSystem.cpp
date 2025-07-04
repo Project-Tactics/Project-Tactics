@@ -67,7 +67,7 @@ void SceneSystem::clearScene(bool clearCameras) {
 Entity SceneSystem::getCurrentCamera() {
 	auto view = _ecs.sceneRegistry().view<component::CurrentCamera>();
 	if (view.empty()) {
-		throw TACTICS_EXCEPTION("No current camera entity found");
+		TACTICS_EXCEPTION("No current camera entity found");
 	}
 	return Entity::create(*view.begin(), &_ecs.sceneRegistry());
 }
@@ -105,9 +105,9 @@ void SceneSystem::_onSpriteAnimationUpdated(entt::registry& registry, entt::enti
 		auto& sprite = entityWrapper.getComponent<Sprite>();
 		if (!spriteAnimation.currentAnimation.isEmpty() &&
 			!sprite.spriteSheet->animations.contains(spriteAnimation.currentAnimation)) {
-			throw TACTICS_EXCEPTION("Animation [{}] not found in sprite sheet [{}]",
-									spriteAnimation.currentAnimation,
-									sprite.spriteSheet->name);
+			TACTICS_EXCEPTION("Animation [{}] not found in sprite sheet [{}]",
+							  spriteAnimation.currentAnimation,
+							  sprite.spriteSheet->name);
 		}
 	}
 }
@@ -230,7 +230,8 @@ Entity SceneSystem::getEntityByName(const HashId& name) {
 		}
 	}
 
-	throw TACTICS_EXCEPTION("Entity with name {} not found", name.str());
+	TACTICS_EXCEPTION("Entity with name {} not found", name.str());
+	return Entity();
 }
 
 } // namespace tactics

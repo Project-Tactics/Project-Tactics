@@ -28,7 +28,6 @@ namespace tactics {
 FsmAction DemoSimpleState::enter() {
 	_createCamera("freeCamera"_id);
 	_createPlane();
-	//_createGrid();
 	_createTeapot();
 	_createCrate();
 	_createQuads();

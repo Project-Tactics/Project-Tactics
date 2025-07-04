@@ -21,12 +21,12 @@ template<typename T> void fromString(const std::string& strValue, T& result) {
 		if (auto value = magic_enum::enum_cast<T>(strValue); value.has_value()) {
 			result = *value;
 		} else {
-			throw TACTICS_EXCEPTION("Cannot convert string {} to type {}", strValue, magic_enum::enum_type_name<T>());
+			TACTICS_EXCEPTION("Cannot convert string {} to type {}", strValue, magic_enum::enum_type_name<T>());
 		}
 	} else {
 		std::istringstream ss(strValue);
 		if (!(ss >> result)) {
-			throw TACTICS_EXCEPTION("Cannot convert string to type T");
+			TACTICS_EXCEPTION("Cannot convert string to type T");
 		}
 	}
 }

@@ -124,7 +124,7 @@ FsmStateInfo& FsmOverlay::_getStateInfo(const HashId& stateName) {
 	});
 
 	if (itr == _fsmInfo.states.end()) {
-		throw TACTICS_EXCEPTION("State {} not found", stateName);
+		TACTICS_EXCEPTION("State {} not found", stateName);
 	}
 
 	return *itr;

@@ -7,8 +7,8 @@ TEST_F(ResourceTest, EmptySystemWithNoResources) {
 }
 
 TEST_F(ResourceTest, GetResourceWithoutManager) {
-	EXPECT_THROW([[maybe_unused]] auto res = _resourceSystem->getResource<MockTextureResource>("MyResourceName1"_id),
-				 Exception);
+	EXPECT_DEATH([[maybe_unused]] auto res = _resourceSystem->getResource<MockTextureResource>("MyResourceName1"_id),
+				 ".*");
 }
 
 TEST_F(ResourceTest, KeepReferenceToResource) {
@@ -20,7 +20,7 @@ TEST_F(ResourceTest, KeepReferenceToResource) {
 															  "MyResourceName1"_id,
 															  {{"testResource", "testResourceData"}});
 	auto referencedResource = _resourceSystem->getResource<MockShaderResource>("MyResourceName1"_id);
-	EXPECT_THROW(_resourceSystem->unloadPack("customPackage"_id), Exception);
+	EXPECT_DEATH(_resourceSystem->unloadPack("customPackage"_id), ".*");
 }
 
 TEST_F(ResourceTest, RemoveReferenceBeforeUnloadingPack) {

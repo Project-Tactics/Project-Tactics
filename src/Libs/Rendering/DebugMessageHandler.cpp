@@ -50,7 +50,7 @@ void DebugMessageHandler::checkGlErrors(const char* context) const {
 		default: error = "UNKNOWN ERROR: An unknown OpenGL error occurred."; break;
 		}
 
-		throw TACTICS_EXCEPTION("OpenGL error in {}: {} - Code: {}", context, error, errorCode);
+		TACTICS_EXCEPTION("OpenGL error in {}: {} - Code: {}", context, error, errorCode);
 	}
 }
 

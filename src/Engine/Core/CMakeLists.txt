@@ -38,7 +38,8 @@ target_link_libraries(engine_core
     libs_utility
     libs_filesystem
     libs_input
-    libs_ui)
+    libs_ui
+    libs_physics)
 add_to_engine_folder(engine_core)
 
 unset(SOURCES)

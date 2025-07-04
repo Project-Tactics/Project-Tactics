@@ -49,7 +49,7 @@ TEST_F(ServiceLocatorTest, RetrieveService) {
 TEST_F(ServiceLocatorTest, RemoveService) {
 	_serviceLocator.addService(new int());
 	_serviceLocator.removeService(new int());
-	EXPECT_THROW([[maybe_unused]] auto& service = _serviceLocator.getService<int>(), Exception);
+	EXPECT_DEATH([[maybe_unused]] auto& service = _serviceLocator.getService<int>(), ".*");
 }
 
 TEST_F(ServiceLocatorTest, RemoveServiceWhichIsNotRegistered) {

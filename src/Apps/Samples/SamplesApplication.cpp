@@ -13,6 +13,7 @@
 #include "States/DemoDebugDrawingState.h"
 #include "States/DemoMapState.h"
 #include "States/DemoParticlesState.h"
+#include "States/DemoPhysicsState.h"
 #include "States/DemoPongState.h"
 #include "States/DemoSimpleState.h"
 #include "States/DemoSpriteState.h"
@@ -30,12 +31,13 @@ namespace tactics {
 
 SamplesApplication::SamplesApplication() {
 	_addSampleFlow<DemoSpriteState>("sprite", "Sprite");
-	_addSampleFlow<DemoMapState>("map", "Map", ".lua");
+	_addSampleFlow<DemoMapState>("map", "Map");
 	_addSampleFlow<DemoParticlesState>("particles", "Particles");
 	_addSampleFlow<DemoSimpleState>("simple", "Simple");
 	_addSampleFlow<DemoPongState>("pong", "Pong");
 	_addSampleFlow<DemoUserInterfaceState>("userinterface", "UserInterface");
 	_addSampleFlow<DemoDebugDrawingState>("debugdrawing", "DebugDrawing");
+	_addSampleFlow<DemoPhysicsState>("physics", "Physics");
 	// ADD FLOW SAMPLES HERE
 }
 

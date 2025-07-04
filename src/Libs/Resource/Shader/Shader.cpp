@@ -55,7 +55,7 @@ int Shader::_getAndCacheUniform(std::string_view uniformName) {
 
 	auto location = render::pipeline::getShaderVarLocation(rendererId, uniformName.data());
 	if (location == -1) {
-		throw TACTICS_EXCEPTION("Uniform '{}' not found in shader program.", uniformName);
+		TACTICS_EXCEPTION("Uniform '{}' not found in shader program.", uniformName);
 	}
 	_uniformsMapping[uniformName] = location;
 	return location;

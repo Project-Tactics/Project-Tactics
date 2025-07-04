@@ -14,16 +14,16 @@ PrefabManager::clonePrefabToRegistry(const HashId& name, const Entity& prefabEnt
 	for (auto&& componentType : prefabComponent.componentTypes) {
 		auto type = entt::resolve(componentType);
 		if (!type) {
-			throw TACTICS_EXCEPTION("Can't create entity [{}]. Component type [{}] not found while cloning: [{}]",
-									name,
-									toString(componentType),
-									toString(prefabEntity.getName()));
+			TACTICS_EXCEPTION("Can't create entity [{}]. Component type [{}] not found while cloning: [{}]",
+							  name,
+							  toString(componentType),
+							  toString(prefabEntity.getName()));
 		}
 
 		if (auto cloneFunction = type.func("clone"_id)) {
 			cloneFunction.invoke({}, prefabEntity, entity);
 		} else {
-			throw TACTICS_EXCEPTION(
+			TACTICS_EXCEPTION(
 				"Can't create entity [{}]. Missing [clone] function for Component. A component reflection must provide "
 				"it. Component: [{}]",
 				name,
@@ -45,7 +45,7 @@ Entity PrefabManager::createPrefab(const HashId& name,
 		auto type = entt::resolve(id);
 
 		if (!type) {
-			throw TACTICS_EXCEPTION("Component type not found while loading prefab: [{}]", key);
+			TACTICS_EXCEPTION("Component type not found while loading prefab: [{}]", key);
 		}
 
 		prefab.componentTypes.push_back(id);
@@ -54,7 +54,7 @@ Entity PrefabManager::createPrefab(const HashId& name,
 		if (auto deserializer = type.func("deserialize"_id)) {
 			deserializer.invoke(componentInstance, &resourceProvider, jsonValue);
 		} else {
-			throw TACTICS_EXCEPTION(
+			TACTICS_EXCEPTION(
 				"Missing [deserialize] function for Component. A component reflection must provide it. Component: [{}]",
 				key);
 		}
@@ -62,7 +62,7 @@ Entity PrefabManager::createPrefab(const HashId& name,
 		if (auto func = type.func("emplace"_id)) {
 			func.invoke(componentInstance, entity);
 		} else {
-			throw TACTICS_EXCEPTION(
+			TACTICS_EXCEPTION(
 				"Missing [emplace] function for Component. A component reflection must provide it. Component: [{}]",
 				key);
 		}

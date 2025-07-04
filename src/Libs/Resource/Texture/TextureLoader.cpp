@@ -22,11 +22,11 @@ std::shared_ptr<Texture> TextureLoader::load(const HashId& name, const TextureDe
 std::shared_ptr<Texture>
 TextureLoader::_loadTexture(const HashId& name, const std::string& filename, const TextureDescriptor& descriptor) {
 	if (filename.empty()) {
-		throw TACTICS_EXCEPTION("Can't load texture. Filename is empty while trying to load texture [{}]", name);
+		TACTICS_EXCEPTION("Can't load texture. Filename is empty while trying to load texture [{}]", name);
 	}
 
 	if (!std::filesystem::exists(filename)) {
-		throw TACTICS_EXCEPTION("Can't load texture. File [{}] does not exist", filename);
+		TACTICS_EXCEPTION("Can't load texture. File [{}] does not exist", filename);
 	}
 
 	auto texture = std::make_shared<Texture>(name);

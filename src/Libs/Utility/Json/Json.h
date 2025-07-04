@@ -6,7 +6,6 @@
 #define JSON_DIAGNOSTICS 0
 #endif
 
-#include <nlohmann/detail/exceptions.hpp>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;

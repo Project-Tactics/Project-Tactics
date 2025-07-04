@@ -26,6 +26,7 @@ class Fsm;
 class InputSystem;
 class OverlaySystem;
 class ParticleSystem;
+class PhysicsSystem;
 class RenderSystem;
 class ServiceLocator;
 class SceneSystem;
@@ -63,6 +64,7 @@ private:
 	std::unique_ptr<OverlaySystem> _overlaySystem;
 	std::unique_ptr<RenderSystem> _renderSystem;
 	std::unique_ptr<ParticleSystem> _particleSystem;
+	std::unique_ptr<PhysicsSystem> _physicsSystem;
 	std::unique_ptr<EventsSystem> _eventsSystem;
 	std::unique_ptr<EntityComponentSystem> _ecs;
 	std::unique_ptr<SceneSystem> _sceneSystem;

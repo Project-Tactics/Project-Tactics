@@ -76,7 +76,7 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenNormals);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-		throw TACTICS_EXCEPTION("Failed to load mesh: {}", importer.GetErrorString());
+		TACTICS_EXCEPTION("Failed to load mesh: {}", importer.GetErrorString());
 	}
 
 	auto meshResource = std::make_shared<Mesh>();

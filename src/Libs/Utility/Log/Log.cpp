@@ -1,10 +1,11 @@
 #include "Log.h"
 
+#include <cstdarg>
 #include <filesystem>
 #include <memory>
-#include <source_location>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
+#include <stacktrace>
 
 namespace tactics {
 
@@ -21,6 +22,7 @@ const LogCategory Log::Game("Game", 0x000000);
 const LogCategory Log::Engine("Engine", 0x004000);
 const LogCategory Log::Resource("Resource", 0x000040);
 const LogCategory Log::Rendering("Rendering", 0x400000);
+const LogCategory Log::Physics("Physics", 0x400420);
 const LogCategory Log::Overlay("Overlay", 0x404000);
 const LogCategory Log::Fsm("Fsm", 0x400040);
 const LogCategory Log::Ecs("Ecs", 0x000000);
@@ -105,30 +107,23 @@ void Log::log(const LogCategory& category, LogLevel level, fmt::string_view fmt,
 	++_logCountsByLevel[static_cast<int>(level)];
 }
 
-void Log::exception(const std::exception& exception) {
-	critical(Log::Engine, "Exception: {}", exception.what());
-}
-
-void Log::exception(const json_exception& exception) {
-	critical(Log::Engine, "Exception: {}", exception.what());
-}
-
-void Log::exception(const Exception& exception) {
-	std::string message = fmt::format("{}\nCallstack:", exception.message());
+void Log::exception(std::string_view message, const cpptrace::stacktrace& stacktrace) {
+	std::string finalMessage = fmt::format("{}\nCallstack:", message);
 
 	std::filesystem::path rootPath = (*std::stacktrace::current().begin()).source_file();
 	for (auto i = 0; i < 4; ++i, rootPath = rootPath.parent_path()) {}
 
-	for (auto&& entry : exception.trace()) {
+	for (auto&& entry : stacktrace) {
 		auto entryPath = std::filesystem::path(entry.filename);
 		auto relativePath = entryPath.lexically_relative(rootPath);
-		message += fmt::format("\n{}", fmt::styled(".\\" + relativePath.string(), fmt::fg(fmt::color::aquamarine)));
-		message += fmt::format(":{}", entry.line.value_or(0));
-		message += fmt::format(" {}\n", fmt::styled(entry.symbol, fmt::fg(fmt::color::bisque)));
-		message += cpptrace::get_snippet(entry.filename, entry.line.value_or(0), 1, false);
+		finalMessage +=
+			fmt::format("\n{}", fmt::styled(".\\" + relativePath.string(), fmt::fg(fmt::color::aquamarine)));
+		finalMessage += fmt::format(":{}", entry.line.value_or(0));
+		finalMessage += fmt::format(" {}\n", fmt::styled(entry.symbol, fmt::fg(fmt::color::bisque)));
+		finalMessage += cpptrace::get_snippet(entry.filename, entry.line.value_or(0), 1, false);
 	}
 
-	critical(Log::Engine, "{}", message);
+	critical(Log::Engine, "{}", finalMessage);
 }
 
 bool Log::hasBeenLoggedOverLevel(LogLevel minimumLogLevel) {

@@ -1,0 +1,23 @@
+{
+    "demoPhysics": {
+        "Texture": {
+            "boxTexture": {
+                "path": "_demoPhysics/texture.jpg"
+            },
+            "floor": {
+                "path": "_demoSimple/floor.jpg"
+            }
+        },
+        "Prefab": {
+            "defaultCamera": {
+                "path": "_demoPhysics/defaultCamera.prefab"
+            },
+            "defaultCube": {
+                "path": "_demoPhysics/defaultCube.prefab"
+            },
+            "defaultPlane": {
+                "path": "_demoPhysics/plane.prefab"
+            }
+        }
+    }
+}

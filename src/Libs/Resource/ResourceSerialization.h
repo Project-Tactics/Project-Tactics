@@ -25,7 +25,7 @@ protected:
 
 template<tactics::resource::IsResource T> struct adl_serializer<std::shared_ptr<T>> : public resource_serializer_base {
 	static void to_json(json&, const std::shared_ptr<T>&) {
-		throw TACTICS_EXCEPTION("Serializing resources is not yet implemented");
+		TACTICS_EXCEPTION("Serializing resources is not yet implemented");
 	}
 
 	static void from_json(const json& json, std::shared_ptr<T>& resource) {

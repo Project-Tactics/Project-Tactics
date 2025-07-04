@@ -22,7 +22,7 @@ bool FsmAction::hasTransition() const {
 
 const HashId& FsmAction::transitionName() const {
 	if (_transitionName.isEmpty()) {
-		throw TACTICS_EXCEPTION("FsmAction does not have a transition name");
+		TACTICS_EXCEPTION("FsmAction does not have a transition name");
 	}
 	return _transitionName;
 }
@@ -48,7 +48,7 @@ FsmEventAction FsmEventAction::transition(const HashId& transitionName) {
 
 const HashId& FsmEventAction::transitionName() const {
 	if (_transitionName.isEmpty()) {
-		throw TACTICS_EXCEPTION("FsmEventAction does not have a transition name");
+		TACTICS_EXCEPTION("FsmEventAction does not have a transition name");
 	}
 	return _transitionName;
 }

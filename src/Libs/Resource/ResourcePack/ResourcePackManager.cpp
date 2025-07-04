@@ -40,7 +40,7 @@ void ResourcePackManager::unloadPack(const HashId& packName) {
 void ResourcePackManager::removePack(const HashId& packName) {
 	auto& pack = _getResourcePack(packName);
 	if (pack.isLoaded()) {
-		throw TACTICS_EXCEPTION("Can't remove pack [{}]. The pack is still loaded", packName);
+		TACTICS_EXCEPTION("Can't remove pack [{}]. The pack is still loaded", packName);
 	}
 
 	_packs.erase(packName);
@@ -48,7 +48,7 @@ void ResourcePackManager::removePack(const HashId& packName) {
 
 Pack& ResourcePackManager::createPack(const HashId& packName, bool isManuallyCreated) {
 	if (_packs.contains(packName)) {
-		throw TACTICS_EXCEPTION("Can't create custom pack [{}]. A pack with the same name already exists.", packName);
+		TACTICS_EXCEPTION("Can't create custom pack [{}]. A pack with the same name already exists.", packName);
 	}
 
 	auto pack = std::make_unique<Pack>(packName, isManuallyCreated);
@@ -57,7 +57,7 @@ Pack& ResourcePackManager::createPack(const HashId& packName, bool isManuallyCre
 
 Pack& ResourcePackManager::_getResourcePack(const HashId& packName) {
 	if (!_packs.contains(packName)) {
-		throw TACTICS_EXCEPTION("Can't find resource pack with name [{}]. The Resource Pack does not exists", packName);
+		TACTICS_EXCEPTION("Can't find resource pack with name [{}]. The Resource Pack does not exists", packName);
 	}
 
 	return *_packs[packName];
@@ -86,13 +86,13 @@ std::unique_ptr<FileHandle<ordered_json>>
 ResourcePackManager::_loadPackDefinition(const std::filesystem::path& packDefinitionPath) {
 	auto jsonFileHandle = _fileSystem.createJsonFileHandle(packDefinitionPath);
 	if (!jsonFileHandle->exists()) {
-		throw TACTICS_EXCEPTION("Pack definition file [{}] does not exist", packDefinitionPath.string());
+		TACTICS_EXCEPTION("Pack definition file [{}] does not exist", packDefinitionPath.string());
 	}
 
 	jsonFileHandle->load();
 
 	if (jsonFileHandle->getContent().empty()) {
-		throw TACTICS_EXCEPTION("Pack definition file [{}] is empty", packDefinitionPath.string());
+		TACTICS_EXCEPTION("Pack definition file [{}] is empty", packDefinitionPath.string());
 	}
 	return jsonFileHandle;
 }

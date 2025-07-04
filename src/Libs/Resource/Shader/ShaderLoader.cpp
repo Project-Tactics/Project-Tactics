@@ -62,7 +62,7 @@ std::tuple<unsigned int, std::string> ShaderLoader::_loadShader(unsigned int sha
 		std::vector<char> buffer(length);
 		glGetShaderInfoLog(shaderId, length, &length, buffer.data());
 		glDeleteShader(shaderId);
-		throw TACTICS_EXCEPTION("Shader Compiler error: {}", buffer.data());
+		TACTICS_EXCEPTION("Shader Compiler error: {}", buffer.data());
 	}
 
 	return {shaderId, shaderCode};

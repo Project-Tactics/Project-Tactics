@@ -13,7 +13,7 @@ std::shared_ptr<Material::Instance> Material::createInstance(std::shared_ptr<Mat
 
 Material::Instance::Instance(std::shared_ptr<Material> parent) : parent(parent) {
 	if (!parent) {
-		throw TACTICS_EXCEPTION("Cannot create a Material Instance. The provided parent material is null.");
+		TACTICS_EXCEPTION("Cannot create a Material Instance. The provided parent material is null.");
 	}
 }
 

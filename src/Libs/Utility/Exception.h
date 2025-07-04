@@ -1,20 +1,28 @@
 #pragma once
 
+#include <Libs/Utility/Log/Log.h>
+
+#include <cassert>
 #include <cpptrace/cpptrace.hpp>
 #include <fmt/core.h>
-#include <stacktrace>
-#include <stdexcept>
-#include <string_view>
 
 namespace tactics {
 
-class Exception : public cpptrace::exception_with_message {
+class Exception {
 public:
 	template<class... Args>
-	Exception(fmt::format_string<Args...> formatString, Args&&... args)
-		: cpptrace::exception_with_message(fmt::format(formatString, std::forward<Args>(args)...).c_str()) {}
+	static void trigger_exception([[maybe_unused]] const cpptrace::stacktrace& stacktrace,
+								  [[maybe_unused]] fmt::format_string<Args...> formatString,
+								  [[maybe_unused]] Args&&... args) {
+		LOG_EXCEPTION((fmt::format(formatString, std::forward<Args>(args)...)), stacktrace);
+#ifdef NDEBUG
+		exit(1);
+#else
+		assert(0);
+#endif
+	}
 };
 
 } // namespace tactics
 
-#define TACTICS_EXCEPTION(...) tactics::Exception(__VA_ARGS__)
+#define TACTICS_EXCEPTION(...) tactics::Exception::trigger_exception(cpptrace::generate_trace(), __VA_ARGS__)

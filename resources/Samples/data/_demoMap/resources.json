@@ -1,0 +1,309 @@
+{
+    "demoMap": {
+        "Texture": {
+            "spriteSheet00": {
+                "path": "_demoMap/spriteSheet00.png",
+                "filter": "Nearest"
+            },
+            "charShadow": {
+                "path": "_demoMap/charShadow.png"
+            },
+            "map00_00": {
+                "path": "_demoMap/map00/tex00.png"
+            },
+            "map00_01": {
+                "path": "_demoMap/map00/tex01.png"
+            },
+            "map00_02": {
+                "path": "_demoMap/map00/tex02.png"
+            },
+            "map00_03": {
+                "path": "_demoMap/map00/tex03.png"
+            },
+            "map00_04": {
+                "path": "_demoMap/map00/tex04.png"
+            },
+            "map00_05": {
+                "path": "_demoMap/map00/tex05.png"
+            },
+            "map00_06": {
+                "path": "_demoMap/map00/tex06.png"
+            },
+            "map00_07": {
+                "path": "_demoMap/map00/tex07.png"
+            },
+            "map00_08": {
+                "path": "_demoMap/map00/tex08.png"
+            },
+            "map00_09": {
+                "path": "_demoMap/map00/tex09.png"
+            },
+            "map01_00": {
+                "path": "_demoMap/map01/tex00.png"
+            },
+            "map01_01": {
+                "path": "_demoMap/map01/tex01.png"
+            },
+            "map01_02": {
+                "path": "_demoMap/map01/tex02.png"
+            },
+            "map01_03": {
+                "path": "_demoMap/map01/tex03.png"
+            },
+            "map01_04": {
+                "path": "_demoMap/map01/tex04.png"
+            },
+            "map01_05": {
+                "path": "_demoMap/map01/tex05.png"
+            },
+            "map01_06": {
+                "path": "_demoMap/map01/tex06.png"
+            },
+            "map01_07": {
+                "path": "_demoMap/map01/tex07.png"
+            },
+            "map01_08": {
+                "path": "_demoMap/map01/tex08.png"
+            },
+            "map01_09": {
+                "path": "_demoMap/map01/tex09.png"
+            },
+            "map01_10": {
+                "path": "_demoMap/map01/tex10.png"
+            },
+            "map01_11": {
+                "path": "_demoMap/map01/tex11.png"
+            },
+            "map01_12": {
+                "path": "_demoMap/map01/tex12.png"
+            },
+            "map02_00": {
+                "path": "_demoMap/map02/tex00.png"
+            },
+            "map02_01": {
+                "path": "_demoMap/map02/tex01.png"
+            },
+            "map02_02": {
+                "path": "_demoMap/map02/tex02.png"
+            },
+            "map02_03": {
+                "path": "_demoMap/map02/tex03.png"
+            },
+            "map02_04": {
+                "path": "_demoMap/map02/tex04.png"
+            },
+            "map02_05": {
+                "path": "_demoMap/map02/tex05.png"
+            },
+            "map02_06": {
+                "path": "_demoMap/map02/tex06.png"
+            },
+            "map02_07": {
+                "path": "_demoMap/map02/tex07.png"
+            },
+            "map03_00": {
+                "path": "_demoMap/map03/tex00.png"
+            },
+            "map03_01": {
+                "path": "_demoMap/map03/tex01.png"
+            },
+            "map03_02": {
+                "path": "_demoMap/map03/tex02.png"
+            },
+            "map03_03": {
+                "path": "_demoMap/map03/tex03.png"
+            },
+            "map03_04": {
+                "path": "_demoMap/map03/tex04.png"
+            },
+            "map04_00": {
+                "path": "_demoMap/map04/tex00.png"
+            },
+            "map04_01": {
+                "path": "_demoMap/map04/tex01.png"
+            },
+            "map04_02": {
+                "path": "_demoMap/map04/tex02.png"
+            },
+            "map04_03": {
+                "path": "_demoMap/map04/tex03.png"
+            },
+            "map04_04": {
+                "path": "_demoMap/map04/tex04.png"
+            },
+            "map04_05": {
+                "path": "_demoMap/map04/tex05.png"
+            },
+            "map04_06": {
+                "path": "_demoMap/map04/tex06.png"
+            },
+            "map04_07": {
+                "path": "_demoMap/map04/tex07.png"
+            },
+            "map04_08": {
+                "path": "_demoMap/map04/tex08.png"
+            },
+            "map04_09": {
+                "path": "_demoMap/map04/tex09.png"
+            },
+            "map04_10": {
+                "path": "_demoMap/map04/tex10.png"
+            },
+            "map04_11": {
+                "path": "_demoMap/map04/tex11.png"
+            },
+            "map04_12": {
+                "path": "_demoMap/map04/tex12.png"
+            },
+            "map04_13": {
+                "path": "_demoMap/map04/tex13.png"
+            }
+        },
+        "SpriteSheet": {
+            "char00": {
+                "texture": "spriteSheet00",
+                "spriteSize": {
+                    "x": 32,
+                    "y": 48
+                },
+                "animations": {
+                    "idleSouth": {
+                        "frames": [
+                            8,
+                            9,
+                            10,
+                            11,
+                            12,
+                            11,
+                            10,
+                            9
+                        ],
+                        "duration": 1
+                    },
+                    "idleNorth": {
+                        "frames": [
+                            16,
+                            17,
+                            18,
+                            19,
+                            20,
+                            19,
+                            18,
+                            17
+                        ],
+                        "duration": 1
+                    }
+                }
+            }
+        },
+        "Mesh": {
+            "map00": {
+                "path": "_demoMap/map00/map00.fbx"
+            },
+            "map01": {
+                "path": "_demoMap/map01/map01.fbx"
+            },
+            "map02": {
+                "path": "_demoMap/map02/map02.fbx"
+            },
+            "map03": {
+                "path": "_demoMap/map03/map03.fbx"
+            },
+            "map04": {
+                "path": "_demoMap/map04/map04.fbx"
+            }
+        },
+        "Prefab": {
+            "mapCamera": {
+                "path": "_demoMap/mapCamera.prefab"
+            },
+            "character": {
+                "path": "_demoMap/character.prefab"
+            },
+            "charShadow": {
+                "path": "_demoMap/charShadow.prefab"
+            },
+            "map00": {
+                "path": "_demoMap/map00/map00.prefab"
+            },
+            "map01": {
+                "path": "_demoMap/map01/map01.prefab"
+            },
+            "map02": {
+                "path": "_demoMap/map02/map02.prefab"
+            },
+            "map03": {
+                "path": "_demoMap/map03/map03.prefab"
+            },
+            "map04": {
+                "path": "_demoMap/map04/map04.prefab"
+            }
+        },
+        "InputAction": {
+            "loadNextMap": {
+                "type": "Scalar"
+            },
+            "moveCamera": {
+                "type": "Scalar"
+            }
+        },
+        "InputMap": {
+            "mapDemoInput": {
+                "bindings": [
+                    {
+                        "action": "loadNextMap",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyReturn"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "press",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "action": "moveCamera",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyA"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "press",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            },
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyD"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "press",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": [
+                                    {
+                                        "type": "negate",
+                                        "axis": "X"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}
