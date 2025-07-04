@@ -15,7 +15,11 @@ public:
 								  [[maybe_unused]] fmt::format_string<Args...> formatString,
 								  [[maybe_unused]] Args&&... args) {
 		LOG_EXCEPTION((fmt::format(formatString, std::forward<Args>(args)...)), stacktrace);
+#ifdef NDEBUG
+		exit(1);
+#else
 		assert(0);
+#endif
 	}
 };
 
