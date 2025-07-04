@@ -44,7 +44,9 @@ static JPH::ObjectLayer toJolt(PhysicsLayer layer) {
 	default					  : TACTICS_EXCEPTION("Invalid Layer Provided");
 	}
 
+#ifndef NDEBUG
 	return LayerDynamic;
+#endif
 }
 
 } // namespace tactics::physics
