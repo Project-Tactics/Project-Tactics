@@ -35,15 +35,12 @@ class SampleFlow {
 public:
 	virtual ~SampleFlow() = default;
 
-	SampleFlow(std::string_view sampleName, std::string_view resourceFileExtension)
-		: sampleName(sampleName)
-		, resourceFileExtension(resourceFileExtension) {
+	SampleFlow(std::string_view sampleName) : sampleName(sampleName) {
 		loadState = fmt::format("Load{}", sampleName);
 		unloadState = fmt::format("Unload{}", sampleName);
 	}
 
 	std::string sampleName;
-	std::string resourceFileExtension;
 	std::string loadState;
 	std::string unloadState;
 
@@ -52,12 +49,11 @@ public:
 
 template<typename TSampleState> struct TSampleFlow : public SampleFlow {
 public:
-	TSampleFlow(std::string_view sampleName, std::string_view resourceFileExtension)
-		: SampleFlow(sampleName, resourceFileExtension) {}
+	TSampleFlow(std::string_view sampleName) : SampleFlow(sampleName) {}
 
 	void addFlowToFsm(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {
 		auto resourcePackName = fmt::format("demo{}", sampleName);
-		auto resourceFile = fmt::format("_{}/resources{}", resourcePackName, resourceFileExtension);
+		auto resourceFile = fmt::format("_{}/resources.json", resourcePackName);
 
 		// clang-format off
 		fsmBuilder

@@ -94,11 +94,12 @@ public:
 		_jsonPackFileHandleUniquePtr = std::make_unique<MockJsonFileHandle>();
 		_jsonPackFileHandle = _jsonPackFileHandleUniquePtr.get();
 
-		EXPECT_CALL(*_fileLoader, createJsonFile(_)).WillOnce(Return(ByMove(std::move(_jsonPackFileHandleUniquePtr))));
+		EXPECT_CALL(*_fileLoader, createJsonFile(_))
+			.WillRepeatedly(Return(ByMove(std::move(_jsonPackFileHandleUniquePtr))));
 	}
 
 	void givenPackDefinitionExists(bool exists) {
-		EXPECT_CALL(*_jsonPackFileHandle, exists()).WillOnce(Return(exists));
+		EXPECT_CALL(*_jsonPackFileHandle, exists()).WillRepeatedly(Return(exists));
 	}
 
 	void givenDefaultPackDefinition() {

@@ -5,8 +5,7 @@ set(SOURCES
         OverlaySystem.cpp
         OverlayStyleHelper.cpp
         ExampleOverlay.cpp
-        MainOverlay.cpp
-        ScriptedOverlay.cpp)
+        MainOverlay.cpp)
 
 set(HEADERS
         Overlay.h
@@ -14,11 +13,10 @@ set(HEADERS
         OverlayStyleHelper.h
         OverlayTypes.h
         ExampleOverlay.h
-        MainOverlay.h
-        ScriptedOverlay.h)
+        MainOverlay.h)
 
 add_library(libs_overlay STATIC ${SOURCES} ${HEADERS})
-target_link_libraries(libs_overlay PUBLIC imgui imgui_node_editor libs_resource PRIVATE lua_wrapper libs_utility inicpp)
+target_link_libraries(libs_overlay PUBLIC imgui imgui_node_editor libs_resource PRIVATE libs_utility inicpp)
 add_to_libs_folder(libs_overlay)
 
 unset(SOURCES)

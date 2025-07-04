@@ -3,13 +3,13 @@
 #include <Libs/Utility/Exception.h>
 
 TEST_F(ResourceTest, LoadInvalidPack) {
-	EXPECT_THROW(_resourceSystem->loadPack("InvalidPack"_id), Exception);
+	EXPECT_DEATH(_resourceSystem->loadPack("InvalidPack"_id), ".*");
 }
 
 TEST_F(ResourceTest, LoadValidPackWithMissingManager) {
 	givenValidPackDefinitionLoaded();
 
-	EXPECT_THROW(_resourceSystem->loadPack("mainPackage"_id), Exception);
+	EXPECT_DEATH(_resourceSystem->loadPack("mainPackage"_id), ".*");
 }
 
 TEST_F(ResourceTest, LoadValidPackWithOnlyOneWrongManager) {
@@ -18,7 +18,7 @@ TEST_F(ResourceTest, LoadValidPackWithOnlyOneWrongManager) {
 	auto loader = std::make_unique<MockTextureLoader>(*_fileSystem, *_resourceSystem);
 	auto manager = std::make_unique<MockTextureManager>(std::move(loader));
 	_resourceSystem->registerManager(std::move(manager));
-	EXPECT_THROW(_resourceSystem->loadPack("mainPackage"_id), Exception);
+	EXPECT_DEATH(_resourceSystem->loadPack("mainPackage"_id), ".*");
 }
 
 TEST_F(ResourceTest, LoadValidPack) {
@@ -66,8 +66,7 @@ TEST_F(ResourceTest, LoadValidPackAndGetResourceWithWrongName) {
 
 	_resourceSystem->loadPack("mainPackage"_id);
 
-	EXPECT_THROW([[maybe_unused]] auto res = _resourceSystem->getResource<MockShaderResource>("MyResource"_id),
-				 Exception);
+	EXPECT_DEATH([[maybe_unused]] auto res = _resourceSystem->getResource<MockShaderResource>("MyResource"_id), ".*");
 }
 
 TEST_F(ResourceTest, LoadPackTwice) {
@@ -76,7 +75,7 @@ TEST_F(ResourceTest, LoadPackTwice) {
 
 	_resourceSystem->loadPack("mainPackage"_id);
 
-	EXPECT_THROW(_resourceSystem->loadPack("mainPackage"_id), Exception);
+	EXPECT_DEATH(_resourceSystem->loadPack("mainPackage"_id), ".*");
 }
 
 TEST_F(ResourceTest, ReloadPackAfterUnloading) {
@@ -119,7 +118,7 @@ TEST_F(ResourceTest, UnloadPackWhichHasNotBeenLoaded) {
 	givenValidPackDefinitionLoaded();
 	givenValidManagerRegistered();
 
-	EXPECT_THROW(_resourceSystem->unloadPack("mainPackage"_id), Exception);
+	EXPECT_DEATH(_resourceSystem->unloadPack("mainPackage"_id), ".*");
 }
 
 TEST_F(ResourceTest, CreateCustomPack) {
@@ -142,7 +141,7 @@ TEST_F(ResourceTest, CreateCustomPackWithSameName) {
 	givenValidManagerRegistered();
 
 	_resourceSystem->createManualPack("customPackage"_id);
-	EXPECT_THROW(_resourceSystem->createManualPack("customPackage"_id), Exception);
+	EXPECT_DEATH(_resourceSystem->createManualPack("customPackage"_id), ".*");
 }
 
 TEST_F(ResourceTest, LoadCustomPack) {
@@ -150,7 +149,7 @@ TEST_F(ResourceTest, LoadCustomPack) {
 	givenValidManagerRegistered();
 
 	_resourceSystem->createManualPack("customPackage"_id);
-	EXPECT_THROW(_resourceSystem->loadPack("customPackage"_id), Exception);
+	EXPECT_DEATH(_resourceSystem->loadPack("customPackage"_id), ".*");
 }
 
 TEST_F(ResourceTest, UnloadCustomPack) {
@@ -167,7 +166,7 @@ TEST_F(ResourceTest, ReloadCustomPack) {
 
 	_resourceSystem->createManualPack("customPackage"_id);
 	_resourceSystem->unloadPack("customPackage"_id);
-	EXPECT_THROW(_resourceSystem->loadPack("customPackage"_id), Exception);
+	EXPECT_DEATH(_resourceSystem->loadPack("customPackage"_id), ".*");
 }
 
 TEST_F(ResourceTest, RegisterExternalResource) {
@@ -201,9 +200,9 @@ TEST_F(ResourceTest, RegisterExternalResourceWithSameName) {
 	_resourceSystem->createManualPack("anotherPackage"_id);
 	ordered_json json = {{"testResource", "testResourceData"}};
 	_resourceSystem->loadExternalResource<MockShaderResource>("customPackage"_id, "MyResourceName1"_id, json);
-	EXPECT_THROW(
+	EXPECT_DEATH(
 		_resourceSystem->loadExternalResource<MockShaderResource>("anotherPackage"_id, "MyResourceName1"_id, json),
-		Exception);
+		".*");
 }
 
 TEST_F(ResourceTest, RegisterExternalResourceCleanPackAndRegisterAgain) {

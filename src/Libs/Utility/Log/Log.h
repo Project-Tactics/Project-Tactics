@@ -1,14 +1,9 @@
 #pragma once
 
-#include "../Exception.h"
-
-#include <Libs/Utility/Json/Json.h>
-
 #include <array>
+#include <cpptrace/cpptrace.hpp>
 #include <fmt/color.h>
-#include <fmt/core.h>
 #include <memory>
-#include <string_view>
 
 namespace tactics {
 
@@ -22,21 +17,21 @@ enum LogLevel {
 };
 
 #ifdef COMPILING_TESTS
-#define LOG_TRACE(...)			 (void)0
-#define LOG_DEBUG(...)			 (void)0
-#define LOG_INFO(...)			 (void)0
-#define LOG_WARNING(...)		 (void)0
-#define LOG_ERROR(...)			 (void)0
-#define LOG_CRITICAL(...)		 (void)0
-#define LOG_EXCEPTION(exception) (void)0
+#define LOG_TRACE(...)					   (void)0
+#define LOG_DEBUG(...)					   (void)0
+#define LOG_INFO(...)					   (void)0
+#define LOG_WARNING(...)				   (void)0
+#define LOG_ERROR(...)					   (void)0
+#define LOG_CRITICAL(...)				   (void)0
+#define LOG_EXCEPTION(message, stacktrace) (void)0
 #else
-#define LOG_TRACE(...)			 tactics::Log::trace(__VA_ARGS__)
-#define LOG_DEBUG(...)			 tactics::Log::debug(__VA_ARGS__)
-#define LOG_INFO(...)			 tactics::Log::info(__VA_ARGS__)
-#define LOG_WARNING(...)		 tactics::Log::warning(__VA_ARGS__)
-#define LOG_ERROR(...)			 tactics::Log::error(__VA_ARGS__)
-#define LOG_CRITICAL(...)		 tactics::Log::critical(__VA_ARGS__)
-#define LOG_EXCEPTION(exception) tactics::Log::exception(exception)
+#define LOG_TRACE(...)					   tactics::Log::trace(__VA_ARGS__)
+#define LOG_DEBUG(...)					   tactics::Log::debug(__VA_ARGS__)
+#define LOG_INFO(...)					   tactics::Log::info(__VA_ARGS__)
+#define LOG_WARNING(...)				   tactics::Log::warning(__VA_ARGS__)
+#define LOG_ERROR(...)					   tactics::Log::error(__VA_ARGS__)
+#define LOG_CRITICAL(...)				   tactics::Log::critical(__VA_ARGS__)
+#define LOG_EXCEPTION(message, stacktrace) tactics::Log::exception(message, stacktrace)
 #endif
 
 class LogCategory {
@@ -69,6 +64,7 @@ public:
 	static const LogCategory Engine;
 	static const LogCategory Resource;
 	static const LogCategory Rendering;
+	static const LogCategory Physics;
 	static const LogCategory Overlay;
 	static const LogCategory Fsm;
 	static const LogCategory Input;
@@ -107,9 +103,7 @@ public:
 		log(category, LogLevel::Critical, fmt, fmt::make_format_args(args...));
 	}
 
-	static void exception(const std::exception& exception);
-	static void exception(const json_exception& exception);
-	static void exception(const Exception& exception);
+	static void exception(std::string_view message, const cpptrace::stacktrace& stacktrace);
 
 	static void log(const LogCategory& category, LogLevel level, fmt::string_view fmt, fmt::format_args args);
 

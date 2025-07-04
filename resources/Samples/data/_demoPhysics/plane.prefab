@@ -1,0 +1,37 @@
+{
+    "Transform": {
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "rotation": {
+            "fromAngleAxis": {
+                "axis": {
+                    "x": 1,
+                    "y": 0,
+                    "z": 0
+                },
+                "angle": 90
+            }
+        },
+        "scale": {
+            "x": 25,
+            "y": 25,
+            "z": 25
+        }
+    },
+    "Mesh": {
+        "mesh": "quad",
+        "materials": [
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "floor"
+                    }
+                }
+            }
+        ]
+    }
+}

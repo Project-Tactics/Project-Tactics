@@ -8,7 +8,7 @@ std::shared_ptr<Material> MaterialLoader::load(const MaterialDescriptor& descrip
 	auto material = std::make_shared<Material>();
 
 	if (descriptor.shader.empty()) {
-		throw TACTICS_EXCEPTION("MaterialDescriptor must have a valid shader.");
+		TACTICS_EXCEPTION("MaterialDescriptor must have a valid shader.");
 	}
 
 	auto shader = _getResource<Shader>(HashId(descriptor.shader));

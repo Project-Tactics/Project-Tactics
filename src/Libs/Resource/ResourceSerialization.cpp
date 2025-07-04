@@ -25,13 +25,13 @@ namespace nlohmann {
 tactics::resource::ResourceProvider* resource_serializer_base::_getResourceProvider() {
 	using namespace tactics::resource;
 	if (_resourceProvider == nullptr) {
-		throw TACTICS_EXCEPTION("Resource provider for serialization is not set");
+		TACTICS_EXCEPTION("Resource provider for serialization is not set");
 	}
 	return _resourceProvider;
 }
 
 void adl_serializer<tactics::resource::MaterialInstances>::to_json(json&, const tactics::resource::MaterialInstances&) {
-	throw TACTICS_EXCEPTION("Serializing resources is not yet implemented");
+	TACTICS_EXCEPTION("Serializing resources is not yet implemented");
 }
 
 void adl_serializer<tactics::resource::MaterialInstances>::from_json(

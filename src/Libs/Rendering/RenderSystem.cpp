@@ -67,7 +67,7 @@ void RenderSystem::_createWindow() {
 	_window = SDL_CreateWindow(windowTitle.c_str(), position.x, position.y, size.x, size.y, flags);
 	LOG_TRACE(Log::Rendering, "Window Created {}x{}", size.x, size.y);
 	if (_window == nullptr) {
-		throw TACTICS_EXCEPTION("Failed to open window: %s\n", SDL_GetError());
+		TACTICS_EXCEPTION("Failed to open window: %s\n", SDL_GetError());
 	}
 
 	_windowSize = {size.x, size.y};
@@ -80,7 +80,7 @@ void RenderSystem::_initializeGlContext() {
 
 	int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
 	if (version == 0) {
-		throw TACTICS_EXCEPTION("Failed to initialize OpenGL context\n");
+		TACTICS_EXCEPTION("Failed to initialize OpenGL context\n");
 	}
 
 	LOG_TRACE(Log::Rendering, "Loaded OpenGL {}.{}", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
@@ -135,7 +135,7 @@ void RenderSystem::_setupVSync() {
 	} else if (enableVSyncStr == "adaptive") {
 		swapInterval = -1;
 	} else {
-		throw TACTICS_EXCEPTION(
+		TACTICS_EXCEPTION(
 			"Invalid value for enableVSync in the config file. Expected 'true/false/adaptive', got %s",
 			enableVSyncStr.c_str());
 	}
@@ -151,7 +151,7 @@ void RenderSystem::_setupOglContextProfile() {
 	} else if (contextProfile == "es") {
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 	} else {
-		throw TACTICS_EXCEPTION("Invalid rendering context profile provided: %s, check your ini config file.",
+		TACTICS_EXCEPTION("Invalid rendering context profile provided: %s, check your ini config file.",
 								contextProfile);
 	}
 }

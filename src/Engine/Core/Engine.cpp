@@ -26,6 +26,7 @@
 #include <Libs/Overlay/ExampleOverlay.h>
 #include <Libs/Overlay/MainOverlay.h>
 #include <Libs/Overlay/OverlaySystem.h>
+#include <Libs/Physics/PhysicsSystem.h>
 #include <Libs/Rendering/Particle/ParticleSystem.h>
 #include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/DataSet/DataSetSystem.h>
@@ -49,20 +50,12 @@ void Engine::_run(Application& application) {
 	Log::init(LogLevel::Trace);
 	LOG_TRACE(Log::Engine, "Engine Initialization Started");
 	auto engine = Engine();
-	try {
-		engine._initialize(application);
-		LOG_INFO(Log::Engine, "Engine Initialized");
-		engine._internalRun();
-		LOG_TRACE(Log::Engine, "Engine Shutdown Started");
-		engine._shutdown();
-		LOG_TRACE(Log::Engine, "Engine Shutdown Ended");
-	} catch (Exception& exception) {
-		LOG_EXCEPTION(exception);
-	} catch (json_exception& exception) {
-		LOG_EXCEPTION(exception);
-	} catch (std::exception& exception) {
-		LOG_EXCEPTION(exception);
-	}
+	engine._initialize(application);
+	LOG_INFO(Log::Engine, "Engine Initialized");
+	engine._internalRun();
+	LOG_TRACE(Log::Engine, "Engine Shutdown Started");
+	engine._shutdown();
+	LOG_TRACE(Log::Engine, "Engine Shutdown Ended");
 }
 
 void Engine::_initialize(Application& application) {
@@ -96,7 +89,12 @@ void Engine::_initialize(Application& application) {
 	_renderSystem = std::make_unique<RenderSystem>(configFile);
 	_renderSystem->setViewport({0, 0}, {1, 1}, Color::black);
 
+	LOG_TRACE(Log::Engine, "ParticleSystem Initialization");
 	_particleSystem = std::make_unique<ParticleSystem>(*_resourceSystem, *_ecs);
+
+	LOG_TRACE(Log::Engine, "PhysicsSystem Initialization");
+	constexpr int tempAllocatorSize = 1 * 1024 * 1024; // Let's allocate 1 MB for temporary allocations
+	_physicsSystem = std::make_unique<PhysicsSystem>(tempAllocatorSize, *_ecs);
 
 	_resourceSystem->loadPack("builtinMeshes"_id);
 	_resourceSystem->createManualPack("_internalCustomPack"_id);
@@ -129,8 +127,8 @@ void Engine::_internalRun() {
 		_timer.update(TimeUtility::nowInSeconds());
 		_eventsSystem->update();
 
-		int ticksProcessed = 0;
-		const int maxTicksPerFrame = 20;
+		auto ticksProcessed = 0;
+		const auto maxTicksPerFrame = 20;
 
 		while (_timer.hasConsumedAllTicks() && ticksProcessed < maxTicksPerFrame) {
 			_inputSystem->update();
@@ -158,6 +156,7 @@ void Engine::_shutdown() {
 	_renderSystem.reset();
 	_particleSystem.reset();
 	_overlaySystem.reset();
+	_physicsSystem.reset();
 	_uiSystem.reset();
 	_ecs->clearPrefabsRegistry();
 	LOG_TRACE(Log::Engine, "Unload Engine Resources");
@@ -202,24 +201,24 @@ void Engine::_throwIfAnyResourceIsStillLoaded() {
 	LOG_TRACE(Log::Engine, "Check if any resource is still loaded");
 	_resourceSystem->forEachManager([](auto& manager) {
 		manager.forEachResource([](const auto& resource) {
-			throw TACTICS_EXCEPTION("Resource [{}]:[{}] of type [{}] was not unloaded.",
-									resource.name,
-									resource.id,
-									toString(resource.type));
+			TACTICS_EXCEPTION("Resource [{}]:[{}] of type [{}] was not unloaded.",
+							  resource.name,
+							  resource.id,
+							  toString(resource.type));
 		});
 	});
 }
 
 void Engine::_throwIfAnyImportantLogHappened() {
 	if (Log::hasBeenLoggedOverLevel(LogLevel::Warning)) {
-		throw TACTICS_EXCEPTION("Do not ignore logs over warning level.\nRecap:\n{}", Log::getLogCountRecapMessage());
+		TACTICS_EXCEPTION("Do not ignore logs over warning level.\nRecap:\n{}", Log::getLogCountRecapMessage());
 	}
 }
 
 void Engine::_initializeSDL() {
 	LOG_TRACE(Log::Engine, "SDL Initialization Started");
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0) {
-		throw TACTICS_EXCEPTION("SDL could not initialize! SDL_Error: {}\n", SDL_GetError());
+		TACTICS_EXCEPTION("SDL could not initialize! SDL_Error: {}\n", SDL_GetError());
 	}
 	LOG_TRACE(Log::Engine, "SDL Initialization Ended");
 }
@@ -229,7 +228,7 @@ void Engine::_setupFsm(Application& application) {
 	auto builder = FsmBuilder();
 	auto fsmStartingStateName = application.initialize(*_serviceLocator, builder);
 	if (fsmStartingStateName.isEmpty()) {
-		throw TACTICS_EXCEPTION(
+		TACTICS_EXCEPTION(
 			"Application did not return a valid name for the starting state for the FSM. The name is empty");
 	}
 
@@ -250,6 +249,7 @@ void Engine::_setupServiceLocator() {
 	_serviceLocator->addService(_sceneSystem.get());
 	_serviceLocator->addService(_fileSystem.get());
 	_serviceLocator->addService(_uiSystem.get());
+	_serviceLocator->addService(_physicsSystem.get());
 	_serviceLocator->addService(_dataSetSystem.get());
 }
 
@@ -257,6 +257,7 @@ void Engine::_updateCommonComponentSystems() {
 	using namespace component;
 
 	auto& registry = _ecs->sceneRegistry();
+	_physicsSystem->update(EngineTime::fixedDeltaTime<float>(), registry);
 	SpriteAnimationSystem::update(registry);
 	SpriteSystem::update(registry);
 	CameraSystem::updateCameraAspectRatios(*_renderSystem, registry);

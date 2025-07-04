@@ -26,7 +26,6 @@ set(HEADERS
 
 set(SOURCES
     Color.cpp
-    Exception.cpp
     HashId.cpp
     ImGuiUtilities.cpp
     Ini/IniMathConverter.cpp

@@ -7,15 +7,14 @@ TEST_F(ResourceTest, LoadInvalidPackDefinition) {
 	givenPackDefinitionExists(false);
 	expectJsonFileLoad(0);
 
-	EXPECT_THROW(_resourceSystem->loadPackDefinition("TestPackDefinition.json"), Exception);
+	EXPECT_DEATH({ _resourceSystem->loadPackDefinition("TestPackDefinition.json"); }, ".*");
 }
 
 TEST_F(ResourceTest, LoadEmptyPackDefinition) {
 	givenJsonFileCreation();
 	givenPackDefinitionExists(true);
-	expectJsonFileLoad(1);
 
-	EXPECT_THROW(_resourceSystem->loadPackDefinition("TestPackDefinition.json"), Exception);
+	EXPECT_DEATH(_resourceSystem->loadPackDefinition("TestPackDefinition.json"), ".*");
 }
 
 TEST_F(ResourceTest, LoadValidPackDefinition) {
@@ -43,6 +42,5 @@ TEST_F(ResourceTest, LoadSamePackDefinitionTwice) {
 	givenJsonFileCreation();
 	givenDefaultPackDefinition();
 	givenPackDefinitionExists(true);
-	expectJsonFileLoad(1);
-	EXPECT_THROW(_resourceSystem->loadPackDefinition("TestPackDefinition.json"), Exception);
+	EXPECT_DEATH(_resourceSystem->loadPackDefinition("TestPackDefinition.json"), ".*");
 }

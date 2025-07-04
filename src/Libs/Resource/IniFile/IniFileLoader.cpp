@@ -24,7 +24,7 @@ std::shared_ptr<IniFile> IniFileLoader::load(const IniFileLoadDescriptor& descri
 			defaultIniHandle->load();
 			iniFile->merge(defaultIniHandle->getContent());
 		} else {
-			throw TACTICS_EXCEPTION("A default ini has been specified but could not be found: {}",
+			TACTICS_EXCEPTION("A default ini has been specified but could not be found: {}",
 									descriptor.pathToDefault);
 		}
 	}

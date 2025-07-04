@@ -11,6 +11,7 @@ set(SOURCES
     Component/PrefabComponent.cpp
     Component/RenderableComponent.cpp
     Component/SpriteComponent.cpp
+    Component/PhysicsComponent.cpp
     Component/TransformComponent.cpp
     Entity.cpp
     EntityComponentSystem.cpp
@@ -32,6 +33,7 @@ set(HEADERS
     Component/MeshComponent.h
     Component/NameComponent.h
     Component/ParticleEmitterComponent.h
+    Component/PhysicsComponent.h
     Component/PrefabComponent.h
     Component/RenderableComponent.h
     Component/SpriteComponent.h 

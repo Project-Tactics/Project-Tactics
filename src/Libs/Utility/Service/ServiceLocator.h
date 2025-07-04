@@ -56,11 +56,11 @@ public:
 
 	template<typename TService> [[nodiscard]] TService& getService() {
 		auto id = ClassId<TService>::ID();
-		if (auto itr = _services.find(id); itr != _services.end()) {
-			return static_cast<WrappedService<TService>*>(itr->second.get())->get();
-		} else {
-			throw TACTICS_EXCEPTION("Can't find Service. Class ID: {}", id);
+		auto itr = _services.find(id);
+		if (itr == _services.end()) {
+			TACTICS_EXCEPTION("Can't find Service. Class ID: {}", id);
 		}
+		return static_cast<WrappedService<TService>*>(itr->second.get())->get();
 	}
 
 private:

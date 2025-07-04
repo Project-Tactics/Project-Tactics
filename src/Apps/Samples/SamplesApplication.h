@@ -15,11 +15,8 @@ public:
 	HashId initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) override;
 
 private:
-	template<typename TSampleState>
-	void _addSampleFlow(std::string_view key,
-						std::string_view sampleName,
-						std::string_view resourceFileExtension = ".json") {
-		_sampleFlows[std::string(key)] = std::make_unique<TSampleFlow<TSampleState>>(sampleName, resourceFileExtension);
+	template<typename TSampleState> void _addSampleFlow(std::string_view key, std::string_view sampleName) {
+		_sampleFlows[std::string(key)] = std::make_unique<TSampleFlow<TSampleState>>(sampleName);
 	}
 
 	SampleFlows _sampleFlows;

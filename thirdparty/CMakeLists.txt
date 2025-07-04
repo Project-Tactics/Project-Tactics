@@ -19,11 +19,6 @@ add_subdirectory(imgui-node-editor)
 # https://github.com/fmtlib/fmt
 add_subdirectory(fmt)
 
-# Adding sol2 as template library to easily bind c++ to lua
-# https://github.com/ThePhD/sol2
-set(SOL2_ENABLE_INSTALL "" OFF)
-add_subdirectory(sol2)
-
 # Adding stb library by only including std_image.h to load images
 # https://github.com/nothings/stb
 add_subdirectory(stb)
@@ -56,6 +51,6 @@ add_library(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/single_include/entt/
 target_include_directories(entt INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entt/single_include)
 
 # Let's keep things clean and tidy by moving all the thirdparty libs to a folder
-set_property(TARGET glad glm imgui imgui_node_editor fmt sol2 stb inicpp entt cereal spdlog PROPERTY FOLDER "thirdparty")
-# sol2 is including these extra CI targets that we don't need. Let's move them to the same thirdparty folder but later we'll just get rid of them
+set_property(TARGET glad glm imgui imgui_node_editor fmt stb inicpp entt cereal spdlog PROPERTY FOLDER "thirdparty")
+# Let's move these extra CI targets that we don't need to the same thirdparty folder but later we'll just get rid of them
 set_property(TARGET Continuous Experimental Nightly NightlyMemoryCheck PROPERTY FOLDER "thirdparty")
