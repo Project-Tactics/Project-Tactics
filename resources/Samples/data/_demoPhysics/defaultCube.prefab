@@ -45,5 +45,17 @@
                 }
             }
         ]
+    },
+    "BoxShape": {
+        "halfExtents": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
+        }
+    },
+    "PhysicsBody": {
+        "motionType": "Dynamic",
+        "layer": "Dynamic",
+        "mass": 1
     }
 }

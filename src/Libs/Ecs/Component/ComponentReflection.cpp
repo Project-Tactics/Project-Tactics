@@ -6,6 +6,7 @@
 #include "FrustumComponent.h"
 #include "MeshComponent.h"
 #include "ParticleEmitterComponent.h"
+#include "PhysicsComponent.h"
 #include "SpriteComponent.h"
 #include "TransformComponent.h"
 
@@ -54,7 +55,11 @@ void ComponentReflection::initializeCommonComponents() {
 					 Sprite,
 					 SpriteAnimation,
 					 Transform,
-					 ParticleEmitter>();
+					 ParticleEmitter,
+					 BoxShape,
+					 SphereShape,
+					 CapsuleShape,
+					 PhysicsBody>();
 }
 
 } // namespace tactics

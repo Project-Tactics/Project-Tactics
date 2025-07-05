@@ -3,15 +3,15 @@
     "Transform": {
         "position": {
             "x": 0,
-            "y": 5,
-            "z": -5
+            "y": 10,
+            "z": -10
         },
         "rotation": {
             "fromLookAt": {
                 "from": {
                     "x": 0,
-                    "y": 5,
-                    "z": -5
+                    "y": 10,
+                    "z": -10
                 },
                 "to": {
                     "x": 0,

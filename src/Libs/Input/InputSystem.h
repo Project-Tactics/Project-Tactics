@@ -33,7 +33,9 @@ public:
 	bool checkAction(const char* inputActionName, click::PlayerId playerId = 0) const;
 
 	void assignInputMap(const char* inputMapName, click::PlayerId playerId = 0);
+	void unassignInputMap(const char* inputMapName);
 	void assignInputMap(std::shared_ptr<resource::InputMap> inputMap, click::PlayerId playerId = 0);
+	void unassignInputMap(std::shared_ptr<resource::InputMap> inputMap);
 	void assignDevice(click::DeviceType deviceType, unsigned int deviceIndex, click::PlayerId playerId = 0);
 	bool hasDeviceAssigned(click::PlayerId playerId, click::DeviceType deviceType) const;
 
