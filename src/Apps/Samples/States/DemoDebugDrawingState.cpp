@@ -33,6 +33,7 @@ FsmAction DemoDebugDrawingState::update() {
 	sceneSystem.drawLine({2, 1, 0}, {2, -1, 0}, Color::yellow);
 	sceneSystem.drawLine({3, 1, 0}, {3, -1, 0}, Color::gray);
 	sceneSystem.drawLine({4, 1, 0}, {4, -1, 0}, Color::magenta);
+	sceneSystem.drawQuad({0, 2, 0}, {1, 1}, Color::cyan);
 
 	return FsmAction::none();
 }
