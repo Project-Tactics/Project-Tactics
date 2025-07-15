@@ -33,5 +33,18 @@
                 }
             }
         ]
+    },
+    "BoxShape": {
+        "halfExtents": {
+            "x": 12.5,
+            "y": 12.5,
+            "z": 0.01
+        }
+    },
+    "PhysicsBody": {
+        "motionType": "Static",
+        "layer": "Static",
+        "convexRadius": 0,
+        "mass": 1
     }
 }

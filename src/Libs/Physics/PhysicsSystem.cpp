@@ -1,25 +1,32 @@
 #include "PhysicsSystem.h"
 
+#include "JoltConversion.h"
 #include "JoltTraceAssert.h"
 #include "PhysicsSystemPimpl.h"
 
 #include <Libs/Ecs/Component/PhysicsComponent.h>
+#include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Ecs/EntityComponentSystem.h>
 
+#include <Jolt/Physics/Body/BodyCreationSettings.h>
 #include <Jolt/Physics/Collision/Shape/BoxShape.h>
 
 JPH_SUPPRESS_WARNING_PUSH
 
 namespace tactics {
 
+using namespace physics;
+
 PhysicsSystem::PhysicsSystem(int tempAllocatorSizeInBytes, EntityComponentSystem& ecs) {
 	_initializeSubsystem(tempAllocatorSizeInBytes);
 
 	using namespace component;
-	ecs.sceneRegistry().on_construct<BoxShape>().connect<&PhysicsSystem::_onBoxShapeCreated>(this);
-	ecs.sceneRegistry().on_destroy<BoxShape>().connect<&PhysicsSystem::_onBoxShapeDestroyed>(this);
-	ecs.sceneRegistry().on_construct<PhysicsBody>().connect<&PhysicsSystem::_onBodyCreated>(this);
-	ecs.sceneRegistry().on_destroy<PhysicsBody>().connect<&PhysicsSystem::_onBodyDestroyed>(this);
+	auto& registry = ecs.sceneRegistry();
+	registry.on_construct<BoxShape>().connect<&PhysicsSystem::_onBoxShapeCreated>(this);
+	registry.on_destroy<BoxShape>().connect<&PhysicsSystem::_onBoxShapeDestroyed>(this);
+	registry.on_construct<PhysicsBody>().connect<&PhysicsSystem::_onBodyCreated>(this);
+	registry.on_destroy<PhysicsBody>().connect<&PhysicsSystem::_onBodyDestroyed>(this);
+	registry.on_update<Transform>().connect<&PhysicsSystem::_onTransformUpdated>(this);
 }
 
 PhysicsSystem::~PhysicsSystem() {
@@ -38,12 +45,26 @@ void PhysicsSystem::_installTraceAndAssertCallbacks() {
 #endif
 }
 
-void PhysicsSystem::update(float fixedDeltaTime, entt::registry& /*registry*/) {
+void PhysicsSystem::update(float fixedDeltaTime, entt::registry& registry) {
 	const int collisionSteps = 1;
 	_pimpl->joltPhysicsSystem->Update(fixedDeltaTime,
 									  collisionSteps,
 									  _pimpl->tempAllocator.get(),
 									  _pimpl->jobSystem.get());
+
+	using namespace component;
+	auto view = registry.view<Transform, PhysicsBody>();
+	auto& bodyInterface = _pimpl->joltPhysicsSystem->GetBodyInterface();
+	for (auto [entity, transform, body] : view.each()) {
+		if (body.bodyId != 0) {
+			JPH::BodyID joltBodyId = toJoltBodyId(body.bodyId);
+			JPH::Vec3 position;
+			JPH::Quat rotation;
+			bodyInterface.GetPositionAndRotation(joltBodyId, position, rotation);
+			transform.setPosition(fromJolt(position));
+			transform.setRotation(fromJolt(rotation));
+		}
+	}
 }
 
 void PhysicsSystem::_initializeSubsystem(int tempAllocatorSizeInBytes) {
@@ -90,13 +111,59 @@ void PhysicsSystem::_initializeSubsystem(int tempAllocatorSizeInBytes) {
 	_pimpl->joltPhysicsSystem->SetContactListener(_pimpl.get());
 }
 
-void PhysicsSystem::_onBoxShapeCreated(entt::registry& /*registry*/, entt::entity /*entity*/) {}
+void PhysicsSystem::_onBoxShapeCreated(entt::registry& registry, entt::entity entity) {
+	if (registry.any_of<component::PhysicsBody>(entity)) {
+		// If the entity already has a PhysicsBody component, we need to update the shape of the body
+		auto& shapeComp = registry.get<component::BoxShape>(entity);
+		auto& bodyComp = registry.get<component::PhysicsBody>(entity);
+		auto& transform = registry.get<component::Transform>(entity);
+
+		bodyComp.bodyId = _pimpl->createAndAddBody<JPH::BoxShape>(toJolt(transform.getPosition()),
+																  toJolt(transform.getRotation()),
+																  toJolt(bodyComp.motionType),
+																  toJolt(bodyComp.layer),
+																  toJolt(shapeComp.halfExtents),
+																  bodyComp.convexRadius);
+	}
+}
 
 void PhysicsSystem::_onBoxShapeDestroyed(entt::registry& /*registry*/, entt::entity /*entity*/) {}
 
-void PhysicsSystem::_onBodyCreated(entt::registry& /*registry*/, entt::entity /*entity*/) {}
+void PhysicsSystem::_onBodyCreated(entt::registry& registry, entt::entity entity) {
+	if (registry.any_of<component::BoxShape>(entity)) {
+		auto& shapeComp = registry.get<component::BoxShape>(entity);
+		auto& bodyComp = registry.get<component::PhysicsBody>(entity);
+		auto& transform = registry.get<component::Transform>(entity);
+		bodyComp.bodyId = _pimpl->createAndAddBody<JPH::BoxShape>(toJolt(transform.getPosition()),
+																  toJolt(transform.getRotation()),
+																  toJolt(bodyComp.motionType),
+																  toJolt(bodyComp.layer),
+																  toJolt(shapeComp.halfExtents),
+																  bodyComp.convexRadius);
+	}
+}
 
-void PhysicsSystem::_onBodyDestroyed(entt::registry& /*registry*/, entt::entity /*entity*/) {}
+void PhysicsSystem::_onBodyDestroyed(entt::registry& registry, entt::entity entity) {
+	auto& bodyComp = registry.get<component::PhysicsBody>(entity);
+	// Remove the body from the physics system
+	auto& bodyInterface = _pimpl->joltPhysicsSystem->GetBodyInterface();
+	auto bodyId = toJoltBodyId(bodyComp.bodyId);
+	bodyInterface.RemoveBody(bodyId);
+	bodyInterface.DestroyBody(bodyId);
+}
+
+void PhysicsSystem::_onTransformUpdated(entt::registry& registry, entt::entity entity) {
+	auto& transform = registry.get<component::Transform>(entity);
+	if (registry.any_of<component::PhysicsBody>(entity)) {
+		auto& bodyComp = registry.get<component::PhysicsBody>(entity);
+		if (bodyComp.bodyId != 0) {
+			_pimpl->joltPhysicsSystem->GetBodyInterface().SetPositionAndRotation(toJoltBodyId(bodyComp.bodyId),
+																				 toJolt(transform.getPosition()),
+																				 toJolt(transform.getRotation()),
+																				 JPH::EActivation::Activate);
+		}
+	}
+}
 
 } // namespace tactics
 

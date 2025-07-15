@@ -82,9 +82,9 @@ void InputSystem::update() {
 }
 
 void InputSystem::assignInputMap(std::shared_ptr<resource::InputMap> inputMap, click::PlayerId playerId) {
-	auto mapId = click::addInputMap(playerId);
+	inputMap->mapId = click::addInputMap(playerId);
 	for (const auto& binding : inputMap->bindings) {
-		click::bind(mapId, binding.action->actionId, binding.gesture, binding.triggers, binding.modifiers);
+		click::bind(inputMap->mapId, binding.action->actionId, binding.gesture, binding.triggers, binding.modifiers);
 	}
 }
 
@@ -92,6 +92,16 @@ void InputSystem::assignInputMap(const char* inputMapName, click::PlayerId playe
 	auto inputMapId = HashId(inputMapName);
 	auto inputMap = _resourceProvider.getResource<resource::InputMap>(inputMapId);
 	assignInputMap(inputMap, playerId);
+}
+
+void InputSystem::unassignInputMap(std::shared_ptr<resource::InputMap> inputMap) {
+	click::unbind(inputMap->mapId);
+}
+
+void InputSystem::unassignInputMap(const char* inputMapName) {
+	auto inputMapId = HashId(inputMapName);
+	auto inputMap = _resourceProvider.getResource<resource::InputMap>(inputMapId);
+	unassignInputMap(inputMap);
 }
 
 void InputSystem::assignDevice(click::DeviceType deviceType, unsigned int deviceIndex, click::PlayerId playerId) {

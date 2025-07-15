@@ -7,9 +7,11 @@ set(SOURCES
 
 set(HEADERS
         JoltConstants.h
+        JoltConversion.h
         JoltTraceAssert.h
         PhysicsSystem.h
-        PhysicsSystemPimpl.h)
+        PhysicsSystemPimpl.h
+        PhysicsTypes.h)
 
 add_library(libs_physics STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_physics PRIVATE libs_ecs libs_utility Jolt::Jolt)

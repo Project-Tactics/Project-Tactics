@@ -18,6 +18,34 @@
             "defaultPlane": {
                 "path": "_demoPhysics/plane.prefab"
             }
+        },
+        "InputAction": {
+            "resetRigidBodies": {
+                "type": "Scalar"
+            }
+        },
+        "InputMap": {
+            "PhysicsDemo": {
+                "bindings": [
+                    {
+                        "action": "resetRigidBodies",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeySpace"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "press",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
         }
     }
 }

@@ -171,7 +171,7 @@ void Engine::_shutdown() {
 
 void Engine::_registerOverlays() {
 	auto debugConfigFile = _resourceSystem->getResource<resource::IniFile>("devUserConfigFile"_id);
-	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", false)) {
+	if (debugConfigFile->getOrCreate("overlay", "enableEngineOverlay", true)) {
 		LOG_TRACE(Log::Engine, "Register Engine Overlays");
 		_overlaySystem->addOverlay<MainOverlay>("Main", true, *_overlaySystem);
 		_overlaySystem->addOverlay<EngineCoreOverlay>("Engine", false);

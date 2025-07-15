@@ -29,6 +29,7 @@ private:
 	void _onBoxShapeDestroyed(entt::registry& registry, entt::entity entity);
 	void _onBodyCreated(entt::registry& registry, entt::entity entity);
 	void _onBodyDestroyed(entt::registry& registry, entt::entity entity);
+	void _onTransformUpdated(entt::registry& registry, entt::entity entity);
 
 	std::unique_ptr<physics::PhysicsSystemPimpl> _pimpl;
 };

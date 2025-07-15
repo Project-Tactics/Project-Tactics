@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Libs/Physics/PhysicsTypes.h>
 #include <Libs/Utility/Reflection.h>
 
 namespace tactics::component {
@@ -24,9 +25,13 @@ struct CapsuleShape {
 };
 
 struct PhysicsBody {
+	physics::PhysicsMotionType motionType{physics::PhysicsMotionType::Dynamic};
+	physics::PhysicsLayer layer{physics::PhysicsLayer::Dynamic};
 	float mass{1.0f};
+	float convexRadius{0.05f};
+	std::uint32_t bodyId{0};
 
-	COMPONENT(PhysicsBody, mass)
+	COMPONENT(PhysicsBody, mass, motionType, layer, mass, convexRadius)
 };
 
 } // namespace tactics::component
