@@ -91,23 +91,27 @@ void DrawDebug::execute(RenderStepInfo& renderInfo) {
 
 	// Fill Vertex Info for Quads
 	{
-		auto view = _ecs.sceneRegistry().view<DebugQuad>();
-		for (auto&& [entity, quad] : view.each()) {
-			glm::vec3 p1 = quad.position + glm::vec3(-quad.size.x * 0.5f, -quad.size.y * 0.5f, 0);
-			glm::vec3 p2 = quad.position + glm::vec3(quad.size.x * 0.5f, -quad.size.y * 0.5f, 0);
-			glm::vec3 p3 = quad.position + glm::vec3(quad.size.x * 0.5f, quad.size.y * 0.5f, 0);
-			glm::vec3 p4 = quad.position + glm::vec3(-quad.size.x * 0.5f, quad.size.y * 0.5f, 0);
-			if (vertexCount + 8u >= _vertices.size()) {
-				break;
+		if (vertexCount + 8u < _vertices.size()) {
+			auto view = _ecs.sceneRegistry().view<DebugQuad>();
+			for (auto&& [entity, quad] : view.each()) {
+				glm::vec3 p1 = quad.position + glm::vec3(-quad.size.x * 0.5f, -quad.size.y * 0.5f, 0);
+				glm::vec3 p2 = quad.position + glm::vec3(quad.size.x * 0.5f, -quad.size.y * 0.5f, 0);
+				glm::vec3 p3 = quad.position + glm::vec3(quad.size.x * 0.5f, quad.size.y * 0.5f, 0);
+				glm::vec3 p4 = quad.position + glm::vec3(-quad.size.x * 0.5f, quad.size.y * 0.5f, 0);
+
+				_vertices[vertexCount++] = {p1, quad.color};
+				_vertices[vertexCount++] = {p2, quad.color};
+				_vertices[vertexCount++] = {p2, quad.color};
+				_vertices[vertexCount++] = {p3, quad.color};
+				_vertices[vertexCount++] = {p3, quad.color};
+				_vertices[vertexCount++] = {p4, quad.color};
+				_vertices[vertexCount++] = {p4, quad.color};
+				_vertices[vertexCount++] = {p1, quad.color};
+
+				if (vertexCount + 8u >= _vertices.size()) {
+					break;
+				}
 			}
-			_vertices[vertexCount++] = {p1, quad.color};
-			_vertices[vertexCount++] = {p2, quad.color};
-			_vertices[vertexCount++] = {p2, quad.color};
-			_vertices[vertexCount++] = {p3, quad.color};
-			_vertices[vertexCount++] = {p3, quad.color};
-			_vertices[vertexCount++] = {p4, quad.color};
-			_vertices[vertexCount++] = {p4, quad.color};
-			_vertices[vertexCount++] = {p1, quad.color};
 		}
 	}
 
