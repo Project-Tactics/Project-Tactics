@@ -43,6 +43,7 @@ public:
 	void drawLine(const glm::vec3& start, const glm::vec3& end, const glm::vec4& color, float lifetime = 0.016f);
 	void drawBox(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color, float lifetime = 0.016f);
 	void drawSphere(const glm::vec3& position, float radius, const glm::vec4& color, float lifetime = 0.016f);
+	void drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, float lifetime = 0.016f);
 
 	[[nodiscard]] Entity getEntityByName(const HashId& name);
 	[[nodiscard]] Entity getCurrentCamera();

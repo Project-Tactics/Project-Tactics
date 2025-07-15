@@ -22,6 +22,12 @@ struct DebugSphere {
 	glm::vec4 color;
 };
 
+struct DebugQuad {
+	glm::vec3 position;
+	glm::vec2 size;
+	glm::vec4 color;
+};
+
 struct DebugDrawingLifetime {
 	float lifetime{};
 };

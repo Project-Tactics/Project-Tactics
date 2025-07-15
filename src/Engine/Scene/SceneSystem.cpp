@@ -222,6 +222,13 @@ void SceneSystem::drawSphere(const glm::vec3& position, float radius, const glm:
 	entity.addComponent<DebugDrawingLifetime>(lifetime);
 }
 
+void SceneSystem::drawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, float lifetime) {
+	using namespace component;
+	auto entity = Entity::create("DebugQuad"_id, &_ecs.sceneRegistry());
+	entity.addComponent<DebugQuad>(position, size, color);
+	entity.addComponent<DebugDrawingLifetime>(lifetime);
+}
+
 Entity SceneSystem::getEntityByName(const HashId& name) {
 	auto view = _ecs.sceneRegistry().view<component::Name>();
 	for (auto [entity, nameComp] : view.each()) {
