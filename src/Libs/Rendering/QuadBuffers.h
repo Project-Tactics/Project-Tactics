@@ -24,14 +24,10 @@ public:
 			},
 			rp::StaticDraw::value);
 		_indexBuffer.generateData({0, 1, 2, 2, 3, 0}, rp::StaticDraw::value);
-		_vertexBuffer.bind();
-
 		VertexAttributes::Builder builder;
 		builder.attributef(3);
 		builder.attributef(2);
-		builder.create(_vertexAttributes);
-
-		_vertexBuffer.unbind();
+		builder.create(_vertexBuffer, _indexBuffer);
 	}
 
 	QuadBuffers(const QuadBuffers&) = delete;

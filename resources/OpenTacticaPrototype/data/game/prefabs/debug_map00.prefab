@@ -1,0 +1,27 @@
+{
+    "Transform": {
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "scale": {
+            "x": 0.01,
+            "y": 0.01,
+            "z": 0.01
+        }
+    },
+    "Mesh": {
+        "mesh": "debug_map00",
+        "materials": [
+            {
+                "material": "texturedUnlit",
+                "uniforms": {
+                    "textures": {
+                        "u_Texture": "map00"
+                    }
+                }
+            }
+        ]
+    }
+}

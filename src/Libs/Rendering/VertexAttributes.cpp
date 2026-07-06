@@ -1,5 +1,6 @@
 #include "VertexAttributes.h"
 
+#include "IndexBuffer.h"
 #include "VertexBuffer.h"
 
 #include <glad/gl.h>
@@ -11,31 +12,46 @@ namespace tactics {
 void VertexAttributes::Builder::attributef(int count) {
 	void* stride = reinterpret_cast<void*>(static_cast<intptr_t>(_stride));
 	_attributes.push_back([this, count, index = _attributeIndex, pointer = stride]() {
-		glVertexAttribPointer(index, count, GL_FLOAT, GL_FALSE, _stride, pointer);
 		glEnableVertexAttribArray(index);
+		glVertexAttribPointer(index, count, GL_FLOAT, GL_FALSE, _stride, pointer);
 	});
 	++_attributeIndex;
 	_stride += count * sizeof(float);
 }
 
-VertexAttributes VertexAttributes::Builder::create() {
+VertexAttributes VertexAttributes::Builder::create(VertexBuffer& vb, IndexBuffer& ib) {
 	auto attributes = VertexAttributes();
-	attributes.setComponentPerVertex(_stride / static_cast<unsigned int>(sizeof(float)));
-	_defineAttributes(attributes);
+	create(attributes, vb, ib);
 	return attributes;
 }
 
-void VertexAttributes::Builder::create(VertexAttributes& va) {
-	va.setComponentPerVertex(_stride / static_cast<unsigned int>(sizeof(float)));
-	_defineAttributes(va);
+VertexAttributes VertexAttributes::Builder::create(VertexBuffer& vb) {
+	auto attributes = VertexAttributes();
+	create(attributes, vb);
+	return attributes;
 }
 
-void VertexAttributes::Builder::_defineAttributes(VertexAttributes& vertexAttribute) {
-	vertexAttribute.bind();
+void VertexAttributes::Builder::create(VertexAttributes& va, VertexBuffer& vb, IndexBuffer& ib) {
+	va.setComponentPerVertex(_stride / static_cast<unsigned int>(sizeof(float)));
+	va.bind();
+	vb.bind();
+	ib.bind();
+	_defineAttributes();
+	va.unbind();
+}
+
+void VertexAttributes::Builder::create(VertexAttributes& va, VertexBuffer& vb) {
+	va.setComponentPerVertex(_stride / static_cast<unsigned int>(sizeof(float)));
+	va.bind();
+	vb.bind();
+	_defineAttributes();
+	va.unbind();
+}
+
+void VertexAttributes::Builder::_defineAttributes() {
 	for (auto& attribute : _attributes) {
 		attribute();
 	}
-	vertexAttribute.unbind();
 }
 
 // Vertex Attributes

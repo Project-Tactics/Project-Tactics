@@ -3,19 +3,19 @@
     "Transform": {
         "position": {
             "x": 0,
-            "y": 2,
-            "z": 5
+            "y": 10,
+            "z": 20
         },
         "rotation": {
             "fromLookAt": {
                 "from": {
                     "x": 0,
-                    "y": 2,
-                    "z": 5
+                    "y": 10,
+                    "z": 20
                 },
                 "to": {
                     "x": 0,
-                    "y": 0,
+                    "y": 2,
                     "z": 0
                 }
             }

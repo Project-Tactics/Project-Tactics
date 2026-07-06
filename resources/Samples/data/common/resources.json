@@ -20,6 +20,10 @@
             "debug": {
                 "vertexShader": "common/shaders/debug.vert",
                 "fragmentShader": "common/shaders/debug.frag"
+            },
+            "lit": {
+                "vertexShader": "common/shaders/newVert.vert",
+                "fragmentShader": "common/shaders/lit.frag"
             }
         },
         "Texture": {
@@ -108,6 +112,33 @@
                             "z": 1.0,
                             "w": 1.0
                         }
+                    }
+                }
+            },
+            "lit": {
+                "shader": "lit",
+                "uniforms": {
+                    "vectors4": {
+                        "u_DiffuseColor": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0,
+                            "w": 1.0
+                        }
+                    },
+                    "vectors3": {
+                        "u_AmbientColor": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "textures": {
+                        "u_DiffuseTexture": "none"
+                    },
+                    "floats": {
+                        "u_UseTexture": 0.0,
+                        "u_AmbientStrength": 0.1
                     }
                 }
             }

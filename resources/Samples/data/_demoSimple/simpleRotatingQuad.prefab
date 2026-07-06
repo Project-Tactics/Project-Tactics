@@ -23,10 +23,10 @@
         "mesh": "quad",
         "materials": [
             {
-                "material": "coloredUnlit",
+                "material": "lit",
                 "uniforms": {
                     "vectors4": {
-                        "u_Color": {
+                        "u_DiffuseColor": {
                             "x": 1,
                             "y": 0.5,
                             "z": 0,

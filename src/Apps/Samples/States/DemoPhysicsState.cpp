@@ -5,6 +5,7 @@
 #include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
 #include <Libs/Input/InputSystem.h>
+#include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Utility/Random.h>
 
 namespace tactics {
@@ -14,6 +15,10 @@ DemoPhysicsState::DemoPhysicsState(ServiceLocator& serviceLocator) : SampleState
 FsmAction DemoPhysicsState::enter() {
 	auto& inputSystem = getService<InputSystem>();
 	inputSystem.assignInputMap("PhysicsDemo");
+
+	auto& renderSystem = getService<RenderSystem>();
+	renderSystem.setAmbientLightColor({1, 1, 1});
+	renderSystem.setAmbientLightStrength(0.75f);
 
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.createEntity("Camera"_id, "defaultCamera"_id);
@@ -27,7 +32,7 @@ FsmAction DemoPhysicsState::enter() {
 		});
 
 		auto& mesh = entity.getComponent<component::Mesh>();
-		mesh.materials[0]->set("u_Color", glm::vec4(Random::random3D(), 1.0f));
+		mesh.materials[0]->set("u_DiffuseColor", glm::vec4(Random::random3D(), 1.0f));
 	}
 
 	return FsmAction::none();

@@ -115,8 +115,6 @@ void DrawMeshes::_drawMesh(const RenderStepInfo& renderInfo,
 
 		auto& shader = material->parent->shader;
 
-		subMesh.va().bind();
-
 		// TODO(Gerark) Optimization: Group Shader/Materials instead of constantly binding and unbinding
 		shader->bind();
 		material->updateShaderUniforms();
@@ -128,6 +126,15 @@ void DrawMeshes::_drawMesh(const RenderStepInfo& renderInfo,
 		if (shader->hasUniform("u_Resolution")) {
 			shader->setUniform("u_Resolution", renderInfo.windowSize);
 		}
+		if (shader->hasUniform("u_AmbientStrength")) {
+			shader->setUniform("u_AmbientStrength", renderInfo.ambientStrength);
+		}
+		if (shader->hasUniform("u_AmbientColor")) {
+			shader->setUniform("u_AmbientColor", renderInfo.ambientColor);
+		}
+		if (shader->hasUniform("u_Model")) {
+			shader->setUniform("u_Model", transform.getMatrix());
+		}
 
 		_drawGeometry(subMesh);
 
@@ -136,15 +143,13 @@ void DrawMeshes::_drawMesh(const RenderStepInfo& renderInfo,
 }
 
 void DrawMeshes::_drawGeometry(const resource::SubMesh& mesh) {
-	mesh.vb().bind();
+	mesh.va().bind();
 	if (mesh.ib().getSize() > 0) {
-		mesh.ib().bind();
 		glDrawElements(GL_TRIANGLES, mesh.ib().getSize(), GL_UNSIGNED_INT, nullptr);
 	} else {
 		glDrawArrays(GL_TRIANGLES, 0, mesh.vb().getSize());
 	}
 	mesh.va().unbind();
-	mesh.vb().unbind();
 }
 
 void DrawMeshes::_drawParticles(const RenderStepInfo& info,

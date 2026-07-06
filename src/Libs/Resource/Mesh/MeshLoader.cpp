@@ -56,16 +56,12 @@ std::vector<unsigned int> MeshLoader::_parseIndices(const std::string& strIndice
 
 std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& strVertices, const std::string& strIndices) {
 	// TODO(Gerark) Using dynamic draw as usage but it should be best to receive this as a parameter
-	auto meshVertices = VertexBuffer(_parseVertices(strVertices), rp::DynamicDraw::value);
-	meshVertices.bind();
-	auto vertexAttributes = _createDefaultVertexAttributes();
-	meshVertices.unbind();
+	auto vb = VertexBuffer(_parseVertices(strVertices), rp::DynamicDraw::value);
+	auto ib = IndexBuffer(_parseIndices(strIndices), rp::DynamicDraw::value);
+	auto vertexAttributes = _createDefaultVertexAttributes(vb, ib);
 
 	auto mesh = std::make_shared<Mesh>(""_id);
-	mesh->subMeshes.emplace_back(0,
-								 std::move(meshVertices),
-								 IndexBuffer(_parseIndices(strIndices), rp::DynamicDraw::value),
-								 std::move(vertexAttributes));
+	mesh->subMeshes.emplace_back(0, std::move(vb), std::move(ib), std::move(vertexAttributes));
 	return mesh;
 }
 
@@ -94,6 +90,7 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 			vertices.push_back(vertex.y);
 			vertices.push_back(vertex.z);
 
+			// Sort of expecting only one set of uv coordinates so this would create artifacts if there are more
 			unsigned int uvCount = mesh->GetNumUVChannels();
 			for (unsigned int uvIndex = 0; uvIndex < uvCount; ++uvIndex) {
 				if (mesh->HasTextureCoords(uvIndex)) {
@@ -102,6 +99,18 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 					vertices.push_back(uv.y);
 					break;
 				}
+			}
+
+			if (mesh->HasNormals()) {
+				aiVector3D& normal = mesh->mNormals[vertexIndex];
+				vertices.push_back(normal.x);
+				vertices.push_back(normal.y);
+				vertices.push_back(normal.z);
+			} else {
+				// Kind of fallback since we expect normals anyway
+				vertices.push_back(0.0f);
+				vertices.push_back(0.0f);
+				vertices.push_back(0.0f);
 			}
 		}
 		for (unsigned int faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
@@ -112,24 +121,21 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 		}
 
 		// TODO(Gerark) Using dynamic draw is just temporary, we should have a way to define this through the descriptor
-		auto meshVertices = VertexBuffer(vertices, rp::DynamicDraw::value);
-		meshVertices.bind();
-		auto vertexAttributes = _createDefaultVertexAttributes();
-		meshVertices.unbind();
+		auto vb = VertexBuffer(vertices, rp::DynamicDraw::value);
+		auto ib = IndexBuffer(indices, rp::DynamicDraw::value);
+		auto vertexAttributes = _createDefaultVertexAttributes(vb, ib);
 
-		meshResource->subMeshes.emplace_back(meshIndex,
-											 std::move(meshVertices),
-											 IndexBuffer(indices, rp::DynamicDraw::value),
-											 std::move(vertexAttributes));
+		meshResource->subMeshes.emplace_back(meshIndex, std::move(vb), std::move(ib), std::move(vertexAttributes));
 	}
 	return meshResource;
 }
 
-VertexAttributes MeshLoader::_createDefaultVertexAttributes() {
+VertexAttributes MeshLoader::_createDefaultVertexAttributes(VertexBuffer& vb, IndexBuffer& ib) {
 	auto builder = VertexAttributes::Builder();
 	builder.attributef(3); // position
 	builder.attributef(2); // uv
-	return builder.create();
+	builder.attributef(3); // normal
+	return builder.create(vb, ib);
 }
 
 } // namespace tactics::resource

@@ -4,6 +4,11 @@
 
 #include <Libs/Resource/ResourceLoader.h>
 
+namespace tactics {
+class VertexBuffer;
+class IndexBuffer;
+} // namespace tactics
+
 namespace tactics::resource {
 
 class MeshLoader : public ResourceLoader {
@@ -16,7 +21,7 @@ private:
 	static std::vector<unsigned int> _parseIndices(const std::string& strIndices);
 	std::shared_ptr<Mesh> _loadMesh(const std::string& path);
 	std::shared_ptr<Mesh> _loadMesh(const std::string& strVertices, const std::string& strIndices);
-	VertexAttributes _createDefaultVertexAttributes();
+	VertexAttributes _createDefaultVertexAttributes(VertexBuffer& vb, IndexBuffer& ib);
 };
 
 } // namespace tactics::resource

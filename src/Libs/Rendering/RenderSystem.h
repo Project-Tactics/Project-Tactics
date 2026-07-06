@@ -33,8 +33,12 @@ public:
 
 	const glm::u32vec2& getWindowSize() const;
 
-	void setViewport(const glm::vec2& position, const glm::vec2& size, glm::vec4 clearColor);
+	void setViewport(const glm::vec2& position, const glm::vec2& size, const glm::vec4& clearColor);
+	void setViewportColor(const glm::vec4& clearColor);
 	const Viewport& getViewport() const;
+
+	void setAmbientLightStrength(float strength);
+	void setAmbientLightColor(const glm::vec3& color);
 
 	bool onEvent(const SDL_Event& event) override;
 
@@ -63,5 +67,7 @@ private:
 	std::shared_ptr<resource::IniFile> _configFile;
 	Viewport _viewport;
 	glm::u32vec2 _windowSize;
+	float _ambientStrength{0.5f};
+	glm::vec3 _ambientColor{1.0f, 1.0f, 1.0f};
 };
 } // namespace tactics

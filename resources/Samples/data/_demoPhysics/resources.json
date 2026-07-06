@@ -13,7 +13,7 @@
                 "path": "_demoPhysics/defaultCamera.prefab"
             },
             "defaultCube": {
-                "path": "_demoPhysics/defaultCube.prefab"
+                "path": "_demoPhysics/cube.prefab"
             },
             "defaultPlane": {
                 "path": "_demoPhysics/plane.prefab"

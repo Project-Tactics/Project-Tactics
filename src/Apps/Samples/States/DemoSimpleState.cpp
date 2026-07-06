@@ -98,17 +98,18 @@ void DemoSimpleState::_createCrate() {
 	auto& sceneSystem = getService<SceneSystem>();
 	auto& resourceSystem = getService<resource::ResourceSystem>();
 
-	auto crate = sceneSystem.createEntity("crate"_id, {40.0f, 5.0f, 0.0f}, "cube"_id, {"texturedUnlit"_id});
+	auto crate = sceneSystem.createEntity("crate"_id, {40.0f, 5.0f, 0.0f}, "cube"_id, {"lit"_id});
 	crate.getComponent<component::Transform>().setScale({10, 10, 10});
 	crate.updateComponent<component::Mesh>([&resourceSystem](auto& mesh) {
 		mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("crate"_id));
+		mesh.materials[0]->set("u_UseTexture", 1.0f);
 	});
 }
 
 void DemoSimpleState::_createTeapot() {
 	auto& sceneSystem = getService<SceneSystem>();
 
-	auto teapot = sceneSystem.createEntity("teapot"_id, {0.0f, 0.0f, 0.0f}, "teapot"_id, {"coloredUnlit"_id});
+	auto teapot = sceneSystem.createEntity("teapot"_id, {0.0f, 0.0f, 0.0f}, "teapot"_id, {"lit"_id});
 	auto& transform = teapot.getComponent<component::Transform>();
 	transform.setRotation(glm::radians(90.0f), Vector3::up);
 	transform.setScale({5, 5, 5});

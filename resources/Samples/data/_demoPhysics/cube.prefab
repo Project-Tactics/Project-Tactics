@@ -29,11 +29,8 @@
         "mesh": "cube",
         "materials": [
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
-                    "textures": {
-                        "u_Texture": "boxTexture"
-                    },
                     "vectors4": {
                         "u_Color": {
                             "x": 1.0,
