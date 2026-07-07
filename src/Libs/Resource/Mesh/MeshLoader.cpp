@@ -92,13 +92,19 @@ std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& path) {
 
 			// Sort of expecting only one set of uv coordinates so this would create artifacts if there are more
 			unsigned int uvCount = mesh->GetNumUVChannels();
+			auto hasUv = false;
 			for (unsigned int uvIndex = 0; uvIndex < uvCount; ++uvIndex) {
 				if (mesh->HasTextureCoords(uvIndex)) {
 					aiVector3D& uv = mesh->mTextureCoords[uvIndex][vertexIndex];
 					vertices.push_back(uv.x);
 					vertices.push_back(uv.y);
+					hasUv = true;
 					break;
 				}
+			}
+			if (!hasUv) {
+				vertices.push_back(0.0f);
+				vertices.push_back(0.0f);
 			}
 
 			if (mesh->HasNormals()) {

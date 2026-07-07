@@ -14,6 +14,7 @@
 namespace tactics {
 
 FsmAction DemoMapState::enter() {
+	component::BattleCameraSystem::init(getService<SceneSystem>().getRegistry());
 	_createScene();
 	_setupInput();
 	return FsmAction::none();
@@ -39,21 +40,21 @@ FsmAction DemoMapState::update() {
 }
 
 void DemoMapState::exit() {
-	auto& sceneSystem = getService<SceneSystem>();
-	sceneSystem.clearScene();
+	auto& inputSystem = getService<InputSystem>();
+	inputSystem.unassignInputMap("mapDemoInput");
 
+	auto& sceneSystem = getService<SceneSystem>();
 	component::BattleCameraSystem::uninit(sceneSystem.getRegistry());
+	sceneSystem.clearScene(true);
 }
 
 void DemoMapState::_createScene() {
 	using namespace component;
 
 	auto& sceneSystem = getService<SceneSystem>();
-	BattleCameraSystem::init(sceneSystem.getRegistry());
+	sceneSystem.clearScene(true);
 
 	_createCamera("mapCamera"_id);
-
-	sceneSystem.clearScene();
 	auto mapName = fmt::format("map{:02d}", _mapIndex);
 	sceneSystem.createEntity("map"_id, HashId(mapName));
 	sceneSystem.createEntity("char"_id, "character"_id);
