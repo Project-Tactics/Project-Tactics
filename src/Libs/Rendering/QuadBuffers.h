@@ -27,7 +27,7 @@ public:
 		VertexAttributes::Builder builder;
 		builder.attributef(3);
 		builder.attributef(2);
-		builder.create(_vertexBuffer, _indexBuffer);
+		builder.create(_vertexAttributes, _vertexBuffer, _indexBuffer);
 	}
 
 	QuadBuffers(const QuadBuffers&) = delete;
