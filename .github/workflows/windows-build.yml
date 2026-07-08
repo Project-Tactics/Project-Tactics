@@ -9,7 +9,7 @@ on:
 jobs:
   formatting-check:
     name: Formatting Check
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: windows-latest
+    runs-on: windows-2022
     needs: formatting-check
 
     strategy:
@@ -48,7 +48,7 @@ jobs:
         retention-days: 1
 
   unit-tests:
-    runs-on: windows-latest
+    runs-on: windows-2022
     needs: build
 
     strategy:
