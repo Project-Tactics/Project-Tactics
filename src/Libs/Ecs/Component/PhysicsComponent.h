@@ -31,7 +31,7 @@ struct PhysicsBody {
 	float convexRadius{0.05f};
 	std::uint32_t bodyId{0};
 
-	COMPONENT(PhysicsBody, mass, motionType, layer, mass, convexRadius)
+	COMPONENT(PhysicsBody, mass, motionType, layer, convexRadius)
 };
 
 } // namespace tactics::component

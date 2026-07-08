@@ -21,74 +21,101 @@
         "mesh": "map00",
         "materials": [
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "map00_00"
+                        "u_DiffuseTexture": "map00_00"
+                    },
+                    "floats": {
+                        "u_UseTexture": 1.0
                     }
                 }
             },
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "map00_01"
+                        "u_DiffuseTexture": "map00_01"
+                    },
+                    "floats": {
+                        "u_UseTexture": 1.0
                     }
                 }
             },
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "map00_02"
+                        "u_DiffuseTexture": "map00_02"
+                    },
+                    "floats": {
+                        "u_UseTexture": 1.0
                     }
                 }
             },
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "map00_03"
+                        "u_DiffuseTexture": "map00_03"
+                    },
+                    "floats": {
+                        "u_UseTexture": 1.0
                     }
                 }
             },
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "map00_04"
+                        "u_DiffuseTexture": "map00_04"
+                    },
+                    "floats": {
+                        "u_UseTexture": 1.0
                     }
                 }
             },
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "map00_05"
+                        "u_DiffuseTexture": "map00_05"
+                    },
+                    "floats": {
+                        "u_UseTexture": 1.0
                     }
                 }
             },
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "map00_07"
+                        "u_DiffuseTexture": "map00_07"
+                    },
+                    "floats": {
+                        "u_UseTexture": 1.0
                     }
                 }
             },
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "map00_08"
+                        "u_DiffuseTexture": "map00_08"
+                    },
+                    "floats": {
+                        "u_UseTexture": 1.0
                     }
                 }
             },
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "map00_09"
+                        "u_DiffuseTexture": "map00_09"
+                    },
+                    "floats": {
+                        "u_UseTexture": 1.0
                     }
                 }
             },

@@ -87,7 +87,7 @@ void RenderSystem::_initializeGlContext() {
 }
 
 void RenderSystem::render() {
-	RenderStepInfo renderInfo{_viewport, getWindowSize()};
+	RenderStepInfo renderInfo{_viewport, getWindowSize(), _ambientStrength, _ambientColor};
 
 	for (auto& renderQueue : _renderQueues) {
 		renderQueue->execute(renderInfo);
@@ -164,14 +164,26 @@ const glm::u32vec2& RenderSystem::getWindowSize() const {
 	return _windowSize;
 }
 
-void RenderSystem::setViewport(const glm::vec2& position, const glm::vec2& size, glm::vec4 clearColor) {
+void RenderSystem::setViewport(const glm::vec2& position, const glm::vec2& size, const glm::vec4& clearColor) {
 	_viewport.position = position;
 	_viewport.size = size;
 	_viewport.clearColor = clearColor;
 }
 
+void RenderSystem::setViewportColor(const glm::vec4& clearColor) {
+	_viewport.clearColor = clearColor;
+}
+
 const Viewport& RenderSystem::getViewport() const {
 	return _viewport;
+}
+
+void RenderSystem::setAmbientLightStrength(float strength) {
+	_ambientStrength = strength;
+}
+
+void RenderSystem::setAmbientLightColor(const glm::vec3& color) {
+	_ambientColor = color;
 }
 
 bool RenderSystem::onEvent(const SDL_Event& event) {

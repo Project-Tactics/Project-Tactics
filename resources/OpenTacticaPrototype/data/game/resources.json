@@ -3,6 +3,9 @@
         "Prefab": {
             "character": {
                 "path": "game/prefabs/character.prefab"
+            },
+            "debug_map00": {
+                "path": "game/prefabs/debug_map00.prefab"
             }
         },
         "Texture": {
@@ -21,6 +24,9 @@
             "spriteSheet00": {
                 "path": "game/textures/spriteSheet00.png",
                 "filter": "Nearest"
+            },
+            "map00": {
+                "path": "game/textures/dev_map00_diffuse.png"
             }
         },
         "DataSet": {
@@ -46,6 +52,11 @@
                         "duration": 1
                     }
                 }
+            }
+        },
+        "Mesh": {
+            "debug_map00": {
+                "path": "game/meshes/debug_map00.fbx"
             }
         }
     }

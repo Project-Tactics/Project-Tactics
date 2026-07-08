@@ -25,10 +25,13 @@
         "mesh": "quad",
         "materials": [
             {
-                "material": "texturedUnlit",
+                "material": "lit",
                 "uniforms": {
                     "textures": {
-                        "u_Texture": "floor"
+                        "u_DiffuseTexture": "floor"
+                    },
+                    "floats": {
+                        "u_UseTexture": 1.0
                     }
                 }
             }

@@ -6,17 +6,30 @@
 
 namespace tactics {
 class VertexBuffer;
+class IndexBuffer;
+template<typename TVertex> class TVertexBuffer;
 
 class VertexAttributes {
 public:
 	class Builder {
 	public:
 		void attributef(int count);
-		VertexAttributes create();
-		void create(VertexAttributes& va);
+		VertexAttributes create(VertexBuffer& vb, IndexBuffer& ib);
+		VertexAttributes create(VertexBuffer& vb);
+		void create(VertexAttributes& va, VertexBuffer& vb, IndexBuffer& ib);
+		void create(VertexAttributes& va, VertexBuffer& vb);
+
+		template<typename T> void create(VertexAttributes& va, TVertexBuffer<T>& vb) {
+			va.setComponentPerVertex(_stride / static_cast<unsigned int>(sizeof(float)));
+			va.bind();
+			vb.bind();
+			_defineAttributes();
+			vb.unbind();
+			va.unbind();
+		}
 
 	private:
-		void _defineAttributes(VertexAttributes& vertexAttribute);
+		void _defineAttributes();
 
 		unsigned int _stride{};
 		unsigned int _attributeIndex{};

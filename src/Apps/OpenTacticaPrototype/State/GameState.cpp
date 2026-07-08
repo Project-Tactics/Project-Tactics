@@ -10,6 +10,7 @@
 #include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Input/InputSystem.h>
 #include <Libs/Overlay/OverlaySystem.h>
+#include <Libs/Rendering/RenderSystem.h>
 #include <Libs/Resource/DataSet/DataSetSystem.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Utility/Time/EngineTime.h>
@@ -37,7 +38,11 @@ void createCharacterFromData(const CharacterDataSet& charData, SceneSystem& scen
 }
 
 FsmAction GameState::enter() {
+	auto& renderSystem = getService<RenderSystem>();
+	renderSystem.setViewportColor({0.0627f, 0.3569f, 0.6314f, 1.f});
+
 	auto& sceneSystem = getService<SceneSystem>();
+	/*
 	auto& dataSetSystem = getService<resource::DataSetSystem>();
 	auto characterDataSet = dataSetSystem.getDataSet<CharacterDataSet>("main_characters"_id);
 	std::vector<glm::vec3> positions;
@@ -55,8 +60,10 @@ FsmAction GameState::enter() {
 		createCharacterFromData(charData, sceneSystem, positions[i]);
 		++i;
 	}
+	*/
 
 	sceneSystem.createEntity("MainCamera"_id, "simpleCamera"_id);
+	sceneSystem.createEntity("Map"_id, "debug_map00"_id);
 
 	auto& overlaySystem = getService<OverlaySystem>();
 	auto& resourceSystem = getService<resource::ResourceSystem>();

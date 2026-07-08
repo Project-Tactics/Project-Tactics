@@ -56,13 +56,12 @@ std::shared_ptr<resource::Mesh> GeometryBuilder::build(const HashId& name) {
 
 		auto vbo = VertexBuffer(subMesh.vertices, rp::StaticDraw::value);
 		auto ibo = IndexBuffer(subMesh.indices, rp::StaticDraw::value);
-		vbo.bind();
+
 		auto builder = VertexAttributes::Builder();
 		for (auto& attribute : _attributes) {
 			builder.attributef(attribute.size);
 		}
-		auto vao = builder.create();
-		vbo.unbind();
+		auto vao = builder.create(vbo, ibo);
 
 		mesh->subMeshes.emplace_back(static_cast<unsigned int>(mesh->subMeshes.size()),
 									 std::move(vbo),

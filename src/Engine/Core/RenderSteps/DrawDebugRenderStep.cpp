@@ -16,12 +16,10 @@ DrawDebug::DrawDebug(EntityComponentSystem& ecs, resource::Shader::Ptr shader) :
 
 	_vb.generateData(_vertices, rp::DynamicDraw::value);
 
-	_vb.bind();
 	VertexAttributes::Builder builder;
 	builder.attributef(3); // position
 	builder.attributef(4); // color
-	builder.create(_va);
-	_vb.unbind();
+	builder.create(_va, _vb);
 }
 
 void DrawDebug::execute(RenderStepInfo& renderInfo) {

@@ -2,7 +2,21 @@
 
 #include <Libs/Utility/Time/EngineTime.h>
 
+#include <cmath>
+
 namespace tactics::component {
+
+namespace {
+
+float normalizeRotationDegree(float rotation) {
+	auto normalized = std::fmod(rotation, 360.0f);
+	if (normalized < 0.0f) {
+		normalized += 360.0f;
+	}
+	return normalized;
+}
+
+} // namespace
 
 void BattleCameraSystem::update(entt::registry& registry) {
 	_updateInputs(registry);
@@ -68,25 +82,39 @@ void BattleCameraSystem::_updateCameras(entt::registry& registry) {
 }
 
 float BattleCamera::getCurrentRotationDegree() const {
+	if (rotationSteps.empty()) {
+		return 0.0f;
+	}
+
 	if (currentStep == nextStep) {
-		return rotationSteps[currentStep];
+		return normalizeRotationDegree(rotationSteps[currentStep]);
 	}
 
 	auto startTargetRotation = rotationSteps[currentStep];
-	return startTargetRotation + (targetRotation - startTargetRotation) * rotationTime;
+	return normalizeRotationDegree(startTargetRotation + (targetRotation - startTargetRotation) * rotationTime);
 }
 
 void BattleCamera::rotateToNextStep() {
-	if (rotationTime == 0.0f) {
-		nextStep = (nextStep + 1) % rotationSteps.size();
+	if (rotationTime == 0.0f && rotationSteps.size() > 1) {
+		nextStep = (currentStep + 1) % rotationSteps.size();
+
+		auto startRotation = rotationSteps[currentStep];
 		targetRotation = rotationSteps[nextStep];
+		if (targetRotation <= startRotation) {
+			targetRotation += 360.0f;
+		}
 	}
 }
 
 void BattleCamera::rotateToPrevStep() {
-	if (rotationTime == 0.0f) {
-		nextStep = (nextStep - 1) % rotationSteps.size();
+	if (rotationTime == 0.0f && rotationSteps.size() > 1) {
+		nextStep = currentStep == 0 ? static_cast<unsigned int>(rotationSteps.size() - 1) : currentStep - 1;
+
+		auto startRotation = rotationSteps[currentStep];
 		targetRotation = rotationSteps[nextStep];
+		if (targetRotation >= startRotation) {
+			targetRotation -= 360.0f;
+		}
 	}
 }
 
