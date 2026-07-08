@@ -19,6 +19,69 @@ struct MeshInlineDescriptor {
 	JSON_SERIALIZE(MeshInlineDescriptor, vertices, indices);
 };
 
+namespace {
+
+constexpr unsigned int legacyInlineVertexComponents = 5;
+constexpr unsigned int defaultVertexComponents = 8;
+
+bool indicesFitVertexCount(const std::vector<unsigned int>& indices, unsigned int vertexCount) {
+	for (auto index : indices) {
+		if (index >= vertexCount) {
+			return false;
+		}
+	}
+	return true;
+}
+
+unsigned int vertexCountForLayout(const std::vector<float>& vertices, unsigned int componentsPerVertex) {
+	if (vertices.empty() || vertices.size() % componentsPerVertex != 0) {
+		return 0;
+	}
+
+	return static_cast<unsigned int>(vertices.size() / componentsPerVertex);
+}
+
+std::vector<float> expandLegacyInlineVertices(const std::vector<float>& vertices) {
+	std::vector<float> expandedVertices;
+	auto vertexCount = vertexCountForLayout(vertices, legacyInlineVertexComponents);
+	expandedVertices.reserve(vertexCount * defaultVertexComponents);
+
+	for (auto vertexIndex = 0u; vertexIndex < vertexCount; ++vertexIndex) {
+		auto offset = vertexIndex * legacyInlineVertexComponents;
+		expandedVertices.insert(expandedVertices.end(),
+								vertices.begin() + offset,
+								vertices.begin() + offset + legacyInlineVertexComponents);
+		expandedVertices.push_back(0.0f);
+		expandedVertices.push_back(0.0f);
+		expandedVertices.push_back(1.0f);
+	}
+
+	return expandedVertices;
+}
+
+std::vector<float> normalizeInlineVertices(std::vector<float> vertices, const std::vector<unsigned int>& indices) {
+	auto defaultVertexCount = vertexCountForLayout(vertices, defaultVertexComponents);
+	auto legacyVertexCount = vertexCountForLayout(vertices, legacyInlineVertexComponents);
+
+	if (defaultVertexCount > 0 && indicesFitVertexCount(indices, defaultVertexCount)) {
+		return vertices;
+	}
+
+	if (legacyVertexCount > 0 && indicesFitVertexCount(indices, legacyVertexCount)) {
+		return expandLegacyInlineVertices(vertices);
+	}
+
+	TACTICS_EXCEPTION(
+		"Inline mesh vertex data must use either 5 floats per vertex (position + uv) or 8 floats per "
+		"vertex (position + uv + normal), and all indices must fit the resolved vertex count. "
+		"Got {} vertex floats and {} indices.",
+		vertices.size(),
+		indices.size());
+	return {};
+}
+
+} // namespace
+
 std::shared_ptr<Mesh> MeshLoader::load(const json& descriptor) {
 	std::shared_ptr<Mesh> mesh;
 	if (!descriptor.contains("path")) {
@@ -56,8 +119,10 @@ std::vector<unsigned int> MeshLoader::_parseIndices(const std::string& strIndice
 
 std::shared_ptr<Mesh> MeshLoader::_loadMesh(const std::string& strVertices, const std::string& strIndices) {
 	// TODO(Gerark) Using dynamic draw as usage but it should be best to receive this as a parameter
-	auto vb = VertexBuffer(_parseVertices(strVertices), rp::DynamicDraw::value);
-	auto ib = IndexBuffer(_parseIndices(strIndices), rp::DynamicDraw::value);
+	auto indices = _parseIndices(strIndices);
+	auto vertices = normalizeInlineVertices(_parseVertices(strVertices), indices);
+	auto vb = VertexBuffer(vertices, rp::DynamicDraw::value);
+	auto ib = IndexBuffer(indices, rp::DynamicDraw::value);
 	auto vertexAttributes = _createDefaultVertexAttributes(vb, ib);
 
 	auto mesh = std::make_shared<Mesh>(""_id);

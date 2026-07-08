@@ -9,7 +9,7 @@ namespace tactics {
 
 struct RenderStepInfo {
 	const Viewport& viewport;
-	const glm::vec2& windowSize;
+	glm::vec2 windowSize;
 	float ambientStrength{0.5f};
 	glm::vec3 ambientColor{1.0f, 1.0f, 1.0f};
 	glm::mat4 projection;

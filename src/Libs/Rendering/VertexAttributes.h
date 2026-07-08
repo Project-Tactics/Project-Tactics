@@ -24,6 +24,7 @@ public:
 			va.bind();
 			vb.bind();
 			_defineAttributes();
+			vb.unbind();
 			va.unbind();
 		}
 

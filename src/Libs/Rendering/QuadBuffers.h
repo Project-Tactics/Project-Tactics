@@ -49,13 +49,9 @@ public:
 
 	void bind() {
 		_vertexAttributes.bind();
-		_vertexBuffer.bind();
-		_indexBuffer.bind();
 	}
 
 	void unbind() {
-		_indexBuffer.unbind();
-		_vertexBuffer.unbind();
 		_vertexAttributes.unbind();
 	}
 

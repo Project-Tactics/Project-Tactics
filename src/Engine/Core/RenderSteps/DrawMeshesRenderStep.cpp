@@ -147,7 +147,7 @@ void DrawMeshes::_drawGeometry(const resource::SubMesh& mesh) {
 	if (mesh.ib().getSize() > 0) {
 		glDrawElements(GL_TRIANGLES, mesh.ib().getSize(), GL_UNSIGNED_INT, nullptr);
 	} else {
-		glDrawArrays(GL_TRIANGLES, 0, mesh.vb().getSize());
+		glDrawArrays(GL_TRIANGLES, 0, mesh.getVertexCount());
 	}
 	mesh.va().unbind();
 }

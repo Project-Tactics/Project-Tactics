@@ -37,6 +37,7 @@ void VertexAttributes::Builder::create(VertexAttributes& va, VertexBuffer& vb, I
 	vb.bind();
 	ib.bind();
 	_defineAttributes();
+	vb.unbind();
 	va.unbind();
 }
 
@@ -45,6 +46,7 @@ void VertexAttributes::Builder::create(VertexAttributes& va, VertexBuffer& vb) {
 	va.bind();
 	vb.bind();
 	_defineAttributes();
+	vb.unbind();
 	va.unbind();
 }
 
