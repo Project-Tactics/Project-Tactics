@@ -16,6 +16,12 @@ third-party code unless the request specifically targets them.
 Project-Tactics is a C++23 tactical RPG/game framework inspired by Final Fantasy Tactics. It is currently structured as
 an engine/framework plus sample and prototype applications.
 
+Long-term, this project is intended to become a complete authoring toolset similar in spirit to RPG Maker, but focused
+on building tactical RPGs in the style of Final Fantasy Tactics. The engine runtime, data formats, editor-facing
+reflection, resource pipeline, validation, and sample/prototype apps should all move toward enabling creators to build
+grid-based tactical RPGs with maps, encounters, units, jobs/classes, abilities, items, dialogue/events, progression, and
+campaign content without hardcoding each game in C++.
+
 Main areas:
 - `src/Engine`: runtime orchestration, application lifecycle, scene helpers, engine/debug overlays.
 - `src/Libs`: reusable engine subsystems: ECS, resources, rendering, input, physics, FSM, filesystem, events, overlays,

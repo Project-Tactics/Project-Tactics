@@ -31,6 +31,8 @@ RenderSystem::RenderSystem(std::shared_ptr<resource::IniFile> configFile) : _con
 }
 
 RenderSystem::~RenderSystem() {
+	// Render steps own GPU objects that must be released before the OpenGL context.
+	destroyRenderQueues();
 	_shutdownImGui();
 	SDL_GL_DeleteContext(_oglContext);
 	LOG_TRACE(Log::Rendering, "OpenGL Context Destroyed");

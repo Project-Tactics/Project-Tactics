@@ -153,16 +153,20 @@ void Engine::_shutdown() {
 	_unregisterOverlays();
 	_eventsSystem->unregisterEventsListener(_fsmExternalController.get());
 	_eventsSystem->unregisterEventsListener(_renderSystem.get());
-	_renderSystem.reset();
+	// Render steps must be destroyed while their systems and the OpenGL context are alive.
+	_renderSystem->destroyRenderQueues();
 	_particleSystem.reset();
-	_overlaySystem.reset();
 	_physicsSystem.reset();
 	_uiSystem.reset();
 	_ecs->clearPrefabsRegistry();
 	LOG_TRACE(Log::Engine, "Unload Engine Resources");
-	_resourceSystem->unloadPack("initialization"_id);
+	// GPU resources must be unloaded before destroying the renderer's OpenGL context.
 	_resourceSystem->unloadPack("builtinMeshes"_id);
 	_resourceSystem->unloadPack("_internalCustomPack"_id);
+	// Shut down ImGui's backends before its context, then release their configuration resources.
+	_renderSystem.reset();
+	_overlaySystem.reset();
+	_resourceSystem->unloadPack("initialization"_id);
 	_throwIfAnyResourceIsStillLoaded();
 	_throwIfAnyImportantLogHappened();
 	SDL_Quit();
