@@ -14,5 +14,11 @@ add_to_apps_folder(${TARGET_NAME})
 
 unset(SOURCES)
 
+# Input-system tests need SDL's runtime DLL before test discovery starts the executable.
+add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${TARGET_NAME}> $<TARGET_RUNTIME_DLLS:${TARGET_NAME}>
+  COMMAND_EXPAND_LISTS
+)
+
 include(GoogleTest)
 gtest_discover_tests(${TARGET_NAME})

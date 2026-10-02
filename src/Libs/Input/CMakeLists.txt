@@ -24,5 +24,11 @@ add_library(libs_input STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_input PRIVATE libs_utility sdl2_wrapper)
 add_to_libs_folder(libs_input)
 
+set(TEST_SOURCES Tests/Test_InputSystem.cpp)
+set(TEST_LIBS libs_input libs_resource_headless sdl2_wrapper)
+add_unit_test(libs_input "${TEST_SOURCES}" "${TEST_LIBS}")
+
+unset(TEST_SOURCES)
+unset(TEST_LIBS)
 unset(SOURCES)
 unset(HEADERS)

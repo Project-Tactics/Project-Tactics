@@ -95,7 +95,7 @@ void InputSystem::assignInputMap(const char* inputMapName, click::PlayerId playe
 }
 
 void InputSystem::unassignInputMap(std::shared_ptr<resource::InputMap> inputMap) {
-	click::unbind(inputMap->mapId);
+	click::removeInputMap(inputMap->mapId);
 }
 
 void InputSystem::unassignInputMap(const char* inputMapName) {
