@@ -18,5 +18,12 @@ target_link_libraries(engine_scene
 set_property(TARGET engine_scene PROPERTY FOLDER "tactics/engine")
 add_to_engine_folder(engine_scene)
 
+set(TEST_SOURCES Tests/Test_SystemSubscriptions.cpp)
+set(TEST_LIBS engine_scene libs_physics libs_resource_headless)
+add_unit_test(engine_scene "${TEST_SOURCES}" "${TEST_LIBS}")
+
+unset(TEST_SOURCES)
+unset(TEST_LIBS)
+
 unset(SOURCES)
 unset(HEADERS)

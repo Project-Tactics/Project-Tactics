@@ -50,14 +50,21 @@ PhysicsSystem::PhysicsSystem(int tempAllocatorSizeInBytes, EntityComponentSystem
 
 	using namespace component;
 	auto& registry = ecs.sceneRegistry();
-	registry.on_construct<BoxShape>().connect<&PhysicsSystem::_onBoxShapeCreated>(this);
-	registry.on_destroy<BoxShape>().connect<&PhysicsSystem::_onBoxShapeDestroyed>(this);
-	registry.on_construct<PhysicsBody>().connect<&PhysicsSystem::_onBodyCreated>(this);
-	registry.on_destroy<PhysicsBody>().connect<&PhysicsSystem::_onBodyDestroyed>(this);
-	registry.on_update<Transform>().connect<&PhysicsSystem::_onTransformUpdated>(this);
+	_connections = {
+		registry.on_construct<BoxShape>().connect<&PhysicsSystem::_onBoxShapeCreated>(this),
+		registry.on_destroy<BoxShape>().connect<&PhysicsSystem::_onBoxShapeDestroyed>(this),
+		registry.on_construct<PhysicsBody>().connect<&PhysicsSystem::_onBodyCreated>(this),
+		registry.on_destroy<PhysicsBody>().connect<&PhysicsSystem::_onBodyDestroyed>(this),
+		registry.on_update<Transform>().connect<&PhysicsSystem::_onTransformUpdated>(this),
+	};
 }
 
 PhysicsSystem::~PhysicsSystem() {
+	// Disconnect before tearing down the physics subsystem.
+	for (auto& connection : _connections) {
+		connection.release();
+	}
+
 	// Unregisters all types with the factory and cleans up the default material
 	JPH::UnregisterTypes();
 

@@ -59,6 +59,8 @@ private:
 	FrameTimer _timer;
 	Random _random;
 	std::unique_ptr<FileSystem> _fileSystem;
+	// The registry must outlive its subscribers and resources containing entity references.
+	std::unique_ptr<EntityComponentSystem> _ecs;
 	std::unique_ptr<resource::ResourceSystem> _resourceSystem;
 	std::unique_ptr<InputSystem> _inputSystem;
 	std::unique_ptr<OverlaySystem> _overlaySystem;
@@ -66,7 +68,6 @@ private:
 	std::unique_ptr<ParticleSystem> _particleSystem;
 	std::unique_ptr<PhysicsSystem> _physicsSystem;
 	std::unique_ptr<EventsSystem> _eventsSystem;
-	std::unique_ptr<EntityComponentSystem> _ecs;
 	std::unique_ptr<SceneSystem> _sceneSystem;
 	std::unique_ptr<jab::UiSystem> _uiSystem;
 	std::unique_ptr<resource::DataSetSystem> _dataSetSystem;

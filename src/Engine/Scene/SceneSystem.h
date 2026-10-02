@@ -5,6 +5,8 @@
 #include <Libs/Utility/Color.h>
 #include <Libs/Utility/Math.h>
 
+#include <array>
+
 namespace tactics {
 namespace resource {
 class ResourceSystem;
@@ -15,6 +17,7 @@ class Scene;
 
 class SceneSystem {
 public:
+	// The ECS and resource system must outlive this system.
 	SceneSystem(EntityComponentSystem& ecs, resource::ResourceSystem& resourceSystem);
 	~SceneSystem();
 
@@ -60,6 +63,7 @@ private:
 
 	EntityComponentSystem& _ecs;
 	resource::ResourceSystem& _resourceSystem;
+	std::array<entt::scoped_connection, 7> _connections;
 };
 
 } // namespace tactics

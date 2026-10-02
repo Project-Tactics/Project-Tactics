@@ -13,15 +13,18 @@ ParticleSystem::ParticleSystem(resource::ResourceProvider& resourceSystem, Entit
 	: _resourceSystem(resourceSystem)
 	, _ecs(ecs) {
 	firebolt::init(2000);
-	ecs.sceneRegistry().on_construct<component::ParticleEmitter>().connect<&ParticleSystem::_onEmitterCreated>(this);
-	ecs.sceneRegistry().on_destroy<component::ParticleEmitter>().connect<&ParticleSystem::_onEmitterDestroyed>(this);
+	_connections = {
+		ecs.sceneRegistry().on_construct<component::ParticleEmitter>().connect<&ParticleSystem::_onEmitterCreated>(
+			this),
+		ecs.sceneRegistry().on_destroy<component::ParticleEmitter>().connect<&ParticleSystem::_onEmitterDestroyed>(
+			this),
+	};
 }
 
 ParticleSystem::~ParticleSystem() {
-	_ecs.sceneRegistry().on_construct<component::ParticleEmitter>().disconnect<&ParticleSystem::_onEmitterCreated>(
-		this);
-	_ecs.sceneRegistry().on_destroy<component::ParticleEmitter>().disconnect<&ParticleSystem::_onEmitterDestroyed>(
-		this);
+	for (auto& connection : _connections) {
+		connection.release();
+	}
 	firebolt::shutdown();
 }
 

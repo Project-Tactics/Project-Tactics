@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <entt/entt.hpp>
 #include <memory>
 
@@ -15,6 +16,8 @@ class PhysicsSystem {
 public:
 	/*
 	 * tempAllocatorSizeInBytes - Size used for temporary allocation during physics update.
+	 * The ECS must
+	 * outlive this system.
 	 */
 	PhysicsSystem(int tempAllocatorSizeInBytes, EntityComponentSystem& ecs);
 	~PhysicsSystem();
@@ -32,6 +35,7 @@ private:
 	void _onTransformUpdated(entt::registry& registry, entt::entity entity);
 
 	std::unique_ptr<physics::PhysicsSystemPimpl> _pimpl;
+	std::array<entt::scoped_connection, 5> _connections;
 };
 
 } // namespace tactics

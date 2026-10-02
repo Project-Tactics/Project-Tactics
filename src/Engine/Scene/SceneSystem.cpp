@@ -28,16 +28,18 @@ SceneSystem::SceneSystem(EntityComponentSystem& ecs, resource::ResourceSystem& r
 	using namespace component;
 	auto& registry = _ecs.sceneRegistry();
 
-	registry.on_construct<Mesh>().connect<&SceneSystem::_onMeshConstructed>(this);
-	registry.on_destroy<Mesh>().connect<&SceneSystem::_onMeshDestroyed>(this);
-	registry.on_construct<Renderable>().connect<&SceneSystem::_onRenderableConstructed>(this);
-	registry.on_update<Renderable>().connect<&SceneSystem::_onRenderableUpdated>(this);
-	registry.on_construct<CurrentCamera>().connect<&SceneSystem::_onCurrentCameraConstructed>(this);
-	registry.on_construct<SpriteAnimation>().connect<&SceneSystem::_onSpriteAnimationConstructed>(this);
-	registry.on_update<SpriteAnimation>().connect<&SceneSystem::_onSpriteAnimationUpdated>(this);
+	_connections = {
+		registry.on_construct<Mesh>().connect<&SceneSystem::_onMeshConstructed>(this),
+		registry.on_destroy<Mesh>().connect<&SceneSystem::_onMeshDestroyed>(this),
+		registry.on_construct<Renderable>().connect<&SceneSystem::_onRenderableConstructed>(this),
+		registry.on_update<Renderable>().connect<&SceneSystem::_onRenderableUpdated>(this),
+		registry.on_construct<CurrentCamera>().connect<&SceneSystem::_onCurrentCameraConstructed>(this),
+		registry.on_construct<SpriteAnimation>().connect<&SceneSystem::_onSpriteAnimationConstructed>(this),
+		registry.on_update<SpriteAnimation>().connect<&SceneSystem::_onSpriteAnimationUpdated>(this),
+	};
 }
 
-SceneSystem::~SceneSystem() {}
+SceneSystem::~SceneSystem() = default;
 
 entt::registry& SceneSystem::getRegistry() {
 	return _ecs.sceneRegistry();

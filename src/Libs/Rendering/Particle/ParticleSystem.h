@@ -6,6 +6,8 @@
 #include <Libs/Resource/ParticleEffect/ParticleEffect.h>
 #include <Libs/Utility/HashId.h>
 
+#include <array>
+
 namespace tactics {
 namespace resource {
 class ResourceProvider;
@@ -13,6 +15,7 @@ class ResourceProvider;
 
 class ParticleSystem {
 public:
+	// The resource provider and ECS must outlive this system.
 	ParticleSystem(resource::ResourceProvider& resourceSystem, EntityComponentSystem& ecs);
 	~ParticleSystem();
 
@@ -39,6 +42,7 @@ private:
 	std::vector<firebolt::EffectId> _effects;
 	resource::ResourceProvider& _resourceSystem;
 	EntityComponentSystem& _ecs;
+	std::array<entt::scoped_connection, 2> _connections;
 };
 
 } // namespace tactics
