@@ -87,6 +87,7 @@ const ImVec4& CustomOverlayColors::getResourceTypeColor(resource::ResourceType t
 	case resource::ResourceType::DataSet: {
 		return _colors.DataSetColor;
 	}
+	default: break;
 	}
 
 	return _colors.ResourceColor;

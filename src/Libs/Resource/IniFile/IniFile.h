@@ -10,7 +10,7 @@ namespace tactics::resource {
 class IniFile : public Resource<IniFile> {
 public:
 	using Resource<IniFile>::Resource;
-	static const ResourceType TYPE = ResourceType::IniFile;
+	static constexpr ResourceType TYPE = ResourceType::IniFile;
 
 	ini::IniSection& createSection(std::string_view section);
 

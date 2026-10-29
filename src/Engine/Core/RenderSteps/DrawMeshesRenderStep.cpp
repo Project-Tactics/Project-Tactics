@@ -22,8 +22,8 @@ namespace tactics::renderstep {
 
 DrawMeshes::DrawMeshes(EntityComponentSystem& ecs, ParticleSystem& particleSystem, AlphaBlendedFlag alphaBlendedFlag)
 	: _ecs(ecs)
-	, _particleSystem(particleSystem)
-	, _alphaBlendedFlag(alphaBlendedFlag) {}
+	, _alphaBlendedFlag(alphaBlendedFlag)
+	, _particleSystem(particleSystem) {}
 
 void DrawMeshes::execute(RenderStepInfo& info) {
 	using namespace component;

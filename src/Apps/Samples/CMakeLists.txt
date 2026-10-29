@@ -71,10 +71,12 @@ set_target_properties(
 )
 
 # Copy all the dependencies ( dll ) to the executable file directory
-add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${TARGET_NAME}> $<TARGET_RUNTIME_DLLS:${TARGET_NAME}>
-  COMMAND_EXPAND_LISTS
-)
+if(WIN32)
+  add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${TARGET_NAME}> $<TARGET_RUNTIME_DLLS:${TARGET_NAME}>
+    COMMAND_EXPAND_LISTS
+  )
+endif()
 # Copy all the dependencies ( dll ) and the data folder to the executable file directory
 add_custom_target(${POST_BUILD_TARGET_NAME} ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources/${TARGET_NAME}/data $<TARGET_FILE_DIR:${TARGET_NAME}>/data

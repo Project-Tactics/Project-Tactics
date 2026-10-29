@@ -62,7 +62,7 @@ template<typename T> std::array<T, 4> parseStringToVectorValues(const std::strin
 } // namespace tactics
 
 #define FORMAT_STR(TYPE)                                                                        \
-	template<> struct ::fmt::formatter<TYPE> {                                                  \
+	template<> struct fmt::formatter<TYPE> {                                                    \
 	public:                                                                                     \
 		constexpr auto parse(::fmt::format_parse_context& ctx) {                                \
 			return ctx.begin();                                                                 \

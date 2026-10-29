@@ -10,7 +10,12 @@
             "name": "default",
             "hidden": true,
             "generator": "Visual Studio 17 2022",
-            "binaryDir": "${sourceDir}/build/${presetName}"
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
         },
         {
             "name": "Debug",
@@ -29,6 +34,33 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_CONFIGURATION_TYPES": "Release"
             }
+        },
+        {
+            "name": "linux-default",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "Linux-Debug",
+            "inherits": "linux-default",
+            "description": "Configure for Linux Debug build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "Linux-Release",
+            "inherits": "linux-default",
+            "description": "Configure for Linux Release build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         }
     ],
     "buildPresets": [
@@ -39,6 +71,14 @@
         {
             "name": "Release",
             "configurePreset": "Release"
+        },
+        {
+            "name": "Linux-Debug",
+            "configurePreset": "Linux-Debug"
+        },
+        {
+            "name": "Linux-Release",
+            "configurePreset": "Linux-Release"
         }
     ]
 }

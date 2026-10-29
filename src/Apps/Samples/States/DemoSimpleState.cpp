@@ -238,10 +238,10 @@ void DemoSimpleState::_createParticleEffect() {
 	auto createParticleEffect = [&sceneSystem,
 								 &particleSystem](auto&& name, auto&& prefab, auto&& position, auto&& color) {
 		auto particleEffect = sceneSystem.createEntity(name, prefab);
-		auto transform = &particleEffect.getComponent<component::Transform>();
+		auto transform = &particleEffect.template getComponent<component::Transform>();
 		transform->setPosition(position);
 		transform->setScale(10);
-		auto effectId = particleEffect.getComponent<component::ParticleEmitter>().maybeEffectId;
+		auto effectId = particleEffect.template getComponent<component::ParticleEmitter>().maybeEffectId;
 		auto copiedConfig = particleSystem.getEffectConfig(*effectId);
 		auto& colorOverLifetime = std::get<firebolt::ColorOverLifetime>(copiedConfig.updaters[0]);
 		// change start color from blue to red based on x coordinate

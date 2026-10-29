@@ -17,7 +17,7 @@ struct Rectangle2DCollider {
 	glm::vec3 center = Vector3::zero;
 
 	void updateCenter(const glm::vec3& newCenter);
-	const bool intersect(const glm::vec3& position);
+	bool intersect(const glm::vec3& position);
 
 	COMPONENT(Rectangle2DCollider, heightFromCenter, widthFromCenter, center)
 };

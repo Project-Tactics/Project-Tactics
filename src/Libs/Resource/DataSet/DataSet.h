@@ -7,7 +7,7 @@ namespace tactics::resource {
 class BaseDataSet : public Resource<BaseDataSet> {
 public:
 	using Resource<BaseDataSet>::Resource;
-	static const ResourceType TYPE = ResourceType::DataSet;
+	static constexpr ResourceType TYPE = ResourceType::DataSet;
 };
 
 template<typename T> class DataSet : public BaseDataSet {

@@ -33,7 +33,7 @@
 #include <Libs/Resource/IniFile/IniFile.h>
 #include <Libs/Resource/ResourceSystem.h>
 #include <Libs/Resource/Texture/Texture.h>
-#include <Libs/UI/UISystem.h>
+#include <Libs/Ui/UiSystem.h>
 #include <Libs/Utility/Exception.h>
 #include <Libs/Utility/Log/Log.h>
 #include <Libs/Utility/Math.h>

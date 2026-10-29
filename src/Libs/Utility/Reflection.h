@@ -33,13 +33,13 @@ template<typename TComponent, bool DefaultDeserialization = true>
 entt::meta_factory<TComponent> componentReflection(const char* name) {
 	auto metaFactory = entt::meta<TComponent>()
 						   .type(HashId(name))
-						   .func<&emplaceComponent<TComponent>>("emplace"_id)
-						   .func<&cloneComponent<TComponent>>("clone"_id);
+						   .template func<&emplaceComponent<TComponent>>("emplace"_id)
+						   .template func<&cloneComponent<TComponent>>("clone"_id);
 
 	if constexpr (HasDeserialize<TComponent>) {
-		metaFactory.func<&TComponent::deserialize>("deserialize"_id);
+		metaFactory.template func<&TComponent::deserialize>("deserialize"_id);
 	} else if constexpr (DefaultDeserialization) {
-		metaFactory.func<&defaultJsonDeserializer<TComponent>>("deserialize"_id);
+		metaFactory.template func<&defaultJsonDeserializer<TComponent>>("deserialize"_id);
 	}
 	return metaFactory;
 }

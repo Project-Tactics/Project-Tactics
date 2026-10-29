@@ -13,7 +13,14 @@ namespace tactics {
 class EventsListener {
 public:
 	virtual ~EventsListener() = default;
-	virtual [[nodiscard]] bool onEvent(const SDL_Event& event) = 0;
+
+	/**
+	 * Listeners are notified in registration order.
+	 *
+	 * @param event The SDL event to process.
+	 * @return true if the event has been consumed and must not be forwarded to the remaining listeners.
+	 */
+	[[nodiscard]] virtual bool onEvent(const SDL_Event& event) = 0;
 };
 
 } // namespace tactics

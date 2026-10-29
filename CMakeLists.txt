@@ -18,26 +18,33 @@ else()
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
 endif()
 
-# Avoid conflicts with <Windows.h> min-max functions
-add_compile_definitions(NOMINMAX)
+if(MSVC)
+    # Avoid conflicts with <Windows.h> min-max functions
+    add_compile_definitions(NOMINMAX)
 
-# Suppress some compiler warnings to reduce noise
-add_compile_definitions(_CRT_NONSTDC_NO_DEPRECATE)
-add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+    # Suppress some compiler warnings to reduce noise
+    add_compile_definitions(_CRT_NONSTDC_NO_DEPRECATE)
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 
-# Treat warnings as errors
-add_compile_options(/WX)
-# Set warning level 4
-add_compile_options(/W4)
-# Enable multi-processor compilation to accelerate the build process
-add_compile_options(/MP)
-# Enable a more standardized preprocessor behavior
-add_compile_options(/Zc:preprocessor)
+    # Treat warnings as errors
+    add_compile_options(/WX)
+    # Set warning level 4
+    add_compile_options(/W4)
+    # Enable multi-processor compilation to accelerate the build process
+    add_compile_options(/MP)
+    # Enable a more standardized preprocessor behavior
+    add_compile_options(/Zc:preprocessor)
 
-# Linker Optimization: Remove unreferenced data & functions
-add_link_options(/OPT:REF)
-# Linker Optimization: Merge identical code sections when possible
-add_link_options(/OPT:ICF)
+    # Linker Optimization: Remove unreferenced data & functions
+    add_link_options(/OPT:REF)
+    # Linker Optimization: Merge identical code sections when possible
+    add_link_options(/OPT:ICF)
+else()
+    # Some static libraries depend on each other (e.g. libs_ecs <-> libs_resource). The MSVC linker resolves symbols
+    # regardless of the library order, GNU-style linkers don't: wrap the libraries in a group to get the same behavior
+    set(CMAKE_CXX_LINK_EXECUTABLE
+        "<CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> -Wl,--start-group <LINK_LIBRARIES> -Wl,--end-group")
+endif()
 
 # Include macros from the cmakes folder
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmakes)

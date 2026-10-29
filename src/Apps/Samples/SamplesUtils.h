@@ -65,7 +65,7 @@ public:
 				.on("exit").jumpTo(unloadState)
 				.onAppExitRequest().jumpTo(unloadState)
 
-			.state<UnloadState>(unloadState, serviceLocator, HashId(resourcePackName))
+			.template state<UnloadState>(unloadState, serviceLocator, HashId(resourcePackName))
 				.on("proceed").jumpTo("Selection")
 				.onAppExitRequest().exitFsm();
 		// clang-format on

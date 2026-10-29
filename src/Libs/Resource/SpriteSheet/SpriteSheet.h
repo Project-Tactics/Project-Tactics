@@ -20,7 +20,7 @@ struct SpriteSheetAnimation {
 class SpriteSheet : public Resource<SpriteSheet> {
 public:
 	using Resource<SpriteSheet>::Resource;
-	static const ResourceType TYPE = ResourceType::SpriteSheet;
+	static constexpr ResourceType TYPE = ResourceType::SpriteSheet;
 
 	glm::vec2 getUVCoordinates(uint32_t spriteIndex) const;
 	glm::vec2 getUVSpriteSize() const;

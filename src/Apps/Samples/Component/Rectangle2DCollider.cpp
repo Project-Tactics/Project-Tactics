@@ -8,7 +8,7 @@ void Rectangle2DCollider::updateCenter(const glm::vec3& newCenter) {
 	center = newCenter;
 }
 
-const bool Rectangle2DCollider::intersect(const glm::vec3& position) {
+bool Rectangle2DCollider::intersect(const glm::vec3& position) {
 	if (position.y < center.y + heightFromCenter && position.y > center.y - heightFromCenter) {
 		if (position.x < center.x + widthFromCenter && position.x > center.x - widthFromCenter) {
 			return true;

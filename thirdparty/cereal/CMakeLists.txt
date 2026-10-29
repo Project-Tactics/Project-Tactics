@@ -6,6 +6,8 @@ file(GLOB_RECURSE HEADERS *.hpp *.h)
 add_library(cereal INTERFACE ${HEADERS})
 target_include_directories(cereal INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 # disable some warnings
-target_compile_options(cereal INTERFACE /wd5054)
+if(MSVC)
+    target_compile_options(cereal INTERFACE /wd5054)
+endif()
 
 unset(HEADERS)

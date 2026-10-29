@@ -27,9 +27,9 @@ tactics::resource::BaseDataSet::Ptr dataSetJsonDeserializer(const nlohmann::orde
 
 template<typename TDataSetItem> void dataSetReflection(const char* name) {
 	using namespace tactics::resource;
-	auto meta = entt::meta<DataSet<TDataSetItem>>()
-					.type(HashId(name))
-					.func<&dataSetJsonDeserializer<TDataSetItem>>("deserialize"_id);
+	entt::meta<DataSet<TDataSetItem>>()
+		.type(HashId(name))
+		.template func<&dataSetJsonDeserializer<TDataSetItem>>("deserialize"_id);
 }
 
 } // namespace tactics

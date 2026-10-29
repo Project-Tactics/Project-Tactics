@@ -63,8 +63,8 @@ void RenderSystem::_createWindow() {
 	auto fullscreen = _getConfigValue("fullscreen", false);
 	auto resize = _getConfigValue("windowResize", false);
 	Uint32 flags = SDL_WINDOW_OPENGL;
-	flags |= resize ? SDL_WINDOW_RESIZABLE : 0u;
-	flags |= fullscreen ? SDL_WINDOW_FULLSCREEN : 0u;
+	flags |= resize ? static_cast<Uint32>(SDL_WINDOW_RESIZABLE) : 0u;
+	flags |= fullscreen ? static_cast<Uint32>(SDL_WINDOW_FULLSCREEN) : 0u;
 
 	_window = SDL_CreateWindow(windowTitle.c_str(), position.x, position.y, size.x, size.y, flags);
 	LOG_TRACE(Log::Rendering, "Window Created {}x{}", size.x, size.y);

@@ -9,7 +9,7 @@ namespace tactics::resource {
 
 class ParticleEffect : public Resource<ParticleEffect> {
 public:
-	static const ResourceType TYPE = ResourceType::ParticleEffect;
+	static constexpr ResourceType TYPE = ResourceType::ParticleEffect;
 	using Resource<ParticleEffect>::Resource;
 
 	firebolt::EffectConfig config;

@@ -5,8 +5,8 @@
 namespace tactics {
 
 FileSystem::FileSystem(std::unique_ptr<FileLoader> fileLoader, std::unique_ptr<PathHelper> pathHelper)
-	: _fileLoader(std::move(fileLoader))
-	, _pathHelper(std::move(pathHelper)) {}
+	: _pathHelper(std::move(pathHelper))
+	, _fileLoader(std::move(fileLoader)) {}
 
 const PathHelper& FileSystem::getPathHelper() const {
 	return *_pathHelper;

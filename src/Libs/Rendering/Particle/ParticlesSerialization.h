@@ -3,8 +3,6 @@
 #include <Libs/Rendering/Particle/Particles.h>
 #include <Libs/Utility/Json/JsonSerialization.h>
 
-namespace firebolt {
-
 JSON_VARIANT_NAME(firebolt::SphereEmitShape, "sphere");
 JSON_VARIANT_NAME(firebolt::ConeEmitShape, "cone");
 
@@ -13,6 +11,8 @@ JSON_VARIANT_NAME(firebolt::SizeOverLifetime, "sizeOverLifetime");
 
 JSON_VARIANT_NAME(firebolt::FixedValue, "fixed");
 JSON_VARIANT_NAME(firebolt::RandomRange, "randomRange");
+
+namespace firebolt {
 
 JSON_SERIALIZE_EXT(firebolt::SphereEmitShape, position, radius);
 JSON_SERIALIZE_EXT(firebolt::ConeEmitShape, position, radius);

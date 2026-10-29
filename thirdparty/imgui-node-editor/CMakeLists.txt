@@ -22,8 +22,10 @@ add_library(imgui_node_editor STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(imgui_node_editor PRIVATE imgui)
 target_include_directories(imgui_node_editor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 # disable warning as error for imgui_node_editor
-target_compile_options(imgui_node_editor PRIVATE /wd4701)
-target_compile_options(imgui_node_editor PRIVATE /wd4996)
+if(MSVC)
+    target_compile_options(imgui_node_editor PRIVATE /wd4701)
+    target_compile_options(imgui_node_editor PRIVATE /wd4996)
+endif()
 
 unset(SOURCES)
 unset(HEADERS)

@@ -18,7 +18,6 @@ float Random::range(float min, float max) {
 }
 
 float Random::random() {
-	using limits = std::numeric_limits<float>;
 	auto distribution = std::uniform_real_distribution<float>(0, 1);
 	return distribution(_instance->generator);
 }
