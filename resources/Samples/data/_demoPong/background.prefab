@@ -1,0 +1,26 @@
+{
+    "Transform": {
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": -10
+        },
+        "scale": {
+            "x": 32,
+            "y": 32,
+            "z": 0
+        }
+    },
+    "Mesh": {
+        "mesh": "quad",
+        "materials": [
+            {
+                "material": "spriteMaterial"
+            }
+        ]
+    },
+    "Sprite": {
+        "spriteSheet": "background",
+        "spriteIndex": 0
+    }
+}

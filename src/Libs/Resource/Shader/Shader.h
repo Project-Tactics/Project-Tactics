@@ -9,7 +9,7 @@ namespace tactics::resource {
 
 class Shader : public Resource<Shader> {
 public:
-	static const ResourceType TYPE = ResourceType::Shader;
+	static constexpr ResourceType TYPE = ResourceType::Shader;
 	using Resource<Shader>::Resource;
 	~Shader();
 	void bind() const;

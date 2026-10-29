@@ -1,0 +1,12 @@
+{
+    "PongMatch": {
+        "winningScore": 9,
+        "fieldHalfSize": {
+            "x": 5.0,
+            "y": 2.3
+        },
+        "serveDelay": 1.0,
+        "ballStartSpeed": 2.5,
+        "ballStartRotationSpeed": 4.0
+    }
+}

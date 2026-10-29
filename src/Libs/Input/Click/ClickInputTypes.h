@@ -3,6 +3,8 @@
 #include "ClickEnumTypes.h"
 
 #include <array>
+#include <cstdint>
+#include <limits>
 #include <tuple>
 #include <variant>
 #include <vector>

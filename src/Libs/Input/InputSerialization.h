@@ -17,6 +17,20 @@ template<> inline void fromString(const std::string& str, click::ActionValue& re
 	result = click::ActionValue{.vec3 = {values[0], values[1], values[2]}};
 }
 
+JSON_VARIANT_NAME(click::GestureSimple, "simple");
+JSON_VARIANT_NAME(click::Gesture2D, "2d");
+JSON_VARIANT_NAME(click::Gesture3D, "3d");
+JSON_VARIANT_NAME(click::GestureDirectional2D, "dir2d");
+JSON_VARIANT_NAME(click::GestureDirectional3D, "dir3d");
+
+JSON_VARIANT_NAME(click::DownCondition, "down");
+JSON_VARIANT_NAME(click::PressCondition, "press");
+JSON_VARIANT_NAME(click::ReleaseCondition, "release");
+JSON_VARIANT_NAME(click::HoldCondition, "hold");
+JSON_VARIANT_NAME(click::ContinuousCondition, "continuous");
+
+JSON_VARIANT_NAME(click::NegateModifier, "negate");
+
 namespace click {
 
 void to_json(json&, const Condition&);
@@ -25,20 +39,6 @@ void to_json(json&, const Modifier&);
 void from_json(const json& json, Modifier& modifier);
 void to_json(json&, const Gesture&);
 void from_json(const json& json, Gesture& gesture);
-
-JSON_VARIANT_NAME(GestureSimple, "simple");
-JSON_VARIANT_NAME(Gesture2D, "2d");
-JSON_VARIANT_NAME(Gesture3D, "3d");
-JSON_VARIANT_NAME(GestureDirectional2D, "dir2d");
-JSON_VARIANT_NAME(GestureDirectional3D, "dir3d");
-
-JSON_VARIANT_NAME(DownCondition, "down");
-JSON_VARIANT_NAME(PressCondition, "press");
-JSON_VARIANT_NAME(ReleaseCondition, "release");
-JSON_VARIANT_NAME(HoldCondition, "hold");
-JSON_VARIANT_NAME(ContinuousCondition, "continuous");
-
-JSON_VARIANT_NAME(NegateModifier, "negate");
 
 JSON_SERIALIZE_EXT(GestureSimple, input);
 JSON_SERIALIZE_EXT(Gesture2D, x, y);

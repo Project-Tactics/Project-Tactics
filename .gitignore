@@ -20,6 +20,7 @@
 
 # Build Folder
 /Build
+/build
 !/!**/build
 /out
 !/!**/out

@@ -8,7 +8,7 @@ namespace tactics::resource {
 
 class Prefab : public Resource<Prefab> {
 public:
-	static const ResourceType TYPE = ResourceType::Prefab;
+	static constexpr ResourceType TYPE = ResourceType::Prefab;
 	using Resource<Prefab>::Resource;
 	~Prefab();
 	Entity entity;

@@ -17,7 +17,7 @@ struct InputBinding {
 class InputMap : public Resource<InputMap> {
 public:
 	using Resource<InputMap>::Resource;
-	static const ResourceType TYPE = ResourceType::InputMap;
+	static constexpr ResourceType TYPE = ResourceType::InputMap;
 
 	std::vector<InputBinding> bindings;
 	click::MapId mapId{};

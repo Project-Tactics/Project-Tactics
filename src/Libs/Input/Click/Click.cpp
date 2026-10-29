@@ -4,6 +4,7 @@
 #include "ClickModifiers.h"
 
 #include <assert.h>
+#include <cmath>
 
 namespace click {
 

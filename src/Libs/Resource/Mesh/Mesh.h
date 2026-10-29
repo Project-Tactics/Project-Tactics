@@ -47,7 +47,7 @@ private:
 
 class Mesh : public Resource<Mesh> {
 public:
-	static const ResourceType TYPE = ResourceType::Mesh;
+	static constexpr ResourceType TYPE = ResourceType::Mesh;
 	using Resource<Mesh>::Resource;
 
 	unsigned int getTotalVertexCount() const;

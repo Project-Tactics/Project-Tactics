@@ -1,0 +1,42 @@
+{
+    "Transform": {
+        "position": {
+            "x": 0,
+            "y": 1,
+            "z": 0.1
+        },
+        "scale": {
+            "x": 0.25,
+            "y": 1,
+            "z": 1
+        }
+    },
+    "TranslateItem": {
+        "axis": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+        },
+        "speed": 4
+    },
+    "PlayerMovement": {},
+    "PlayerMovementInput": {
+        "movePlayer": "movePlayer1"
+    },
+    "Rectangle2DCollider": {
+        "heightFromCenter": 0.5,
+        "widthFromCenter": 0.125
+    },
+    "Mesh": {
+        "mesh": "quad",
+        "materials": [
+            {
+                "material": "spriteMaterial"
+            }
+        ]
+    },
+    "Sprite": {
+        "spriteSheet": "player01",
+        "spriteIndex": 0
+    }
+}

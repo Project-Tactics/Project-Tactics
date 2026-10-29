@@ -2,105 +2,85 @@
 
 #include "../Component/BallMovement.h"
 #include "../Component/PlayerMovement.h"
+#include "../Component/PongMatch.h"
+#include "../Component/Rectangle2DCollider.h"
+#include "../Component/RotateItem.h"
 #include "../Component/TranslateItem.h"
 
 #include <Engine/Scene/SceneSystem.h>
 
-#include <Libs/Ecs/Component/CameraComponent.h>
-#include <Libs/Ecs/Component/MeshComponent.h>
 #include <Libs/Ecs/Component/TransformComponent.h>
-#include <Libs/Ecs/EntityComponentSystem.h>
 #include <Libs/Input/InputSystem.h>
-#include <Libs/Rendering/GeometryBuilder.h>
-#include <Libs/Rendering/RenderSystem.h>
-#include <Libs/Resource/ResourceSystem.h>
-#include <Libs/Utility/Math.h>
 
 namespace tactics {
 
 FsmAction DemoPongState::enter() {
+	using namespace component;
+
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.createEntity("Camera"_id, "defaultCamera"_id);
+	sceneSystem.createEntity("background"_id, "background"_id);
+	sceneSystem.createEntity("match"_id, "pongMatch"_id);
+
+	auto playerLeft = sceneSystem.createEntity("playerLeft"_id, "player1"_id);
+	auto playerRight = sceneSystem.createEntity("playerRight"_id, "player2"_id);
+	playerLeft.getComponent<Transform>().setPosition({-4.5f, 0.0f, 0.1f});
+	playerRight.getComponent<Transform>().setPosition({4.5f, 0.0f, 0.1f});
+
+	sceneSystem.createEntity("ball"_id, "ball"_id);
+
+	_createScoreDisplay("scoreLeft", PlayerSide::Left, -3.4f);
+	_createScoreDisplay("scoreRight", PlayerSide::Right, 3.4f);
 
 	auto& inputSystem = getService<InputSystem>();
 	inputSystem.assignInputMap("pongMapping");
 
-	_playerLeft = sceneSystem.createEntity("playerLeft"_id, "player"_id);
-	_playerRight = sceneSystem.createEntity("playerRight"_id, "player"_id);
-	_ball = sceneSystem.createEntity("ball"_id, "ball"_id);
-	// _scoreLeft = sceneSystem.createEntity("scoreLeft"_id, "numbers"_id);
-
-	auto& playerLeftTransform = _playerLeft.getComponent<component::Transform>();
-	auto& playerRightTransform = _playerRight.getComponent<component::Transform>();
-
-	playerLeftTransform.setPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
-	playerRightTransform.setPosition(glm::vec3(4.0f, 0.0f, 0.0f));
-
-	_playerLeft.getComponent<component::PlayerMovement>().keyCodeDown = SDLK_s;
-	_playerLeft.getComponent<component::PlayerMovement>().keyCodeUp = SDLK_w;
-	_playerRight.getComponent<component::PlayerMovement>().keyCodeDown = SDLK_l;
-	_playerRight.getComponent<component::PlayerMovement>().keyCodeUp = SDLK_o;
-
-	// auto& resourceSystem = getService<resource::ResourceSystem>();
-
-	/*auto leftStickCollUpRightXPos = _playerLeft.getComponent<component::Transform>().getPosition().x + 0.1f;
-	auto leftStickCollUpRightYPos = _playerLeft.getComponent<component::Transform>().getPosition().y + 0.5f;
-
-	auto crate = sceneSystem.createEntity({leftStickCollUpRightXPos, leftStickCollUpRightYPos, 0.0f}, "cube"_id,
-	{"texturedUnlit"_id}); crate.getComponent<component::Transform>().setScale({0.1, 0.1, 0.1});
-	crate.updateComponent<component::Mesh>([&resourceSystem](auto& mesh) {
-		mesh.materials[0]->set("u_Texture", resourceSystem.getResource<resource::Texture>("crate"_id));
-	});*/
+	PongMatchSystem::restartMatch(sceneSystem.getRegistry());
 
 	return FsmAction::none();
 }
 
 void DemoPongState::exit() {
+	auto& inputSystem = getService<InputSystem>();
+	inputSystem.unassignInputMap("pongMapping");
+
 	auto& sceneSystem = getService<SceneSystem>();
 	sceneSystem.clearScene();
 }
 
 FsmAction DemoPongState::update() {
+	using namespace component;
+
 	auto& inputSystem = getService<InputSystem>();
 	if (inputSystem.checkAction("exitFromState")) {
 		return FsmAction::transition("exit"_id);
-	} else if (inputSystem.checkAction("playerMovement")) {
-		Log::trace(Log::Game, "Player movement action detected");
 	}
 
-	auto& ecs = getService<EntityComponentSystem>();
-	component::TranslateItemSystem::update(ecs.sceneRegistry().view<component::Transform, component::TranslateItem>());
-	component::Rectangle2DColliderSystem::update(
-		ecs.sceneRegistry().view<component::Transform, component::Rectangle2DCollider>());
+	auto& registry = getService<SceneSystem>().getRegistry();
+	if (PongMatchSystem::isGameOver(registry) && inputSystem.checkAction("restartMatch")) {
+		PongMatchSystem::restartMatch(registry);
+	}
 
-	component::BallMovementSystem::update(
-		ecs.sceneRegistry().view<component::Transform, component::TranslateItem, component::BallMovement>(),
-		ecs.sceneRegistry().view<component::Transform, component::Rectangle2DCollider>());
+	PlayerMovementSystem::update(registry);
+	TranslateItemSystem::update(registry.view<Transform, TranslateItem>());
+	RotateItemSystem::update(registry);
+	Rectangle2DColliderSystem::update(registry.view<Transform, Rectangle2DCollider>());
+	BallMovementSystem::update(registry);
+	PongMatchSystem::update(registry);
 
 	return FsmAction::none();
 }
 
-/*
-FsmEventAction PongDemoState::onKeyPress(SDL_KeyboardEvent& event) {
-	if (event.keysym.sym == SDLK_ESCAPE) {
-		return FsmEventAction::transition("exit"_id);
-	}
+void DemoPongState::_createScoreDisplay(const std::string& name, component::PlayerSide side, float positionX) {
+	using namespace component;
 
-	auto& ecs = getService<EntityComponentSystem>();
-	component::PlayerMovementSystem::onKeyPress(
-		event,
-		ecs.sceneRegistry().view<component::Transform, component::TranslateItem, component::PlayerMovement>());
+	auto& sceneSystem = getService<SceneSystem>();
+	auto background = sceneSystem.createEntity(HashId(name + "Bg"), "scorebarBg"_id);
+	background.getComponent<Transform>().setPosition({positionX, 2.6f, 0.0f});
 
-	return FsmEventAction::none();
+	auto score = sceneSystem.createEntity(HashId(name), "scoreNumbers"_id);
+	score.getComponent<Transform>().setPosition({positionX, 2.6f, 0.01f});
+	score.getComponent<ScoreDisplay>().side = side;
 }
 
-FsmEventAction PongDemoState::onKeyRelease(SDL_KeyboardEvent& event) {
-	auto& ecs = getService<EntityComponentSystem>();
-	component::PlayerMovementSystem::onKeyRelease(
-		event,
-		ecs.sceneRegistry().view<component::Transform, component::TranslateItem, component::PlayerMovement>());
-
-	return FsmEventAction::none();
-}
-*/
 } // namespace tactics

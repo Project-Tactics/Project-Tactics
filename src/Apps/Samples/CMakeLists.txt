@@ -8,6 +8,7 @@ set(SOURCES
     Component/CharacterFacing.cpp
     Component/FreeCamera.cpp
     Component/PlayerMovement.cpp
+    Component/PongMatch.cpp
     Component/Rectangle2DCollider.cpp
     Component/RotateAroundPoint.cpp
     Component/RotateItem.cpp
@@ -35,8 +36,9 @@ set(HEADERS
     Component/BattleCamera.h
     Component/CharacterFacing.h
     Component/FreeCamera.h
-    Component/PlayerMovement.cpp
-    Component/Rectangle2DCollider.cpp
+    Component/PlayerMovement.h
+    Component/PongMatch.h
+    Component/Rectangle2DCollider.h
     Component/RotateAroundPoint.h
     Component/RotateItem.h
     Component/TranslateItem.h
@@ -71,10 +73,12 @@ set_target_properties(
 )
 
 # Copy all the dependencies ( dll ) to the executable file directory
-add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${TARGET_NAME}> $<TARGET_RUNTIME_DLLS:${TARGET_NAME}>
-  COMMAND_EXPAND_LISTS
-)
+if(WIN32)
+  add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${TARGET_NAME}> $<TARGET_RUNTIME_DLLS:${TARGET_NAME}>
+    COMMAND_EXPAND_LISTS
+  )
+endif()
 # Copy all the dependencies ( dll ) and the data folder to the executable file directory
 add_custom_target(${POST_BUILD_TARGET_NAME} ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources/${TARGET_NAME}/data $<TARGET_FILE_DIR:${TARGET_NAME}>/data

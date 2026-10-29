@@ -1,28 +1,72 @@
 {
     "demoPong": {
         "Texture": {
-            "spritePlayer": {
-                "path": "_demoPong/Player.png",
+            "spritePlayer1": {
+                "path": "_demoPong/Player1.png",
+                "filter": "Nearest"
+            },
+            "spritePlayer2": {
+                "path": "_demoPong/Player2.png",
                 "filter": "Nearest"
             },
             "spriteBall": {
                 "path": "_demoPong/Ball.png",
                 "filter": "Nearest"
+            },
+            "spritePointsBG": {
+                "path": "_demoPong/ScoreBarBg.png",
+                "filter": "Nearest"
+            },
+            "spriteScore": {
+                "path": "_demoPong/ScoreNumbers.png",
+                "filter": "Nearest"
+            },
+            "spriteBackground": {
+                "path": "_demoPong/background.png",
+                "filter": "Nearest"
             }
         },
         "SpriteSheet": {
-            "player00": {
-                "texture": "spritePlayer",
+            "player01": {
+                "texture": "spritePlayer1",
                 "spriteSize": {
-                    "x": 17,
-                    "y": 120
+                    "x": 64,
+                    "y": 255
+                }
+            },
+            "player02": {
+                "texture": "spritePlayer2",
+                "spriteSize": {
+                    "x": 64,
+                    "y": 255
                 }
             },
             "ball00": {
                 "texture": "spriteBall",
                 "spriteSize": {
-                    "x": 30,
-                    "y": 30
+                    "x": 128,
+                    "y": 127
+                }
+            },
+            "scoreBarBg": {
+                "texture": "spritePointsBG",
+                "spriteSize": {
+                    "x": 64,
+                    "y": 64
+                }
+            },
+            "score0": {
+                "texture": "spriteScore",
+                "spriteSize": {
+                    "x": 80,
+                    "y": 96
+                }
+            },
+            "background": {
+                "texture": "spriteBackground",
+                "spriteSize": {
+                    "x": 1280,
+                    "y": 1280
                 }
             }
         },
@@ -30,24 +74,46 @@
             "defaultCamera": {
                 "path": "_demoPong/defaultCamera.prefab"
             },
-            "player": {
-                "path": "_demoPong/player.prefab"
+            "player1": {
+                "path": "_demoPong/player1.prefab"
+            },
+            "player2": {
+                "path": "_demoPong/player2.prefab"
             },
             "ball": {
                 "path": "_demoPong/ball.prefab"
+            },
+            "scorebarBg": {
+                "path": "_demoPong/scorebarBg.prefab"
+            },
+            "scoreNumbers": {
+                "path": "_demoPong/scoreNumbers.prefab"
+            },
+            "background": {
+                "path": "_demoPong/background.prefab"
+            },
+            "pongMatch": {
+                "path": "_demoPong/pongMatch.prefab"
             }
         },
         "InputAction": {
-            "playerMovement": {
+            "movePlayer1": {
                 "type": "Scalar",
                 "normalized": true
+            },
+            "movePlayer2": {
+                "type": "Scalar",
+                "normalized": true
+            },
+            "restartMatch": {
+                "type": "Scalar"
             }
         },
         "InputMap": {
             "pongMapping": {
                 "bindings": [
                     {
-                        "action": "playerMovement",
+                        "action": "movePlayer1",
                         "gestures": [
                             {
                                 "gesture": {
@@ -57,7 +123,7 @@
                                 "conditions": [
                                     {
                                         "type": "down",
-                                        "actuationThreshold": 0.5
+                                        "actuationThreshold": 0
                                     }
                                 ],
                                 "modifiers": []
@@ -70,7 +136,7 @@
                                 "conditions": [
                                     {
                                         "type": "down",
-                                        "actuationThreshold": 0.5
+                                        "actuationThreshold": 0
                                     }
                                 ],
                                 "modifiers": [
@@ -79,6 +145,60 @@
                                         "axis": "X"
                                     }
                                 ]
+                            }
+                        ]
+                    },
+                    {
+                        "action": "movePlayer2",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyO"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "down",
+                                        "actuationThreshold": 0
+                                    }
+                                ],
+                                "modifiers": []
+                            },
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeyL"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "down",
+                                        "actuationThreshold": 0
+                                    }
+                                ],
+                                "modifiers": [
+                                    {
+                                        "type": "negate",
+                                        "axis": "X"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "action": "restartMatch",
+                        "gestures": [
+                            {
+                                "gesture": {
+                                    "type": "simple",
+                                    "input": "KeySpace"
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "press",
+                                        "actuationThreshold": 0.5
+                                    }
+                                ],
+                                "modifiers": []
                             }
                         ]
                     }

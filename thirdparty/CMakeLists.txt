@@ -40,9 +40,14 @@ target_include_directories(inicpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/inifile-
 # Adding spdlog as a logging library
 # https://github.com/gabime/spdlog
 set(SPDLOG_FMT_EXTERNAL ON)
-set(SPDLOG_WCHAR_SUPPORT ON)
+# wchar support is only available on Windows
+if(WIN32)
+    set(SPDLOG_WCHAR_SUPPORT ON)
+endif()
 add_subdirectory(spdlog)
-target_compile_options(spdlog PRIVATE /wd4389)
+if(MSVC)
+    target_compile_options(spdlog PRIVATE /wd4389)
+endif()
 
 # Adding entt as an entity-component-system library
 # https://github.com/skypjack/entt

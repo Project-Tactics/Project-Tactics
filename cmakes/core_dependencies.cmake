@@ -1,6 +1,11 @@
 macro(core_dependencies)
+    # On Windows SDL2 and assimp come from the prebuilt folder, on other platforms the system packages are used
+    if(WIN32)
+        list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/prebuilt/sdl2")
+        list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/prebuilt/assimp/cmake")
+    endif()
+
     # SDL2 dependency by configuring a wrapper library for simplified linking with other targets
-    list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/prebuilt/sdl2")
     find_package(SDL2 CONFIG REQUIRED)
     # Create a wrapper library for SDL2
     add_library(sdl2_wrapper INTERFACE)
@@ -11,7 +16,6 @@ macro(core_dependencies)
     find_package(OpenGL REQUIRED)
 
     # assimp
-    list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/prebuilt/assimp/cmake")
     find_package(assimp CONFIG REQUIRED)
     # Create a wrapper library for assimp
     add_library(assimp_wrapper INTERFACE)

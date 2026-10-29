@@ -14,7 +14,7 @@ namespace tactics::resource {
 
 class Material : public Resource<Material>, public Uniforms {
 public:
-	static const ResourceType TYPE = ResourceType::Material;
+	static constexpr ResourceType TYPE = ResourceType::Material;
 	using Resource<Material>::Resource;
 
 	class Instance : public Uniforms {

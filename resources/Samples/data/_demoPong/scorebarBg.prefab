@@ -1,0 +1,26 @@
+{
+    "Transform": {
+        "position": {
+            "x": -3.4,
+            "y": 2.65,
+            "z": 0
+        },
+        "scale": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 1
+        }
+    },
+    "Mesh": {
+        "mesh": "quad",
+        "materials": [
+            {
+                "material": "spriteMaterial"
+            }
+        ]
+    },
+    "Sprite": {
+        "spriteSheet": "scoreBarBg",
+        "spriteIndex": 0
+    }
+}

@@ -44,6 +44,10 @@ set(SOURCES
 add_library(libs_utility STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(libs_utility PUBLIC glm 
     cpptrace::cpptrace fmt::fmt inicpp json_wrapper imgui entt magic_enum PRIVATE spdlog)
+# std::stacktrace lives in a separate library on GCC
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_link_libraries(libs_utility PUBLIC stdc++exp)
+endif()
 add_to_libs_folder(libs_utility)
 
 set(TEST_SOURCES

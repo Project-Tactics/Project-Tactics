@@ -6,6 +6,7 @@
 #include "Component/CharacterFacing.h"
 #include "Component/FreeCamera.h"
 #include "Component/PlayerMovement.h"
+#include "Component/PongMatch.h"
 #include "Component/Rectangle2DCollider.h"
 #include "Component/RotateAroundPoint.h"
 #include "Component/RotateItem.h"
@@ -53,7 +54,11 @@ void SamplesApplication::setupComponentReflections() {
 					 BallMovement,
 					 BallBouncing,
 					 Rectangle2DCollider,
-					 PlayerMovement>();
+					 PlayerMovement,
+					 PlayerMovementInput,
+					 PongMatch,
+					 ScoreDisplay,
+					 CollideWithWall>();
 }
 
 HashId SamplesApplication::initialize(ServiceLocator& serviceLocator, FsmBuilder& fsmBuilder) {

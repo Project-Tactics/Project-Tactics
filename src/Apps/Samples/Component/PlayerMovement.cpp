@@ -2,34 +2,43 @@
 
 #include <Libs/Utility/Time/EngineTime.h>
 
+#include <algorithm>
+
 namespace tactics::component {
 
-void PlayerMovementSystem::onKeyPress(SDL_KeyboardEvent& event,
-									  const ecs_view<Transform, TranslateItem, PlayerMovement>& view) {
-	view.each([event](auto& transform, auto& translateItem, auto& playerMovement) {
-		if (event.keysym.sym == playerMovement.keyCodeDown) {
-			if (transform.getPosition().y > -2.1f) {
-				translateItem.axis = Vector3::down;
-			} else {
-				translateItem.axis = Vector3::zero;
-			}
-		} else if (event.keysym.sym == playerMovement.keyCodeUp) {
-			if (transform.getPosition().y < 2.1f) {
-				translateItem.axis = Vector3::up;
-			} else {
-				translateItem.axis = Vector3::zero;
-			}
-		}
-	});
+void PlayerMovementSystem::update(entt::registry& registry) {
+	_updateInputs(registry);
 }
 
-void PlayerMovementSystem::onKeyRelease(SDL_KeyboardEvent& event,
-										const ecs_view<Transform, TranslateItem, PlayerMovement>& view) {
-	view.each([event](auto& /*transform*/, auto& translateItem, auto& playerMovement) {
-		if (event.keysym.sym == playerMovement.keyCodeUp || event.keysym.sym == playerMovement.keyCodeDown) {
+void PlayerMovementSystem::_updateInputs(entt::registry& registry) {
+	auto matchView = registry.view<PongMatch>();
+	if (matchView.empty()) {
+		return;
+	}
+	const auto& match = matchView.get<PongMatch>(matchView.front());
+
+	auto view = registry.view<TranslateItem, Transform, PlayerMovement, PlayerMovementInput, Rectangle2DCollider>();
+	for (auto [entity, translateItem, transform, playerMovement, input, collider] : view.each()) {
+		if (!playerMovement.active) {
 			translateItem.axis = Vector3::zero;
+			continue;
 		}
-	});
+
+		// Keep the whole player inside the field
+		auto verticalLimit = std::max(0.0f, match.fieldHalfSize.y - collider.heightFromCenter);
+		auto position = transform.getPosition();
+		position.y = std::clamp(position.y, -verticalLimit, verticalLimit);
+		transform.setPosition(position);
+
+		auto& value = input.movePlayer->getInputValue();
+		if (value.scalar > 0 && position.y >= verticalLimit) {
+			translateItem.axis = Vector3::zero;
+		} else if (value.scalar < 0 && position.y <= -verticalLimit) {
+			translateItem.axis = Vector3::zero;
+		} else {
+			translateItem.axis = Vector3::up * value.scalar;
+		}
+	}
 }
 
 } // namespace tactics::component

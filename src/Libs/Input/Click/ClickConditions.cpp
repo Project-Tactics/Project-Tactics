@@ -53,6 +53,7 @@ ConditionState update(ReleaseCondition& condition, Binding& binding, float /*del
 		}
 		break;
 	}
+	default: break;
 	}
 
 	return condition.state;

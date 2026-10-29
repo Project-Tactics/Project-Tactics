@@ -3,7 +3,7 @@
         "position": {
             "x": 0,
             "y": 0,
-            "z": 0
+            "z": 0.1
         },
         "scale": {
             "x": 0.2,
@@ -19,7 +19,20 @@
         },
         "speed": 2.0
     },
-    "BallMovement": {},
+    "RotateItem": {
+        "axis": {
+            "x": 0,
+            "y": 0,
+            "z": 1
+        },
+        "speed": 4
+    },
+    "BallMovement": {
+        "radius": 0.1,
+        "maxSpeed": 4.5,
+        "speedMultiplier": 1.1,
+        "maxBounceAngle": 50
+    },
     "Mesh": {
         "mesh": "quad",
         "materials": [

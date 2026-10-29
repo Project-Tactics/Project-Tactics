@@ -138,6 +138,7 @@ bool InputSystem::hasDevice(click::DeviceType deviceType, unsigned int deviceInd
 	case click::DeviceType::Keyboard: return click::hasKeyboard(deviceIndex);
 	case click::DeviceType::Mouse	: return click::hasMouse(deviceIndex);
 	case click::DeviceType::Gamepad : return click::hasGamepad(deviceIndex);
+	default							: break;
 	}
 
 	LOG_ERROR(Log::Input,
@@ -152,6 +153,7 @@ click::DeviceId InputSystem::getDeviceId(click::DeviceType deviceType, unsigned 
 	case click::DeviceType::Keyboard: return click::keyboard(deviceIndex);
 	case click::DeviceType::Mouse	: return click::mouse(deviceIndex);
 	case click::DeviceType::Gamepad : return click::gamepad(deviceIndex);
+	default							: break;
 	}
 
 	LOG_ERROR(Log::Input,

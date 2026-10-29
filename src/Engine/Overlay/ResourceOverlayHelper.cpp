@@ -57,6 +57,7 @@ void ResourceOverlayHelper::drawResource(const resource::ResourceInfo& resourceI
 				drawTResource<BaseDataSet>(resource);
 				break;
 			}
+			default: break;
 			}
 			ImGui::EndTabItem();
 		}
@@ -186,7 +187,6 @@ void ResourceOverlayHelper::drawResource(const resource::SpriteSheet& spriteShee
 	auto spriteCount = spriteSheet.getSpriteCount();
 	ImGui::Text("Sprites: %d", spriteCount);
 
-	auto uvSpriteSize = spriteSheet.getUVSpriteSize();
 	for (auto i = 0u; i < spriteCount; i++) {
 		auto imageButtonId = "Sprite" + std::to_string(i);
 		if (_drawSpriteButton(imageButtonId.c_str(),

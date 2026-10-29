@@ -14,8 +14,8 @@ const HashId Fsm::exitState = "_Exit"_id;
 
 Fsm::Fsm(FsmStateEntries states, const HashId& startStateName, FsmExternalController* externalController)
 	: _states(std::move(states))
-	, _startStateName(startStateName)
-	, _externalController(externalController) {
+	, _externalController(externalController)
+	, _startStateName(startStateName) {
 	if (!_states.contains(startStateName)) {
 		LOG_ERROR(Log::Fsm, "Cannot create Fsm with starting state [{}]. The state does not exist.", _startStateName);
 	}
